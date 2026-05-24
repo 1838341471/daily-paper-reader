@@ -1051,11 +1051,11 @@ window.SubscriptionsManager = (function () {
                 <div class="chat-quick-run-title">快速抓取</div>
                 <div id="arxiv-admin-quick-run-selection-count" class="dpr-bulk-selection-count is-empty">未选择</div>
               </div>
-              <button id="arxiv-admin-open-workflow-panel-btn" class="arxiv-tool-btn" type="button" style="padding:2px 8px;">工作流</button>
             </div>
             <div id="arxiv-admin-quick-run-hint" class="dpr-task-hint">先在上方勾选常规词条。</div>
             <div class="dpr-task-content-row">
               <div class="dpr-task-primary-column">
+                <button id="arxiv-admin-open-workflow-panel-btn" class="arxiv-tool-btn dpr-task-workflow-btn" type="button">打开工作流</button>
                 <div class="dpr-task-action-grid">
                   <button id="arxiv-admin-quick-run-10d-btn" class="chat-quick-run-item" type="button">
                     <span class="dpr-task-action-title">10 天论文</span>

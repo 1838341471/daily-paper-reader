@@ -3225,12 +3225,23 @@ article.markdown-section {
 }
 
 .dpr-task-content-row {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 108px;
   align-items: end;
-  gap: 10px;
+  column-gap: 14px;
   flex: 1 1 auto;
   min-height: 0;
+}
+
+.dpr-task-content-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 122px;
+  width: 1px;
+  background: #e3eaf7;
 }
 
 .dpr-task-primary-column {
@@ -3238,6 +3249,13 @@ article.markdown-section {
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+}
+
+.dpr-task-workflow-btn {
+  align-self: flex-start;
+  padding: 4px 9px;
+  font-size: 11px;
+  border-radius: 999px;
 }
 
 .dpr-task-action-grid {
@@ -3272,7 +3290,6 @@ article.markdown-section {
 }
 
 .dpr-task-danger-module {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -3283,16 +3300,6 @@ article.markdown-section {
   border: 1px solid rgba(219, 112, 147, 0.22);
   border-radius: 12px;
   background: #fff4f8;
-}
-
-.dpr-task-danger-module::before {
-  content: '';
-  position: absolute;
-  left: -6px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: #e3eaf7;
 }
 
 .dpr-task-danger-module .chat-quick-run-title {
