@@ -302,6 +302,53 @@ function testQuickLinksCenterTextAndDetachIcon() {
   assert.ok(/transform:\s*translateY\(-50%\)/i.test(iconRule));
 }
 
+function testSidebarFooterControlsReplaceRefresh() {
+  const sidebar = loadSidebarForTest('#/');
+  const tools = sidebar.__test;
+  assert.equal(typeof tools.renderSidebarFooterControls, 'function');
+
+  const html = tools.renderSidebarFooterControls(false);
+  assert.ok(html.includes('class="dpr-sidebar-footer"'));
+  assert.ok(html.includes('class="dpr-sidebar-footer-btn dpr-sidebar-collapse-btn"'));
+  assert.ok(html.includes('data-sidebar-collapse'));
+  assert.ok(html.includes('aria-label="收起侧边栏"'));
+  assert.ok(html.includes('class="dpr-sidebar-footer-btn dpr-sidebar-settings-btn"'));
+  assert.ok(html.includes('data-sidebar-settings'));
+  assert.ok(html.includes('aria-label="打开设置"'));
+  assert.ok(!html.includes('dpr-sidebar-refresh'));
+  assert.ok(!html.includes('刷新'));
+
+  const collapsedHtml = tools.renderSidebarFooterControls(true);
+  assert.ok(collapsedHtml.includes('aria-label="展开侧边栏"'));
+  assert.ok(collapsedHtml.includes('title="展开侧边栏"'));
+
+  const css = fs.readFileSync('app/app.css', 'utf8');
+  const bodyRule = cssRule(css, 'body.dpr-sidebar-v2');
+  assert.ok(/--dpr-sidebar-collapsed-width:\s*96px/i.test(bodyRule));
+  const footerRule = cssRule(css, '.dpr-sidebar-footer');
+  assert.ok(/display:\s*flex/i.test(footerRule));
+  assert.ok(/gap:\s*8px/i.test(footerRule));
+  assert.ok(/margin-top:\s*auto/i.test(footerRule));
+  assert.ok(/background:\s*var\(--dpr-sidebar-surface\)/i.test(footerRule));
+
+  const footerBtnRule = cssRule(css, '.dpr-sidebar-footer-btn');
+  assert.ok(/width:\s*34px/i.test(footerBtnRule));
+  assert.ok(/height:\s*34px/i.test(footerBtnRule));
+  assert.ok(/display:\s*inline-flex/i.test(footerBtnRule));
+
+  const collapsedRootRule = cssRule(css, '#dpr-sidebar-v2.is-collapsed');
+  assert.ok(/width:\s*var\(--dpr-sidebar-collapsed-width\)/i.test(collapsedRootRule));
+  const collapsedContentRule = cssRule(css, 'body.dpr-sidebar-v2.dpr-sidebar-v2-collapsed .content');
+  assert.ok(/left:\s*var\(--dpr-sidebar-collapsed-width\)\s*!important/i.test(collapsedContentRule));
+  assert.ok(/\.dpr-sidebar-refresh/.test(css) === false, 'refresh button CSS should be removed');
+
+  const uiScript = fs.readFileSync('app/ui.layout-and-subscriptions-entry.js', 'utf8');
+  assert.ok(/function isDprSidebarV2Active\(\)/.test(uiScript));
+  assert.ok(/function shouldUseDprSidebarInternalSettings\(\)/.test(uiScript));
+  assert.ok(/window\.matchMedia\('\(min-width:\s*1024px\)'\)\.matches/i.test(uiScript));
+  assert.ok(/if\s*\(shouldUseDprSidebarInternalSettings\(\)\)\s*return;/i.test(uiScript));
+}
+
 function testSidebarSortsByNewestTimeFirst() {
   const sidebar = loadSidebarForTest('#/202606/25/new');
   const tools = sidebar.__test;
@@ -691,6 +738,7 @@ testAxisTabsRenderUnreadCounts();
 testPaperEvidenceAndActionButtonsRender();
 testPaperMetaOrderKeepsEvidenceBetweenTitleAndStars();
 testQuickLinksCenterTextAndDetachIcon();
+testSidebarFooterControlsReplaceRefresh();
 testSidebarSortsByNewestTimeFirst();
 testSidebarUtilityHelpers();
 testEvidenceCssIsPersistent();

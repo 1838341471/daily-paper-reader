@@ -961,6 +961,7 @@
     activeConference: '',
     activeConferenceTag: '',
     sidebarWidth: DEFAULT_SIDEBAR_WIDTH,
+    sidebarCollapsed: false,
     titleOverflowFrame: 0,
   };
 
@@ -1069,6 +1070,46 @@
     );
   }
 
+  function renderSidebarFooterControls(collapsed) {
+    var collapseLabel = collapsed ? '展开侧边栏' : '收起侧边栏';
+    return (
+      '<div class="dpr-sidebar-footer">' +
+      '  <button type="button" class="dpr-sidebar-footer-btn dpr-sidebar-collapse-btn" data-sidebar-collapse aria-label="' +
+      safeAttr(collapseLabel) + '" title="' + safeAttr(collapseLabel) + '">☰</button>' +
+      '  <button type="button" class="dpr-sidebar-footer-btn dpr-sidebar-settings-btn" data-sidebar-settings aria-label="打开设置" title="打开设置">⚙️</button>' +
+      '</div>'
+    );
+  }
+
+  function dispatchNamedEvent(name) {
+    try {
+      document.dispatchEvent(new CustomEvent(name));
+    } catch (e) {
+      try {
+        var event = document.createEvent('CustomEvent');
+        event.initCustomEvent(name, false, false, null);
+        document.dispatchEvent(event);
+      } catch (ignored) {}
+    }
+  }
+
+  function openSettingsPanel() {
+    dispatchNamedEvent('ensure-arxiv-ui');
+    window.setTimeout(function () {
+      dispatchNamedEvent('load-arxiv-subscriptions');
+
+      var overlay = document.getElementById('arxiv-search-overlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            overlay.classList.add('show');
+          });
+        });
+      }
+    }, 100);
+  }
+
   function renderShell(root) {
     var homeHref = (state.model.home && state.model.home.href) || '#/';
     var tutorialHref = (state.model.tutorial && state.model.tutorial.href) || '#/tutorial/README';
@@ -1094,9 +1135,7 @@
       '  </div>' +
       '</div>' +
       '<nav class="dpr-sidebar-body" aria-label="论文导航"></nav>' +
-      '<div class="dpr-sidebar-footer">' +
-      '  <button type="button" class="dpr-sidebar-refresh" title="刷新侧边栏">↻ 刷新</button>' +
-      '</div>' +
+      renderSidebarFooterControls(state.sidebarCollapsed) +
       '<div class="dpr-sidebar-resizer" role="separator" aria-orientation="vertical" title="拖动调整侧栏宽度"></div>';
     state.bodyEl = $('.dpr-sidebar-body', root);
     state.searchInput = $('.dpr-sidebar-search', root);
@@ -1594,6 +1633,28 @@
     return root.classList.contains('is-open');
   }
 
+  function applySidebarCollapsed(collapsed) {
+    var root = state.rootEl || $('#dpr-sidebar-v2');
+    state.sidebarCollapsed = !!collapsed;
+    if (root && root.classList) {
+      root.classList.toggle('is-collapsed', state.sidebarCollapsed);
+    }
+    if (document.body && document.body.classList) {
+      document.body.classList.toggle('dpr-sidebar-v2-collapsed', state.sidebarCollapsed);
+    }
+    var btn = root && $('.dpr-sidebar-collapse-btn', root);
+    if (btn) {
+      var label = state.sidebarCollapsed ? '展开侧边栏' : '收起侧边栏';
+      btn.setAttribute('aria-label', label);
+      btn.setAttribute('title', label);
+    }
+    return state.sidebarCollapsed;
+  }
+
+  function toggleSidebarCollapsed() {
+    return applySidebarCollapsed(!state.sidebarCollapsed);
+  }
+
   // ---------- 事件 ----------
   function bindEvents(root) {
     // 工具栏：筛选
@@ -1613,6 +1674,22 @@
       var mobile = e.target.closest('.dpr-sidebar-mobile-toggle');
       if (mobile) {
         root.classList.toggle('is-open');
+        return;
+      }
+      var collapseBtn = e.target.closest('.dpr-sidebar-collapse-btn');
+      if (collapseBtn) {
+        e.preventDefault();
+        if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+          toggleMobile(false);
+        } else {
+          toggleSidebarCollapsed();
+        }
+        return;
+      }
+      var settingsBtn = e.target.closest('.dpr-sidebar-settings-btn');
+      if (settingsBtn) {
+        e.preventDefault();
+        openSettingsPanel();
         return;
       }
       var panelHeader = e.target.closest('.dpr-sidebar-panel-header');
@@ -1695,13 +1772,6 @@
         if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
           root.classList.remove('is-open');
         }
-      }
-      // 刷新
-      var refresh = e.target.closest('.dpr-sidebar-refresh');
-      if (refresh) {
-        e.preventDefault();
-        refresh.disabled = true;
-        loadAndRender().finally(function () { refresh.disabled = false; });
       }
     });
 
@@ -1841,10 +1911,14 @@
     openMobile: function () { return toggleMobile(true); },
     closeMobile: function () { return toggleMobile(false); },
     toggleMobile: function () { return toggleMobile(); },
+    toggleCollapsed: function () { return toggleSidebarCollapsed(); },
+    setCollapsed: function (collapsed) { return applySidebarCollapsed(collapsed); },
+    openSettingsPanel: openSettingsPanel,
   };
 
   // 让正文页（评分按钮）和 docsify 插件能消费侧栏状态。
   window.DPRSidebar = DPRSidebarApi;
+  window.DPROpenSettingsPanel = openSettingsPanel;
 
   if (typeof module === 'object' && module.exports) {
     module.exports = {
@@ -1875,6 +1949,10 @@
         syncActiveOptionsForInitialLoad: syncActiveOptionsForInitialLoad,
         updatePaperTitleOverflowMarks: updatePaperTitleOverflowMarks,
         renderQuickLink: renderQuickLink,
+        renderSidebarFooterControls: renderSidebarFooterControls,
+        applySidebarCollapsed: applySidebarCollapsed,
+        toggleSidebarCollapsed: toggleSidebarCollapsed,
+        openSettingsPanel: openSettingsPanel,
       },
     };
   }

@@ -6734,6 +6734,9 @@ body.dpr-sidebar-v2 .sidebar,
 body.dpr-sidebar-v2 .sidebar-toggle {
   display: none !important;
 }
+body.dpr-sidebar-v2 {
+  --dpr-sidebar-collapsed-width: 96px;
+}
 body.dpr-sidebar-v2 #sidebar-resizer {
   display: none !important;
 }
@@ -6749,6 +6752,9 @@ body.dpr-sidebar-v2 .content {
   width: auto !important;
   transition: none !important;
 }
+body.dpr-sidebar-v2.dpr-sidebar-v2-collapsed .content {
+  left: var(--dpr-sidebar-collapsed-width) !important;
+}
 @media (max-width: 768px) {
   body.dpr-sidebar-v2 .content {
     left: 0 !important;
@@ -6759,6 +6765,7 @@ body.dpr-sidebar-v2 .content {
 /* root 容器 */
 #dpr-sidebar-v2 {
   --dpr-sidebar-surface: #ffffff;
+  --dpr-sidebar-collapsed-width: 96px;
   --dpr-sidebar-sticky-panel-top: 0px;
   --dpr-sidebar-sticky-axis-top: 34px;
   --dpr-sidebar-sticky-section-top: 70px;
@@ -6775,6 +6782,17 @@ body.dpr-sidebar-v2 .content {
   z-index: 30;
   font-family: var(--dpr-sidebar-font, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif);
   color: #1f2937;
+}
+#dpr-sidebar-v2.is-collapsed {
+  width: var(--dpr-sidebar-collapsed-width);
+}
+#dpr-sidebar-v2.is-collapsed .dpr-sidebar-header,
+#dpr-sidebar-v2.is-collapsed .dpr-sidebar-toolbar,
+#dpr-sidebar-v2.is-collapsed .dpr-sidebar-body {
+  display: none !important;
+}
+#dpr-sidebar-v2.is-collapsed .dpr-sidebar-resizer {
+  display: none;
 }
 .dpr-sidebar-resizer {
   position: absolute;
@@ -7523,26 +7541,41 @@ body.dpr-sidebar-resizing {
 
 /* footer */
 .dpr-sidebar-footer {
-  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 8px 10px;
   border-top: 1px solid #f1f5f9;
+  background: var(--dpr-sidebar-surface);
   flex-shrink: 0;
 }
-.dpr-sidebar-refresh {
-  width: 100%;
-  padding: 6px;
-  font-size: 12px;
-  background: #f8fafc;
+.dpr-sidebar-footer-btn {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   color: #475569;
   cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
 }
-.dpr-sidebar-refresh:hover {
+.dpr-sidebar-footer-btn:hover,
+.dpr-sidebar-footer-btn:focus-visible {
   background: #eef2f7;
+  border-color: #cbd5e1;
+  color: #1f2937;
+  outline: none;
+  transform: translateY(-1px);
 }
-.dpr-sidebar-refresh[disabled] {
-  opacity: 0.55;
-  cursor: progress;
+.dpr-sidebar-settings-btn {
+  margin-left: 0;
 }
 
 /* 筛选 / 搜索隐藏 */
@@ -7617,7 +7650,7 @@ body.dpr-dark .dpr-sidebar-toolbar,
 body.dpr-dark .dpr-sidebar-header {
   border-color: #1e293b;
 }
-body.dpr-dark .dpr-sidebar-refresh {
+body.dpr-dark .dpr-sidebar-footer-btn {
   background: #1e293b;
   border-color: #334155;
   color: #cbd5e1;

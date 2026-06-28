@@ -151,7 +151,45 @@
 
 // 3. 自定义订阅管理入口按钮脚本（左下角 📚）
 (function() {
+  function isDprSidebarV2Active() {
+    return Boolean(
+      (document.body && document.body.classList && document.body.classList.contains('dpr-sidebar-v2')) ||
+      document.getElementById('dpr-sidebar-v2')
+    );
+  }
+
+  function shouldUseDprSidebarInternalSettings() {
+    var isLargeScreen = !window.matchMedia || window.matchMedia('(min-width: 1024px)').matches;
+    return isLargeScreen && isDprSidebarV2Active();
+  }
+
+  function openSettingsPanel() {
+    if (window.DPROpenSettingsPanel && typeof window.DPROpenSettingsPanel === 'function') {
+      window.DPROpenSettingsPanel();
+      return;
+    }
+
+    var event = new CustomEvent('ensure-arxiv-ui');
+    document.dispatchEvent(event);
+
+    setTimeout(function () {
+      var loadEvent = new CustomEvent('load-arxiv-subscriptions');
+      document.dispatchEvent(loadEvent);
+
+      var overlay = document.getElementById('arxiv-search-overlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            overlay.classList.add('show');
+          });
+        });
+      }
+    }, 100);
+  }
+
   function createCustomButton() {
+    if (shouldUseDprSidebarInternalSettings()) return;
     if (document.getElementById('custom-toggle-btn')) return;
 
     var sidebarToggle = document.querySelector('.sidebar-toggle');
@@ -166,25 +204,7 @@
     btn.innerHTML = '⚙️';
     btn.title = '后台管理';
 
-    btn.addEventListener('click', function () {
-      var event = new CustomEvent('ensure-arxiv-ui');
-      document.dispatchEvent(event);
-
-      setTimeout(function () {
-        var loadEvent = new CustomEvent('load-arxiv-subscriptions');
-        document.dispatchEvent(loadEvent);
-
-        var overlay = document.getElementById('arxiv-search-overlay');
-        if (overlay) {
-          overlay.style.display = 'flex';
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              overlay.classList.add('show');
-            });
-          });
-        }
-      }, 100);
-    });
+    btn.addEventListener('click', openSettingsPanel);
 
     document.body.appendChild(btn);
   }
