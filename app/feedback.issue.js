@@ -16,6 +16,19 @@
   ]);
   const TARGET_OWNER = 'ziwenhahaha';
   const TARGET_REPO = 'daily-paper-reader';
+  const FEEDBACK_ANIMATION_MS = 180;
+
+  const getFeedbackMotionStyles = (isVisible) => ({
+    overlay: {
+      opacity: isVisible ? '1' : '0',
+    },
+    panel: {
+      opacity: isVisible ? '1' : '0',
+      transform: isVisible
+        ? 'translateY(0) scale(1)'
+        : 'translateY(12px) scale(0.98)',
+    },
+  });
 
   const state = {
     overlay: null,
@@ -28,6 +41,9 @@
     pendingDraftUrl: '',
     restoreFocus: null,
     keydownHandler: null,
+    openFrame: null,
+    closingTimer: null,
+    isClosing: false,
   };
 
   const normalizeText = (value) => String(value == null ? '' : value).replace(/\r\n/g, '\n').trim();
@@ -293,6 +309,35 @@
     });
   };
 
+  const prefersReducedMotion = () => Boolean(
+    root
+      && typeof root.matchMedia === 'function'
+      && root.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+
+  const applyFeedbackMotionStyles = (overlay, panel, isVisible) => {
+    if (!overlay || !panel) return;
+    const styles = getFeedbackMotionStyles(isVisible);
+    applyStyles(overlay, styles.overlay);
+    applyStyles(panel, styles.panel);
+  };
+
+  const clearScheduledOpen = () => {
+    if (state.openFrame == null) return;
+    if (root && typeof root.cancelAnimationFrame === 'function') {
+      root.cancelAnimationFrame(state.openFrame);
+    } else {
+      root.clearTimeout(state.openFrame);
+    }
+    state.openFrame = null;
+  };
+
+  const clearClosingTimer = () => {
+    if (state.closingTimer == null) return;
+    root.clearTimeout(state.closingTimer);
+    state.closingTimer = null;
+  };
+
   const setStatus = (text, tone) => {
     if (!state.refs || !state.refs.status) return;
     const colorMap = {
@@ -377,14 +422,12 @@
     renderValidationState();
   };
 
-  const close = () => {
-    const restoreFocus = state.restoreFocus;
-    if (state.keydownHandler && hasDom()) {
-      root.document.removeEventListener('keydown', state.keydownHandler);
+  const finishClose = (snapshot) => {
+    if (snapshot.overlay && snapshot.overlay.parentNode) {
+      snapshot.overlay.parentNode.removeChild(snapshot.overlay);
     }
-    if (state.overlay && state.overlay.parentNode) {
-      state.overlay.parentNode.removeChild(state.overlay);
-    }
+    if (state.overlay !== snapshot.overlay) return;
+
     state.overlay = null;
     state.refs = null;
     state.attemptedSubmit = false;
@@ -394,12 +437,52 @@
     state.pendingDraftUrl = '';
     state.restoreFocus = null;
     state.keydownHandler = null;
+    state.openFrame = null;
+    state.closingTimer = null;
+    state.isClosing = false;
+    state.bodyOverflow = '';
     if (hasDom() && root.document && root.document.body) {
-      root.document.body.style.overflow = state.bodyOverflow || '';
+      root.document.body.style.overflow = snapshot.bodyOverflow || '';
     }
-    if (restoreFocus && typeof restoreFocus.focus === 'function') {
-      restoreFocus.focus();
+    if (snapshot.shouldRestoreFocus
+      && snapshot.restoreFocus
+      && typeof snapshot.restoreFocus.focus === 'function') {
+      snapshot.restoreFocus.focus();
     }
+  };
+
+  const close = (options = {}) => {
+    if (!state.overlay) return;
+    const immediate = Boolean(options && options.immediate);
+    const snapshot = {
+      overlay: state.overlay,
+      restoreFocus: state.restoreFocus,
+      bodyOverflow: state.bodyOverflow,
+      shouldRestoreFocus: !(options && options.restoreFocus === false),
+    };
+
+    if (state.keydownHandler && hasDom()) {
+      root.document.removeEventListener('keydown', state.keydownHandler);
+    }
+    state.keydownHandler = null;
+    clearScheduledOpen();
+
+    if (state.isClosing && !immediate) return;
+    clearClosingTimer();
+
+    if (immediate || prefersReducedMotion()) {
+      finishClose(snapshot);
+      return;
+    }
+
+    state.isClosing = true;
+    state.overlay.style.pointerEvents = 'none';
+    state.overlay.setAttribute('aria-hidden', 'true');
+    applyFeedbackMotionStyles(state.overlay, state.refs && state.refs.panel, false);
+    state.closingTimer = root.setTimeout(() => {
+      state.closingTimer = null;
+      finishClose(snapshot);
+    }, FEEDBACK_ANIMATION_MS);
   };
 
   const handleSubmit = async () => {
@@ -500,6 +583,9 @@
       padding: '24px',
       background: 'rgba(15, 23, 42, 0.52)',
       boxSizing: 'border-box',
+      opacity: '0',
+      transition: `opacity ${FEEDBACK_ANIMATION_MS}ms ease`,
+      willChange: 'opacity',
     });
     overlay.addEventListener('click', (event) => {
       if (event.target === overlay) {
@@ -525,6 +611,11 @@
       boxSizing: 'border-box',
       color: '#101828',
       fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      opacity: '0',
+      transform: 'translateY(12px) scale(0.98)',
+      transformOrigin: 'center center',
+      transition: `opacity ${FEEDBACK_ANIMATION_MS}ms ease, transform ${FEEDBACK_ANIMATION_MS}ms cubic-bezier(0.2, 0, 0, 1)`,
+      willChange: 'opacity, transform',
     });
 
     const closeButton = documentRef.createElement('button');
@@ -751,7 +842,7 @@
 
   const open = (prefill = {}) => {
     if (!hasDom()) return null;
-    close();
+    close({ immediate: true, restoreFocus: false });
 
     const built = buildModal();
     if (!built) return null;
@@ -763,6 +854,7 @@
     state.submitted = false;
     state.submittedLabel = '';
     state.pendingDraftUrl = '';
+    state.isClosing = false;
     state.restoreFocus = root.document.activeElement || null;
     state.bodyOverflow = root.document.body ? root.document.body.style.overflow || '' : '';
 
@@ -774,6 +866,20 @@
     if (root.document.body) {
       root.document.body.appendChild(state.overlay);
       root.document.body.style.overflow = 'hidden';
+    }
+
+    const reveal = () => {
+      state.openFrame = null;
+      if (state.overlay !== built.overlay || state.isClosing) return;
+      applyFeedbackMotionStyles(built.overlay, built.refs.panel, true);
+    };
+    if (prefersReducedMotion()) {
+      reveal();
+    } else if (typeof root.requestAnimationFrame === 'function') {
+      built.overlay.getBoundingClientRect();
+      state.openFrame = root.requestAnimationFrame(reveal);
+    } else {
+      state.openFrame = root.setTimeout(reveal, 0);
     }
 
     const types = normalizeSelectedTypes(prefill.types);
@@ -799,6 +905,8 @@
       ISSUE_TYPES,
       TARGET_OWNER,
       TARGET_REPO,
+      FEEDBACK_ANIMATION_MS,
+      getFeedbackMotionStyles,
       normalizeText,
       normalizeInlineText,
       normalizeSelectedTypes,

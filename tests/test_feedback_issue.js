@@ -6,6 +6,8 @@ const {
   ISSUE_TYPES,
   TARGET_OWNER,
   TARGET_REPO,
+  FEEDBACK_ANIMATION_MS,
+  getFeedbackMotionStyles,
   normalizeSelectedTypes,
   buildIssueTitle,
   buildIssueBody,
@@ -15,6 +17,19 @@ const {
   classifyIssueError,
   submitIssueWithFallback,
 } = feedback.__test;
+
+function testFeedbackMotionStylesCoverEnterAndExit() {
+  const hidden = getFeedbackMotionStyles(false);
+  const visible = getFeedbackMotionStyles(true);
+
+  assert.equal(FEEDBACK_ANIMATION_MS, 180);
+  assert.equal(hidden.overlay.opacity, '0');
+  assert.equal(hidden.panel.opacity, '0');
+  assert.match(hidden.panel.transform, /translateY\(12px\)/);
+  assert.equal(visible.overlay.opacity, '1');
+  assert.equal(visible.panel.opacity, '1');
+  assert.equal(visible.panel.transform, 'translateY(0) scale(1)');
+}
 
 function buildValidForm(overrides = {}) {
   return {
@@ -225,6 +240,7 @@ async function testSubmitIssueFallsBackGracefullyOnAuthFailure() {
 }
 
 async function run() {
+  testFeedbackMotionStylesCoverEnterAndExit();
   testNormalizeSelectedTypesKeepsCanonicalOrder();
   testBuildIssueTitleUsesStrictPrefixFormat();
   testBuildIssueBodyStaysMinimal();
