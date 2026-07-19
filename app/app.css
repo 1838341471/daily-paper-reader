@@ -257,6 +257,257 @@ html {
   }
 }
 
+/* 首页仪表盘卡片 */
+.markdown-section .dpr-home-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+  margin: 18px 0 24px;
+}
+
+.markdown-section .dpr-home-dashboard-card {
+  --dpr-home-dashboard-accent: #2563eb;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #d9dee3;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.markdown-section .dpr-home-report-card {
+  --dpr-home-dashboard-accent: #2563eb;
+}
+
+.markdown-section .dpr-home-brief-card {
+  --dpr-home-dashboard-accent: #17805c;
+}
+
+.markdown-section .dpr-home-deep-card {
+  --dpr-home-dashboard-accent: #c44f45;
+}
+
+.markdown-section .dpr-home-skim-card {
+  --dpr-home-dashboard-accent: #966b00;
+}
+
+.markdown-section .dpr-home-dashboard-card:hover,
+.markdown-section .dpr-home-dashboard-card:focus-within {
+  transform: translateY(-1px);
+  border-color: #cfd6dc;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
+}
+
+.markdown-section .dpr-home-dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.markdown-section .dpr-home-dashboard-kicker {
+  display: block;
+  margin: 0 0 4px;
+  color: #66737f !important;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.markdown-section .dpr-home-dashboard-title {
+  display: block;
+  min-width: 0;
+  margin: 0 !important;
+  overflow: hidden;
+  color: var(--dpr-home-dashboard-accent) !important;
+  font-size: 1rem !important;
+  font-weight: 700;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.markdown-section .dpr-home-dashboard-count {
+  flex: 0 0 auto;
+  min-width: 3ch;
+  color: var(--dpr-home-dashboard-accent) !important;
+  font-size: 1.75rem;
+  font-weight: 760;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-align: right;
+}
+
+.markdown-section .dpr-home-dashboard-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
+.markdown-section .dpr-home-dashboard-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 12px;
+  border-right: 1px solid #e4e8ec;
+  color: #52606d !important;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.markdown-section .dpr-home-dashboard-stat:first-child {
+  padding-left: 0;
+}
+
+.markdown-section .dpr-home-dashboard-stat:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.markdown-section .dpr-home-dashboard-stat dt {
+  color: #74808b;
+  font-size: 0.76rem;
+}
+
+.markdown-section .dpr-home-dashboard-stat dd {
+  margin: 2px 0 0;
+  color: #334155;
+  font-size: 0.94rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.markdown-section .dpr-home-dashboard-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 1px solid #e4e8ec;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #52606d !important;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.markdown-section .dpr-home-dashboard-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  margin-top: 14px;
+  gap: 12px;
+}
+
+.markdown-section .dpr-home-dashboard-paper-list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.markdown-section .dpr-home-dashboard-paper-list li {
+  min-width: 0;
+  overflow: hidden;
+  color: #334155 !important;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.markdown-section .dpr-home-dashboard-paper-list a {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: inherit !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.markdown-section .dpr-home-dashboard-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.markdown-section .dpr-home-dashboard-link {
+  align-self: flex-start;
+  margin-top: auto;
+  color: #334155 !important;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.markdown-section .dpr-home-dashboard-link,
+.markdown-section .dpr-home-dashboard-link:link,
+.markdown-section .dpr-home-dashboard-link:visited {
+  color: #334155 !important;
+  text-decoration: none;
+}
+
+.markdown-section .dpr-home-dashboard-link:hover,
+.markdown-section .dpr-home-dashboard-link:focus-visible {
+  color: #0f172a !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.markdown-section .dpr-home-dashboard-empty {
+  margin: 0;
+  color: #74808b !important;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markdown-section .dpr-home-dashboard-card {
+    transition: none;
+  }
+
+  .markdown-section .dpr-home-dashboard-card:hover,
+  .markdown-section .dpr-home-dashboard-card:focus-within {
+    transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .markdown-section .dpr-home-dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .markdown-section .dpr-home-dashboard-card {
+    padding: 16px;
+  }
+
+  .markdown-section .dpr-home-dashboard-header {
+    gap: 10px;
+  }
+
+  .markdown-section .dpr-home-dashboard-count {
+    font-size: 1.6rem;
+  }
+}
+
 /* 侧边栏字体放大 */
 .sidebar {
   font-size: 1.1rem !important;
