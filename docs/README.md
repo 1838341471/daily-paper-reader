@@ -32,7 +32,6 @@
     <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>0</dd></div>
   </dl>
   <p class="dpr-home-dashboard-body">最近更新：2026-03-06 19:11:19 UTC<br>状态：成功</p>
-  <a class="dpr-home-dashboard-link" href="#/202603/06/README">查看完整日报</a>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -45,7 +44,6 @@
   <div class="dpr-home-dashboard-body">
 <p>今日无新推荐，系统未产出可展示论文。</p>
   </div>
-  <a class="dpr-home-dashboard-link" href="#/202603/06/README">阅读全文</a>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
   <div class="dpr-home-dashboard-header">
@@ -59,7 +57,6 @@
 <p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
 
-  <a class="dpr-home-dashboard-link" href="#/202603/06/README">查看全部</a>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -73,7 +70,6 @@
 <p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
   </div>
 
-  <a class="dpr-home-dashboard-link" href="#/202603/06/README">查看全部</a>
 </section>
 </div>
 

@@ -40,10 +40,15 @@ def test_home_dashboard_cards_keep_a_quiet_equal_height_surface():
     assert "display: flex" in shared_rule
     assert "flex-direction: column" in shared_rule
     assert "height: 100%" in shared_rule
+    assert "position: relative" in shared_rule
+    assert "overflow: hidden" in shared_rule
     assert "background: #ffffff" in shared_rule
     assert "border: 1px solid #d9dee3" in shared_rule
+    assert "border-top: 4px solid var(--dpr-home-dashboard-accent)" in shared_rule
     assert "border-radius: 8px" in shared_rule
-    assert "box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04)" in shared_rule
+    assert "box-shadow:" in shared_rule
+    assert shared_rule.count("rgba(") >= 2
+    assert re.search(r"box-shadow:\s*[^;]*0\s+[34]px\s+0", shared_rule)
     assert "border-left" not in shared_rule
     assert "gradient" not in shared_rule.lower()
 
@@ -90,59 +95,43 @@ def test_home_dashboard_stats_are_not_nested_cards():
     assert "flex-direction: column" in stat_rule
 
 
-def test_home_dashboard_layout_keeps_footer_links_and_wrapped_tags():
+def test_home_dashboard_layout_keeps_wrapped_tags_and_truncated_non_link_titles():
     css = _read_css()
     section = _section_between(css, "/* 首页仪表盘卡片 */", "/* 侧边栏字体放大 */")
 
     body_rule = _rule_body(section, ".markdown-section .dpr-home-dashboard-body")
     tags_rule = _rule_body(section, ".markdown-section .dpr-home-dashboard-tags")
-    link_rule = _rule_body(section, ".markdown-section .dpr-home-dashboard-link")
     title_rule = _rule_body(section, ".markdown-section .dpr-home-dashboard-title")
-    paper_link_rule = _rule_body(
-        section, ".markdown-section .dpr-home-dashboard-paper-list a"
+    paper_title_rule = _rule_body(
+        section, ".markdown-section .dpr-home-dashboard-paper-title"
     )
 
     assert "flex: 1 1 auto" in body_rule
     assert "min-width: 0" in body_rule
     assert "display: flex" in tags_rule
     assert "flex-wrap: wrap" in tags_rule
-    assert "margin-top: auto" in link_rule
     assert "overflow: hidden" in title_rule
     assert "text-overflow: ellipsis" in title_rule
     assert "white-space: nowrap" in title_rule
-    assert "display: block" in paper_link_rule
-    assert "min-width: 0" in paper_link_rule
-    assert "overflow: hidden" in paper_link_rule
-    assert "text-overflow: ellipsis" in paper_link_rule
+    assert "display: block" in paper_title_rule
+    assert "min-width: 0" in paper_title_rule
+    assert "overflow: hidden" in paper_title_rule
+    assert "text-overflow: ellipsis" in paper_title_rule
+    assert "white-space: nowrap" in paper_title_rule
+    assert ".markdown-section .dpr-home-dashboard-link" not in section
 
 
-def test_home_dashboard_hover_motion_stays_subtle_and_respects_reduced_motion():
+def test_home_dashboard_cards_stay_static_without_hover_or_focus_motion():
     css = _read_css()
     section = _section_between(css, "/* 首页仪表盘卡片 */", "/* 侧边栏字体放大 */")
 
-    hover_rule = _rule_body(
-        section,
-        ".markdown-section .dpr-home-dashboard-card:hover,\n"
-        ".markdown-section .dpr-home-dashboard-card:focus-within",
-    )
-    assert "transform: translateY(-1px)" in hover_rule
-
     base_rule = _rule_body(section, ".markdown-section .dpr-home-dashboard-card")
-    assert "transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease" in base_rule
-
-    reduced_motion = _section_between(
-        section,
-        "@media (prefers-reduced-motion: reduce)",
-        "@media (max-width: 760px)",
-    )
-    reduced_rule = _rule_body(reduced_motion, ".markdown-section .dpr-home-dashboard-card")
-    assert "transition: none" in reduced_rule
-    hover_reduced_rule = _rule_body(
-        reduced_motion,
-        ".markdown-section .dpr-home-dashboard-card:hover,\n"
-        "  .markdown-section .dpr-home-dashboard-card:focus-within",
-    )
-    assert "transform: none" in hover_reduced_rule
+    assert "transition" not in base_rule
+    assert "cursor: pointer" not in base_rule
+    assert ":hover" not in section
+    assert ":focus-within" not in section
+    assert "@media (prefers-reduced-motion: reduce)" not in section
+    assert "transform: translate" not in section
 
 
 def test_home_dashboard_switches_to_single_column_on_small_screens():
@@ -160,3 +149,9 @@ def test_current_and_init_homepages_render_exactly_four_dashboard_cards():
         content = path.read_text(encoding="utf-8")
         assert content.count('class="dpr-home-dashboard-card ') == 4, path
         assert content.count('class="dpr-home-dashboard-grid"') == 1, path
+        dashboard_region = _section_between(
+            content,
+            '<div class="dpr-home-dashboard-grid">',
+            '<div class="dpr-home-promo-card dpr-home-panel">',
+        )
+        assert "<a " not in dashboard_region, path

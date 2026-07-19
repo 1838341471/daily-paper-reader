@@ -1023,10 +1023,6 @@ def build_docsify_id_href(path_no_ext: str) -> str:
     return f"/{p}"
 
 
-def _build_home_route_href(path_no_ext: str) -> str:
-    return f"#{build_docsify_id_href(path_no_ext)}"
-
-
 def _home_summary_html(summary: str) -> str:
     paragraphs: List[str] = []
     for raw_line in str(summary or "").splitlines():
@@ -1075,8 +1071,10 @@ def _home_dashboard_papers(
     items = []
     for paper_id, title, _ in entries[:limit]:
         safe_title = html.escape((title or "").strip() or paper_id)
-        safe_href = html.escape(_build_home_route_href(paper_id), quote=True)
-        items.append(f'<li><a href="{safe_href}" title="{safe_title}">{safe_title}</a></li>')
+        items.append(
+            '<li><span class="dpr-home-dashboard-paper-title" '
+            f'title="{safe_title}">{safe_title}</span></li>'
+        )
     return '<ul class="dpr-home-dashboard-paper-list">' + "".join(items) + "</ul>"
 
 
@@ -1103,13 +1101,6 @@ def build_latest_report_section(
             run_status=run_status,
         )
 
-    if RANGE_DATE_RE.match(date_str):
-        report_path = f"{date_str}/README"
-    else:
-        ym = date_str[:6]
-        day = date_str[6:]
-        report_path = f"{ym}/{day}/README"
-    report_href = html.escape(_build_home_route_href(report_path), quote=True)
     safe_label = html.escape(effective_label)
     safe_generated_at = html.escape(generated_at)
     safe_status = html.escape(run_status)
@@ -1132,7 +1123,6 @@ def build_latest_report_section(
             f'    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>{len(quick_entries)}</dd></div>',
             "  </dl>",
             f'  <p class="dpr-home-dashboard-body">最近更新：{safe_generated_at}<br>状态：{safe_status}</p>',
-            f'  <a class="dpr-home-dashboard-link" href="{report_href}">查看完整日报</a>',
             "</section>",
             '<section class="dpr-home-dashboard-card dpr-home-brief-card">',
             '  <div class="dpr-home-dashboard-header">',
@@ -1145,7 +1135,6 @@ def build_latest_report_section(
             '  <div class="dpr-home-dashboard-body">',
             _home_summary_html(summary),
             "  </div>",
-            f'  <a class="dpr-home-dashboard-link" href="{report_href}">阅读全文</a>',
             "</section>",
         ]
     )
@@ -1171,7 +1160,6 @@ def build_latest_report_section(
                 body_html,
                 "  </div>",
                 f'  <div class="dpr-home-dashboard-tags">{tags_html}</div>' if tags_html else "",
-                f'  <a class="dpr-home-dashboard-link" href="{report_href}">查看全部</a>',
                 "</section>",
             ]
         )

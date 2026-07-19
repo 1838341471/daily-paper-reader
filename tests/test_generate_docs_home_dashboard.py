@@ -83,7 +83,9 @@ def test_home_latest_report_renders_one_two_by_two_dashboard():
     assert "速读推荐" in html and "1 篇" in html
     assert "Paper &lt;A&gt;" in html
     assert "Paper <A>" not in html
-    assert 'href="#/202607/20/README"' in html
+    assert '<span class="dpr-home-dashboard-paper-title"' in html
+    assert "<a " not in html
+    assert "href=" not in html
 
 
 def test_same_day_home_sync_replaces_the_dashboard_instead_of_appending(tmp_path):
@@ -122,6 +124,10 @@ def test_same_day_home_sync_replaces_the_dashboard_instead_of_appending(tmp_path
     assert "共 3 篇" in content
     assert "合并后重新生成。" in content
     assert "第一次生成。" not in content
+    dashboard = content.split('<div class="dpr-home-dashboard-grid">', 1)[1].split(
+        '<div class="dpr-home-promo-card', 1
+    )[0]
+    assert "<a " not in dashboard
 
 
 def test_day_report_uses_cumulative_wording_after_merge():
