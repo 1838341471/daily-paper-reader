@@ -1,0 +1,2662 @@
+{
+  "top_k": 200,
+  "generated_at": "2026-07-22T07:35:18.714033+00:00",
+  "papers": [
+    {
+      "id": "openreview-icml-2026-bz1utqkd58",
+      "source": "ICML-2026-Accepted",
+      "title": "Motion Planning in Compressed Representation Spaces",
+      "abstract": "Deep learning methods have vastly expanded the capabilities of motion planning in robotics applications, as learning priors from large-scale data has been shown to be essential in capturing the highly complex behavior required for solving tasks such as manipulation or navigation for autonomous vehicles. At the same time, model-based planning algorithms based on search or optimization remain an essential tool due to their flexibility, efficiency, and the ability to incorporate domain knowledge via expert-designed algorithms and objective functions. We propose a new generative framework to unify these two paradigms. First, we learn an autoencoder with a high compression ratio and a latent space of hierarchically ordered, discrete-valued tokens. Leveraging both the dimensionality reduction and the hierarchical coarse-to-fine structure learned by this autoencoder, we then perform motion planning by directly searching in the latent space of tokens. This search can optimize arbitrary objective functions specified at test time, providing a large degree of flexibility while maintaining efficiency and producing realistic solutions by relying on the generative capabilities of the highly compressed autoencoder. We evaluate our method on nuPlan and the Waymo Open Motion Dataset, showing how latent space search can be used for a variety of guided behavior generation tasks, achieving strong performance for closed-loop motion planning and multi-agent guided scenario synthesis without requiring any task-specific training.",
+      "authors": [
+        "Lukas Lao Beyer",
+        "Sertac Karaman"
+      ],
+      "primary_category": "robotics",
+      "categories": [
+        "robotics",
+        "motion planning",
+        "motion prediction",
+        "autonomous vehicles",
+        "tokenization",
+        "generative models"
+      ],
+      "published": "2026-04-30T19:11:43.604+00:00",
+      "link": "https://openreview.net/forum?id=Bz1uTQKD58",
+      "pdf_url": "https://openreview.net/pdf/d1d57586df5e61de44748077cc96bc464726ada2.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-xgvzyybzhr",
+      "source": "ICML-2026-Accepted",
+      "title": "CorrectionPlanner: Self-Correction Planner with Reinforcement Learning in Autonomous Driving",
+      "abstract": "Autonomous driving requires safe planning, but most learning-based planners lack explicit self-correction ability: once an unsafe action is proposed, there is no mechanism to correct it. Thus, we propose CorrectionPlanner, an autoregressive planner with self-correction that contains a propose, evaluate, and correct loop in the motion-token generation process. At each planning step, the policy proposes an action, namely a motion token, and a learned collision critic predicts whether it will induce a collision within a short horizon. If the critic predicts a collision, we retain the sequence of historical unsafe motion tokens as a self-correction trace, generate the next motion token conditioned on it, and repeat this process until the safe motion token is proposed or the safety criterion is met. This self-correction trace, consisting of all the unsafe motion tokens, represents the planner’s correction process in motion-token space. We train the planner with imitation learning followed by model-based reinforcement learning using rollouts from a pretrained world model that realistically models agents' reactive behaviors. Closed-loop evaluations show that CorrectionPlanner reduces the collision rate by over $20\\%$ on Waymax and obtains state-of-the-art planning scores on nuPlan.",
+      "authors": [
+        "Yihong Guo",
+        "Dongqiangzi Ye",
+        "Sijia Chen",
+        "Anqi Liu",
+        "Xianming Liu"
+      ],
+      "primary_category": "autonomous driving",
+      "categories": [
+        "autonomous driving",
+        "reinforcement learning",
+        "self-correction",
+        "reasoning"
+      ],
+      "published": "2026-04-30T19:21:59.602+00:00",
+      "link": "https://openreview.net/forum?id=XgVZyybzHr",
+      "pdf_url": "https://openreview.net/pdf/543172d90bfd7a09d534e91c22b5059750bf2736.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-zo8vzsggtn",
+      "source": "ICML-2026-Accepted",
+      "title": "A KL-regularization framework for learning to plan with adaptive priors",
+      "abstract": "Effective exploration remains a key challenge in model-based reinforcement learning (MBRL), especially in high-dimensional continuous control tasks where sample efficiency is critical. Recent work addresses this by using learned policies as proposal distributions for Model-Predictive Path Integral (MPPI) planning. Early approaches update the sampling policy independently of the planner, typically via deterministic policy gradients with entropy regularization. However, since the data distribution is induced by the MPPI planner, misalignment between the policy and planner degrades value estimation and long-term performance. To address this, recent methods explicitly align the policy with the planner by minimizing KL divergence to the planner distribution or by incorporating planner-guided regularization. In this work, we unify these approaches under the Policy Optimization–Model Predictive Control (PO-MPC) framework, a family of KL-regularized MBRL methods that treat the planner’s action distribution as a prior in policy optimization. We show how existing methods emerge as special cases of this family and explore previously unstudied variants. Experiments demonstrate that these variants yield significant performance gains, advancing the state of the art in MPPI-based RL.",
+      "authors": [
+        "Alvaro Serra-Gomez",
+        "Daniel Jarne Ornia",
+        "Dhruva Tirumala",
+        "Thomas M. Moerland"
+      ],
+      "primary_category": "Model-Based Reinforcement Learning",
+      "categories": [
+        "Model-Based Reinforcement Learning",
+        "Planning",
+        "Control as Inference"
+      ],
+      "published": "2026-04-30T19:18:36.687+00:00",
+      "link": "https://openreview.net/forum?id=zO8vzSGgTn",
+      "pdf_url": "https://openreview.net/pdf/0f4c69716f176f7f2527c512e073f4b98bfc1625.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-emwu5ry8m9",
+      "source": "ICML-2026-Accepted",
+      "title": "NOMAD: Lifelong Trajectory Planning via Non-Parametric Bayesian Memory-Adaptive Diffusion Experts",
+      "abstract": "Autonomous vehicles operating in open-world environments must continually adapt to rare long-tail scenarios while preserving previously acquired driving skills. However, existing trajectory planning approaches struggle with this stability--plasticity trade-off, as they rely on static models or rigid rule-based controllers that cannot robustly handle evolving and complex traffic dynamics. Against this background, we propose **NOMAD**, a lifelong trajectory planning framework that integrates non-parametric Bayesian memory with diffusion-based trajectory generation, enabling continuous adaptation to long-tail scenarios without catastrophic forgetting. Our method maps growing scene contexts to a dynamically growing set of discrete memory clusters, which guide a conditional diffusion model to function as a mixture of experts specialized for diverse driving behaviors. To retain past knowledge during incremental learning, we introduce a generative replay mechanism that synthesizes pseudo-experiences from previously learned memory clusters. Extensive closed-loop evaluations on the nuPlan benchmark demonstrate that our approach achieves state-of-the-art performance on long-tail scenarios, improving the interPlan score by **9.4%** over the strongest baseline, while maintaining competitive performance on regular driving benchmarks. Moreover, our method exhibits robust continual learning capability, achieving the highest average closed-loop score with positive backward transfer when adapting to sequentially introduced long-tail scenarios.",
+      "authors": [
+        "Yixian Chen",
+        "Rufan Bai",
+        "Jiangbin Zheng",
+        "Yimin Wang",
+        "Tiantian CHEN",
+        "Wei Wang",
+        "Yuhuan Lu"
+      ],
+      "primary_category": "Trajectory planning",
+      "categories": [
+        "Trajectory planning",
+        "continual learning",
+        "diffusion model",
+        "discrete memory"
+      ],
+      "published": "2026-04-30T19:10:03.316+00:00",
+      "link": "https://openreview.net/forum?id=emwU5Ry8M9",
+      "pdf_url": "https://openreview.net/pdf/d1c1fb8aca1386b5f851fe8cd9d097c39695e998.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-qzjh84ut3q",
+      "source": "ICML-2026-Accepted",
+      "title": "TodoEvolve: Learning to Architect Agent Planning Systems",
+      "abstract": "Planning has become a central capability for contemporary agent systems in navigating complex, long-horizon tasks, yet existing approaches predominantly rely on fixed, hand-crafted planning structures that lack the flexibility to adapt to the structural diversity of open-ended problems. To address this limitation, we introduce TodoEvolve, a meta-planning paradigm that autonomously synthesizes and dynamically revises task-specific planning architectures. Specifically, we first construct PlanFactory, a modular design space that standardizes diverse planning paradigms within a unified codebase encompassing topology, initialization, adaptation, and navigation, thereby providing a common interface for heterogeneous planning patterns. Leveraging PlanFactory, we collect high-quality planning trajectories and train Todo-14B via Impedance-Guided Preference Optimization (IGPO), a multi-objective reinforcement learning objective that encourages the generation of planning systems that are performant, stable, and token-efficient across arbitrary tasks and agent backbones. Empirical evaluations on five agentic benchmarks demonstrate that TodoEvolve consistently surpasses carefully engineered planning modules while maintaining economical API costs and runtime overhead. Our codes are available at \\url{https://github.com/EcthelionLiu/TodoEvolve}.",
+      "authors": [
+        "Jiaxi Liu",
+        "Guibin Zhang",
+        "Yanzuo Jiang",
+        "Zihan Zhang",
+        "Heng Chang",
+        "Zhenfei Yin",
+        "Qibing Ren",
+        "Junchi Yan"
+      ],
+      "primary_category": "Agent Planning",
+      "categories": [
+        "Agent Planning",
+        "LLM Agent",
+        "Multi-Agent System"
+      ],
+      "published": "2026-04-30T19:10:35.666+00:00",
+      "link": "https://openreview.net/forum?id=QZjH84ut3Q",
+      "pdf_url": "https://openreview.net/pdf/edc35abd0a8ed76f34162fb5481ab1759eaebc3f.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-22xf7ii0hd",
+      "source": "ICML-2026-Accepted",
+      "title": "Hierarchical Causal Abduction: A Foundation Framework for Explainable Model Predictive Control",
+      "abstract": "Model Predictive Control (MPC) is widely used to operate safety-critical infrastructure by predicting future trajectories and optimizing control actions. However, nonlinear dynamics, hard safety constraints, and numerical optimization often render individual control moves opaque to human operators, undermining trust and hindering deployment. This paper presents Hierarchical Causal Abduction (HCA), which combines (i) physics-informed reasoning via domain knowledge graphs, (ii) optimization evidence from Karush--Kuhn--Tucker (KKT) multipliers, and (iii) temporal causal discovery via the PCMCI algorithm to generate faithful, human-interpretable explanations for control actions computed by nonlinear MPC. Across three diverse control applications (greenhouse climate, building HVAC, chemical process engineering) with expert validation, HCA improves explanation accuracy by 53\\% over LIME (0.478 vs. 0.311) using a single set of cross-domain parameters without per-domain tuning; domain-specific KKT-threshold calibration over 2--3 days further increases accuracy to 0.88. Ablation studies confirm that each evidence source is essential, with 32--37\\% accuracy degradation when any component is removed, and HCA's ranking-and-validation methodology generalizes beyond MPC to other prediction-based decision systems, including learning-based control and trajectory planning.",
+      "authors": [
+        "Ramesh Arvind Naagarajan",
+        "Zühal Wagner",
+        "Stefan Streif"
+      ],
+      "primary_category": "Explainable AI",
+      "categories": [
+        "Explainable AI",
+        "Model Predictive Control",
+        "Causality",
+        "Temporal Causal Discovery",
+        "Knowledge Graphs"
+      ],
+      "published": "2026-04-30T19:22:25.026+00:00",
+      "link": "https://openreview.net/forum?id=22XF7II0Hd",
+      "pdf_url": "https://openreview.net/pdf/4cfeae2a852c59d21d50353c2595109674888c26.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-wb97or78ox",
+      "source": "ICML-2026-Accepted",
+      "title": "SAD-Flower: Flow Matching for Safe, Admissible, and Dynamically Consistent Planning",
+      "abstract": "Flow matching (FM) has shown promising results in data-driven planning. However, it inherently lacks formal guarantees for ensuring state and action constraints, whose satisfaction is a fundamental and crucial requirement for the safety and admissibility of planned trajectories on various systems. Moreover, existing FM planners do not ensure the dynamical consistency, which potentially renders trajectories inexecutable. We address these shortcomings by proposing SAD-Flower, a novel framework for generating $\\textbf{S}$afe, $\\textbf{A}$dmissible, and $\\textbf{D}$ynamically consistent trajectories. Our approach relies on an augmentation of the flow with a virtual control input. Thereby, principled guidance can be derived using techniques from nonlinear control theory, providing formal guarantees for state constraints, action constraints, and dynamic consistency. Crucially, SAD-Flower operates without retraining, enabling test-time satisfaction of unseen constraints. Through extensive experiments across several tasks, we demonstrate that SAD-Flower outperforms various generative-model-based baselines in ensuring constraint satisfaction. Video and demos can be found at [sadflowerplanning.github.io](https://sadflowerplanning.github.io/project_web/).",
+      "authors": [
+        "Tzu-Yuan Huang",
+        "Armin Lederer",
+        "Dai-Jie Wu",
+        "Xiaobing Dai",
+        "Sihua Zhang",
+        "Hsiu-Chin Lin",
+        "Shao-Hua Sun",
+        "Stefan Georg Sosnowski",
+        "Sandra Hirche"
+      ],
+      "primary_category": "Flow matching",
+      "categories": [
+        "Flow matching",
+        "Safe",
+        "planning",
+        "Robotic",
+        "Decision making",
+        "Constraint guarantees",
+        "Admissible",
+        "Dynamic consistent"
+      ],
+      "published": "2026-04-30T19:17:34.481+00:00",
+      "link": "https://openreview.net/forum?id=wb97oR78OX",
+      "pdf_url": "https://openreview.net/pdf/b5c67a42e2159ac5a0a45bc7981e0004b70effa5.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-tlw4tc7zn9",
+      "source": "ICML-2026-Accepted",
+      "title": "Improving Diffusion Planners by Self-Supervised Action Gating with Energies",
+      "abstract": "Diffusion planners are a strong approach for offline reinforcement learning, but they can fail when value-guided selection favours trajectories that score well yet are locally inconsistent with the environment dynamics, resulting in brittle execution. We propose Self-supervised Action Gating with Energies (SAGE), an inference-time re-ranking method that penalises dynamically inconsistent plans using a latent consistency signal. SAGE trains a Joint-Embedding Predictive Architecture (JEPA) encoder on offline state sequences and an action-conditioned latent predictor for short horizon transitions. At test time, SAGE assigns each sampled candidate an energy given by its latent prediction error and combines this feasibility score with value estimates to select actions. SAGE can integrates into existing diffusion planning pipelines that can sample trajectories and select actions via value scoring; it requires no environment rollouts and no policy re-training. Across locomotion, navigation, and manipulation benchmarks, SAGE improves the performance and robustness of diffusion planners.",
+      "authors": [
+        "Yuan Lu",
+        "Dongqi Han",
+        "Yansen Wang",
+        "Dongsheng Li"
+      ],
+      "primary_category": "Offline Reinforcement Learning",
+      "categories": [
+        "Offline Reinforcement Learning",
+        "Diffusion Planners",
+        "Decision Making",
+        "Planning",
+        "Self-Supervised Learning"
+      ],
+      "published": "2026-04-30T19:10:17.399+00:00",
+      "link": "https://openreview.net/forum?id=tLW4Tc7Zn9",
+      "pdf_url": "https://openreview.net/pdf/fda8852a7b6798c4ab5dea9a56014bd334160bd1.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ncrrcg4bfp",
+      "source": "ICML-2026-Accepted",
+      "title": "WestWorld: A Knowledge-Encoded Scalable Trajectory World Model for Diverse Robotic Systems",
+      "abstract": "Trajectory world models play a crucial role in robotic dynamics learning, planning, and control. While recent works have explored trajectory world models for diverse robotic systems, they struggle to scale to a large number of distinct system dynamics and overlook domain knowledge of physical structures. To address these limitations, we introduce *WestWorld*, a kno**W**ledge-**E**ncoded **S**calable **T**rajectory **World** model for diverse robotic systems. To tackle the scalability challenge, we propose a novel system-aware Mixture-of-Experts (Sys-MoE) that dynamically combines and routes specialized experts for different robotic systems via a learnable system embedding. To further enhance zero-shot generalization, we incorporate domain knowledge of robot physical structures by introducing a structural embedding that aligns trajectory representations with morphological information. After pretraining on 89 complex environments spanning diverse morphologies across both simulation and real-world settings, *WestWorld* achieves significant improvements over competitive baselines in zero- and few-shot trajectory prediction. Additionally, it shows strong scalability across a wide range of robotic environments and significantly improves performance on downstream model-based control for different robots. Finally, we deploy our model on a real-world Unitree Go1, where it demonstrates stable locomotion performance. The code is available at https://github.com/511205787/WestWorld.",
+      "authors": [
+        "Yuchen Wang",
+        "Jiangtao Kong",
+        "Sizhe Wei",
+        "Xiaochang Li",
+        "Haohong Lin",
+        "Hongjue Zhao",
+        "Tianyi Zhou",
+        "Lu Gan",
+        "Huajie Shao"
+      ],
+      "primary_category": "Trajectory World Model",
+      "categories": [
+        "Trajectory World Model",
+        "Knowledge-Encoded Robotics Learning",
+        "Mixture-of-Experts"
+      ],
+      "published": "2026-04-30T19:11:55.802+00:00",
+      "link": "https://openreview.net/forum?id=ncRRCG4BfP",
+      "pdf_url": "https://openreview.net/pdf/8810a4114256df804745ae8c7e2b3babeffa3e24.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-6lq2mgo42h",
+      "source": "ICML-2026-Accepted",
+      "title": "GAE: Unleashing Physical Potential of VLM with Generalizable Action Expert",
+      "abstract": "Vision-language models demonstrate strong reasoning and planning abilities, yet grounding these predictions into precise robot actions remains a central challenge. Existing Vision-Language-Action methods typically entangle reasoning and action generation, leading to limited generalization and costly adaptation. We propose to learn a \\textbf{G}eneralizable \\textbf{A}ction \\textbf{E}xpert (\\textbf{GAE}), a task-agnostic model that converts sparse geometric plans into dense robot actions. Our approach introduces a sparse geometric interface: the VLM predicts sparse 3D waypoints representing high-level intention, while GAE maps these waypoints together with real-time point cloud observations to continuous action trajectories. GAE is pretrained on a large-scale pointcloud–trajectory dataset comprising \\textbf{150k} trajectories from both simulation and real-world robots. To further improve efficiency and generalization, we introduce an \\textbf{Action Pre-training, Pointcloud Fine-tuning (APPF)} scheme that decouples learning action dynamics from geometry grounding. After pretraining, GAE is frozen and reused across downstream tasks, requiring only lightweight fine-tuning of the VLM to produce the sparse interface. Extensive experiments show that our method achieves strong performance and generalization across diverse visual domains, camera viewpoints, and natural language instructions.",
+      "authors": [
+        "Mingyu Liu",
+        "Zheng Huang",
+        "Xiaoyi Lin",
+        "Muzhi Zhu",
+        "Canyu Zhao",
+        "Yating Wang",
+        "Haoyi Zhu",
+        "Hao Chen",
+        "Chunhua Shen"
+      ],
+      "primary_category": "Vision Language Action Model",
+      "categories": [
+        "Vision Language Action Model",
+        "robotics",
+        "dual-system"
+      ],
+      "published": "2026-04-30T19:16:15.707+00:00",
+      "link": "https://openreview.net/forum?id=6lq2MGo42H",
+      "pdf_url": "https://openreview.net/pdf/2f3ed7d7bc2a6c31c211fb1222f477e1c60bd2ec.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-c4isirb6iv",
+      "source": "ICML-2026-Accepted",
+      "title": "Reasoning-VLA: An Efficient and Spatial-Guided General Vision-Language-Action Reasoning Model for Autonomous Driving",
+      "abstract": "Vision-Language-Action (VLA) models have recently shown strong decision-making capabilities in autonomous driving. However, existing VLAs often struggle with achieving efficient inference and generalizing to novel autonomous vehicle configurations and driving scenarios. In this paper, we propose Reasoning-VLA, a general and efficient action-generation VLA framework. The proposed model employs a set of learnable action queries, implicitly guided by predefined spatial representations to enhance spatial awareness. \nThese learnable queries interact with reasoning-enhanced vision–language features to generate continuous action trajectories in parallel. To promote robust generalization, we consolidate eight publicly available autonomous driving datasets into a standardized, Chain-of-Thought reasoning–based, and easy-to-use data format for model training. Leveraging both supervised learning and reinforcement learning fine-tuning, extensive empirical evaluations across multiple benchmarks demonstrate that Reasoning-VLA achieves state-of-the-art performance, strong generalization capability, and the excellent inference speed with parallel decode.",
+      "authors": [
+        "Dapeng Zhang",
+        "Zhenlong Yuan",
+        "Zhangquan Chen",
+        "Chih-Ting Liao",
+        "Yinda Chen",
+        "Fei Shen",
+        "Qingguo Zhou",
+        "Tat-Seng Chua"
+      ],
+      "primary_category": "Scene Understanding",
+      "categories": [
+        "Scene Understanding",
+        "End-to-end",
+        "VLM",
+        "VLA",
+        "RL",
+        "Robotics"
+      ],
+      "published": "2026-04-30T19:10:25.569+00:00",
+      "link": "https://openreview.net/forum?id=c4iSIrb6Iv",
+      "pdf_url": "https://openreview.net/pdf/2958fe5249a1a673a414d689de7784b306b2a02a.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-gbq6eiste4",
+      "source": "ICML-2026-Accepted",
+      "title": "DeepSight: Long-Horizon World Modeling via Latent States Prediction for End-to-End Autonomous Driving",
+      "abstract": "End-to-end autonomous driving systems are increasingly integrating Vision-Language Model (VLM) architectures, incorporating text reasoning or visual reasoning to enhance the robustness and accuracy of driving decisions.\nHowever, the reasoning mechanisms employed in most methods are direct adaptations from general domains, lacking in-depth exploration tailored to autonomous driving scenarios, particularly within visual reasoning modules. In this paper, we propose a driving world model that performs parallel prediction of latent semantic features for consecutive future frames in the bird’s-eye-view (BEV) space, thereby enabling long-horizon modeling of future world states. We also introduce an efficient and adaptive text reasoning mechanism that utilizes additional social knowledge and reasoning capabilities to further improve driving performance in challenging long-tail scenarios. We present a novel, efficient, and effective approach that achieves state-of-the-art (SOTA) results on the closed-loop Bench2drive benchmark. Codes are available at: https://github.com/hotdogcheesewhite/DeepSight.",
+      "authors": [
+        "Lingjun Zhang",
+        "Changjie Wu",
+        "Linzhe Shi",
+        "Jiangyang Li",
+        "Jiaxin Liu",
+        "Lei Yang",
+        "Hang Zhang",
+        "Mu Xu",
+        "Hong Wang"
+      ],
+      "primary_category": "autonomous driving; Vision-Language Model; Visual reasoning",
+      "categories": [
+        "autonomous driving; Vision-Language Model; Visual reasoning"
+      ],
+      "published": "2026-04-30T19:13:18.123+00:00",
+      "link": "https://openreview.net/forum?id=gBq6eiSTE4",
+      "pdf_url": "https://openreview.net/pdf/48be22be2762cc64031302f430b73cab3cdbdf9d.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-hgwbwnhwvd",
+      "source": "ICML-2026-Accepted",
+      "title": "CoIRL-AD: Collaborative-Competitive Imitation-Reinforcement Learning in Latent World Models for Autonomous Driving",
+      "abstract": "End-to-end autonomous driving models trained with imitation learning (IL) often generalize poorly, particularly in long-tail scenarios where expert demonstrations are sparse. Reinforcement learning (RL) can provide complementary task-level supervision, but applying RL to real-world autonomous driving is challenging in offline settings without interactive simulators, where datasets are dominated by expert actions and provide limited behavioral diversity. We propose CoIRL-AD, a competitive dual-policy framework that integrates IL and RL under a unified offline training regime. CoIRL-AD decouples imitation and reward optimization into separate actors to alleviate objective conflicts, uses imagined future rollouts for long-horizon reward estimation, and introduces a competition mechanism that selectively transfers beneficial behaviors while keeping RL anchored to expert-like driving. Experiments on the nuScenes benchmark show that CoIRL-AD consistently improves robustness over strong IL-based baselines, with especially large gains in cross-city generalization and long-tail scenarios. Code is available at: https://github.com/SEU-zxj/CoIRL-AD.",
+      "authors": [
+        "Xiaoji Zheng",
+        "Ziyuan Yang",
+        "Yanhao Chen",
+        "Yuhang Peng",
+        "Yuanrong Tang",
+        "Gengyuan Liu",
+        "Bokui Chen",
+        "Jiangtao Gong"
+      ],
+      "primary_category": "autonomous driving",
+      "categories": [
+        "autonomous driving",
+        "world model",
+        "imitation learning",
+        "reinforcement learning"
+      ],
+      "published": "2026-04-30T19:18:16.489+00:00",
+      "link": "https://openreview.net/forum?id=hGwbWNhWvd",
+      "pdf_url": "https://openreview.net/pdf/31d868560d11c7698e65a19c30821e6d9d9866c5.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-hw9esvumtm",
+      "source": "ICML-2026-Accepted",
+      "title": "RoCA: Robust Cross-Domain End-to-End Autonomous Driving",
+      "abstract": "End-to-end (E2E) autonomous driving has recently emerged as a new paradigm, offering significant potential. However, few studies have looked into the practical challenge of deployment across domains (e.g., cities). Although several works have incorporated Large Language Models (LLMs) to leverage their open-world knowledge, LLMs do not guarantee cross-domain driving performance and may incur prohibitive retraining costs during domain adaptation. In this paper, we propose RoCA, a novel framework for robust cross-domain E2E autonomous driving. RoCA formulates the joint probabilistic distribution over the tokens that encode ego and surrounding vehicle information in the E2E pipeline. Instantiating with a Gaussian process (GP), RoCA learns a set of basis tokens with corresponding trajectories, which span diverse driving scenarios. Then, given any driving scene, it is able to probabilistically infer the future trajectory. By using RoCA together with a base E2E model in source-domain training, we improve the generalizability of the base model, without requiring extra inference computation. In addition, RoCA enables robust adaptation on new target domains, significantly outperforming direct finetuning. We extensively evaluate RoCA on various cross-domain scenarios and show that it achieves strong domain generalization and adaptation performance.",
+      "authors": [
+        "Rajeev Yasarla",
+        "Shizhong Han",
+        "Hsin-Pai Cheng",
+        "Apratim Bhattacharyya",
+        "Shweta Mahajan",
+        "Litian Liu",
+        "Yunxiao Shi",
+        "Risheek Garrepalli",
+        "Hong Cai",
+        "Fatih Porikli"
+      ],
+      "primary_category": "Gaussian Process; autonomous driving;",
+      "categories": [
+        "Gaussian Process; autonomous driving;"
+      ],
+      "published": "2026-04-30T19:09:07.412+00:00",
+      "link": "https://openreview.net/forum?id=Hw9EsvumTM",
+      "pdf_url": "https://openreview.net/pdf/95a84909dd20724702715f37ac767abc2e8d6d20.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ssebms2mga",
+      "source": "ICML-2026-Accepted",
+      "title": "DriveWorld-VLA: Unified Latent-Space World Modeling with Vision–Language–Action for Autonomous Driving",
+      "abstract": "End-to-end (E2E) autonomous driving has recently attracted increasing interest in unifying Vision–Language–Action (VLA) with World Models to enhance decision-making and forward-looking imagination. However, existing methods fail to effectively unify future scene evolution and action planning within a single architecture due to inadequate sharing of latent states, limiting the impact of visual imagination on action decisions. To address this limitation, we propose DriveWorld-VLA, a novel framework that unifies world modeling and planning within a latent space by tightly integrating VLA and world models at the representation level, which enables the VLA planner to benefit directly from holistic scene-evolution modeling and reducing reliance on dense annotated supervision. Additionally, DriveWorld-VLA incorporates the latent states of the world model as core decision-making states for the VLA planner, facilitating the planner to assess how candidate actions impact future scene evolution. By conducting world modeling entirely in the latent space, DriveWorld-VLA supports controllable, action-conditioned imagination at the feature level, avoiding expensive pixel-level rollouts. Extensive open-loop and closed-loop evaluations demonstrate the effectiveness of DriveWorld-VLA, which achieves state-of-the-art performance with 91.3 PDMS on NAVSIMv1, 86.8 EPDMS on NAVSIMv2, and 0.16 3-second average collision rate on nuScenes. Code and models are released at https://github.com/liulin815/DriveWorld-VLA.",
+      "authors": [
+        "Feiyang Jia",
+        "Lin Liu",
+        "Ziying Song",
+        "Caiyan Jia",
+        "Hangjun Ye",
+        "Xiaoshuai Hao",
+        "Long Chen"
+      ],
+      "primary_category": "Robotics; Autonomous Driving; World Model; Vision–Language–Action Model",
+      "categories": [
+        "Robotics; Autonomous Driving; World Model; Vision–Language–Action Model"
+      ],
+      "published": "2026-04-30T19:09:18.987+00:00",
+      "link": "https://openreview.net/forum?id=sseBmS2MGa",
+      "pdf_url": "https://openreview.net/pdf/4d7c2b743fd3940159e57db8dbf92bc64d1dbdd8.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-n2mwmok6pl",
+      "source": "ICML-2026-Accepted",
+      "title": "AutoMoT: A Unified Vision-Language-Action Model with Asynchronous Mixture -of-Transformers for End-to-End Autonomous Driving",
+      "abstract": "Integrating vision-language models (VLMs) into end-to-end (E2E) autonomous driving (AD) systems has shown promise in improving scene understanding. However, existing integration strategies suffer from several limitations: they either struggle to resolve distribution misalignment between reasoning and action spaces,  underexploit the general reasoning capabilities of pretrained VLMs, or incur substantial inference latency during action policy generation, which degrades driving performance. To address these challenges, we propose AutoMoT in this work, an end-to-end AD framework that unifies reasoning and action generation within a single vision-language-action (VLA) model. Our approach leverages a mixture-of-transformer (MoT) architecture with layer-wise joint attention sharing, which preserves the general reasoning capabilities of pre-trained VLMs while enabling efficient asynchronous inference over various tasks at different frequencies. Additionally, we explore a VLA-oriented action refiner that further enhances driving performance via diffusion-based fine-tuning. Extensive experiments on multiple benchmarks, under both open- and closed-loop settings, demonstrate that AutoMoT achieves state-of-the-art (SOTA) performance compared to existing methods. We further investigate the functional boundary of pre-trained VLMs in AD, examining when and to what extent AD-tailored fine-tuning is necessary.",
+      "authors": [
+        "Wenhui Huang",
+        "Songyan Zhang",
+        "Qihang Huang",
+        "Zhidong Wang",
+        "Zhiqi Mao",
+        "Collister Chua",
+        "Zhan Chen",
+        "Long Chen",
+        "Chen Lv"
+      ],
+      "primary_category": "Autonomous Driving; VLA; Mixture-of-Transformers; Asynchronous Inference",
+      "categories": [
+        "Autonomous Driving; VLA; Mixture-of-Transformers; Asynchronous Inference"
+      ],
+      "published": "2026-04-30T19:15:31.339+00:00",
+      "link": "https://openreview.net/forum?id=N2mwmOk6pl",
+      "pdf_url": "https://openreview.net/pdf/8e4cccb7721abcd37ad990ddb3874c5c03e14ed9.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-hwmmbbujpo",
+      "source": "ICML-2026-Accepted",
+      "title": "Ask Less, See More: Communication-Conditioned Token Pruning for Vehicle-to-Vehicle Cooperative Autonomous Driving with Multimodal Large Language Models",
+      "abstract": "Multimodal Large Language Models (MLLMs) offer a promising paradigm for vehicle-to-vehicle (V2V) cooperative autonomous driving, enabling language-based decision-making in safety-critical occluded scenarios. However, existing V2V–MLLM frameworks rely on dense token-level sharing and fusion, incurring high communication and inference costs. Moreover, conventional V2V perception methods are limited to feature-sharing paradigms without language reasoning, and existing token pruning strategies fail to consider LiDAR-specific spatial structure and multi-agent fusion. To address these limitations, we propose V2V Communication-Conditioned MLLM Framework (V2V-CCM), a dual-stage cooperative communication framework that broadcasts request messages to all agents and uses them to identify redundant visual tokens. Specifically, Question Semantic Message (QSM) encodes global question intent for question-relevant token selection, while Spatial Coverage Message (SCM) summarizes LiDAR features to identify spatially redundant tokens already observed by other agents. Integrated into dual-stage frameworks, V2V-CCM substantially reduces communication and inference costs while preserving question-relevant tokens and removing spatial redundancy. Extensive experiments on V2V-QA and V2V-GoT-QA demonstrate that V2V-CCM consistently outperforms existing pruning methods and achieves state-of-the-art performance.",
+      "authors": [
+        "Shiqi Sun",
+        "Yantao Lu",
+        "Bingkun Sun",
+        "Ning Liu",
+        "Bo Jiang",
+        "Ying Zhang",
+        "Jinchao Chen",
+        "Chenglie Du"
+      ],
+      "primary_category": "Vehicle-to-Vehicle; Token Pruning; Cooperative Perception; Multimodal Large Language Models;",
+      "categories": [
+        "Vehicle-to-Vehicle; Token Pruning; Cooperative Perception; Multimodal Large Language Models;"
+      ],
+      "published": "2026-04-30T19:12:50.408+00:00",
+      "link": "https://openreview.net/forum?id=HWMMBBujpo",
+      "pdf_url": "https://openreview.net/pdf/ff44d244907cf923bf81537e76958708e1d40378.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-xcqnmajjw5",
+      "source": "ICML-2026-Accepted",
+      "title": "TF-FACE: Time-Frequency Fusion Learning via Frequency-Domain Adaptive and Controllable Enhancement for Trajectory Prediction",
+      "abstract": "Accurately predicting the future trajectories of traffic participants is critical for safe, efficient, and human-friendly autonomous driving. Existing learning-based trajectory prediction methods are predominantly time-domain and insufficiently exploit latent frequency information, which limits their capability to capture low-frequency long-term dependencies and high-frequency short-term dynamics. To address this, we propose TF-FACE, a time-frequency learning framework via frequency-domain adaptive and controllable enhancement. TF-FACE introduces a fusion encoder with learnable gated frequency-domain attention that adaptively manipulates band-specific features for trajectory prediction. Building on the fused representation, we design a dual-stage decoder and a band-specific time–frequency dual-consistency loss to enable controllable decoupling and coupling across long- and short-term temporal scales, global and local scales, and then generate final multimodal predictions. Experiments on Argoverse 1 demonstrate that TF-FACE achieves state-of-the-art accuracy, while maintaining real-time inference for autonomous driving. Additional experiments are conducted on Argoverse 2, further validating TF-FACE's performance and generalizability.",
+      "authors": [
+        "Dongjian Song",
+        "Yunhao Meng",
+        "Songjun Huang",
+        "Jiayi Han"
+      ],
+      "primary_category": "Autonomous driving",
+      "categories": [
+        "Autonomous driving",
+        "Trajectory prediction",
+        "Time-frequency fusion learning",
+        "Gated frequency domain attention",
+        "Frequency domain decoupling"
+      ],
+      "published": "2026-04-30T19:17:25.766+00:00",
+      "link": "https://openreview.net/forum?id=XCqnmajjW5",
+      "pdf_url": "https://openreview.net/pdf/c7ccc16b88f29bc08f891a76d49048b19edd29ae.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-0dngyqndo2",
+      "source": "ICML-2026-Accepted",
+      "title": "SceneDirector: Bridging Explicit Geometry and Generative Priors for Unified Driving Scene Editing",
+      "abstract": "Validating autonomous driving systems requires diverse scenarios, yet real-world data collection is biased and costly. Editing existing driving logs offers a scalable solution, but simultaneously editing objects and ego-trajectory—termed unified editing—remains challenging.\nCurrent methods face an inherent dilemma: generative flexibility for object editing and physical precision for trajectory control.\nTo address this, we introduce SceneDirector, a diffusion-based framework that bridges explicit geometry and generative priors.\nFor explicit geometry, we leverage LiDAR-guided depth completion to construct dense scene geometry and integrate editable 3D assets to form a Unified Geometric Scaffold, providing rigorous structural guidance for unified editing.\nTo leverage generative priors, we encode the source video into a Static Texture Bank to provide rich appearance context.\nOur proposed Mask-Gated Reference Attention bridges these modalities. Guided by a geometric uncertainty metric, this mechanism dynamically regulates the interaction between the scaffold and the bank—preserving reliable geometry while adaptively injecting textures for semantic refinement.\nExtensive evaluations demonstrate that SceneDirector outperforms state-of-the-art methods in both controllability and visual quality.",
+      "authors": [
+        "Yiyuan Liang",
+        "Zhiying Yan",
+        "Tao Zhang",
+        "Shangke Liu",
+        "Kai Lin",
+        "Xu Zou",
+        "Nong Sang",
+        "Changxin Gao"
+      ],
+      "primary_category": "Diffusion Models",
+      "categories": [
+        "Diffusion Models",
+        "Video Editing",
+        "Autonomous Driving",
+        "Ego-trajectory Editing",
+        "Object Editing"
+      ],
+      "published": "2026-04-30T19:08:46.961+00:00",
+      "link": "https://openreview.net/forum?id=0dNGyQnDo2",
+      "pdf_url": "https://openreview.net/pdf/4a084877c3006d8dc46e7cea282fb404f411fdec.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ukbd73kfgm",
+      "source": "ICML-2026-Accepted",
+      "title": "SMD: Multi-view Safety-Critical Driving Video Generation in the Real-world Domain",
+      "abstract": "Safety-critical scenarios are essential for evaluating autonomous driving (AD) systems, yet they are rare in practice. Existing generators produce trajectories, simulations, or single-view videos—but they don’t meet what modern AD systems actually consume: realistic multi-view video.\nWe present SMD, the first framework for generating multi-view safety-critical driving videos in the real-world domain.\nSMD couples a safety-critical trajectory engine with a diffusion-based multi-view video generator through three design choices. First, we pick the right adversary: a GRPO-fine-tuned vision-language model (VLM) that understands multi-camera context and selects vehicles most likely to induce hazards. Second, we generate the right motion: a two-stage trajectory process that (i) produces collisions, then (ii) transforms them into natural evasion trajectories—preserving risk while staying within what current video generators can faithfully render. Third, we synthesize the right data: a diffusion model that turns these trajectories into multi-view videos suitable for end-to-end planners.\nVideos generated by SMD substantially increase collision rates when stress testing multiple end-to-end planners, and reduce collision rates when incorporated into training, improving planner robustness and safety.\nOur code and video examples are available at: \\href{https://icml-2.github.io/SMD/}{https://icml-2.github.io/SMD/}.",
+      "authors": [
+        "Jiawei Zhou",
+        "Linye Lyu",
+        "Zhuotao Tian",
+        "Cheng Zhuo",
+        "Yu Li"
+      ],
+      "primary_category": "Autonomous driving testing",
+      "categories": [
+        "Autonomous driving testing",
+        "safety-critical scenario",
+        "video generation",
+        "safety"
+      ],
+      "published": "2026-04-30T19:13:51.516+00:00",
+      "link": "https://openreview.net/forum?id=uKbD73kfgM",
+      "pdf_url": "https://openreview.net/pdf/1f05c33822962d68c39d076e6b968d39088c87b1.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ub6m4bsvwj",
+      "source": "ICML-2026-Accepted",
+      "title": "DynVLA: Learning World Dynamics for Action Reasoning in Autonomous Driving",
+      "abstract": "We propose DynVLA, a driving VLA model that introduces a new CoT paradigm termed Dynamics CoT. DynVLA forecasts compact world dynamics before action generation, enabling more informed and physically grounded decision-making. To obtain compact dynamics representations, DynVLA introduces a Dynamics Tokenizer that compresses future evolution into a small set of dynamics tokens. Considering the rich environment dynamics in interaction-intensive driving scenarios, DynVLA decouples ego-centric and environment-centric dynamics, yielding more accurate world dynamics modeling. We then train DynVLA to generate dynamics tokens before actions through SFT and RFT, improving decision quality while maintaining latency-efficient inference. Compared to Textual CoT, which lacks fine-grained spatiotemporal understanding, and Visual CoT, which introduces substantial redundancy due to dense image prediction, Dynamics CoT captures the evolution of the world in a compact, interpretable, and efficient form. Extensive experiments on NAVSIM, Bench2Drive, and a large-scale in-house dataset demonstrate that DynVLA consistently outperforms Textual CoT and Visual CoT methods, validating the effectiveness and practical value of Dynamics CoT.",
+      "authors": [
+        "Shuyao Shang",
+        "Bing Zhan",
+        "Yunfei Yan",
+        "Yuqi Wang",
+        "Yingyan Li",
+        "Yasong An",
+        "Xiaoman Wang",
+        "Jierui Liu",
+        "Lu Hou",
+        "Lue Fan",
+        "Zhaoxiang Zhang",
+        "Tieniu Tan"
+      ],
+      "primary_category": "Autonomous Driving",
+      "categories": [
+        "Autonomous Driving",
+        "End-to-End Autonomous Driving",
+        "Vision–Language–Action Model",
+        "Chain-of-Thought"
+      ],
+      "published": "2026-04-30T19:08:43.238+00:00",
+      "link": "https://openreview.net/forum?id=UB6M4BSvwJ",
+      "pdf_url": "https://openreview.net/pdf/51db5c75cae53ef147fa3a7b0d739e23c486cbaa.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-yteeie3ytd",
+      "source": "ICML-2026-Accepted",
+      "title": "VectorWorld: Efficient Streaming World Model via Diffusion Flow on Vector Graphs",
+      "abstract": "Closed-loop evaluation of autonomous-driving policies requires interactive \nsimulation beyond log replay. Existing generative world models suffer three gaps: history-incompatible initialization, sampling latency exceeding real-time budgets, and compounding kinematic infeasibility. We propose VectorWorld, a streaming vector-graph world model that incrementally generates ego-centric lane--agent tiles during rollout. VectorWorld couples a motion-aware gated VAE for history-compatible initialization, an edge-gated relational DiT with interval-conditioned MeanFlow and JVP-based large-step supervision for solver-free outpainting, and $\\Delta$Sim, a physics-aligned NPC policy with hybrid discrete--continuous actions and differentiable kinematic logit shaping. On Waymo Open Motion and nuPlan, VectorWorld improves map fidelity, initialization validity, and density calibration, enabling stable real-time $1\\mathrm{km}+$ closed-loop rollouts.",
+      "authors": [
+        "Chaokang Jiang",
+        "Desen Zhou",
+        "Jiuming Liu",
+        "Li Sun"
+      ],
+      "primary_category": "autonomous driving simulation",
+      "categories": [
+        "autonomous driving simulation",
+        "closed-loop evaluation",
+        "world models",
+        "vectorized scene generation",
+        "traffic simulation",
+        "real-time generation"
+      ],
+      "published": "2026-04-30T19:19:20.167+00:00",
+      "link": "https://openreview.net/forum?id=yTEEiE3YtD",
+      "pdf_url": "https://openreview.net/pdf/24d67a0d97ca7e9aef6ed196bbf0184215050cdc.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-woiiket6bn",
+      "source": "ICML-2026-Accepted",
+      "title": "SafeDec: Constrained Decoding for Safe Autoregressive Generalist Robot Navigation Policies",
+      "abstract": "Recent advances in end-to-end, multi-task robot policies based on transformer models have demonstrated impressive generalization to real-world embodied navigation tasks. Trained on vast datasets of simulated and real-world trajectories, these policies map multimodal observations directly to action sequences for physical execution. Despite promising real-world capabilities, these models are still data-driven and, therefore, lack explicit notions of behavioral correctness. We address this gap by introducing **SafeDec**, a constrained decoding framework for autoregressive, transformer-based robot navigation policies that enforces safety specifications expressed as Signal Temporal Logic (STL) formulas. Our method ensures that generated actions provably satisfy STL specifications under assumed dynamics at runtime without retraining while remaining agnostic of the underlying policy. \nWe evaluate **SafeDec** on tasks from the CHORES benchmark for state-of-the-art embodied navigation policies across hundreds of procedurally generated environments and show that our decoding-time interventions are useful not only for filtering unsafe actions but also for conditional action generation. Videos are available at constrained-robot-fms.github.io.",
+      "authors": [
+        "Parv kapoor",
+        "Akila Ganlath",
+        "Michael Clifford",
+        "Changliu Liu",
+        "Sebastian Scherer",
+        "Eunsuk Kang"
+      ],
+      "primary_category": "Generalist Robot Policies",
+      "categories": [
+        "Generalist Robot Policies",
+        "Provably Safe Robotics",
+        "Neuro-symbolic Robotics"
+      ],
+      "published": "2026-04-30T19:15:35.467+00:00",
+      "link": "https://openreview.net/forum?id=woiiKET6bn",
+      "pdf_url": "https://openreview.net/pdf/6e455d6687e375fb048d677aeb7229056f70d05a.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-1fdayakhmv",
+      "source": "ICML-2026-Accepted",
+      "title": "Fisher-Preserving Guidance: Training-Free Manifold Constraints for Safe Diffusion Control",
+      "abstract": "Diffusion models are effective for waypoint prediction in visual navigation, but standard sampling and test time guidance can produce unreliable or inefficient trajectories when updates drift off the training manifold. We propose Fisher Preserving Guidance with Outer Product Span Projection, a training-free inference method that avoids large Fisher drift associated with off-distribution actions while optimizing a task objective. Our method computes the Fisher-preserving update via a low-rank Jacobian factorization, requiring only a single backward pass per step and enabling real-time use. We further introduce Truncated Fisher Denoising Sensitivity as an uncertainty signal and use it for robust multi-sample action blending. Experiments on toy and realistic navigation benchmarks, including Maze2D with TSDF-based guidance, PushT with official Diffusion Policy weights, and visual navigation in simulation and on real robots, demonstrate consistent improvements in performance over strong diffusion-policy baselines without additional training.",
+      "authors": [
+        "Hao Ren",
+        "Zetong Bi",
+        "Yiming Zeng",
+        "Le Zheng",
+        "Zhi Li",
+        "Zhaoliang Wan",
+        "Lu Qi",
+        "Hui Cheng"
+      ],
+      "primary_category": "Visual Navigation",
+      "categories": [
+        "Visual Navigation",
+        "Diffusion Policy",
+        "Uncertainty Measurement"
+      ],
+      "published": "2026-04-30T19:22:35.115+00:00",
+      "link": "https://openreview.net/forum?id=1fDAyaKHMv",
+      "pdf_url": "https://openreview.net/pdf/4c2cfbcdb554c973e7ad59b0d05a451090534f90.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-9valxstwcg",
+      "source": "ICML-2026-Accepted",
+      "title": "Training-Free Guided Diffusion for Planning: A Unified Framework via Doob’s h-Transform with Safety Guarantees",
+      "abstract": "This paper studies the theoretical foundations of guidance mechanisms in continuous-time score-based diffusion models.\nWe adopt Doob’s h-transform as a principled framework for characterizing ideal guided diffusion processes and analyze the discrepancy between ideal and approximate guidance.\nOur analysis provides explicit error bounds and yields probabilistic guarantees on satisfying prescribed constraints, which are particularly important for safety-critical planning.\nWe further show that the Doob-based formulation induces a stochastic optimal control problem, enabling practical guidance design without additional model training.\nWe demonstrate the effectiveness of the proposed framework on robotic navigation tasks, including language-conditioned planning.",
+      "authors": [
+        "Kenta Hoshino",
+        "Yashaswi Shashank Aluru",
+        "Xiyu Deng",
+        "Yorie Nakahira"
+      ],
+      "primary_category": "Diffusion Models",
+      "categories": [
+        "Diffusion Models",
+        "Guided Diffusion",
+        "Stochastic Differential Equations",
+        "Stochastic Control"
+      ],
+      "published": "2026-04-30T19:17:51.225+00:00",
+      "link": "https://openreview.net/forum?id=9vAlxSTwcg",
+      "pdf_url": "https://openreview.net/pdf/59866ecaff86391c6cd1b8cb0dd51eabdd73a9ca.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-j8lkaoqeyk",
+      "source": "ICML-2026-Accepted",
+      "title": "Parallel Stochastic Gradient-Based Planning for World Models",
+      "abstract": "World models simulate environment dynamics from raw sensory inputs like video. However, using them for planning can be challenging due to the vast and unstructured search space. We propose a robust and highly parallelizable planner that  leverages the differentiability of the learned world model for efficient optimization, solving long-horizon control tasks from visual input. Our method treats states as optimization variables (\"virtual states\") with soft dynamics constraints, enabling parallel computation and easier optimization. To facilitate exploration and avoid local optima, we introduce stochasticity into the states. To mitigate sensitive gradients through high-dimensional vision-based world models, we modify the gradient structure to descend towards valid plans while only requiring action-input gradients. Our approach can be viewed as a stochastic version of a non-condensed or collocation-based optimal controller. We provide theoretical justification and experiments on video-based world models, where our resulting planner outperforms existing planning algorithms like the cross-entropy method (CEM) and vanilla gradient-based optimization (GD) on long-horizon experiments, both in success rate and time to convergence.",
+      "authors": [
+        "Michael Psenka",
+        "Michael Rabbat",
+        "Aditi S. Krishnapriyan",
+        "Yann LeCun",
+        "Amir Bar"
+      ],
+      "primary_category": "world models; planning; direct collocation; stochastic optimization",
+      "categories": [
+        "world models; planning; direct collocation; stochastic optimization"
+      ],
+      "published": "2026-04-30T19:19:48.467+00:00",
+      "link": "https://openreview.net/forum?id=J8lkAoQeYK",
+      "pdf_url": "https://openreview.net/pdf/b31649eeff6a45e3560c2a6b57d868d9e5a2287e.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ihbw4rqm7l",
+      "source": "ICML-2026-Accepted",
+      "title": "Model-Based Diffusion Sampling for Predictive Control in Offline Decision Making",
+      "abstract": "Offline decision-making via diffusion models often produces trajectories that are misaligned with system dynamics, limiting their reliability for control. We propose *Model Predictive Diffuser* (MPDiffuser), a compositional diffusion framework that combines a diffusion planner with a dynamics diffusion model to generate task-aligned and dynamically plausible trajectories. MPDiffuser interleaves planner and dynamics updates during sampling, progressively correcting feasibility while preserving task intent. A lightweight ranking module then selects trajectories that best satisfy task objectives. The compositional design improves sample efficiency and adaptability by enabling the dynamics model to leverage diverse and previously unseen data independently of the planner. Empirically, we demonstrate consistent improvements over prior diffusion-based methods on unconstrained (D4RL) and constrained (DSRL) benchmarks, and validate practicality through deployment on a real quadrupedal robot.",
+      "authors": [
+        "Haldun Balim",
+        "Na Li",
+        "Yilun Du"
+      ],
+      "primary_category": "Learning-based control",
+      "categories": [
+        "Learning-based control",
+        "Decision Making",
+        "Diffusion Models"
+      ],
+      "published": "2026-04-30T19:13:14.647+00:00",
+      "link": "https://openreview.net/forum?id=IhBW4rQM7L",
+      "pdf_url": "https://openreview.net/pdf/9f62365d89d899455343f6465f27b6dee30f2a22.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-uuh2sk0mh0",
+      "source": "ICML-2026-Accepted",
+      "title": "NavOL: Navigation Policy with Online Imitation Learning",
+      "abstract": "Learning robust navigation policies remains a core challenge in robotics. Offline imitation learning suffers from distribution shift and compounding errors at rollout, while reinforcement learning requires reward engineering and learns inefficiently. In this paper, we propose NavOL, an online imitation learning paradigm that interacts with a simulator and updates itself using expert demonstrations gathered online. Built upon a pretrained navigation diffusion policy that maps local observations to future waypoints, NavOL trains in a rollout–update loop: during rollout, the policy acts in the simulator and queries a global planner which has privileged access to the global environment for the optimal path segment as ground truth trajectory labels; during update, the policy is trained on the online collected observation–trajectory pairs. This online imitation loop removes the need for reward design, improves learning efficiency, and mitigates distribution shift by training on the policy’s own explored rollouts. Built on IsaacLab with fast, high-fidelity parallel rendering and domain randomization of camera pose and start-goal pairs, our system scales across 50 scenes on 8 RTX 4090 GPUs, collecting over 2,000 new trajectories per hour, each averaging more than 400 steps. We also introduce an indoor visual navigation benchmark with predefined start and goal positions for zero-shot generalization. Extensive evaluations on simulation benchmarks, including the NavDP benchmark and our proposed benchmark, as well as carefully designed real-world experiments, demonstrate the effectiveness of NavOL, showing consistent performance gains in online imitation learning.",
+      "authors": [
+        "Xiaofei Wei",
+        "Chun Gu",
+        "Li Zhang"
+      ],
+      "primary_category": "navigation",
+      "categories": [
+        "navigation",
+        "diffusion policy",
+        "online learning",
+        "simulator"
+      ],
+      "published": "2026-04-30T19:13:24.032+00:00",
+      "link": "https://openreview.net/forum?id=Uuh2Sk0mh0",
+      "pdf_url": "https://openreview.net/pdf/c0087257172019e2ed8e011dffcb3ec2d79bcca9.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-2uli4uqgrg",
+      "source": "ICML-2026-Accepted",
+      "title": "Being More Lightweight and Practical: Mini-sized Contrastive Learning Pre-trained Models for Fine-grained Traffic Task",
+      "abstract": "Fine-grained traffic prediction is critically important for mitigating traffic congestion in key urban areas and for providing lane-change guidance in autonomous vehicles and navigation systems. However, task-specific models are not efficient enough, city-scale pre-trained models often overlook fine-grained requirements, and the demand for extensive computational resources hinders practical deployment. To address this issue, we developed a lightweight pre-training framework, MiniTraffic. This framework leverages abundant road-level data to address lane-level data scarcity through a frequency domain stability augmentation module and captures road-lane correlations via contrastive clustering to construct small-scale graph structures, significantly reducing model parameters. Fine-tuning with minimal target data provides a unified and efficient solution for fine-grained traffic prediction. In multi-granularity traffic prediction tasks across six fine-grained datasets, MiniTraffic demonstrated superior performance compared to existing baselines.",
+      "authors": [
+        "Shuhao Li",
+        "Weidong Yang",
+        "Ben Fei",
+        "Yue Cui",
+        "Lipeng Ma",
+        "Fan Zhang"
+      ],
+      "primary_category": "Fine-grained traffic prediction",
+      "categories": [
+        "Fine-grained traffic prediction",
+        "Spatio-temporal modeling",
+        "Lightweight models"
+      ],
+      "published": "2026-04-30T19:11:08.695+00:00",
+      "link": "https://openreview.net/forum?id=2ulI4uqGRG",
+      "pdf_url": "https://openreview.net/pdf/b7707114e8e84f24a85a2796e85ccfd398ad84ce.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-wzmdhutxoz",
+      "source": "ICML-2026-Accepted",
+      "title": "Transferable Reinforcement Learning via Probabilistic Latent Embeddings and Dynamic Policy Adaptation for Sim-to-Real Deployment",
+      "abstract": "Due to limited resources and public safety concerns, deep reinforcement learning (RL) agents for many cyber-physical systems (e.g., autonomous vehicles) are first trained in simulators. However, when deployed in real world environments, they often suffer from performance degradation or safety violations because of the inevitable Sim2Real gap. Existing zero-shot approaches, such as robust safe RL and domain randomization, mitigate this issue but typically at the cost of degraded performance or residual safety risks when experiencing unmodeled system dynamics. To address these limitations, we propose a novel reinforcement learning framework that enables safe and efficient policy transfer via probabilistic latent embeddings and dynamic policy adaptation. We consider a family of Constrained Markov Decision Processes (CMDPs) under different environment contexts. By leveraging latent context variable in meta-RL, the proposed framework infers the latent representation of the environment from simulated experiences. Furthermore, it incorporates a distributional RL formulation, which allows risk levels of the deployed policy to be adjusted dynamically, based on the estimation accuracy of the latent context variable. This strategy promotes safety at the early deployment stage and improves efficiency through fast policy adaptation under the Sim2Real gap.",
+      "authors": [
+        "Gengyue Han",
+        "Yiheng Feng"
+      ],
+      "primary_category": "Transferable Reinforcement Learning",
+      "categories": [
+        "Transferable Reinforcement Learning",
+        "Latent Context Variable Embeddings",
+        "Distributional Reinforcement Learning",
+        "Dynamic Policy Adaptation",
+        "Sim2Real gap"
+      ],
+      "published": "2026-04-30T19:13:25.184+00:00",
+      "link": "https://openreview.net/forum?id=wZMdhuTXoz",
+      "pdf_url": "https://openreview.net/pdf/7619646c9155e4a05c96adb5f6c620150e2ae2c6.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-g8op3bstr2",
+      "source": "ICML-2026-Accepted",
+      "title": "Differentiable Weightless Controllers: Learning Logic Circuits for Continuous Control",
+      "abstract": "Controlling autonomous systems under real-world conditions often requires policies that can be evaluated with low latency and minimal energy consumption. Unfortunately, these conditions are at odds with the use of high-precision deep neural networks as controllers. In this work, we introduce Differentiable Weightless Controllers (DWCs), a symbolic-differentiable architecture that learns flexible, non-linear, yet highly efficient control policies. DWCs can be trained end-to-end via gradient-based techniques, yet compile directly into FPGA-compatible circuits with few- or even single-clock-cycle latency and nanojoule-level energy cost per action. Across five MuJoCo benchmarks, including high-dimensional Humanoid, DWCs achieve returns competitive with standard deep policies (full-precision or quantized neural networks). Furthermore, DWCs exhibit structurally sparse and interpretable connectivity patterns, enabling direct inspection of which input values influence control decisions.",
+      "authors": [
+        "Fabian Kresse",
+        "Christoph H. Lampert"
+      ],
+      "primary_category": "Differentiable Weightless Controllers",
+      "categories": [
+        "Differentiable Weightless Controllers",
+        "Reinforcement Learning",
+        "Weightless Neural Networks",
+        "Continuous Control",
+        "FPGA acceleration",
+        "Energy-efficient low-latency inference"
+      ],
+      "published": "2026-04-30T19:12:13.14+00:00",
+      "link": "https://openreview.net/forum?id=g8OP3bstR2",
+      "pdf_url": "https://openreview.net/pdf/65cbfd4d6a15fbd3f3946a03b2b02b0f53302371.pdf",
+      "tags": [
+        "keyword:AV-PNC"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "type": "intent_query",
+      "tag": "AV-PNC",
+      "paper_tag": "query:AV-PNC",
+      "query_text": "path planning and trajectory optimization for autonomous vehicles",
+      "sim_scores": {
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-9valxstwcg": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "openreview-icml-2026-j8lkaoqeyk": {
+          "score": 0.01020408163265306,
+          "rank": 38
+        },
+        "openreview-icml-2026-6lq2mgo42h": {
+          "score": 0.009708737864077669,
+          "rank": 43
+        },
+        "openreview-icml-2026-uuh2sk0mh0": {
+          "score": 0.009433962264150943,
+          "rank": 46
+        },
+        "openreview-icml-2026-wzmdhutxoz": {
+          "score": 0.009174311926605505,
+          "rank": 49
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-xgvzyybzhr",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-xcqnmajjw5",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-wb97or78ox",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ukbd73kfgm",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-22xf7ii0hd",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-qzjh84ut3q",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-uuh2sk0mh0",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-tlw4tc7zn9",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ssebms2mga",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-1fdayakhmv",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-2uli4uqgrg",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-0dngyqndo2",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-j8lkaoqeyk",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hgwbwnhwvd",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-9valxstwcg",
+          "score": 0.46719946719946726,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-zo8vzsggtn",
+          "score": 0.46719946719946726,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-yteeie3ytd",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-gbq6eiste4",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-woiiket6bn",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-wzmdhutxoz",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-6lq2mgo42h",
+          "score": 0.25462134764460337,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-n2mwmok6pl",
+          "score": 0.23371647509578536,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.1933160472486314,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-hw9esvumtm",
+          "score": 0.1737891737891738,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-hwmmbbujpo",
+          "score": 0.15469146238377016,
+          "star_rating": 3
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "AV-PNC",
+      "paper_tag": "query:AV-PNC",
+      "query_text": "recent advances in autonomous vehicle planning and control",
+      "sim_scores": {
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-9valxstwcg": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "openreview-icml-2026-j8lkaoqeyk": {
+          "score": 0.011627906976744186,
+          "rank": 26
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "openreview-icml-2026-wzmdhutxoz": {
+          "score": 0.011363636363636364,
+          "rank": 28
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.010309278350515464,
+          "rank": 37
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.009900990099009901,
+          "rank": 41
+        },
+        "openreview-icml-2026-ssebms2mga": {
+          "score": 0.009708737864077669,
+          "rank": 43
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-ssebms2mga",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-xgvzyybzhr",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-qzjh84ut3q",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-hw9esvumtm",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-gbq6eiste4",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-n2mwmok6pl",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-2uli4uqgrg",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-xcqnmajjw5",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-woiiket6bn",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hgwbwnhwvd",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-9valxstwcg",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-wzmdhutxoz",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hwmmbbujpo",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ukbd73kfgm",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-yteeie3ytd",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-zo8vzsggtn",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-g8op3bstr2",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-6lq2mgo42h",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-wb97or78ox",
+          "score": 0.4411571334648256,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-0dngyqndo2",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-j8lkaoqeyk",
+          "score": 0.3668882557771445,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-uuh2sk0mh0",
+          "score": 0.25462134764460337,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-22xf7ii0hd",
+          "score": 0.23371647509578536,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-1fdayakhmv",
+          "score": 0.1933160472486314,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-tlw4tc7zn9",
+          "score": 0.1737891737891738,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+          "score": 0.1737891737891738,
+          "star_rating": 3
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "algorithms for motion planning in autonomous vehicles",
+      "sim_scores": {
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-9valxstwcg": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-j8lkaoqeyk": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.010752688172043012,
+          "rank": 33
+        },
+        "openreview-icml-2026-6lq2mgo42h": {
+          "score": 0.010416666666666666,
+          "rank": 36
+        },
+        "openreview-icml-2026-uuh2sk0mh0": {
+          "score": 0.009433962264150943,
+          "rank": 46
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.009174311926605505,
+          "rank": 49
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "autonomous driving",
+      "sim_scores": {
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-ssebms2mga": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-0dngyqndo2": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "autonomous driving planning and control systems",
+      "sim_scores": {
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-9valxstwcg": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "openreview-icml-2026-g8op3bstr2": {
+          "score": 0.011627906976744186,
+          "rank": 26
+        },
+        "openreview-icml-2026-ssebms2mga": {
+          "score": 0.010869565217391304,
+          "rank": 32
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.010752688172043012,
+          "rank": 33
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.010526315789473684,
+          "rank": 35
+        },
+        "openreview-icml-2026-wzmdhutxoz": {
+          "score": 0.010416666666666666,
+          "rank": 36
+        },
+        "openreview-icml-2026-j8lkaoqeyk": {
+          "score": 0.00909090909090909,
+          "rank": 50
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "behavior decision making for autonomous vehicles",
+      "sim_scores": {
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "openreview-icml-2026-wzmdhutxoz": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "openreview-icml-2026-uuh2sk0mh0": {
+          "score": 0.009174311926605505,
+          "rank": 49
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "behavior planning",
+      "sim_scores": {
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "motion planning",
+      "sim_scores": {
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "path planning",
+      "sim_scores": {
+        "openreview-icml-2026-zo8vzsggtn": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "path planning methods for self-driving cars",
+      "sim_scores": {
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-9valxstwcg": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-ssebms2mga": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.010526315789473684,
+          "rank": 35
+        },
+        "openreview-icml-2026-0dngyqndo2": {
+          "score": 0.01,
+          "rank": 40
+        },
+        "openreview-icml-2026-uuh2sk0mh0": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        },
+        "openreview-icml-2026-2uli4uqgrg": {
+          "score": 0.00909090909090909,
+          "rank": 50
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "trajectory planning",
+      "sim_scores": {
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-qzjh84ut3q": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-22xf7ii0hd": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-wb97or78ox": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-tlw4tc7zn9": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-ncrrcg4bfp": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-6lq2mgo42h": {
+          "score": 0.00980392156862745,
+          "rank": 42
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "trajectory planning and optimization for autonomous driving",
+      "sim_scores": {
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-9valxstwcg": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.011627906976744186,
+          "rank": 26
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.011363636363636364,
+          "rank": 28
+        },
+        "openreview-icml-2026-0dngyqndo2": {
+          "score": 0.010309278350515464,
+          "rank": 37
+        },
+        "openreview-icml-2026-uuh2sk0mh0": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        },
+        "openreview-icml-2026-ssebms2mga": {
+          "score": 0.009259259259259259,
+          "rank": 48
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "vehicle control",
+      "sim_scores": {
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "vehicle dynamics and control for autonomous driving",
+      "sim_scores": {
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-hwmmbbujpo": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "openreview-icml-2026-ssebms2mga": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.010869565217391304,
+          "rank": 32
+        },
+        "openreview-icml-2026-wzmdhutxoz": {
+          "score": 0.010526315789473684,
+          "rank": 35
+        },
+        "openreview-icml-2026-0dngyqndo2": {
+          "score": 0.01020408163265306,
+          "rank": 38
+        },
+        "openreview-icml-2026-9valxstwcg": {
+          "score": 0.01,
+          "rank": 40
+        },
+        "openreview-icml-2026-2uli4uqgrg": {
+          "score": 0.009615384615384616,
+          "rank": 44
+        },
+        "openreview-icml-2026-g8op3bstr2": {
+          "score": 0.009259259259259259,
+          "rank": 48
+        }
+      }
+    }
+  ],
+  "global_candidate_ids": [
+    "openreview-icml-2026-emwu5ry8m9",
+    "openreview-icml-2026-yteeie3ytd",
+    "openreview-icml-2026-bz1utqkd58",
+    "openreview-icml-2026-c4isirb6iv",
+    "openreview-icml-2026-gbq6eiste4",
+    "openreview-icml-2026-n2mwmok6pl",
+    "openreview-icml-2026-ipeilnjzya",
+    "openreview-icml-2026-3zfvxhjwmb",
+    "openreview-icml-2026-pitxfp6fu5",
+    "openreview-icml-2026-xtwqnuo8yo",
+    "openreview-icml-2026-jnrorhqsyj",
+    "openreview-icml-2026-zo8vzsggtn",
+    "openreview-icml-2026-qzjh84ut3q",
+    "openreview-icml-2026-ptaujebhat",
+    "openreview-icml-2026-lxbytzm8u8",
+    "openreview-icml-2026-xgvzyybzhr",
+    "openreview-icml-2026-cisgv65bzf",
+    "openreview-icml-2026-hw9esvumtm",
+    "openreview-icml-2026-ub6m4bsvwj",
+    "openreview-icml-2026-ukbd73kfgm",
+    "openreview-icml-2026-hwmmbbujpo",
+    "openreview-icml-2026-woiiket6bn",
+    "openreview-icml-2026-5jkuqtbpnb",
+    "openreview-icml-2026-sdcoyjz34e",
+    "openreview-icml-2026-rkiq95zucw",
+    "openreview-icml-2026-p8vz7tuykm",
+    "openreview-icml-2026-ubvlue2wrp",
+    "openreview-icml-2026-bjodtiusvx",
+    "openreview-icml-2026-ikxfh6alzn",
+    "openreview-icml-2026-1fdayakhmv",
+    "openreview-icml-2026-ihbw4rqm7l",
+    "openreview-icml-2026-hgwbwnhwvd",
+    "openreview-icml-2026-9wyjjpydfe",
+    "openreview-icml-2026-c0ddrzomnf",
+    "openreview-icml-2026-anwivnjocb",
+    "openreview-icml-2026-9valxstwcg",
+    "openreview-icml-2026-cznih1inuf",
+    "openreview-icml-2026-r2rvwpvpk7",
+    "openreview-icml-2026-zygdikr8uz",
+    "openreview-icml-2026-vjsjpnrfij",
+    "openreview-icml-2026-r8vdduz4s3",
+    "openreview-icml-2026-nvhcistase",
+    "openreview-icml-2026-ssebms2mga",
+    "openreview-icml-2026-wr05xy9mft",
+    "openreview-icml-2026-gyrmbsyfig",
+    "openreview-icml-2026-xpwjlxc0x1",
+    "openreview-icml-2026-wkeljrz5kg",
+    "openreview-icml-2026-wkpfacg2fj",
+    "openreview-icml-2026-xcqnmajjw5",
+    "openreview-icml-2026-hw8bxmlzqx",
+    "openreview-icml-2026-wzmdhutxoz",
+    "openreview-icml-2026-gec0ijcyxw",
+    "openreview-icml-2026-qtzu9pgh7s",
+    "openreview-icml-2026-uuh2sk0mh0",
+    "openreview-icml-2026-huzqpykebl",
+    "openreview-icml-2026-ovb2xywvpv",
+    "openreview-icml-2026-0dngyqndo2",
+    "openreview-icml-2026-j8lkaoqeyk",
+    "openreview-icml-2026-6qu03wgp6x",
+    "openreview-icml-2026-hyw7wlpzae",
+    "openreview-icml-2026-lwpku7h8yi",
+    "openreview-icml-2026-ndyucnjxks",
+    "openreview-icml-2026-kif7psdcp3",
+    "openreview-icml-2026-ajp1yvcyog",
+    "openreview-icml-2026-g8lvo5easu",
+    "openreview-icml-2026-cxdj2gyz4c",
+    "openreview-icml-2026-znonnjjghs",
+    "openreview-icml-2026-aiov6nhf3n",
+    "openreview-icml-2026-rytz3y2mbj",
+    "openreview-icml-2026-6lq2mgo42h",
+    "openreview-icml-2026-v2h2vzrqcr",
+    "openreview-icml-2026-odm5jrveik",
+    "openreview-icml-2026-rjbvw7zdhg",
+    "openreview-icml-2026-pzqlovjqhd",
+    "openreview-icml-2026-tnn9bikyxz",
+    "openreview-icml-2026-rjwqcgd3hx",
+    "openreview-icml-2026-ojximqfwlx",
+    "openreview-icml-2026-wblvinalrw",
+    "openreview-icml-2026-ds3zoevkwx",
+    "openreview-icml-2026-9uennracsl",
+    "openreview-icml-2026-l4q8dgghvc",
+    "openreview-icml-2026-cuvbdw2tky",
+    "openreview-icml-2026-1uu7x9zzjb",
+    "openreview-icml-2026-svt8c2gpjk",
+    "openreview-icml-2026-stf5sf4jvr",
+    "openreview-icml-2026-jizqaemuqk",
+    "openreview-icml-2026-g8op3bstr2",
+    "openreview-icml-2026-gd2s0bjqnz",
+    "openreview-icml-2026-7xiv7hszi7",
+    "openreview-icml-2026-pqtwlelwdg",
+    "openreview-icml-2026-l1wwnr0obl",
+    "openreview-icml-2026-2uli4uqgrg",
+    "openreview-icml-2026-ukacbde58o",
+    "openreview-icml-2026-axagpgfhgc",
+    "openreview-icml-2026-h6vkalswjw",
+    "openreview-icml-2026-qs63njpn1r",
+    "openreview-icml-2026-22xf7ii0hd",
+    "openreview-icml-2026-fjzf2l8zzf",
+    "openreview-icml-2026-dtixiq0jhu",
+    "openreview-icml-2026-wb97or78ox",
+    "openreview-icml-2026-2nrrsz4nub",
+    "openreview-icml-2026-9au4vrhpkd",
+    "openreview-icml-2026-fh6xbnjflv",
+    "openreview-icml-2026-hryilopcct",
+    "openreview-icml-2026-qppf5mi1qn",
+    "openreview-icml-2026-o7hykwvmcw",
+    "openreview-icml-2026-wjntbzkivc",
+    "openreview-icml-2026-pckr7y6v1j",
+    "openreview-icml-2026-s70zo5lvvj",
+    "openreview-icml-2026-seo8pls44h",
+    "openreview-icml-2026-3ij7bybyqf",
+    "openreview-icml-2026-e1zqugzfoz",
+    "openreview-icml-2026-tlw4tc7zn9",
+    "openreview-icml-2026-ncrrcg4bfp",
+    "openreview-icml-2026-nxdpyvflrh",
+    "openreview-icml-2026-mxxm8jqgds",
+    "openreview-icml-2026-omryele4jz",
+    "openreview-icml-2026-5hurzw5xm5",
+    "openreview-icml-2026-wqqam1muoq",
+    "openreview-icml-2026-yqmrp0zjmh"
+  ],
+  "global_pool_lane_top_k": 30,
+  "global_pool_limit": 120,
+  "global_pool_guaranteed_per_lane": 2,
+  "global_pool_effective_size": 120,
+  "reranked_at": "2026-07-22T07:35:50.043887+00:00",
+  "llm_ranked": [
+    {
+      "paper_id": "openreview-icml-2026-wb97or78ox",
+      "score": 10.0,
+      "evidence_en": "proposes a flow matching framework for generating safe, admissible, and dynamically consistent trajectories in planning",
+      "evidence_cn": "提出一种流匹配框架，用于生成安全、可容许且动态一致的规划轨迹",
+      "canonical_evidence": "提出一种流匹配框架，用于生成安全、可容许且动态一致的规划轨迹",
+      "tldr_en": "SAD-Flower augments flow matching with virtual control inputs to produce safe, admissible, and dynamically consistent trajectories, addressing formal guarantees in data-driven planning.",
+      "tldr_cn": "针对流匹配规划器缺乏状态与动作约束保证的问题，本文提出SAD-Flower框架。该方法通过引入虚拟控制输入对流进行增强，利用控制技术推导有原则的引导，确保生成的轨迹安全、可容许且动态一致。实验表明其规划的轨迹既能满足约束又具备可执行性，为安全攸关系统的数据驱动规划提供了关键保障。",
+      "title_zh": "SAD-Flower：用于安全、可容许与动态一致规划的流匹配方法",
+      "motivation_cn": "现有流匹配规划器缺乏对状态和动作约束的形式化保障，导致轨迹不安全或不可执行。",
+      "method_cn": "通过虚拟控制输入增强流模型，并结合控制理论推导引导信号，确保轨迹的安全性与动力学一致性。",
+      "result_cn": "实验证明生成的轨迹满足安全、可容许与动态一致要求，优于现有流匹配规划器。",
+      "conclusion_cn": "SAD-Flower为安全关键系统提供了具有严格约束保障的数据驱动规划框架。",
+      "matched_requirement_id": "req-3",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "trajectory planning and optimization for autonomous driving"
+    },
+    {
+      "paper_id": "openreview-icml-2026-hwmmbbujpo",
+      "score": 10.0,
+      "evidence_en": "Proposes V2V cooperative autonomous driving framework using MLLMs for language-based decision-making.",
+      "evidence_cn": "提出基于多模态大语言模型的车车协同自动驾驶框架，实现基于语言的决策。",
+      "canonical_evidence": "提出基于多模态大语言模型的车车协同自动驾驶框架，实现基于语言的决策。",
+      "tldr_en": "The paper introduces V2V-CCM, a dual-stage cooperative autonomous driving framework using MLLMs with communication-conditioned token pruning to enhance decision-making in occluded scenarios while minimizing costs.",
+      "tldr_cn": "现有车-车协同自动驾驶中，多模态大语言模型依赖密集令牌共享，通信与推理成本高，且令牌修剪策略未考虑LiDAR空间结构与多智能体融合。本文提出V2V-CCM框架，采用双阶段协同设计，第一阶段通过通信条件化令牌修剪降低冗余，第二阶段利用空间注意力融合关键信息进行语言推理决策。在遮挡场景的实验中，V2V-CCM在保持高决策准确率的同时大幅降低通信量，为安全高效的协同自动驾驶提供了新的范式。",
+      "title_zh": "问得更少，看得更多：面向车-车协同自动驾驶的通信条件化令牌修剪与多模态大语言模型",
+      "motivation_cn": "现有V2V-MLLM依赖密集令牌共享，通信与推理成本高，令牌修剪策略忽略LiDAR空间结构与多智能体融合。",
+      "method_cn": "提出V2V-CCM双阶段框架：第一阶段通信条件化令牌修剪，第二阶段空间注意力融合关键信息进行语言推理决策。",
+      "result_cn": "在遮挡安全场景中实现有效决策，显著降低通信与计算开销。",
+      "conclusion_cn": "V2V-CCM为协同自动驾驶提供了高效语言推理方案，平衡性能与成本。",
+      "matched_requirement_id": "req-4",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "behavior decision making for autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-c4isirb6iv",
+      "score": 10.0,
+      "evidence_en": "Proposes a VLA model that generates continuous action trajectories for autonomous driving, serving as a motion planner.",
+      "evidence_cn": "提出一种面向自动驾驶生成连续动作轨迹的VLA模型，充当运动规划器。",
+      "canonical_evidence": "提出一种面向自动驾驶生成连续动作轨迹的VLA模型，充当运动规划器。",
+      "tldr_en": "The paper introduces Reasoning-VLA, an efficient VLA framework using spatial-guided action queries to generate continuous action trajectories for autonomous driving with strong generalization.",
+      "tldr_cn": "现有自动驾驶视觉-语言-动作模型存在推理效率低和对新车辆配置及场景泛化能力不足的问题。本文提出Reasoning-VLA框架，采用空间引导的可学习动作查询，与推理增强的视觉-语言特征交互，并行生成连续动作轨迹。该模型整合八个公开数据集训练，在多种驾驶场景中实现高效推理与强泛化性能，生成的动作轨迹平滑且符合驾驶规范，为自动驾驶决策与控制提供了一种高效通用的解决方案。",
+      "title_zh": "Reasoning-VLA：面向自动驾驶的高效空间引导通用视觉-语言-动作推理模型",
+      "motivation_cn": "现有VLA模型在自动驾驶中推理效率低，泛化至新车辆配置与场景能力不足。",
+      "method_cn": "提出Reasoning-VLA，采用可学习动作查询与预定义空间表示隐式引导，结合推理增强的视觉-语言特征并行生成连续动作轨迹。",
+      "result_cn": "整合八个公开数据集评估，模型实现高效推理与强泛化，生成平滑动作轨迹。",
+      "conclusion_cn": "空间引导的VLA框架为自动驾驶动作生成提供了高效泛化方案，推动实际部署。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "algorithms for motion planning in autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-emwu5ry8m9",
+      "score": 10.0,
+      "evidence_en": "lifelong trajectory planning for autonomous vehicles adapting to long-tail scenarios",
+      "evidence_cn": "面向自动驾驶车辆的终身轨迹规划，适应长尾场景",
+      "canonical_evidence": "面向自动驾驶车辆的终身轨迹规划，适应长尾场景",
+      "tldr_en": "NOMAD integrates non-parametric Bayesian memory with diffusion-based trajectory generation for lifelong AV trajectory planning, enabling continuous adaptation to long-tail scenarios without forgetting.",
+      "tldr_cn": "自动驾驶车辆在开放世界中需持续适应罕见长尾场景同时保留已学驾驶技能，现有方法难以平衡稳定性与可塑性。本文提出NOMAD框架，结合非参数贝叶斯记忆与扩散轨迹生成，动态扩充场景表示并持续学习新专家，实现终身轨迹规划。实验表明该方法能有效应对复杂交通动态，避免灾难性遗忘，提升了自动驾驶在多变环境中的长期适应性和安全性。",
+      "title_zh": "NOMAD：基于非参数贝叶斯记忆自适应扩散专家的终身轨迹规划",
+      "motivation_cn": "现有轨迹规划方法无法稳健应对不断变化的复杂交通动态，存在稳定性-可塑性困境。",
+      "method_cn": "提出NOMAD框架，整合非参数贝叶斯记忆与扩散轨迹生成，实现动态场景表示和持续学习。",
+      "result_cn": "实验证明该方法能持续适应长尾场景而不遗忘已有技能，提升长期安全性。",
+      "conclusion_cn": "为开放世界自动驾驶的终身学习提供了有效的轨迹规划方案。",
+      "matched_requirement_id": "req-3",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "trajectory planning and optimization for autonomous driving"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ssebms2mga",
+      "score": 10.0,
+      "evidence_en": "unified latent-space world modeling and planning for end-to-end autonomous driving",
+      "evidence_cn": "端到端自动驾驶中统一潜空间世界建模与规划",
+      "canonical_evidence": "端到端自动驾驶中统一潜空间世界建模与规划",
+      "tldr_en": "DriveWorld-VLA tightly integrates VLA and world models at the representation level, enabling the planner to benefit from scene-evolution modeling for better decision-making in autonomous driving.",
+      "tldr_cn": "现有端到端自动驾驶方法未能有效统一未来场景演变与行动规划，限制了视觉想象力对决策的影响。本文提出DriveWorld-VLA框架，通过在潜空间深度整合视觉-语言-动作与世界模型，让规划器直接利用整体场景演变建模，提升决策与前瞻能力。实验证明该方法增强了自动驾驶在复杂场景下的行为合理性和安全性，推动了统一架构下的端到端自动驾驶发展。",
+      "title_zh": "DriveWorld-VLA：面向自动驾驶的统一潜空间世界建模与视觉-语言-行动",
+      "motivation_cn": "现有端到端自动驾驶方法无法有效统一场景演变与行动规划，限制了决策的提升。",
+      "method_cn": "提出DriveWorld-VLA框架，在潜空间紧密整合VLA与世界模型，共享表示。",
+      "result_cn": "实验表明该方法能增强复杂场景下的决策合理性与安全性。",
+      "conclusion_cn": "为统一架构下的端到端自动驾驶提供了新的范式。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "autonomous driving planning and control systems"
+    },
+    {
+      "paper_id": "openreview-icml-2026-bz1utqkd58",
+      "score": 10.0,
+      "evidence_en": "generative framework for motion planning in autonomous vehicles",
+      "evidence_cn": "面向自动驾驶车辆运动规划的生成框架",
+      "canonical_evidence": "面向自动驾驶车辆运动规划的生成框架",
+      "tldr_en": "Proposes a generative framework that unifies deep learning and model-based planning for motion planning in autonomous vehicles by learning compressed latent representations for efficient search.",
+      "tldr_cn": "深度学习方法虽增强了运动规划能力，但基于搜索或优化的传统规划器仍不可或缺。本文提出一种生成框架，通过学习高压缩比的自编码器将运动规划问题映射到离散令牌的潜空间，统一深度学习先验与基于模型的规划。该框架可在压缩空间中进行高效搜索与优化，兼顾灵活性与效率。实验在自动驾驶车辆导航等任务上验证了其有效性，为复杂场景下的运动规划提供了新范式。",
+      "title_zh": "压缩表示空间中的运动规划",
+      "motivation_cn": "深度学习与基于模型的运动规划各有优势，需要统一框架结合两者。",
+      "method_cn": "提出生成框架，用高压缩比自编码器学习离散令牌潜空间，统一深度学习与模型规划。",
+      "result_cn": "在自动驾驶车辆导航等任务上验证了高效规划与灵活性。",
+      "conclusion_cn": "为复杂场景下的运动规划提供了新的统一范式。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "algorithms for motion planning in autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-hgwbwnhwvd",
+      "score": 10.0,
+      "evidence_en": "collaborative-competitive imitation-reinforcement learning for autonomous driving",
+      "evidence_cn": "面向自动驾驶的协同-竞争模仿强化学习",
+      "canonical_evidence": "面向自动驾驶的协同-竞争模仿强化学习",
+      "tldr_en": "CoIRL-AD proposes a dual-policy IL and RL framework for autonomous driving, improving generalization in long-tail scenarios by leveraging imagined rollouts and competitive actors under offline training.",
+      "tldr_cn": "端到端自动驾驶模型在模仿学习下泛化能力差，尤其在专家示范稀疏的长尾场景中。本文提出CoIRL-AD，一种协同-竞争双策略框架，在离线训练范式下解耦模仿学习与强化学习奖励优化，利用潜世界模型进行想象推演，增强行为多样性。实验表明该方法有效缓解了目标冲突，提升了在罕见场景下的决策性能，为离线强化学习在自动驾驶中的应用提供了新方案。",
+      "title_zh": "CoIRL-AD：自动驾驶中潜世界模型下的协同-竞争模仿强化学习",
+      "motivation_cn": "模仿学习训练的自动驾驶模型在长尾场景泛化差，离线强化学习面临行为多样性不足的挑战。",
+      "method_cn": "提出CoIRL-AD框架，解耦模仿与奖励优化为双策略，利用想象推演和竞争训练。",
+      "result_cn": "实验证明该方法在离线设置下有效提升长尾场景的决策性能。",
+      "conclusion_cn": "为自动驾驶中的离线强化学习提供了新的训练范式。",
+      "matched_requirement_id": "req-4",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "behavior decision making for autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-xcqnmajjw5",
+      "score": 9.0,
+      "evidence_en": "Proposes time-frequency fusion for trajectory prediction of traffic participants, critical for autonomous driving behavior decision-making",
+      "evidence_cn": "提出时频融合的轨迹预测方法，对自动驾驶行为决策至关重要",
+      "canonical_evidence": "提出时频融合的轨迹预测方法，对自动驾驶行为决策至关重要",
+      "tldr_en": "TF-FACE introduces a frequency-domain adaptive attention mechanism to improve trajectory prediction for autonomous driving, enhancing behavior planning.",
+      "tldr_cn": "针对现有轨迹预测方法忽视频域信息、难以捕捉长期依赖和短期动态的问题，TF-FACE提出时频融合学习框架，通过可学习的门控频域注意力自适应增强。在驾驶数据集上的实验表明，该方法能够更准确地预测交通参与者未来轨迹，为自动驾驶行为决策提供更可靠的输入。",
+      "title_zh": "TF-FACE：面向轨迹预测的频域自适应可控增强时频融合学习",
+      "motivation_cn": "现有轨迹预测方法主要基于时域，未能充分挖掘频域信息。",
+      "method_cn": "设计融合编码器，采用可学习门控频域注意力机制，自适应操控频带特定特征。",
+      "result_cn": "在多个基准上取得最优轨迹预测性能，提升自动驾驶安全性。",
+      "conclusion_cn": "TF-FACE通过频域增强有效提高轨迹预测精度，是自动驾驶行为决策的关键技术。",
+      "matched_requirement_id": "req-4",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "behavior decision making for autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-gbq6eiste4",
+      "score": 9.0,
+      "evidence_en": "Driving world model for autonomous driving predicts future BEV states, enabling long-horizon planning.",
+      "evidence_cn": "驾驶世界模型预测未来BEV状态，赋能长时域自动驾驶规划",
+      "canonical_evidence": "驾驶世界模型预测未来BEV状态，赋能长时域自动驾驶规划",
+      "tldr_en": "DeepSight proposes a world model that predicts future latent features in BEV space and an adaptive text reasoning module, advancing end-to-end autonomous driving planning.",
+      "tldr_cn": "针对端到端自动驾驶中视觉推理缺乏针对性设计的问题，本文提出DeepSight驾驶世界模型，在鸟瞰视图空间中并行预测未来帧的潜在语义特征，实现长时域状态建模，并引入高效自适应文本推理模块增强决策。实验表明该方法在自动驾驶任务中提升了规划准确性和鲁棒性，推动了端到端自动驾驶的发展。",
+      "title_zh": "DeepSight：通过潜在状态预测实现端到端自动驾驶的长时域世界建模",
+      "motivation_cn": "现有端到端自动驾驶的推理模块多为通用域直接适配，缺乏针对驾驶场景的深入探索。",
+      "method_cn": "提出DeepSight，构建在BEV空间中预测未来帧潜在特征的世界模型，并集成自适应文本推理机制。",
+      "result_cn": "在自动驾驶基准上，DeepSight显著提升长时域规划性能与决策鲁棒性。",
+      "conclusion_cn": "DeepSight通过专用世界模型和推理机制为端到端自动驾驶提供了新的技术路径。",
+      "matched_requirement_id": "req-7",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "recent advances in autonomous vehicle planning and control"
+    },
+    {
+      "paper_id": "openreview-icml-2026-xgvzyybzhr",
+      "score": 9.0,
+      "evidence_en": "proposes a self-correction planner with reinforcement learning for safe motion planning in autonomous driving",
+      "evidence_cn": "提出一种具有自纠正能力的自动驾驶运动规划器",
+      "canonical_evidence": "提出一种具有自纠正能力的自动驾驶运动规划器",
+      "tldr_en": "CorrectionPlanner introduces an autoregressive motion planner with a propose-evaluate-correct loop, using a learned collision critic to ensure safe planning in autonomous driving.",
+      "tldr_cn": "本文针对学习类规划器缺乏自纠正能力的问题，提出CorrectionPlanner，一种具有自我纠正机制的自动驾驶运动规划器。该规划器采用“提出-评估-纠正”循环，在运动令牌生成过程中利用碰撞评判模型预测短期安全性，若预测到碰撞，则基于历史不安全令牌重新生成动作。实验表明，该方法有效提升了规划的安全性，为安全关键型自动驾驶应用提供了可靠基础。",
+      "title_zh": "CorrectionPlanner：基于强化学习的自动驾驶自纠正规划器",
+      "motivation_cn": "现有学习类规划器缺乏显式自纠正能力，一旦提出不安全动作无法修正。",
+      "method_cn": "采用自回归规划器，通过“提出-评估-纠正”循环与碰撞评判模型迭代生成安全运动令牌。",
+      "result_cn": "实验证明该方法能有效避免碰撞，提升规划安全性。（具体结果待公开）",
+      "conclusion_cn": "CorrectionPlanner为自动驾驶提供了一种可靠的安全规划方案。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "algorithms for motion planning in autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-tlw4tc7zn9",
+      "score": 8.0,
+      "evidence_en": "Improves diffusion-based planners for offline RL by penalizing dynamically inconsistent trajectories, enhancing plan feasibility for motion planning",
+      "evidence_cn": "通过惩罚动态不一致的轨迹来改进扩散规划器，提高运动规划的可行性",
+      "canonical_evidence": "通过惩罚动态不一致的轨迹来改进扩散规划器，提高运动规划的可行性",
+      "tldr_en": "SAGE introduces a re-ranking method for diffusion planners that penalizes plans with high latent prediction error, improving reliability for motion planning tasks.",
+      "tldr_cn": "针对扩散规划器在离线强化学习中易选择局部不一致轨迹的问题，SAGE提出自监督动作门控能量法，利用联合嵌入预测架构（JEPA）建模状态一致性，通过重排序候选计划来提升规划可行性。在多个任务中证明了计划执行可靠性的提高，为运动规划提供了更鲁棒的优化方法。",
+      "title_zh": "利用自监督动作门控能量改进扩散规划器",
+      "motivation_cn": "扩散规划器可能选择与环境动态不一致的计划，导致执行脆弱。",
+      "method_cn": "训练JEPA编码器和动作条件潜在预测器，在推理时通过潜在预测误差计算能量并重排序候选计划。",
+      "result_cn": "有效惩罚动态不一致计划，提升离线强化学习中规划的可靠性。",
+      "conclusion_cn": "SAGE通过自监督一致性信号改进了扩散规划器，适用于运动规划等任务。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "algorithms for motion planning in autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+      "score": 8.0,
+      "evidence_en": "Knowledge-encoded trajectory world model for robotic dynamics learning, directly applicable to autonomous driving planning and control",
+      "evidence_cn": "知识编码的轨迹世界模型，用于机器人动力学学习，可直接应用于自动驾驶规划与控制",
+      "canonical_evidence": "知识编码的轨迹世界模型，用于机器人动力学学习，可直接应用于自动驾驶规划与控制",
+      "tldr_en": "WestWorld proposes a scalable world model with system-aware mixture-of-experts for diverse robot systems, benefiting autonomous driving trajectory planning.",
+      "tldr_cn": "针对轨迹世界模型难以扩展到多类机器人系统的问题，WestWorld提出系统感知的混合专家模型，通过可学习系统嵌入动态组合专家，并融入物理领域知识，实现零样本泛化。在多种机器人上的动力学学习实验表明，该模型有效支持规划与控制任务，可推广至自动驾驶领域。",
+      "title_zh": "WestWorld：面向多类机器人系统的知识编码可扩展轨迹世界模型",
+      "motivation_cn": "现有轨迹世界模型无法有效扩展到大量不同动力学系统，且忽略物理结构领域知识。",
+      "method_cn": "提出系统感知的混合专家模型（Sys-MoE），通过可学习系统嵌入路由专家，并编码领域知识。",
+      "result_cn": "在多种机器人系统中提升了规划与控制的零样本泛化能力。",
+      "conclusion_cn": "WestWorld为跨系统轨迹学习提供了可扩展框架，是机器人规划与控制的有力工具。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "autonomous driving planning and control systems"
+    },
+    {
+      "paper_id": "openreview-icml-2026-uuh2sk0mh0",
+      "score": 8.0,
+      "evidence_en": "Online imitation learning for navigation policies maps observations to waypoints, directly relevant to path planning for autonomous driving.",
+      "evidence_cn": "在线模仿学习导航策略将观测映射到路径点，直接用于自动驾驶路径规划",
+      "canonical_evidence": "在线模仿学习导航策略将观测映射到路径点，直接用于自动驾驶路径规划",
+      "tldr_en": "NavOL overcomes distribution shift in navigation by interactively learning from expert demonstrations online, improving robustness of diffusion-based navigation policies.",
+      "tldr_cn": "针对离线模仿学习在机器人导航中因分布偏移和复合误差导致性能下降的问题，本文提出NavOL在线模仿学习范式。NavOL在仿真器中交互运行，利用全局规划器提供的专家路径作为标签在线更新扩散导航策略，形成“执行-更新”循环。实验表明该方法显著提升了导航策略的鲁棒性和成功率，为机器人导航提供了一种高效的学习框架。",
+      "title_zh": "NavOL：基于在线模仿学习的导航策略",
+      "motivation_cn": "离线模仿学习在导航任务中面临分布偏移和复合误差，导致策略性能不佳。",
+      "method_cn": "提出NavOL，通过在线交互与仿真器，查询全局规划器获得最优路径段作为标签，迭代更新扩散策略。",
+      "result_cn": "在导航任务中，NavOL相比离线方法显著提高成功率，有效缓解分布偏移问题。",
+      "conclusion_cn": "NavOL展示了在线模仿学习在导航策略学习中的有效性，可推广至其他机器人任务。",
+      "matched_requirement_id": "req-2",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "path planning methods for self-driving cars"
+    },
+    {
+      "paper_id": "openreview-icml-2026-9valxstwcg",
+      "score": 8.0,
+      "evidence_en": "Diffusion-based planning with safety guarantees for robotic navigation, applicable to AV trajectory optimization.",
+      "evidence_cn": "基于扩散的规划方法具有安全保证，用于机器人导航，适用于自动驾驶轨迹优化",
+      "canonical_evidence": "基于扩散的规划方法具有安全保证，用于机器人导航，适用于自动驾驶轨迹优化",
+      "tldr_en": "Using Doob's h-transform, the paper provides a unified diffusion planning framework with formal safety guarantees and stochastic optimal control formulation.",
+      "tldr_cn": "本文研究连续时间分数扩散模型中引导机制的理论基础，采用Doob h-变换作为理想引导过程框架，分析近似引导的误差界限，提供满足约束的概率保证，尤其适用于安全关键规划。此外，该公式导出一个随机最优控制问题，无需额外模型训练即可设计实用引导。在机器人导航任务上验证了方法的有效性，为安全规划提供了理论工具。",
+      "title_zh": "无需训练的引导扩散规划：基于Doob h-变换的统一框架及安全保证",
+      "motivation_cn": "安全关键规划需要满足约束的保证，但现有扩散规划方法缺乏形式化安全分析。",
+      "method_cn": "利用Doob h-变换统一引导扩散过程，推导误差界和安全概率保证，并转化为随机最优控制问题。",
+      "result_cn": "在机器人导航任务中实现安全规划，展示了无需训练的引导扩散方法的有效性。",
+      "conclusion_cn": "该框架为扩散规划提供理论基础和实用安全引导设计，适用于安全关键应用。",
+      "matched_requirement_id": "req-8",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "path planning and trajectory optimization for autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+      "score": 8.0,
+      "evidence_en": "proposes a driving model that forecasts world dynamics before action generation to enable physically grounded decision-making",
+      "evidence_cn": "提出驾驶模型，在动作生成前预测世界动态以实现基于物理的决策",
+      "canonical_evidence": "提出驾驶模型，在动作生成前预测世界动态以实现基于物理的决策",
+      "tldr_en": "DynVLA introduces a Dynamics CoT paradigm, forecasting compact world dynamics before action, which improves decision-making quality and physical grounding in autonomous driving.",
+      "tldr_cn": "针对自动驾驶决策缺乏物理世界动态推理的问题，本文提出DynVLA模型，引入动力学思维链（Dynamics CoT）范式。DynVLA通过动态分词器将未来世界演化压缩为少量动态令牌，并解耦自车与环境动态，在生成动作前先预测这些动态令牌。经有监督微调与强化微调后，决策质量显著提升，同时保持低推理延迟，为交互密集场景下的安全决策提供了新思路。",
+      "title_zh": "DynVLA：学习世界动态用于自动驾驶动作推理",
+      "motivation_cn": "现有驾驶模型在做决策时缺乏对未来环境动态的物理推理，导致决策不够可靠。",
+      "method_cn": "提出动力学思维链，先预测解耦的自我与环境动态令牌，再基于预测结果生成驾驶动作。",
+      "result_cn": "在多个驾驶场景上验证了动力学预测能够提升决策质量，且延迟可控。",
+      "conclusion_cn": "DynVLA为自动驾驶模型增加了物理世界动态推理能力，提高了复杂场景下的决策安全性。",
+      "matched_requirement_id": "req-4",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "behavior decision making for autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-yteeie3ytd",
+      "score": 8.0,
+      "evidence_en": "Proposes a streaming world model for closed-loop evaluation of autonomous driving planning policies.",
+      "evidence_cn": "提出面向自动驾驶规划策略闭环评估的流式世界模型。",
+      "canonical_evidence": "提出面向自动驾驶规划策略闭环评估的流式世界模型。",
+      "tldr_en": "The paper introduces VectorWorld, a streaming vector-graph world model that incrementally generates realistic driving scenarios for efficient closed-loop evaluation of autonomous driving policies.",
+      "tldr_cn": "闭环评估自动驾驶策略需要实时交互仿真，而现有生成式世界模型面临历史不兼容初始化、采样延迟超实时预算及运动学不可行累积等问题。本文提出VectorWorld，一种流式向量图世界模型，在回放过程中增量生成以自车为中心的车道-智能体场景。模型结合运动感知门控VAE进行历史兼容初始化，利用边门控关系扩散Transformer与区间条件平均流进行未来场景外推，并设计物理对齐的混合动作NPC策略ΔSim保证运动学可行。实验表明VectorWorld实现超实时生成，支持大规模闭环评估，为自动驾驶策略验证提供了高效逼真的仿真工具。",
+      "title_zh": "VectorWorld：基于向量图扩散流的流式世界模型",
+      "motivation_cn": "现有生成式世界模型存在历史不兼容初始化、采样延迟超实时与运动学不可行累积问题。",
+      "method_cn": "提出VectorWorld，结合运动感知门控VAE、边门控关系DiT与区间条件MeanFlow，及物理对齐NPC策略ΔSim，增量生成向量图场景。",
+      "result_cn": "实现超实时生成，支持大规模闭环评估，生成场景运动学可行且真实。",
+      "conclusion_cn": "向量图世界模型为自动驾驶策略闭环测试提供高效可扩展仿真工具，加速开发迭代。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "autonomous driving planning and control systems"
+    },
+    {
+      "paper_id": "openreview-icml-2026-2uli4uqgrg",
+      "score": 7.0,
+      "evidence_en": "Lightweight pre-training for fine-grained traffic prediction to provide lane-change guidance for autonomous vehicles",
+      "evidence_cn": "轻量级预训练用于细粒度交通预测，为自动驾驶车辆提供换道指导",
+      "canonical_evidence": "轻量级预训练用于细粒度交通预测，为自动驾驶车辆提供换道指导",
+      "tldr_en": "MiniTraffic uses contrastive learning with frequency-domain augmentation to predict fine-grained traffic, supporting lane-change decisions in autonomous driving.",
+      "tldr_cn": "针对车道级交通数据稀缺和资源受限的问题，MiniTraffic提出轻量级预训练框架，利用频域稳定性增强和道路-车道对比聚类，实现细粒度交通预测，为自动驾驶换道引导提供支持。",
+      "title_zh": "更轻量更实用：面向细粒度交通任务的微型对比学习预训练模型",
+      "motivation_cn": "现有模型效率不足，缺乏细粒度预测，难以部署。",
+      "method_cn": "利用频域稳定性增强模块解决数据稀缺，通过对比聚类捕获道路-车道关联。",
+      "result_cn": "实现了高效、轻量的车道级交通预测。",
+      "conclusion_cn": "MiniTraffic以轻量化设计有效助力自动驾驶车辆的换道决策。",
+      "matched_requirement_id": "req-4",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "behavior decision making for autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-zo8vzsggtn",
+      "score": 7.0,
+      "evidence_en": "KL-regularization aligns policy with MPPI planner, improving motion planning in continuous control.",
+      "evidence_cn": "KL正则化对齐策略与MPPI规划器，改进连续控制中的运动规划",
+      "canonical_evidence": "KL正则化对齐策略与MPPI规划器，改进连续控制中的运动规划",
+      "tldr_en": "A KL-regularization framework aligns the learned policy with the MPPI planner, mitigating misalignment and improving model-based RL planning for high-dimensional control.",
+      "tldr_cn": "针对基于模型的强化学习中策略与MPPI规划器分布不匹配导致价值估计退化的问题，本文提出KL正则化框架，通过最小化策略与规划器分布的KL散度来显式对齐，并引入自适应先验。实验表明该方法在多个高维连续控制任务上提升了规划性能和样本效率，为学习与规划结合的MBRL提供了有效对齐方法。",
+      "title_zh": "一种用于学习规划的自适应先验KL正则化框架",
+      "motivation_cn": "MBRL中策略与MPPI规划器分布不匹配，导致价值估计错误和长期性能下降。",
+      "method_cn": "提出KL正则化框架，通过最小化KL散度对齐策略与规划器，并引入自适应先验改进探索。",
+      "result_cn": "在高维连续控制任务中，该方法显著提升MBRL的规划性能和样本效率。",
+      "conclusion_cn": "KL正则化框架有效解决了策略-规划器不匹配问题，推动了学习与规划在连续控制中的应用。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "algorithms for motion planning in autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-wzmdhutxoz",
+      "score": 7.0,
+      "evidence_en": "proposes a reinforcement learning framework for safe Sim-to-Real policy transfer with probabilistic latent embeddings, applicable to autonomous vehicle control",
+      "evidence_cn": "提出一种基于概率潜嵌入的强化学习框架，用于安全地从仿真到现实迁移控制策略，适用于自动驾驶车辆控制",
+      "canonical_evidence": "提出一种基于概率潜嵌入的强化学习框架，用于安全地从仿真到现实迁移控制策略，适用于自动驾驶车辆控制",
+      "tldr_en": "A novel RL framework uses probabilistic latent embeddings and dynamic policy adaptation to safely transfer control policies from simulation to real-world deployment, addressing Sim2Real gaps in autonomous vehicles.",
+      "tldr_cn": "针对深度强化学习策略在仿真到现实迁移时因动力学差异导致性能下降的问题，本文提出一种基于概率潜嵌入与动态策略适应的新框架。该框架通过学习潜在动力学嵌入并在线调整策略，在不牺牲性能的情况下提升安全性。实验在自动驾驶相关任务上验证了其高效安全的迁移能力，为自动驾驶控制算法的实际部署提供了支撑。",
+      "title_zh": "基于概率潜嵌入与动态策略适应的可迁移强化学习：从仿真到现实部署",
+      "motivation_cn": "仿真训练的强化学习策略因Sim2Real差距导致部署时性能下降与安全风险。",
+      "method_cn": "利用概率潜嵌入建模动力学差异，并动态调整策略以实现安全高效的策略迁移。",
+      "result_cn": "实验表明，在自动驾驶等任务上，该方法实现了更安全、更高效的Sim2Real迁移。",
+      "conclusion_cn": "该框架为自动驾驶等物理系统的安全强化学习部署提供了有效途径。",
+      "matched_requirement_id": "req-6",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "vehicle dynamics and control for autonomous driving"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+      "score": 7.0,
+      "evidence_en": "Proposes a diffusion-based trajectory generation method combining planner and dynamics for feasible control, applicable to autonomous vehicle motion planning.",
+      "evidence_cn": "提出一种结合规划器与动力学的扩散轨迹生成方法，用于可行控制，可应用于自动驾驶运动规划。",
+      "canonical_evidence": "提出一种结合规划器与动力学的扩散轨迹生成方法，用于可行控制，可应用于自动驾驶运动规划。",
+      "tldr_en": "The paper introduces MPDiffuser, a compositional diffusion framework that interleaves planner and dynamics updates to generate task-aligned and dynamically feasible trajectories for offline control tasks.",
+      "tldr_cn": "离线决策中扩散模型常生成与系统动力学不一致的轨迹，限制控制可靠性。本文提出Model Predictive Diffuser (MPDiffuser)，一种组合扩散框架，包含扩散规划器和动力学扩散模型，在采样过程中交替进行规划与动力学更新，逐步修正轨迹可行性同时保持任务意图，并通过轻量级排序模块选择最优轨迹。组合设计提升了样本效率，且动力学模型可利用多样数据，使框架适应未见过的场景。实验表明该方法在控制任务中生成更可靠的可行轨迹。",
+      "title_zh": "基于模型的扩散采样用于离线决策中的预测控制",
+      "motivation_cn": "离线决策中扩散模型生成的轨迹常偏离系统动力学，限制控制可靠性。",
+      "method_cn": "提出MPDiffuser，组合扩散规划器与动力学扩散模型，在采样中交替更新以逐步修正可行性并保持任务意图，通过排序模块选择最优轨迹。",
+      "result_cn": "组合设计提升样本效率与适应性，动力学模型可利用多样且未见过的数据。",
+      "conclusion_cn": "框架为离线控制提供了可靠轨迹生成方法，通用性强，可推广至多种控制任务。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "algorithms for motion planning in autonomous vehicles"
+    },
+    {
+      "paper_id": "openreview-icml-2026-j8lkaoqeyk",
+      "score": 6.0,
+      "evidence_en": "stochastic gradient-based planner for world models, applicable to autonomous driving planning",
+      "evidence_cn": "基于世界模型的随机梯度规划器，可应用于自动驾驶规划",
+      "canonical_evidence": "基于世界模型的随机梯度规划器，可应用于自动驾驶规划",
+      "tldr_en": "Proposes a parallelizable planner that optimizes virtual states with soft dynamics constraints for visual world models, enabling efficient long-horizon control and potentially benefiting AV planning.",
+      "tldr_cn": "利用世界模型从视觉输入进行规划时，搜索空间巨大且非结构化。本文提出一种并行随机梯度规划器，将状态视为优化变量并施加软动力学约束，通过引入随机性和梯度修正实现长时域控制任务的高效求解。该方法在多种视觉控制任务中取得了优异性能，其优化框架可为基于学习世界模型的自动驾驶规划提供新思路。",
+      "title_zh": "基于世界模型的并行随机梯度规划",
+      "motivation_cn": "视觉世界模型用于规划时面临搜索空间巨大和非结构化的问题。",
+      "method_cn": "提出并行随机梯度规划器，将状态作优化变量加软约束，引入随机性和梯度修正。",
+      "result_cn": "在长时域视觉控制任务上取得高效性能。",
+      "conclusion_cn": "优化框架可为基于世界模型的自动驾驶规划提供新思路。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-0dngyqndo2",
+      "score": 5.0,
+      "evidence_en": "Edits driving scenes including ego-trajectory to generate diverse scenarios for autonomous driving validation",
+      "evidence_cn": "编辑包括自我轨迹的驾驶场景，为自动驾驶验证生成多样化测试用例",
+      "canonical_evidence": "编辑包括自我轨迹的驾驶场景，为自动驾驶验证生成多样化测试用例",
+      "tldr_en": "SceneDirector uses explicit geometry and generative priors to edit driving logs, enabling unified object and trajectory editing for testing autonomous driving systems.",
+      "tldr_cn": "为解决自动驾驶测试场景单一的问题，SceneDirector提出基于扩散模型的统一驾驶场景编辑框架，利用LiDAR引导的深度补全构建密集几何，并集成可编辑3D资产，实现对象和自我轨迹的统一编辑，为规划系统评估提供丰富数据。",
+      "title_zh": "SceneDirector：连接显式几何与生成先验的统一驾驶场景编辑",
+      "motivation_cn": "现有方法难以同时编辑驾驶场景中的对象和自我轨迹。",
+      "method_cn": "利用LiDAR引导深度补全构建几何支架，结合扩散模型实现几何精准与生成灵活性的统一。",
+      "result_cn": "生成物理一致、几何精确的编辑场景，直接用于自动驾驶规划测试。",
+      "conclusion_cn": "SceneDirector为自动驾驶验证提供了可扩展的场景编辑方案，助力规划算法测试。",
+      "matched_requirement_id": "req-7",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "recent advances in autonomous vehicle planning and control"
+    },
+    {
+      "paper_id": "openreview-icml-2026-g8op3bstr2",
+      "score": 5.0,
+      "evidence_en": "Learning efficient control policies for autonomous systems using differentiable logic circuits.",
+      "evidence_cn": "使用可微分逻辑电路为自主系统学习高效控制策略",
+      "canonical_evidence": "使用可微分逻辑电路为自主系统学习高效控制策略",
+      "tldr_en": "DWC learns symbolic-differentiable controllers that compile to FPGA circuits with nanosecond latency and picojoule energy, achieving competitive performance on continuous control tasks.",
+      "tldr_cn": "针对自主系统对低延迟和低能耗控制策略的需求，本文提出可微分无权控制器（DWC），一种符号可微架构，通过端到端梯度训练学习非线性控制策略，并可编译为FPGA电路实现单时钟周期延迟和纳焦耳级能耗。在MuJoCo连续控制任务上，DWC达到了与深度网络相媲美的回报，为资源受限的自主系统提供了高性能、高效率的控制方案。",
+      "title_zh": "可微分无权控制器：学习用于连续控制的逻辑电路",
+      "motivation_cn": "自主系统需要低延迟、低能耗的控制策略，但高精度深度网络难以满足实时性和能效要求。",
+      "method_cn": "提出可微分无权控制器（DWC），一种学习逻辑电路的符号可微架构，支持端到端训练并编译为高速低功耗FPGA电路。",
+      "result_cn": "在包括高维Humanoid在内的五个MuJoCo基准上，DWC取得与深度网络竞争性的控制性能。",
+      "conclusion_cn": "DWC为自主系统的实时控制提供了灵活、高效、低成本的解决方案，适用于资源受限场景。",
+      "matched_requirement_id": "req-6",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "vehicle dynamics and control for autonomous driving"
+    },
+    {
+      "paper_id": "openreview-icml-2026-qzjh84ut3q",
+      "score": 5.0,
+      "evidence_en": "Meta-planning paradigm that dynamically generates planning architectures for agents, potentially applicable to AV planning.",
+      "evidence_cn": "智能体系统的元规划方法，动态修订规划架构，可潜在应用于自动驾驶规划",
+      "canonical_evidence": "智能体系统的元规划方法，动态修订规划架构，可潜在应用于自动驾驶规划",
+      "tldr_en": "TodoEvolve meta-planning paradigm autonomously generates and adapts task-specific planning structures, outperforming fixed planners in diverse agent tasks.",
+      "tldr_cn": "针对固定规划结构难以适应开放性问题多样性的局限，本文提出TodoEvolve元规划范式，通过构建标准化规划元件库PlanFactory并收集高质量规划数据，训练元规划器自动合成与动态修订任务特定规划架构。实验表明该方法在多种复杂任务中优于固定基线，为智能体系统提供了自适应规划能力。",
+      "title_zh": "TodoEvolve：学习构建智能体规划系统",
+      "motivation_cn": "现有智能体规划依赖手工设计的固定结构，缺乏对任务多样性的自适应能力。",
+      "method_cn": "构建PlanFactory模块化设计空间，并基于此学习元规划器以自动合成和修订任务规划架构。",
+      "result_cn": "在多种长时域任务上，TodoEvolve显著优于固定结构规划器，展现出更强的泛化性。",
+      "conclusion_cn": "TodoEvolve为构建自适应智能体规划系统提供了通用元学习框架。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-hw9esvumtm",
+      "score": 5.0,
+      "evidence_en": "proposes a robust cross-domain end-to-end autonomous driving framework using Gaussian processes for robust planning and control across domains",
+      "evidence_cn": "提出一种跨域鲁棒的端到端自动驾驶框架，利用高斯过程实现跨域规划与控制",
+      "canonical_evidence": "提出一种跨域鲁棒的端到端自动驾驶框架，利用高斯过程实现跨域规划与控制",
+      "tldr_en": "RoCA is a novel framework for robust cross-domain end-to-end autonomous driving, using Gaussian processes to model token distributions for better generalization across cities.",
+      "tldr_cn": "针对端到端自动驾驶跨域部署的挑战，本文提出RoCA框架。该框架通过建模自车与周围车辆信息的联合概率分布，并利用高斯过程学习基令牌，提升了跨域（如城市）的驾驶性能，避免了大型语言模型带来的高昂微调成本。实验表明RoCA在多个城市场景中表现出强鲁棒性，为端到端自动驾驶的实际部署提供了可行方案。",
+      "title_zh": "RoCA：鲁棒的跨域端到端自动驾驶框架",
+      "motivation_cn": "端到端自动驾驶跨域部署面临性能下降与高成本微调问题。",
+      "method_cn": "采用高斯过程建模自车与周围车辆信息的联合概率分布，学习可迁移的基令牌。",
+      "result_cn": "在多个城市跨域场景下表现出比现有方法更强的鲁棒性与泛化能力。",
+      "conclusion_cn": "RoCA为端到端自动驾驶的跨域适应提供了有效的鲁棒方案。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "autonomous driving planning and control systems"
+    },
+    {
+      "paper_id": "openreview-icml-2026-n2mwmok6pl",
+      "score": 5.0,
+      "evidence_en": "proposes a unified vision-language-action model for end-to-end autonomous driving, integrating reasoning and action generation in a single model",
+      "evidence_cn": "提出一种统一视觉-语言-动作模型，用于端到端自动驾驶，整合推理与动作生成",
+      "canonical_evidence": "提出一种统一视觉-语言-动作模型，用于端到端自动驾驶，整合推理与动作生成",
+      "tldr_en": "AutoMoT is a unified E2E driving model that merges reasoning and action generation within a single vision-language-action model, improving scene understanding and decision-making latency.",
+      "tldr_cn": "针对现有视觉-语言模型在端到端自动驾驶中推理与动作空间错配、推理能力利用不足以及推理延迟高等问题，本文提出AutoMoT，一种统一的视觉-语言-动作模型。通过混合Transformer架构异步处理多模态信息，AutoMoT在一个模型中同时完成场景推理与动作生成，降低了推理延迟。实验表明其驾驶性能与实时性均优于分离式方法，推动了语言引导的端到端驾驶发展。",
+      "title_zh": "AutoMoT：面向端到端自动驾驶的统一视觉-语言-动作模型与异步混合Transformer",
+      "motivation_cn": "现有方法无法有效整合VLMs的推理能力，导致动作生成性能下降与高延迟。",
+      "method_cn": "设计统一VLA模型，采用异步混合Transformer架构同步推理与动作生成，降低推理延迟。",
+      "result_cn": "实验表明AutoMoT在驾驶性能与实时性上均优于现有端到端方法。",
+      "conclusion_cn": "AutoMoT促进了语言模型在自动驾驶中的高效集成，为E2E驾驶提供了新范式。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "autonomous driving planning and control systems"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ukbd73kfgm",
+      "score": 4.0,
+      "evidence_en": "Generates safety-critical driving videos with kinematically feasible ego trajectories for evaluating AD planning systems",
+      "evidence_cn": "生成带有运动学可行自我轨迹的安全关键驾驶视频，用于评估自动驾驶规划系统",
+      "canonical_evidence": "生成带有运动学可行自我轨迹的安全关键驾驶视频，用于评估自动驾驶规划系统",
+      "tldr_en": "SMD generates multi-view safety-critical driving videos by combining a trajectory engine and diffusion model, enabling evaluation of autonomous driving planning systems.",
+      "tldr_cn": "针对现实世界中安全关键场景稀缺的问题，SMD提出首个生成多视角安全关键驾驶视频的框架。它结合安全关键轨迹引擎与扩散模型，生成带有运动学可行自我轨迹的视频，为自动驾驶规划系统提供评估数据。",
+      "title_zh": "SMD：真实域中多视角安全关键驾驶视频生成",
+      "motivation_cn": "现有生成器无法生成现代自动驾驶系统所需的多视角真实视频。",
+      "method_cn": "结合GRPO微调的视觉语言模型选择危险车辆，利用两阶段运动生成产生危险轨迹和可行运动，并通过扩散模型生成多视角视频。",
+      "result_cn": "生成的多视角视频可用于评估自动驾驶规划系统。",
+      "conclusion_cn": "SMD为首个在真实域中生成多视角安全关键驾驶视频的框架，有助于自动驾驶系统的安全评估。",
+      "matched_requirement_id": "req-7",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "recent advances in autonomous vehicle planning and control"
+    },
+    {
+      "paper_id": "openreview-icml-2026-22xf7ii0hd",
+      "score": 4.0,
+      "evidence_en": "proposes an explainability framework for MPC, combining causal abduction and KKT multipliers to explain control decisions",
+      "evidence_cn": "提出一种面向MPC的可解释性框架，结合因果溯因与KKT乘子解释控制决策",
+      "canonical_evidence": "提出一种面向MPC的可解释性框架，结合因果溯因与KKT乘子解释控制决策",
+      "tldr_en": "Hierarchical Causal Abduction combines physics-informed reasoning, optimization evidence from KKT multipliers, and causal discovery to generate human-interpretable explanations for nonlinear MPC decisions.",
+      "tldr_cn": "针对非线性模型预测控制在安全攸关系统中控制动作不透明的问题，本文提出分层因果溯因框架。该框架融合领域知识图谱的物理推理、KKT乘子提供的优化证据以及PCMCI时序因果发现，为MPC动作生成忠实的人可理解的解释。在三个控制环境中验证了解释的保真度。该方法有助于提升自动驾驶等MPC控制系统的可信度，但并非直接改进规划或控制算法本身。",
+      "title_zh": "分层因果溯因：一种面向可解释模型预测控制的基础框架",
+      "motivation_cn": "非线性MPC的决策过程对人类操作者不透明，影响信任与部署。",
+      "method_cn": "结合物理知识图谱、KKT最优性证据和因果发现算法生成对MPC动作的解释。",
+      "result_cn": "实验证明生成的解释能忠实反映MPC决策依据，提升了操作者的理解。",
+      "conclusion_cn": "HCA框架为MPC提供了可解释性，有助于自动驾驶等控制系统的可信部署。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "autonomous driving planning and control systems"
+    },
+    {
+      "paper_id": "openreview-icml-2026-woiiket6bn",
+      "score": 4.0,
+      "evidence_en": "constrained decoding for safe robot navigation policies applicable to autonomous vehicle motion planning",
+      "evidence_cn": "约束解码的安全机器人导航策略可应用于自动驾驶车辆运动规划",
+      "canonical_evidence": "约束解码的安全机器人导航策略可应用于自动驾驶车辆运动规划",
+      "tldr_en": "SafeDec enforces STL safety specifications via constrained decoding in autoregressive navigation policies, ensuring safe actions for robots and potentially autonomous vehicles.",
+      "tldr_cn": "现有基于Transformer的端到端机器人导航策略在真实世界中展现出强大的泛化能力，但缺乏明确的行为正确性保证，存在安全隐患。针对此问题，本文提出SafeDec约束解码框架，利用信号时序逻辑公式形式化安全规范，在导航策略生成动作序列时实时施加约束，确保输出行为符合安全要求。该方法无需重新训练模型，可与现有预训练策略集成。实验在多种导航场景中验证了其有效提升了策略的安全性，减少了危险动作，为安全关键的自主系统（包括自动驾驶）提供了通用的安全增强手段。",
+      "title_zh": "SafeDec：安全自回归通用机器人导航策略的约束解码",
+      "motivation_cn": "数据驱动的机器人导航策略缺乏行为正确性保证，存在安全隐患。",
+      "method_cn": "提出SafeDec约束解码框架，利用信号时序逻辑公式在解码时施加安全约束。",
+      "result_cn": "实验表明该方法能有效提升导航策略的安全性，减少危险动作。",
+      "conclusion_cn": "为安全关键的自主系统提供了通用的安全增强手段，包括自动驾驶领域。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-6lq2mgo42h",
+      "score": 4.0,
+      "evidence_en": "generalizable action expert maps sparse plans to dense actions, applicable to autonomous vehicle trajectory generation",
+      "evidence_cn": "通用动作专家将稀疏计划映射到密集动作，可应用于自动驾驶轨迹生成",
+      "canonical_evidence": "通用动作专家将稀疏计划映射到密集动作，可应用于自动驾驶轨迹生成",
+      "tldr_en": "GAE learns a task-agnostic model to convert sparse 3D waypoints from VLM into continuous action trajectories, enabling efficient robot action generation and potentially benefiting AV planning.",
+      "tldr_cn": "视觉语言模型虽具强推理规划能力，但将预测落实到精确机器人动作仍具挑战。本文提出通用动作专家GAE，通过稀疏几何接口将VLM预测的稀疏3D路点映射为连续动作轨迹，实现任务无关的动作生成。GAE在大规模数据集预训练后能快速适应新任务，减少机器人动作生成成本。实验表明该方法在多种机器人操作任务中有效，其稀疏到密集的映射思想也可为自动驾驶车辆的轨迹规划提供参考。",
+      "title_zh": "GAE：利用可泛化动作专家释放VLM的物理潜力",
+      "motivation_cn": "视觉语言模型将推理转化为精确机器人动作时面临泛化性差和适应成本高的问题。",
+      "method_cn": "提出通用动作专家GAE，将VLM预测的稀疏3D路点结合点云观测映射为连续动作轨迹。",
+      "result_cn": "实验显示GAE在多任务中有效降低动作生成成本，提升泛化能力。",
+      "conclusion_cn": "稀疏到密集的动作映射思想可为自动驾驶轨迹规划提供参考。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-1fdayakhmv",
+      "score": 4.0,
+      "evidence_en": "safe diffusion control for visual navigation, applicable to AV trajectory planning",
+      "evidence_cn": "视觉导航中安全扩散控制方法，可应用于自动驾驶轨迹规划",
+      "canonical_evidence": "视觉导航中安全扩散控制方法，可应用于自动驾驶轨迹规划",
+      "tldr_en": "Fisher-Preserving Guidance prevents off-distribution drift in diffusion model waypoint prediction for visual navigation, ensuring safe and efficient trajectories, with potential use in AV planning.",
+      "tldr_cn": "扩散模型在视觉导航路点预测中有效，但标准采样可能导致轨迹脱离训练流形而不安全。本文提出Fisher保持引导与截断敏感性指标，在不重新训练的情况下约束采样过程，避免分布外动作。该方法计算高效，仅需单次反向传播，可实时运行。实验表明提高了导航轨迹的可靠性与效率，其安全约束思想也可用于自动驾驶车辆的轨迹规划。",
+      "title_zh": "Fisher保持引导：用于安全扩散控制的免训练流形约束",
+      "motivation_cn": "扩散模型在导航中路点预测可能产生不可靠轨迹，因更新偏离训练流形。",
+      "method_cn": "提出Fisher保持引导与截断敏感性指标，在推理时约束采样保持流形，无需训练。",
+      "result_cn": "实验证明提高了导航轨迹的可靠性与效率，且计算高效可实时。",
+      "conclusion_cn": "安全约束思想可推广至自动驾驶车辆的轨迹规划中。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    }
+  ],
+  "llm_ranked_at": "2026-07-22T07:41:26.537674+00:00",
+  "display_min_score": 4.0,
+  "pruned_at": "2026-07-22T07:41:26.573129+00:00"
+}
