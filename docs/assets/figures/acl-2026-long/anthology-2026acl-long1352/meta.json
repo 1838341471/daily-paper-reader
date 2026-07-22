@@ -1,0 +1,96 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "figures": [
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 805,
+      "height": 348,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 1656,
+      "height": 513,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 1652,
+      "height": 572,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 1647,
+      "height": 673,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 1653,
+      "height": 904,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 1619,
+      "height": 568,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-007.webp",
+      "caption": "",
+      "page": 0,
+      "index": 7,
+      "width": 1633,
+      "height": 425,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-008.webp",
+      "caption": "",
+      "page": 0,
+      "index": 8,
+      "width": 1643,
+      "height": 291,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-009.webp",
+      "caption": "",
+      "page": 0,
+      "index": 9,
+      "width": 1567,
+      "height": 1574,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/acl-2026-long/anthology-2026acl-long1352/fig-010.webp",
+      "caption": "",
+      "page": 0,
+      "index": 10,
+      "width": 1572,
+      "height": 658,
+      "label": "Figure"
+    }
+  ]
+}

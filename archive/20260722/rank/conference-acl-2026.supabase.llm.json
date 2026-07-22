@@ -1,0 +1,429 @@
+{
+  "top_k": 200,
+  "generated_at": "2026-07-22T08:07:14.382964+00:00",
+  "papers": [
+    {
+      "id": "anthology-2026.acl-long.1381",
+      "source": "ACL-2026-Long",
+      "title": "From Language to Driving: A Dual-Loop SLM-Enhanced Framework for Multi-Planner Scheduling via a Domain-Specific Language",
+      "abstract": "Advancing from usable to collaborative autonomy requires driving systems to execute passenger instructions safely and reliably. This work formulates instruction realization as scheduling across multiple motion planners and presents a dual-loop framework that provides a transparent decision chain from natural language to vehicle control. The outer loop uses a small language model (SLM) for high-level, low-frequency semantic reasoning and schedule generation, while the inner loop performs low-level, high-frequency schedule execution and vehicle control. To compensate for the SLM’s limited capacity, the framework integrates receding-horizon scheduling to segment long-horizon instruction tasks, a domain-specific language (DSL) that restricts SLM outputs to a scheduling-oriented subspace, and reinforcement learning in high-fidelity urban traffic to refine the SLM’s DSL proficiency and scheduling performance. Experiments show that the framework improves instruction-completion rates while maintaining high safety and compliance relative to multiple baselines.",
+      "authors": [
+        "Jiawei Liu",
+        "Xun Gong",
+        "Muli Yang",
+        "Xingrui Yu",
+        "Fen Fang",
+        "Xulei Yang",
+        "Ivor Tsang",
+        "Yunfeng Hu",
+        "Hong Chen",
+        "Qing Guo"
+      ],
+      "primary_category": "ACL-2026-Long",
+      "categories": [
+        "ACL-2026-Long"
+      ],
+      "published": "2026-07-01T00:00:00+00:00",
+      "link": "https://aclanthology.org/2026.acl-long.1381/",
+      "pdf_url": "https://aclanthology.org/2026.acl-long.1381.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    },
+    {
+      "id": "anthology-2026.acl-long.1352",
+      "source": "ACL-2026-Long",
+      "title": "Think before Go: Hierarchical Reasoning for Image-goal Navigation",
+      "abstract": "Image-goal navigation steers an agent to a target location specified by an image in unseen environments. Existing methods primarily handle this task by learning an end-to-end navigation policy, which compares the similarities of target and observation images and directly predicts the actions. However, when the target is distant or lies in another room, such methods fail to extract informative visual cues, leading the agent to wander around. Motivated by the human cognitive principle that deliberate, high-level reasoning guides fast, reactive execution in complex tasks, we propose Hierarchical Reasoning Navigation (HRNav), a framework that decomposes image-goal navigation into high-level planning and low-level execution. In high-level planning, a vision-language model is trained on a self-collected dataset to generate a short-horizon plan, such as whether the agent should walk through the door or down the hallway. This downgrades the difficulty of the long-horizon task, making it more amenable to the execution part. In low-level execution, an online reinforcement learning policy is utilized to decide actions conditioned on the short-horizon plan. We also devise a novel Wandering Suppression Penalty (WSP) to further reduce the wandering problem. Together, these components form a hierarchical framew ork for Image-Goal Navigation. Extensive experiments in both simulation and real-world environments demonstrate the superiority of our method.",
+      "authors": [
+        "Pengna Li",
+        "Kangyi Wu",
+        "Shaoqing Xu",
+        "Fang Li",
+        "Lin Zhao",
+        "Long Chen",
+        "Zhi-Xin Yang",
+        "Nanning Zheng"
+      ],
+      "primary_category": "ACL-2026-Long",
+      "categories": [
+        "ACL-2026-Long"
+      ],
+      "published": "2026-07-01T00:00:00+00:00",
+      "link": "https://aclanthology.org/2026.acl-long.1352/",
+      "pdf_url": "https://aclanthology.org/2026.acl-long.1352.pdf",
+      "tags": [
+        "keyword:AV-PNC",
+        "query:AV-PNC"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "type": "intent_query",
+      "tag": "AV-PNC",
+      "paper_tag": "query:AV-PNC",
+      "query_text": "path planning and trajectory optimization for autonomous vehicles",
+      "sim_scores": {
+        "anthology-2026.acl-long.1352": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "anthology-2026.acl-long.1381": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "anthology-2026.acl-long.1381",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "anthology-2026.acl-long.1352",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "AV-PNC",
+      "paper_tag": "query:AV-PNC",
+      "query_text": "recent advances in autonomous vehicle planning and control",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "anthology-2026.acl-long.1352": {
+          "score": 0.015625,
+          "rank": 4
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "anthology-2026.acl-long.1381",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "anthology-2026.acl-long.1352",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "algorithms for motion planning in autonomous vehicles",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "anthology-2026.acl-long.1352": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "autonomous driving",
+      "sim_scores": {}
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "autonomous driving planning and control systems",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "anthology-2026.acl-long.1352": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "behavior decision making for autonomous vehicles",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "anthology-2026.acl-long.1352": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "behavior planning",
+      "sim_scores": {}
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "motion planning",
+      "sim_scores": {}
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "path planning",
+      "sim_scores": {}
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "path planning methods for self-driving cars",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "anthology-2026.acl-long.1352": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "trajectory planning",
+      "sim_scores": {}
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "trajectory planning and optimization for autonomous driving",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "anthology-2026.acl-long.1352": {
+          "score": 0.015625,
+          "rank": 4
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "vehicle control",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AV-PNC",
+      "paper_tag": "keyword:AV-PNC",
+      "query_text": "vehicle dynamics and control for autonomous driving",
+      "sim_scores": {
+        "anthology-2026.acl-long.1381": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "anthology-2026.acl-long.1352": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        }
+      }
+    }
+  ],
+  "global_candidate_ids": [
+    "anthology-2026.findings-acl.60",
+    "anthology-2026.acl-long.1352",
+    "anthology-2026.acl-long.1381",
+    "anthology-2026.findings-acl.1152",
+    "anthology-2026.acl-long.370",
+    "anthology-2026.acl-long.1044",
+    "anthology-2026.acl-long.573",
+    "anthology-2026.findings-acl.1019",
+    "anthology-2026.acl-long.1016",
+    "anthology-2026.acl-long.408",
+    "anthology-2026.acl-long.128",
+    "anthology-2026.findings-acl.245",
+    "anthology-2026.acl-long.1062",
+    "anthology-2026.acl-long.1886",
+    "anthology-2026.acl-long.1670",
+    "anthology-2026.acl-long.37",
+    "anthology-2026.acl-long.1125",
+    "anthology-2026.acl-long.1152",
+    "anthology-2026.acl-long.1863",
+    "anthology-2026.findings-acl.538",
+    "anthology-2026.acl-long.995",
+    "anthology-2026.acl-long.316",
+    "anthology-2026.acl-long.1874",
+    "anthology-2026.acl-long.431",
+    "anthology-2026.acl-long.595",
+    "anthology-2026.findings-acl.1542",
+    "anthology-2026.findings-acl.1720",
+    "anthology-2026.acl-long.1788",
+    "anthology-2026.acl-long.1848",
+    "anthology-2026.acl-long.1771",
+    "anthology-2026.acl-long.335",
+    "anthology-2026.findings-acl.620",
+    "anthology-2026.acl-long.1347",
+    "anthology-2026.findings-acl.718",
+    "anthology-2026.acl-long.1335",
+    "anthology-2026.findings-acl.865",
+    "anthology-2026.findings-acl.1599",
+    "anthology-2026.findings-acl.1852",
+    "anthology-2026.findings-acl.132",
+    "anthology-2026.acl-long.1822",
+    "anthology-2026.findings-acl.1814",
+    "anthology-2026.findings-acl.2090",
+    "anthology-2026.findings-acl.1604",
+    "anthology-2026.findings-acl.637",
+    "anthology-2026.acl-long.1308",
+    "anthology-2026.acl-long.1306",
+    "anthology-2026.acl-long.48",
+    "anthology-2026.acl-long.1300",
+    "anthology-2026.acl-long.467",
+    "anthology-2026.findings-acl.1402",
+    "anthology-2026.findings-acl.1378",
+    "anthology-2026.findings-acl.1186",
+    "anthology-2026.acl-long.827",
+    "anthology-2026.acl-long.1543",
+    "anthology-2026.acl-long.1100",
+    "anthology-2026.acl-long.974",
+    "anthology-2026.findings-acl.920",
+    "anthology-2026.findings-acl.869",
+    "anthology-2026.findings-acl.980",
+    "anthology-2026.acl-long.216",
+    "anthology-2026.findings-acl.77",
+    "anthology-2026.findings-acl.1532",
+    "anthology-2026.acl-long.428",
+    "anthology-2026.acl-long.504",
+    "anthology-2026.findings-acl.988",
+    "anthology-2026.acl-long.1060",
+    "anthology-2026.findings-acl.1434",
+    "anthology-2026.acl-long.236",
+    "anthology-2026.acl-long.2151",
+    "anthology-2026.acl-long.1422",
+    "anthology-2026.acl-long.196",
+    "anthology-2026.findings-acl.2134",
+    "anthology-2026.findings-acl.787",
+    "anthology-2026.findings-acl.670",
+    "anthology-2026.findings-acl.1052",
+    "anthology-2026.findings-acl.1125",
+    "anthology-2026.acl-long.832",
+    "anthology-2026.acl-long.1910",
+    "anthology-2026.acl-long.2001",
+    "anthology-2026.acl-long.1743",
+    "anthology-2026.acl-long.1299",
+    "anthology-2026.findings-acl.336",
+    "anthology-2026.acl-long.1195",
+    "anthology-2026.acl-long.2016",
+    "anthology-2026.findings-acl.2019",
+    "anthology-2026.findings-acl.1133",
+    "anthology-2026.findings-acl.732",
+    "anthology-2026.acl-long.416",
+    "anthology-2026.findings-acl.186",
+    "anthology-2026.findings-acl.2109",
+    "anthology-2026.acl-long.1962",
+    "anthology-2026.findings-acl.1468",
+    "anthology-2026.findings-acl.1069",
+    "anthology-2026.acl-long.684",
+    "anthology-2026.acl-long.754",
+    "anthology-2026.findings-acl.681",
+    "anthology-2026.findings-acl.1725",
+    "anthology-2026.acl-long.1039",
+    "anthology-2026.acl-long.1751",
+    "anthology-2026.acl-long.1624",
+    "anthology-2026.findings-acl.2129",
+    "anthology-2026.findings-acl.361",
+    "anthology-2026.findings-acl.2058",
+    "anthology-2026.findings-acl.763",
+    "anthology-2026.findings-acl.776",
+    "anthology-2026.acl-long.1906",
+    "anthology-2026.findings-acl.333",
+    "anthology-2026.findings-acl.2024",
+    "anthology-2026.acl-long.641",
+    "anthology-2026.findings-acl.1966",
+    "anthology-2026.findings-acl.1147",
+    "anthology-2026.findings-acl.2127",
+    "anthology-2026.findings-acl.511",
+    "anthology-2026.acl-long.325",
+    "anthology-2026.acl-long.935",
+    "anthology-2026.findings-acl.2091",
+    "anthology-2026.acl-long.1569",
+    "anthology-2026.acl-long.21",
+    "anthology-2026.acl-long.41",
+    "anthology-2026.findings-acl.100"
+  ],
+  "global_pool_lane_top_k": 30,
+  "global_pool_limit": 120,
+  "global_pool_guaranteed_per_lane": 2,
+  "global_pool_effective_size": 120,
+  "reranked_at": "2026-07-22T08:07:46.414006+00:00",
+  "llm_ranked": [
+    {
+      "paper_id": "anthology-2026.acl-long.1352",
+      "score": 9.0,
+      "evidence_en": "image-goal navigation path planning with hierarchical reasoning",
+      "evidence_cn": "图像目标导航路径规划与层次化推理",
+      "canonical_evidence": "图像目标导航路径规划与层次化推理",
+      "tldr_en": "Think before Go: Hierarchical Reasoning for Image-goal Navigation proposes HRNav, decomposing navigation into high-level VLM-based planning and low-level execution, achieving significant improvements in long-distance and cross-room navigation tasks.",
+      "tldr_cn": "针对现有图像目标导航方法在远距离目标时难以提取有效视觉线索导致智能体漫游的问题，提出层次化推理导航框架HRNav，将任务分解为高层规划与低层执行。高层利用视觉语言模型生成逐步子目标，低层策略执行具体动作。实验表明该方法在远距离和跨房间导航任务中大幅提升了成功率，为移动机器人自主导航提供了有效方案。",
+      "title_zh": "先思后行：面向图像目标导航的层次化推理",
+      "motivation_cn": "现有图像目标导航方法在目标距离较远或跨房间时无法提取有效视觉线索，导致智能体漫无目的。",
+      "method_cn": "提出HRNav框架，将导航分解为高层规划（视觉语言模型推理）和低层执行（策略动作）。",
+      "result_cn": "实验表明，该方法在远距离和跨房间导航任务中成功率大幅提升。",
+      "conclusion_cn": "层次化推理有效结合深思熟虑的规划与快速反应执行，为复杂导航任务提供了新范式。",
+      "matched_requirement_id": "req-2",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "path planning methods for self-driving cars"
+    },
+    {
+      "paper_id": "anthology-2026.acl-long.1381",
+      "score": 9.0,
+      "evidence_en": "scheduling across multiple motion planners for executing human driving instructions",
+      "evidence_cn": "通过多运动规划器调度将自然语言指令转化为车辆控制",
+      "canonical_evidence": "通过多运动规划器调度将自然语言指令转化为车辆控制",
+      "tldr_en": "Proposes a dual-loop framework combining a small language model for high-level scheduling and a low-level controller for executing human driving instructions via multiple motion planners.",
+      "tldr_cn": "针对自动驾驶中执行乘员自然语言指令的问题，提出一种双环SLM增强框架，外层用小语言模型进行低频语义推理与多运动规划器调度，内层实现高频执行与车辆控制，通过领域专用语言和滚动时域调度补偿模型容量限制，实现了从语言指令到安全驾驶的透明决策链。",
+      "title_zh": "从语言到驾驶：基于领域专用语言的双环SLM增强多规划器调度框架",
+      "motivation_cn": "实现从乘员自然语言指令到安全驾驶的协同自主性，需要透明、可靠的多规划器调度。",
+      "method_cn": "提出双环框架：外环SLM进行高层语义推理与滚动时域调度，内环执行控制指令。",
+      "result_cn": "框架有效桥接语言指令与车辆控制，证明小语言模型在驾驶调度中的可行性。",
+      "conclusion_cn": "该工作推进了人车协同自主性，为语言指令驱动的自动驾驶规划提供了新范式。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-pnc",
+      "matched_query_text": "algorithms for motion planning in autonomous vehicles"
+    }
+  ],
+  "llm_ranked_at": "2026-07-22T08:10:20.398945+00:00",
+  "display_min_score": 4.0,
+  "pruned_at": "2026-07-22T08:10:20.435370+00:00"
+}
