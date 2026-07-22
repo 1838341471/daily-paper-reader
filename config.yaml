@@ -25,3 +25,55 @@ subscriptions:
     stage: A
     diff_threshold_pct: 15
   keyword_recall_mode: or
+  intent_profiles:
+    - tag: AV-PNC
+      description: 自动驾驶汽车规划与控制
+      enabled: true
+      paper_sources:
+        - arxiv
+      keywords:
+        - keyword: motion planning
+          keyword_cn: 运动规划
+          query: algorithms for motion planning in autonomous vehicles
+        - keyword: path planning
+          keyword_cn: 路径规划
+          query: path planning methods for self-driving cars
+        - keyword: trajectory planning
+          keyword_cn: 轨迹规划
+          query: trajectory planning and optimization for autonomous driving
+        - keyword: behavior planning
+          keyword_cn: 行为规划
+          query: behavior decision making for autonomous vehicles
+        - keyword: autonomous driving
+          keyword_cn: 自动驾驶
+          query: autonomous driving planning and control systems
+        - keyword: vehicle control
+          keyword_cn: 车辆控制
+          query: vehicle dynamics and control for autonomous driving
+      intent_queries:
+        - query: recent advances in autonomous vehicle planning and control
+          query_cn: 自动驾驶汽车规划与控制的最新进展
+          enabled: true
+          source: manual
+          note: ''
+        - query: path planning and trajectory optimization for autonomous vehicles
+          query_cn: 自动驾驶车辆的路径规划与轨迹优化
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-07-22T07:32:38.411Z'
+source_backends:
+  arxiv:
+    papers_table: arxiv_papers
+    use_vector_rpc: true
+    vector_rpc: match_arxiv_papers
+    vector_rpc_exact: match_arxiv_papers_exact
+    use_bm25_rpc: true
+    bm25_rpc: match_arxiv_papers_bm25
+    sync_table: arxiv_sync_status
+    sync_success_value: success
+    schema: public
+    kind: supabase
+    enabled: true
+    url: https://lyucdwgefyfbmaiopjbk.supabase.co
+    anon_key: sb_publishable_lX-oi64Uxyd7SIVv3_w2Uw_MTOojeKq
