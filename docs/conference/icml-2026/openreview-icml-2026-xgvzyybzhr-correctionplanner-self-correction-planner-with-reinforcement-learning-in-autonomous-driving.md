@@ -1,19 +1,19 @@
 ---
 title: "CorrectionPlanner: Self-Correction Planner with Reinforcement Learning in Autonomous Driving"
-title_zh: CorrectionPlanner：基于强化学习的自动驾驶自纠正规划器
+title_zh: CorrectionPlanner：基于强化学习的自动驾驶自校正规划器
 authors: "Yihong Guo, Dongqiangzi Ye, Sijia Chen, Anqi Liu, Xianming Liu"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/543172d90bfd7a09d534e91c22b5059750bf2736.pdf"
 tags: ["query:av-pnc"]
-score: 9.0
-evidence: 提出一种具有自纠正能力的自动驾驶运动规划器
-tldr: 本文针对学习类规划器缺乏自纠正能力的问题，提出CorrectionPlanner，一种具有自我纠正机制的自动驾驶运动规划器。该规划器采用“提出-评估-纠正”循环，在运动令牌生成过程中利用碰撞评判模型预测短期安全性，若预测到碰撞，则基于历史不安全令牌重新生成动作。实验表明，该方法有效提升了规划的安全性，为安全关键型自动驾驶应用提供了可靠基础。
+score: 10.0
+evidence: 自动驾驶安全运动规划的自校正规划器
+tldr: 本文针对自动驾驶中学习型规划器缺乏自校正能力的问题，提出CorrectionPlanner，一种具有提议、评估、校正循环的自回归规划器。通过碰撞批评家预测碰撞并基于校正轨迹生成新动作，迭代提升安全性。实验表明该方法能有效减少碰撞，为安全规划提供了新思路。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有学习类规划器缺乏显式自纠正能力，一旦提出不安全动作无法修正。
-method: 采用自回归规划器，通过“提出-评估-纠正”循环与碰撞评判模型迭代生成安全运动令牌。
-result: 实验证明该方法能有效避免碰撞，提升规划安全性。（具体结果待公开）。
-conclusion: CorrectionPlanner为自动驾驶提供了一种可靠的安全规划方案。
+motivation: 现有学习型规划器一旦提出不安全动作，缺乏显式校正机制，威胁自动驾驶安全。
+method: 提出包含提议、评估、校正循环的自回归规划器，利用碰撞批评家和历史不安全动作序列生成校正动作。
+result: 实验证明该方法能有效减少碰撞，提高规划安全性。
+conclusion: 自校正机制显著提升了自动驾驶规划器的安全性和鲁棒性。
 ---
 
 ## Abstract

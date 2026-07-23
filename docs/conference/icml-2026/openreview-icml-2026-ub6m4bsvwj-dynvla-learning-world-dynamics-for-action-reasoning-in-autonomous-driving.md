@@ -1,19 +1,19 @@
 ---
 title: "DynVLA: Learning World Dynamics for Action Reasoning in Autonomous Driving"
-title_zh: DynVLA：学习世界动态用于自动驾驶动作推理
+title_zh: DynVLA：学习世界动力学用于自动驾驶动作推理
 authors: "Shuyao Shang, Bing Zhan, Yunfei Yan, Yuqi Wang, Yingyan Li, Yasong An, Xiaoman Wang, Jierui Liu, Lu Hou, Lue Fan, Zhaoxiang Zhang, Tieniu Tan"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/51db5c75cae53ef147fa3a7b0d739e23c486cbaa.pdf"
 tags: ["query:av-pnc"]
-score: 8.0
-evidence: 提出驾驶模型，在动作生成前预测世界动态以实现基于物理的决策
-tldr: 针对自动驾驶决策缺乏物理世界动态推理的问题，本文提出DynVLA模型，引入动力学思维链（Dynamics CoT）范式。DynVLA通过动态分词器将未来世界演化压缩为少量动态令牌，并解耦自车与环境动态，在生成动作前先预测这些动态令牌。经有监督微调与强化微调后，决策质量显著提升，同时保持低推理延迟，为交互密集场景下的安全决策提供了新思路。
+score: 10.0
+evidence: 基于动力学链式思考的自动驾驶动作推理VLA模型
+tldr: 针对自动驾驶决策，提出DynVLA模型，引入动力学链式思考（Dynamics CoT）范式。通过动力学分词器将未来演化压缩为少量token，并解耦自车与环境动态，在动作生成前预测世界动态，使决策更物理合理。实验表明比文本CoT方法更有效，提升决策质量且延迟低。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有驾驶模型在做决策时缺乏对未来环境动态的物理推理，导致决策不够可靠。
-method: 提出动力学思维链，先预测解耦的自我与环境动态令牌，再基于预测结果生成驾驶动作。
-result: 在多个驾驶场景上验证了动力学预测能够提升决策质量，且延迟可控。
-conclusion: DynVLA为自动驾驶模型增加了物理世界动态推理能力，提高了复杂场景下的决策安全性。
+motivation: 现有自动驾驶VLA模型缺乏对世界动态的显式建模，导致决策不够物理真实。
+method: 提出DynVLA，用动力学分词器压缩未来状态，解耦自车与环境动态，在动作前生成动力学token。
+result: 在交互密集场景下提升决策质量，且保持低延迟推理。
+conclusion: 动力学CoT为自动驾驶动作推理提供了有效的物理先验，优于文本CoT。
 ---
 
 ## Abstract

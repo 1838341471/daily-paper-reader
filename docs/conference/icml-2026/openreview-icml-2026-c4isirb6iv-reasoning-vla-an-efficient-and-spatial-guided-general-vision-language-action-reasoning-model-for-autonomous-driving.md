@@ -5,15 +5,15 @@ authors: "Dapeng Zhang, Zhenlong Yuan, Zhangquan Chen, Chih-Ting Liao, Yinda Che
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/2958fe5249a1a673a414d689de7784b306b2a02a.pdf"
 tags: ["query:av-pnc"]
-score: 10.0
-evidence: 提出一种面向自动驾驶生成连续动作轨迹的VLA模型，充当运动规划器。
-tldr: 现有自动驾驶视觉-语言-动作模型存在推理效率低和对新车辆配置及场景泛化能力不足的问题。本文提出Reasoning-VLA框架，采用空间引导的可学习动作查询，与推理增强的视觉-语言特征交互，并行生成连续动作轨迹。该模型整合八个公开数据集训练，在多种驾驶场景中实现高效推理与强泛化性能，生成的动作轨迹平滑且符合驾驶规范，为自动驾驶决策与控制提供了一种高效通用的解决方案。
+score: 9.0
+evidence: Reasoning-VLA利用空间引导查询生成自动驾驶的连续动作轨迹，直接解决规划与控制问题。
+tldr: 现有视觉-语言-动作模型在自动驾驶中面临推理效率和场景泛化挑战。本文提出Reasoning-VLA，一个高效通用的动作生成框架，通过可学习的动作查询和预定义的空间表示隐式引导，与推理增强的视觉语言特征交互，并行生成连续动作轨迹。该方法在八个公开数据集上验证了泛化能力，为自动驾驶决策规划提供了新思路。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有VLA模型在自动驾驶中推理效率低，泛化至新车辆配置与场景能力不足。
-method: 提出Reasoning-VLA，采用可学习动作查询与预定义空间表示隐式引导，结合推理增强的视觉-语言特征并行生成连续动作轨迹。
-result: 整合八个公开数据集评估，模型实现高效推理与强泛化，生成平滑动作轨迹。
-conclusion: 空间引导的VLA框架为自动驾驶动作生成提供了高效泛化方案，推动实际部署。
+motivation: 现有VLA模型在自动驾驶中推理效率低，难以泛化到新车辆配置和驾驶场景。
+method: 提出可学习动作查询，通过预定义空间表示隐式引导，并行生成连续动作轨迹。
+result: 在八个公开数据集上验证，显著提升了动作生成的泛化能力和推理效率。
+conclusion: Reasoning-VLA为自动驾驶提供了一个高效且通用的决策框架，增强了空间感知和泛化性。
 ---
 
 ## Abstract

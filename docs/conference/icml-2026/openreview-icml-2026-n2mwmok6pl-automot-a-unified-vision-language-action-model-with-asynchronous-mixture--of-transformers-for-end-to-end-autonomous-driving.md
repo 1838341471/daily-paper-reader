@@ -5,15 +5,15 @@ authors: "Wenhui Huang, Songyan Zhang, Qihang Huang, Zhidong Wang, Zhiqi Mao, Co
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/8e4cccb7721abcd37ad990ddb3874c5c03e14ed9.pdf"
 tags: ["query:av-pnc"]
-score: 5.0
-evidence: 提出一种统一视觉-语言-动作模型，用于端到端自动驾驶，整合推理与动作生成
-tldr: 针对现有视觉-语言模型在端到端自动驾驶中推理与动作空间错配、推理能力利用不足以及推理延迟高等问题，本文提出AutoMoT，一种统一的视觉-语言-动作模型。通过混合Transformer架构异步处理多模态信息，AutoMoT在一个模型中同时完成场景推理与动作生成，降低了推理延迟。实验表明其驾驶性能与实时性均优于分离式方法，推动了语言引导的端到端驾驶发展。
+score: 8.0
+evidence: 统一视觉-语言-动作模型用于端到端自动驾驶以对齐推理与动作
+tldr: 针对现有VLM集成在端到端自动驾驶中的推理-动作空间不对齐、预训练能力利用不足与高延迟问题，本文提出AutoMoT，通过异步混合Transformer将推理与动作生成统一到单一模型。实验表明它显著降低策略生成延迟，提升驾驶性能，为端到端自动驾驶提供高效且鲁棒的视觉-语言-动作解决方案。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有方法无法有效整合VLMs的推理能力，导致动作生成性能下降与高延迟。
-method: 设计统一VLA模型，采用异步混合Transformer架构同步推理与动作生成，降低推理延迟。
-result: 实验表明AutoMoT在驾驶性能与实时性上均优于现有端到端方法。
-conclusion: AutoMoT促进了语言模型在自动驾驶中的高效集成，为E2E驾驶提供了新范式。
+motivation: 当前VLM集成方法存在分布不对齐、预训练推理能力挖掘不充分及高推理延迟等问题。
+method: 提出AutoMoT，利用混合Transformer异步处理视觉与语言，统一推理与动作生成。
+result: 实验证明降低了动作生成延迟，提升了驾驶任务的准确性和鲁棒性。
+conclusion: AutoMoT为端到端自动驾驶提供了一种高效、统一的视觉-语言-动作框架。
 ---
 
 ## Abstract

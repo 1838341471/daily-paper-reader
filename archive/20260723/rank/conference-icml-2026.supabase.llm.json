@@ -1,0 +1,1954 @@
+{
+  "top_k": 200,
+  "generated_at": "2026-07-23T02:53:14.195857+00:00",
+  "papers": [
+    {
+      "id": "openreview-icml-2026-3hea2wfhpw",
+      "source": "ICML-2026-Accepted",
+      "title": "Hierarchical Abstract Tree for Cross-Document Retrieval Augmented Generation",
+      "abstract": "Retrieval-augmented generation (RAG) enhances large language models with external knowledge, and tree-based RAG organizes documents into hierarchical indexes to support queries at multiple granularities. However, existing Tree-RAG methods designed for single-document retrieval face critical challenges in scaling to cross-document multi-hop questions: *(1) poor distribution adaptability*, where $k$-means clustering introduces noise due to rigid distribution assumptions; *(2) structural isolation*, as tree indexes lack explicit cross-document connections; and *(3) coarse abstraction*, which obscures fine-grained details. To address these limitations, we propose **$\\Psi$-RAG**, a tree-RAG framework with two key components. *First*, a hierarchical abstract tree index built through an iterative \"merging and collapse\" process that adapts to data distributions without a priori assumption. *Second*, a multi-granular retrieval agent that intelligently interacts with the knowledge base with reorganized queries and an agent-powered hybrid retriever. $\\Psi$-RAG supports diverse tasks from token-level question answering to document-level summarization. On cross-document multi-hop QA benchmarks, it outperforms RAPTOR by 25.9\\% and HippoRAG 2 by 7.4\\% in average F1 score.",
+      "authors": [
+        "Ziwen Zhao",
+        "Menglin Yang"
+      ],
+      "primary_category": "Retrieval-Augmented Generation",
+      "categories": [
+        "Retrieval-Augmented Generation",
+        "Tree-RAG",
+        "Graph-RAG",
+        "Cross-document retrieval",
+        "Data hierarchy"
+      ],
+      "published": "2026-04-30T19:22:44.701+00:00",
+      "link": "https://openreview.net/forum?id=3Hea2WFhPW",
+      "pdf_url": "https://openreview.net/pdf/7936e231851b48a26fa59cba1bcb86f1bfaef6dc.pdf",
+      "tags": [
+        "keyword:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-9yc7mbloxl",
+      "source": "ICML-2026-Accepted",
+      "title": "GAM-RAG: Gain-Adaptive Memory for Evolving Retrieval in Retrieval-Augmented Generation",
+      "abstract": "Retrieval-Augmented Generation (RAG) grounds large language models with external evidence, but many implementations rely on pre-built indices that remain static after construction. Related queries therefore repeat similar multi-hop traversal, increasing latency and compute. Motivated by schema-based learning in cognitive neuroscience, we propose GAM-RAG, a training-free framework that accumulates retrieval experience from recurring or related queries and updates retrieval memory over time. GAM-RAG builds a lightweight, relation-free hierarchical index whose links capture potential co-occurrence rather than fixed semantic relations. During inference, successful retrieval episodes provide sentence-level feedback, updating sentence memories so evidence useful for similar reasoning types becomes easier to activate later. To balance stability and adaptability under noisy feedback, we introduce an uncertainty-aware, Kalman-inspired gain rule that jointly updates memory states and uncertainty estimates. It applies fast updates for reliable novel signals and conservative refinement for stable or noisy memories. We provide a theoretical analysis of the update dynamics, and empirically show that GAM-RAG improves average performance by 3.95\\% over the strongest baseline and by 8.19\\% with 5-turn memory, while reducing inference cost by 61\\%.",
+      "authors": [
+        "Yifan Wang",
+        "Mingxuan Jiang",
+        "Zhihao Sun",
+        "Yixin Cao",
+        "Yicun Liu",
+        "Keyang Chen",
+        "Guangnan Ye",
+        "Hongfeng Chai"
+      ],
+      "primary_category": "Retrieval-Augmented Generation (RAG)",
+      "categories": [
+        "Retrieval-Augmented Generation (RAG)",
+        "Memory"
+      ],
+      "published": "2026-04-30T19:22:47.433+00:00",
+      "link": "https://openreview.net/forum?id=9YC7mbloXl",
+      "pdf_url": "https://openreview.net/pdf/0fd454748f575a4bffb3a311d192478eca177b8a.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-w6fxg6d6my",
+      "source": "ICML-2026-Accepted",
+      "title": "HypRAG: Hyperbolic Dense Retrieval for Retrieval Augmented Generation",
+      "abstract": "Embedding geometry plays a fundamental role in retrieval quality, yet dense retrievers for retrieval-augmented generation (RAG) remain largely confined to Euclidean space. However, natural language exhibits hierarchical structure from broad topics to specific entities that Euclidean embeddings fail to preserve, causing semantically distant documents to appear spuriously similar and increasing hallucination risk. To address these limitations, we introduce hyperbolic dense retrieval, developing two model variants in the Lorentz model of hyperbolic space: HyTE-FH, a fully hyperbolic transformer, and HyTE-H, a hybrid architecture projecting pre-trained Euclidean embeddings into hyperbolic space. To prevent representational collapse during sequence aggregation, we introduce the Outward Einstein Midpoint, a geometry-aware pooling operator that provably preserves hierarchical structure. On MTEB, HyTE-FH outperforms equivalent Euclidean baselines, while on RAGBench, HyTE-H achieves up to 29\\% gains over Euclidean baselines in context relevance and answer relevance using substantially smaller models than current state-of-the-art retrievers. Our analysis also reveals that hyperbolic representations encode document specificity through norm-based separation—with over 20\\% radial increase from general to specific concepts—a property absent in Euclidean embeddings, underscoring the critical role of geometric inductive bias in faithful RAG systems. The code is available at: https://github.com/Graph-and-Geometric-Learning/HypRAG",
+      "authors": [
+        "Hiren Madhu",
+        "Ngoc Bui",
+        "Ali Maatouk",
+        "Leandros Tassiulas",
+        "Smita Krishnaswamy",
+        "Menglin Yang",
+        "Sukanta Ganguly",
+        "Kiran Srinivasan",
+        "Rex Ying"
+      ],
+      "primary_category": "Language models",
+      "categories": [
+        "Language models",
+        "RAG",
+        "Retrieval",
+        "Non-euclidean foundation models",
+        "Geometric deep learning"
+      ],
+      "published": "2026-04-30T19:21:41.186+00:00",
+      "link": "https://openreview.net/forum?id=w6FXg6d6My",
+      "pdf_url": "https://openreview.net/pdf/861a9062f09a3b3fd1a76fd2a0b76289ba995aac.pdf",
+      "tags": [
+        "keyword:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-m9khwqren9",
+      "source": "ICML-2026-Accepted",
+      "title": "LazyAttention: Efficient Retrieval-Augmented Generation with Deferred Positional Encoding",
+      "abstract": "Key-value (KV) caching accelerates inference of large language models (LLMs) by reusing past computations for generated tokens. Its importance becomes even greater in long-context applications such as retrieval-augmented generation (RAG) and in-context learning (ICL). However, conventional KV caching embeds positional information directly into the cache, limiting its reusability. Existing solutions either restrict reuse to prefixes or require expensive memory materialization for positional re-encoding. We introduce LazyAttention, a novel attention mechanism that kernelizes deferred positional encoding to enable zero-copy, position-agnostic KV reuse. By adjusting positional encoding within attention kernels on-the-fly, LazyAttention resolves the materialization bottleneck, allowing a single physical KV copy to serve multiple logical requests at arbitrary positions. Leveraging attention kernels tailored for prefilling and decoding, our system achieves significant efficiency improvements: under skewed document distributions, it reduces time-to-first-token (TTFT) by 1.37× and increases inference throughput by 1.40× compared to the state-of-the-art Block-Attention, while maintaining comparable output quality.",
+      "authors": [
+        "Haocheng Xia",
+        "Mihir Pamnani",
+        "Hanxi Fang",
+        "Supawit Chockchowwat",
+        "Yongjoo Park"
+      ],
+      "primary_category": "Large-language model",
+      "categories": [
+        "Large-language model",
+        "retrieval-augmented generation",
+        "KV cache"
+      ],
+      "published": "2026-04-30T19:19:56.342+00:00",
+      "link": "https://openreview.net/forum?id=M9kHwqreN9",
+      "pdf_url": "https://openreview.net/pdf/c4d825d653070733092c564642dc66ac6db18eb5.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-nyghacifrk",
+      "source": "ICML-2026-Accepted",
+      "title": "Retriever Portfolios: A Principled Approach to Adaptive RAG",
+      "abstract": "Retrieval-augmented generation (RAG) systems typically rely on a single\nretriever and a single set of hyperparameters, despite facing highly\nheterogeneous queries that range from simple factoid questions to complex\nmulti-hop reasoning. We propose a method that automatically selects a small, \ndiverse subset of retrievers (a portfolio) from a large pool of candidates, to cover \ndifferent regions of the target query distribution.\nWe formalize this setting via an expected best-of-$k$ objective over \nthe query distribution and show that it admits an efficient portfolio construction \nalgorithm with near-optimal guarantees. Across multiple QA benchmarks, our learned\nportfolios and router pipeline consistently outperform\nsingle-retriever and naive multi-retriever baselines on both retrieval metrics and answer quality. \nIn addition, compared to inference-time hyperparameter tuning approaches, fixed portfolios \nenable parallel retrieval and LLM calls, achieving comparable (and sometimes better) accuracy \nwith substantially lower latency and token cost.",
+      "authors": [
+        "Miltiadis Stouras",
+        "Vincent Cohen-Addad",
+        "Silvio Lattanzi",
+        "Ola Svensson"
+      ],
+      "primary_category": "retrieval augmented generation",
+      "categories": [
+        "retrieval augmented generation",
+        "large language models",
+        "retrieval",
+        "QA",
+        "inference-time tuning",
+        "diverse retrievers",
+        "portfolios"
+      ],
+      "published": "2026-04-30T19:20:30.664+00:00",
+      "link": "https://openreview.net/forum?id=NyGHaciFrK",
+      "pdf_url": "https://openreview.net/pdf/fca390c3d22e4bfe5d97590506e68b7db1c0559f.pdf",
+      "tags": [
+        "keyword:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-yxnfgsskcc",
+      "source": "ICML-2026-Accepted",
+      "title": "Graph-R1: Towards Agentic GraphRAG Framework via End-to-end Reinforcement Learning",
+      "abstract": "Retrieval-Augmented Generation (RAG) mitigates hallucination in LLMs by incorporating external knowledge, but relies on chunk-based retrieval that lacks structural semantics. GraphRAG methods improve RAG by modeling knowledge as entity-relation graphs, but still face challenges in high construction cost, fixed one-time retrieval, and reliance on long-context reasoning and prompt design. To address these challenges, we propose Graph-R1, the first agentic GraphRAG framework via end-to-end reinforcement learning (RL). It introduces lightweight knowledge hypergraph construction, models retrieval as a multi-turn agent-environment interaction, and optimizes the agent process via an end-to-end reward mechanism. Experiments on standard RAG datasets show that Graph-R1 outperforms traditional GraphRAG and RL-enhanced RAG methods in reasoning accuracy, retrieval efficiency, and generation quality. Our software and data are publicly available.",
+      "authors": [
+        "Haoran Luo",
+        "Haihong E",
+        "Guanting Chen",
+        "Qika Lin",
+        "Yikai Guo",
+        "Fangzhi Xu",
+        "Zemin Kuang",
+        "Meina Song",
+        "Xiaobao Wu",
+        "Yifan Zhu",
+        "Anh Tuan Luu"
+      ],
+      "primary_category": "Knowledge Graph",
+      "categories": [
+        "Knowledge Graph",
+        "Large Language Model",
+        "GraphRAG",
+        "Reinforcement Learning"
+      ],
+      "published": "2026-04-30T19:15:53.042+00:00",
+      "link": "https://openreview.net/forum?id=YXnFGsSkCC",
+      "pdf_url": "https://openreview.net/pdf/c2935937f568d06010d390dd71e0f101f208f6db.pdf",
+      "tags": [
+        "keyword:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-z8svqd3pmi",
+      "source": "ICML-2026-Accepted",
+      "title": "RAG without Forgetting: Continual Query-Infused Key Memory",
+      "abstract": "Retrieval-augmented generation (RAG) systems commonly improve robustness via query-time adaptations such as query expansion and iterative retrieval. While effective, these approaches are inherently stateless: adaptations are recomputed for each query and discarded thereafter, precluding cumulative learning and repeatedly incurring inference-time cost. Index-side approaches like key expansion introduce persistence but rely on offline preprocessing or heuristic updates that are weakly aligned with downstream task utility, leading to semantic drift and noise accumulation. We propose Evolving Retrieval Memory (ERM), a training-free framework that transforms transient query-time gains into persistent retrieval improvements. ERM updates the retrieval index through correctness-gated feedback, selectively attributes atomic expansion signals to the document keys they benefit, and progressively evolves keys via stable, norm-bounded updates. We show that query and key expansion are theoretically equivalent under standard similarity functions and prove convergence of ERM’s selective updates, amortizing optimal query expansion into a stable index with zero inference-time overhead. Experiments on BEIR and BRIGHT across 13 domains demonstrate consistent gains in retrieval and generation, particularly on reasoning-intensive tasks, at native retrieval speed.",
+      "authors": [
+        "Yuntong Hu",
+        "Sha Li",
+        "Naren Ramakrishnan",
+        "Liang Zhao"
+      ],
+      "primary_category": "Evolving retrieval systems",
+      "categories": [
+        "Evolving retrieval systems",
+        "retrieval-augmented generation",
+        "query expansion",
+        "large language models"
+      ],
+      "published": "2026-04-30T19:20:24.467+00:00",
+      "link": "https://openreview.net/forum?id=Z8svqD3pmI",
+      "pdf_url": "https://openreview.net/pdf/014da7f78f2559372ce20ed814ed82657f6013d2.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-vd8hzofz7v",
+      "source": "ICML-2026-Accepted",
+      "title": "Information Flow Reveals When to Trust Language Models",
+      "abstract": "In retrieval-augmented generation, language models can generate incorrect responses if they fail to utilize query-relevant content from the retrieved evidence. This shifts the focus of uncertainty quantification (UQ) toward assessing contextual grounding, i.e., whether predictions are supported by query-relevant tokens. Recent UQ methods unpack language models to characterize how inputs are processed. Nevertheless, these methods focus on a few layers and overlook the whole progressive propagation within the model, thereby failing to fully capture the grounding dynamics essential for reliable uncertainty estimation. We use information flow to build a layer-wise trace that reveals each context token’s contribution to the output, providing an interpretable basis for assessing reliability. From this analysis, we introduce two measures to calibrate prediction confidence. The first, \\textit{simulatability}, posits that a prediction is more likely to be correct when context token contributions align closely with their true relevance. The second, \\textit{concentration}, asserts that a response is more likely to be correct when it is derived from a narrow, focused subset of tokens. Experiments show that our method achieves an average AUROC of 0.709, exceeding the runner-up performance of 0.676, while maintaining moderate computational cost.",
+      "authors": [
+        "Rui Xu",
+        "Yi Chen",
+        "Jiujiu Chen",
+        "Sihong Xie"
+      ],
+      "primary_category": "uncertainty quantification",
+      "categories": [
+        "uncertainty quantification",
+        "retrieval-augmented generation"
+      ],
+      "published": "2026-04-30T19:10:42.679+00:00",
+      "link": "https://openreview.net/forum?id=vd8HzoFZ7v",
+      "pdf_url": "https://openreview.net/pdf/9e5c51b770ffeed01e47c4d228504b941d795e0f.pdf",
+      "tags": [
+        "keyword:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-9lttzqzxgd",
+      "source": "ICML-2026-Accepted",
+      "title": "Less Is More: Elevating RAG via Performance-Driven Context Compression",
+      "abstract": "Retrieval-Augmented Generation (RAG) has emerged as a promising paradigm for improving the timeliness of knowledge updates and the factual accuracy of large language models. However, incorporating a large volume of retrieved documents significantly increases input length, leading to prohibitive computational costs. Existing compression approaches often compromise task performance, primarily due to their reliance on predefined heuristics. These heuristics fail to ensure that the compressed context is conducive to the generation tasks. To address these limitations, we propose CORE-RAG, a novel framework for context compression in RAG systems. \nCORE eliminates reliance on proxy heuristics through a performance-driven learning framework, which directy utilizes task performance as a feedback signal to iteratively refine the compressor policy. Prior to this optimization process, we incorporate a knowledge distillation phase to initialize the compressor with a robust policy. Extensive experiments demonstrate the superiority of our approach. At a high compression ratio of 3\\%, CORE not only avoids performance degradation but also improves the average Exact Match (EM) score by 3.3 points compared to using full documents. Our code is available at https://github.com/ziqiangcui/CORE-RAG-ICML26.",
+      "authors": [
+        "Ziqiang Cui",
+        "Yunpeng Weng",
+        "Xing Tang",
+        "Peiyang Liu",
+        "Shiwei Li",
+        "Bowei He",
+        "Jiamin Chen",
+        "Yansen Zhang",
+        "Xiuqiang He",
+        "Rui Zhang",
+        "Chen Ma"
+      ],
+      "primary_category": "Retrieval-Augmented Generation",
+      "categories": [
+        "Retrieval-Augmented Generation",
+        "LLM",
+        "Context Compression"
+      ],
+      "published": "2026-04-30T19:13:58.638+00:00",
+      "link": "https://openreview.net/forum?id=9LtTZQZxgd",
+      "pdf_url": "https://openreview.net/pdf/691980af2ac73b21258f307583aec6e72ad92325.pdf",
+      "tags": [
+        "keyword:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-c4isirb6iv",
+      "source": "ICML-2026-Accepted",
+      "title": "Reasoning-VLA: An Efficient and Spatial-Guided General Vision-Language-Action Reasoning Model for Autonomous Driving",
+      "abstract": "Vision-Language-Action (VLA) models have recently shown strong decision-making capabilities in autonomous driving. However, existing VLAs often struggle with achieving efficient inference and generalizing to novel autonomous vehicle configurations and driving scenarios. In this paper, we propose Reasoning-VLA, a general and efficient action-generation VLA framework. The proposed model employs a set of learnable action queries, implicitly guided by predefined spatial representations to enhance spatial awareness. \nThese learnable queries interact with reasoning-enhanced vision–language features to generate continuous action trajectories in parallel. To promote robust generalization, we consolidate eight publicly available autonomous driving datasets into a standardized, Chain-of-Thought reasoning–based, and easy-to-use data format for model training. Leveraging both supervised learning and reinforcement learning fine-tuning, extensive empirical evaluations across multiple benchmarks demonstrate that Reasoning-VLA achieves state-of-the-art performance, strong generalization capability, and the excellent inference speed with parallel decode.",
+      "authors": [
+        "Dapeng Zhang",
+        "Zhenlong Yuan",
+        "Zhangquan Chen",
+        "Chih-Ting Liao",
+        "Yinda Chen",
+        "Fei Shen",
+        "Qingguo Zhou",
+        "Tat-Seng Chua"
+      ],
+      "primary_category": "Scene Understanding",
+      "categories": [
+        "Scene Understanding",
+        "End-to-end",
+        "VLM",
+        "VLA",
+        "RL",
+        "Robotics"
+      ],
+      "published": "2026-04-30T19:10:25.569+00:00",
+      "link": "https://openreview.net/forum?id=c4iSIrb6Iv",
+      "pdf_url": "https://openreview.net/pdf/2958fe5249a1a673a414d689de7784b306b2a02a.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-gbq6eiste4",
+      "source": "ICML-2026-Accepted",
+      "title": "DeepSight: Long-Horizon World Modeling via Latent States Prediction for End-to-End Autonomous Driving",
+      "abstract": "End-to-end autonomous driving systems are increasingly integrating Vision-Language Model (VLM) architectures, incorporating text reasoning or visual reasoning to enhance the robustness and accuracy of driving decisions.\nHowever, the reasoning mechanisms employed in most methods are direct adaptations from general domains, lacking in-depth exploration tailored to autonomous driving scenarios, particularly within visual reasoning modules. In this paper, we propose a driving world model that performs parallel prediction of latent semantic features for consecutive future frames in the bird’s-eye-view (BEV) space, thereby enabling long-horizon modeling of future world states. We also introduce an efficient and adaptive text reasoning mechanism that utilizes additional social knowledge and reasoning capabilities to further improve driving performance in challenging long-tail scenarios. We present a novel, efficient, and effective approach that achieves state-of-the-art (SOTA) results on the closed-loop Bench2drive benchmark. Codes are available at: https://github.com/hotdogcheesewhite/DeepSight.",
+      "authors": [
+        "Lingjun Zhang",
+        "Changjie Wu",
+        "Linzhe Shi",
+        "Jiangyang Li",
+        "Jiaxin Liu",
+        "Lei Yang",
+        "Hang Zhang",
+        "Mu Xu",
+        "Hong Wang"
+      ],
+      "primary_category": "autonomous driving; Vision-Language Model; Visual reasoning",
+      "categories": [
+        "autonomous driving; Vision-Language Model; Visual reasoning"
+      ],
+      "published": "2026-04-30T19:13:18.123+00:00",
+      "link": "https://openreview.net/forum?id=gBq6eiSTE4",
+      "pdf_url": "https://openreview.net/pdf/48be22be2762cc64031302f430b73cab3cdbdf9d.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-hgwbwnhwvd",
+      "source": "ICML-2026-Accepted",
+      "title": "CoIRL-AD: Collaborative-Competitive Imitation-Reinforcement Learning in Latent World Models for Autonomous Driving",
+      "abstract": "End-to-end autonomous driving models trained with imitation learning (IL) often generalize poorly, particularly in long-tail scenarios where expert demonstrations are sparse. Reinforcement learning (RL) can provide complementary task-level supervision, but applying RL to real-world autonomous driving is challenging in offline settings without interactive simulators, where datasets are dominated by expert actions and provide limited behavioral diversity. We propose CoIRL-AD, a competitive dual-policy framework that integrates IL and RL under a unified offline training regime. CoIRL-AD decouples imitation and reward optimization into separate actors to alleviate objective conflicts, uses imagined future rollouts for long-horizon reward estimation, and introduces a competition mechanism that selectively transfers beneficial behaviors while keeping RL anchored to expert-like driving. Experiments on the nuScenes benchmark show that CoIRL-AD consistently improves robustness over strong IL-based baselines, with especially large gains in cross-city generalization and long-tail scenarios. Code is available at: https://github.com/SEU-zxj/CoIRL-AD.",
+      "authors": [
+        "Xiaoji Zheng",
+        "Ziyuan Yang",
+        "Yanhao Chen",
+        "Yuhang Peng",
+        "Yuanrong Tang",
+        "Gengyuan Liu",
+        "Bokui Chen",
+        "Jiangtao Gong"
+      ],
+      "primary_category": "autonomous driving",
+      "categories": [
+        "autonomous driving",
+        "world model",
+        "imitation learning",
+        "reinforcement learning"
+      ],
+      "published": "2026-04-30T19:18:16.489+00:00",
+      "link": "https://openreview.net/forum?id=hGwbWNhWvd",
+      "pdf_url": "https://openreview.net/pdf/31d868560d11c7698e65a19c30821e6d9d9866c5.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-hw9esvumtm",
+      "source": "ICML-2026-Accepted",
+      "title": "RoCA: Robust Cross-Domain End-to-End Autonomous Driving",
+      "abstract": "End-to-end (E2E) autonomous driving has recently emerged as a new paradigm, offering significant potential. However, few studies have looked into the practical challenge of deployment across domains (e.g., cities). Although several works have incorporated Large Language Models (LLMs) to leverage their open-world knowledge, LLMs do not guarantee cross-domain driving performance and may incur prohibitive retraining costs during domain adaptation. In this paper, we propose RoCA, a novel framework for robust cross-domain E2E autonomous driving. RoCA formulates the joint probabilistic distribution over the tokens that encode ego and surrounding vehicle information in the E2E pipeline. Instantiating with a Gaussian process (GP), RoCA learns a set of basis tokens with corresponding trajectories, which span diverse driving scenarios. Then, given any driving scene, it is able to probabilistically infer the future trajectory. By using RoCA together with a base E2E model in source-domain training, we improve the generalizability of the base model, without requiring extra inference computation. In addition, RoCA enables robust adaptation on new target domains, significantly outperforming direct finetuning. We extensively evaluate RoCA on various cross-domain scenarios and show that it achieves strong domain generalization and adaptation performance.",
+      "authors": [
+        "Rajeev Yasarla",
+        "Shizhong Han",
+        "Hsin-Pai Cheng",
+        "Apratim Bhattacharyya",
+        "Shweta Mahajan",
+        "Litian Liu",
+        "Yunxiao Shi",
+        "Risheek Garrepalli",
+        "Hong Cai",
+        "Fatih Porikli"
+      ],
+      "primary_category": "Gaussian Process; autonomous driving;",
+      "categories": [
+        "Gaussian Process; autonomous driving;"
+      ],
+      "published": "2026-04-30T19:09:07.412+00:00",
+      "link": "https://openreview.net/forum?id=Hw9EsvumTM",
+      "pdf_url": "https://openreview.net/pdf/95a84909dd20724702715f37ac767abc2e8d6d20.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-xgvzyybzhr",
+      "source": "ICML-2026-Accepted",
+      "title": "CorrectionPlanner: Self-Correction Planner with Reinforcement Learning in Autonomous Driving",
+      "abstract": "Autonomous driving requires safe planning, but most learning-based planners lack explicit self-correction ability: once an unsafe action is proposed, there is no mechanism to correct it. Thus, we propose CorrectionPlanner, an autoregressive planner with self-correction that contains a propose, evaluate, and correct loop in the motion-token generation process. At each planning step, the policy proposes an action, namely a motion token, and a learned collision critic predicts whether it will induce a collision within a short horizon. If the critic predicts a collision, we retain the sequence of historical unsafe motion tokens as a self-correction trace, generate the next motion token conditioned on it, and repeat this process until the safe motion token is proposed or the safety criterion is met. This self-correction trace, consisting of all the unsafe motion tokens, represents the planner’s correction process in motion-token space. We train the planner with imitation learning followed by model-based reinforcement learning using rollouts from a pretrained world model that realistically models agents' reactive behaviors. Closed-loop evaluations show that CorrectionPlanner reduces the collision rate by over $20\\%$ on Waymax and obtains state-of-the-art planning scores on nuPlan.",
+      "authors": [
+        "Yihong Guo",
+        "Dongqiangzi Ye",
+        "Sijia Chen",
+        "Anqi Liu",
+        "Xianming Liu"
+      ],
+      "primary_category": "autonomous driving",
+      "categories": [
+        "autonomous driving",
+        "reinforcement learning",
+        "self-correction",
+        "reasoning"
+      ],
+      "published": "2026-04-30T19:21:59.602+00:00",
+      "link": "https://openreview.net/forum?id=XgVZyybzHr",
+      "pdf_url": "https://openreview.net/pdf/543172d90bfd7a09d534e91c22b5059750bf2736.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-cisgv65bzf",
+      "source": "ICML-2026-Accepted",
+      "title": "ScenePilot: Controllable Boundary-Driven Critical Scenario Generation for Autonomous Driving",
+      "abstract": "Safety-critical scenarios are central to evaluating autonomous driving systems, yet their rarity in naturalistic logs makes simulation-based stress testing indispensable. Most scenario generation methods treat surrounding agents as adversaries, but they either (i) induce failures without explicitly modeling vehicle-road physical limits, yielding visually extreme yet physically unsolvable crashes, or (ii) enforce physical feasibility or policy feasibility in isolation, which can over-focus on aggressive maneuvers or remain tied to a controller-dependent capability boundary. We propose ScenePilot, a feasibility-guided, boundary-driven framework that targets the boundary band: scenarios that are physically solvable in principle yet still cause the deployed autonomy stack to fail. We formulate generation as constrained multi-objective reinforcement learning, combining an RSS-derived physical-feasibility score $\\sigma$ with an online-learned AV-risk predictor $\\Phi$, and introduce step-level feasibility-aware shielding to keep exploration near the feasibility boundary while avoiding infeasible artifacts. Experiments on SafeBench with multiple planners show that ScenePilot yields substantially higher collision rates (+6.2 percentage points) while preserving physical validity, and that adversarial fine-tuning on these boundary-band scenarios consistently reduces downstream crash rates. The code is available at https://github.com/QiyuRuan/ScenePilot.",
+      "authors": [
+        "Qiyu Ruan",
+        "YUXUAN WANG",
+        "He Li",
+        "Zhenning Li",
+        "Cheng-zhong Xu"
+      ],
+      "primary_category": "Scenario Generation",
+      "categories": [
+        "Scenario Generation",
+        "Autonomouos Driving",
+        "Reinforcement Learning"
+      ],
+      "published": "2026-04-30T19:11:36.815+00:00",
+      "link": "https://openreview.net/forum?id=cIsGv65BzF",
+      "pdf_url": "https://openreview.net/pdf/3870bd3e139a0834157df84fb0d0981d05a1c746.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-n2mwmok6pl",
+      "source": "ICML-2026-Accepted",
+      "title": "AutoMoT: A Unified Vision-Language-Action Model with Asynchronous Mixture -of-Transformers for End-to-End Autonomous Driving",
+      "abstract": "Integrating vision-language models (VLMs) into end-to-end (E2E) autonomous driving (AD) systems has shown promise in improving scene understanding. However, existing integration strategies suffer from several limitations: they either struggle to resolve distribution misalignment between reasoning and action spaces,  underexploit the general reasoning capabilities of pretrained VLMs, or incur substantial inference latency during action policy generation, which degrades driving performance. To address these challenges, we propose AutoMoT in this work, an end-to-end AD framework that unifies reasoning and action generation within a single vision-language-action (VLA) model. Our approach leverages a mixture-of-transformer (MoT) architecture with layer-wise joint attention sharing, which preserves the general reasoning capabilities of pre-trained VLMs while enabling efficient asynchronous inference over various tasks at different frequencies. Additionally, we explore a VLA-oriented action refiner that further enhances driving performance via diffusion-based fine-tuning. Extensive experiments on multiple benchmarks, under both open- and closed-loop settings, demonstrate that AutoMoT achieves state-of-the-art (SOTA) performance compared to existing methods. We further investigate the functional boundary of pre-trained VLMs in AD, examining when and to what extent AD-tailored fine-tuning is necessary.",
+      "authors": [
+        "Wenhui Huang",
+        "Songyan Zhang",
+        "Qihang Huang",
+        "Zhidong Wang",
+        "Zhiqi Mao",
+        "Collister Chua",
+        "Zhan Chen",
+        "Long Chen",
+        "Chen Lv"
+      ],
+      "primary_category": "Autonomous Driving; VLA; Mixture-of-Transformers; Asynchronous Inference",
+      "categories": [
+        "Autonomous Driving; VLA; Mixture-of-Transformers; Asynchronous Inference"
+      ],
+      "published": "2026-04-30T19:15:31.339+00:00",
+      "link": "https://openreview.net/forum?id=N2mwmOk6pl",
+      "pdf_url": "https://openreview.net/pdf/8e4cccb7721abcd37ad990ddb3874c5c03e14ed9.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ukbd73kfgm",
+      "source": "ICML-2026-Accepted",
+      "title": "SMD: Multi-view Safety-Critical Driving Video Generation in the Real-world Domain",
+      "abstract": "Safety-critical scenarios are essential for evaluating autonomous driving (AD) systems, yet they are rare in practice. Existing generators produce trajectories, simulations, or single-view videos—but they don’t meet what modern AD systems actually consume: realistic multi-view video.\nWe present SMD, the first framework for generating multi-view safety-critical driving videos in the real-world domain.\nSMD couples a safety-critical trajectory engine with a diffusion-based multi-view video generator through three design choices. First, we pick the right adversary: a GRPO-fine-tuned vision-language model (VLM) that understands multi-camera context and selects vehicles most likely to induce hazards. Second, we generate the right motion: a two-stage trajectory process that (i) produces collisions, then (ii) transforms them into natural evasion trajectories—preserving risk while staying within what current video generators can faithfully render. Third, we synthesize the right data: a diffusion model that turns these trajectories into multi-view videos suitable for end-to-end planners.\nVideos generated by SMD substantially increase collision rates when stress testing multiple end-to-end planners, and reduce collision rates when incorporated into training, improving planner robustness and safety.\nOur code and video examples are available at: \\href{https://icml-2.github.io/SMD/}{https://icml-2.github.io/SMD/}.",
+      "authors": [
+        "Jiawei Zhou",
+        "Linye Lyu",
+        "Zhuotao Tian",
+        "Cheng Zhuo",
+        "Yu Li"
+      ],
+      "primary_category": "Autonomous driving testing",
+      "categories": [
+        "Autonomous driving testing",
+        "safety-critical scenario",
+        "video generation",
+        "safety"
+      ],
+      "published": "2026-04-30T19:13:51.516+00:00",
+      "link": "https://openreview.net/forum?id=uKbD73kfgM",
+      "pdf_url": "https://openreview.net/pdf/1f05c33822962d68c39d076e6b968d39088c87b1.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ub6m4bsvwj",
+      "source": "ICML-2026-Accepted",
+      "title": "DynVLA: Learning World Dynamics for Action Reasoning in Autonomous Driving",
+      "abstract": "We propose DynVLA, a driving VLA model that introduces a new CoT paradigm termed Dynamics CoT. DynVLA forecasts compact world dynamics before action generation, enabling more informed and physically grounded decision-making. To obtain compact dynamics representations, DynVLA introduces a Dynamics Tokenizer that compresses future evolution into a small set of dynamics tokens. Considering the rich environment dynamics in interaction-intensive driving scenarios, DynVLA decouples ego-centric and environment-centric dynamics, yielding more accurate world dynamics modeling. We then train DynVLA to generate dynamics tokens before actions through SFT and RFT, improving decision quality while maintaining latency-efficient inference. Compared to Textual CoT, which lacks fine-grained spatiotemporal understanding, and Visual CoT, which introduces substantial redundancy due to dense image prediction, Dynamics CoT captures the evolution of the world in a compact, interpretable, and efficient form. Extensive experiments on NAVSIM, Bench2Drive, and a large-scale in-house dataset demonstrate that DynVLA consistently outperforms Textual CoT and Visual CoT methods, validating the effectiveness and practical value of Dynamics CoT.",
+      "authors": [
+        "Shuyao Shang",
+        "Bing Zhan",
+        "Yunfei Yan",
+        "Yuqi Wang",
+        "Yingyan Li",
+        "Yasong An",
+        "Xiaoman Wang",
+        "Jierui Liu",
+        "Lu Hou",
+        "Lue Fan",
+        "Zhaoxiang Zhang",
+        "Tieniu Tan"
+      ],
+      "primary_category": "Autonomous Driving",
+      "categories": [
+        "Autonomous Driving",
+        "End-to-End Autonomous Driving",
+        "Vision–Language–Action Model",
+        "Chain-of-Thought"
+      ],
+      "published": "2026-04-30T19:08:43.238+00:00",
+      "link": "https://openreview.net/forum?id=UB6M4BSvwJ",
+      "pdf_url": "https://openreview.net/pdf/51db5c75cae53ef147fa3a7b0d739e23c486cbaa.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-yteeie3ytd",
+      "source": "ICML-2026-Accepted",
+      "title": "VectorWorld: Efficient Streaming World Model via Diffusion Flow on Vector Graphs",
+      "abstract": "Closed-loop evaluation of autonomous-driving policies requires interactive \nsimulation beyond log replay. Existing generative world models suffer three gaps: history-incompatible initialization, sampling latency exceeding real-time budgets, and compounding kinematic infeasibility. We propose VectorWorld, a streaming vector-graph world model that incrementally generates ego-centric lane--agent tiles during rollout. VectorWorld couples a motion-aware gated VAE for history-compatible initialization, an edge-gated relational DiT with interval-conditioned MeanFlow and JVP-based large-step supervision for solver-free outpainting, and $\\Delta$Sim, a physics-aligned NPC policy with hybrid discrete--continuous actions and differentiable kinematic logit shaping. On Waymo Open Motion and nuPlan, VectorWorld improves map fidelity, initialization validity, and density calibration, enabling stable real-time $1\\mathrm{km}+$ closed-loop rollouts.",
+      "authors": [
+        "Chaokang Jiang",
+        "Desen Zhou",
+        "Jiuming Liu",
+        "Li Sun"
+      ],
+      "primary_category": "autonomous driving simulation",
+      "categories": [
+        "autonomous driving simulation",
+        "closed-loop evaluation",
+        "world models",
+        "vectorized scene generation",
+        "traffic simulation",
+        "real-time generation"
+      ],
+      "published": "2026-04-30T19:19:20.167+00:00",
+      "link": "https://openreview.net/forum?id=yTEEiE3YtD",
+      "pdf_url": "https://openreview.net/pdf/24d67a0d97ca7e9aef6ed196bbf0184215050cdc.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-emwu5ry8m9",
+      "source": "ICML-2026-Accepted",
+      "title": "NOMAD: Lifelong Trajectory Planning via Non-Parametric Bayesian Memory-Adaptive Diffusion Experts",
+      "abstract": "Autonomous vehicles operating in open-world environments must continually adapt to rare long-tail scenarios while preserving previously acquired driving skills. However, existing trajectory planning approaches struggle with this stability--plasticity trade-off, as they rely on static models or rigid rule-based controllers that cannot robustly handle evolving and complex traffic dynamics. Against this background, we propose **NOMAD**, a lifelong trajectory planning framework that integrates non-parametric Bayesian memory with diffusion-based trajectory generation, enabling continuous adaptation to long-tail scenarios without catastrophic forgetting. Our method maps growing scene contexts to a dynamically growing set of discrete memory clusters, which guide a conditional diffusion model to function as a mixture of experts specialized for diverse driving behaviors. To retain past knowledge during incremental learning, we introduce a generative replay mechanism that synthesizes pseudo-experiences from previously learned memory clusters. Extensive closed-loop evaluations on the nuPlan benchmark demonstrate that our approach achieves state-of-the-art performance on long-tail scenarios, improving the interPlan score by **9.4%** over the strongest baseline, while maintaining competitive performance on regular driving benchmarks. Moreover, our method exhibits robust continual learning capability, achieving the highest average closed-loop score with positive backward transfer when adapting to sequentially introduced long-tail scenarios.",
+      "authors": [
+        "Yixian Chen",
+        "Rufan Bai",
+        "Jiangbin Zheng",
+        "Yimin Wang",
+        "Tiantian CHEN",
+        "Wei Wang",
+        "Yuhuan Lu"
+      ],
+      "primary_category": "Trajectory planning",
+      "categories": [
+        "Trajectory planning",
+        "continual learning",
+        "diffusion model",
+        "discrete memory"
+      ],
+      "published": "2026-04-30T19:10:03.316+00:00",
+      "link": "https://openreview.net/forum?id=emwU5Ry8M9",
+      "pdf_url": "https://openreview.net/pdf/d1c1fb8aca1386b5f851fe8cd9d097c39695e998.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-sdcoyjz34e",
+      "source": "ICML-2026-Accepted",
+      "title": "Mitigating Error Accumulation in Continuous Navigation via Memory-Augmented Kalman Filtering",
+      "abstract": "Continuous prediction in complex environments is critical for Unmanned Aerial Vehicle (UAV). However, the existing Vision-Language Navigation (VLN) models follows the dead-reckoning, which iteratively predicts the next waypoint and updates its position, thereby constructing the complete trajectory. Then, such stepwise manner will inevitably lead to accumulated errors of position over time, resulting in misalignment between internal belief and objective coordinates, which is known as ``state drift'' and ultimately compromises the subsequent trajectory prediction. Drawing inspiration from classical control theory, we propose to correct for errors by formulating the continuous prediction as a recursive Bayesian state estimation problem. In this paper, we design NeuroKalman, a novel framework that decouples navigation into two complementary processes: a Prior Prediction, based on motion dynamic,s and a Likelihood Correction, from historical observation. We first mathematically associate Kernel Density Estimation of the measurement likelihood with the attention-based retrieval mechanism, which then allows the system to rectify the latent representation using retrieved historical anchors without gradient updates. Comprehensive experiments on TravelUAV benchmark demonstrate that, with only 10\\% of the full training data fine-tuning, our method clearly outperforms strong baselines and regulates drift accumulation.",
+      "authors": [
+        "Yin Tang",
+        "Jiawei Ma",
+        "Jinrui Zhang",
+        "Alex Jinpeng Wang",
+        "Deyu Zhang"
+      ],
+      "primary_category": "Vision-Language Navigation",
+      "categories": [
+        "Vision-Language Navigation",
+        "Kalman filtering",
+        "Temporal Modeling"
+      ],
+      "published": "2026-04-30T19:13:49.036+00:00",
+      "link": "https://openreview.net/forum?id=SdcOyjz34E",
+      "pdf_url": "https://openreview.net/pdf/711857fd38004509b173ac1ca4148cf32ab031d1.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-bz1utqkd58",
+      "source": "ICML-2026-Accepted",
+      "title": "Motion Planning in Compressed Representation Spaces",
+      "abstract": "Deep learning methods have vastly expanded the capabilities of motion planning in robotics applications, as learning priors from large-scale data has been shown to be essential in capturing the highly complex behavior required for solving tasks such as manipulation or navigation for autonomous vehicles. At the same time, model-based planning algorithms based on search or optimization remain an essential tool due to their flexibility, efficiency, and the ability to incorporate domain knowledge via expert-designed algorithms and objective functions. We propose a new generative framework to unify these two paradigms. First, we learn an autoencoder with a high compression ratio and a latent space of hierarchically ordered, discrete-valued tokens. Leveraging both the dimensionality reduction and the hierarchical coarse-to-fine structure learned by this autoencoder, we then perform motion planning by directly searching in the latent space of tokens. This search can optimize arbitrary objective functions specified at test time, providing a large degree of flexibility while maintaining efficiency and producing realistic solutions by relying on the generative capabilities of the highly compressed autoencoder. We evaluate our method on nuPlan and the Waymo Open Motion Dataset, showing how latent space search can be used for a variety of guided behavior generation tasks, achieving strong performance for closed-loop motion planning and multi-agent guided scenario synthesis without requiring any task-specific training.",
+      "authors": [
+        "Lukas Lao Beyer",
+        "Sertac Karaman"
+      ],
+      "primary_category": "robotics",
+      "categories": [
+        "robotics",
+        "motion planning",
+        "motion prediction",
+        "autonomous vehicles",
+        "tokenization",
+        "generative models"
+      ],
+      "published": "2026-04-30T19:11:43.604+00:00",
+      "link": "https://openreview.net/forum?id=Bz1uTQKD58",
+      "pdf_url": "https://openreview.net/pdf/d1d57586df5e61de44748077cc96bc464726ada2.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-woiiket6bn",
+      "source": "ICML-2026-Accepted",
+      "title": "SafeDec: Constrained Decoding for Safe Autoregressive Generalist Robot Navigation Policies",
+      "abstract": "Recent advances in end-to-end, multi-task robot policies based on transformer models have demonstrated impressive generalization to real-world embodied navigation tasks. Trained on vast datasets of simulated and real-world trajectories, these policies map multimodal observations directly to action sequences for physical execution. Despite promising real-world capabilities, these models are still data-driven and, therefore, lack explicit notions of behavioral correctness. We address this gap by introducing **SafeDec**, a constrained decoding framework for autoregressive, transformer-based robot navigation policies that enforces safety specifications expressed as Signal Temporal Logic (STL) formulas. Our method ensures that generated actions provably satisfy STL specifications under assumed dynamics at runtime without retraining while remaining agnostic of the underlying policy. \nWe evaluate **SafeDec** on tasks from the CHORES benchmark for state-of-the-art embodied navigation policies across hundreds of procedurally generated environments and show that our decoding-time interventions are useful not only for filtering unsafe actions but also for conditional action generation. Videos are available at constrained-robot-fms.github.io.",
+      "authors": [
+        "Parv kapoor",
+        "Akila Ganlath",
+        "Michael Clifford",
+        "Changliu Liu",
+        "Sebastian Scherer",
+        "Eunsuk Kang"
+      ],
+      "primary_category": "Generalist Robot Policies",
+      "categories": [
+        "Generalist Robot Policies",
+        "Provably Safe Robotics",
+        "Neuro-symbolic Robotics"
+      ],
+      "published": "2026-04-30T19:15:35.467+00:00",
+      "link": "https://openreview.net/forum?id=woiiKET6bn",
+      "pdf_url": "https://openreview.net/pdf/6e455d6687e375fb048d677aeb7229056f70d05a.pdf",
+      "tags": [
+        "keyword:AD-RAG",
+        "query:AD-RAG"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "type": "intent_query",
+      "tag": "AD-RAG",
+      "paper_tag": "query:AD-RAG",
+      "query_text": "Applications of RAG in autonomous vehicle decision making and control",
+      "sim_scores": {
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-cisgv65bzf": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.010101010101010102,
+          "rank": 39
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-nyghacifrk",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-xgvzyybzhr",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-woiiket6bn",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-yxnfgsskcc",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-gbq6eiste4",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hgwbwnhwvd",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-9lttzqzxgd",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hw9esvumtm",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-n2mwmok6pl",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-3hea2wfhpw",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-sdcoyjz34e",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-9yc7mbloxl",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ukbd73kfgm",
+          "score": 0.3433395872420263,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-m9khwqren9",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-cisgv65bzf",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-z8svqd3pmi",
+          "score": 0.21328671328671328,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-yteeie3ytd",
+          "score": 0.11772814998621459,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-w6fxg6d6my",
+          "score": 0.09983633387888699,
+          "star_rating": 2
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "AD-RAG",
+      "paper_tag": "query:AD-RAG",
+      "query_text": "How does retrieval augmented generation improve autonomous driving systems?",
+      "sim_scores": {
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-cisgv65bzf": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "openreview-icml-2026-z8svqd3pmi": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.011627906976744186,
+          "rank": 26
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.010638297872340425,
+          "rank": 34
+        },
+        "openreview-icml-2026-9yc7mbloxl": {
+          "score": 0.01020408163265306,
+          "rank": 38
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.00980392156862745,
+          "rank": 42
+        },
+        "openreview-icml-2026-m9khwqren9": {
+          "score": 0.009259259259259259,
+          "rank": 48
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-z8svqd3pmi",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-nyghacifrk",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-9yc7mbloxl",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-yxnfgsskcc",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-3hea2wfhpw",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-w6fxg6d6my",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ukbd73kfgm",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-cisgv65bzf",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-m9khwqren9",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-vd8hzofz7v",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-9lttzqzxgd",
+          "score": 0.46719946719946726,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-n2mwmok6pl",
+          "score": 0.4411571334648256,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-yteeie3ytd",
+          "score": 0.4411571334648256,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-gbq6eiste4",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-xgvzyybzhr",
+          "score": 0.2760180995475112,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.21328671328671328,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.1737891737891738,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-hw9esvumtm",
+          "score": 0.15469146238377016,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-hgwbwnhwvd",
+          "score": 0.0823211875843454,
+          "star_rating": 2
+        },
+        {
+          "paper_id": "openreview-icml-2026-sdcoyjz34e",
+          "score": 0.0483743061062648,
+          "star_rating": 2
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "AD-RAG",
+      "paper_tag": "query:AD-RAG",
+      "query_text": "Retrieval augmented generation for perception and planning in self driving cars",
+      "sim_scores": {
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-cisgv65bzf": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.010638297872340425,
+          "rank": 34
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.01,
+          "rank": 40
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-9yc7mbloxl",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-ukbd73kfgm",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-cisgv65bzf",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-yteeie3ytd",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-xgvzyybzhr",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-yxnfgsskcc",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-nyghacifrk",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-n2mwmok6pl",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-m9khwqren9",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-z8svqd3pmi",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-w6fxg6d6my",
+          "score": 0.3433395872420263,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-3hea2wfhpw",
+          "score": 0.2760180995475112,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-gbq6eiste4",
+          "score": 0.25462134764460337,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-woiiket6bn",
+          "score": 0.25462134764460337,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-vd8hzofz7v",
+          "score": 0.21328671328671328,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-sdcoyjz34e",
+          "score": 0.1737891737891738,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-hw9esvumtm",
+          "score": 0.1360089186176142,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-9lttzqzxgd",
+          "score": 0.09983633387888699,
+          "star_rating": 2
+        },
+        {
+          "paper_id": "openreview-icml-2026-hgwbwnhwvd",
+          "score": 0.015799015799015898,
+          "star_rating": 2
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "tag": "AD-RAG",
+      "paper_tag": "keyword:AD-RAG",
+      "query_text": "autonomous driving",
+      "sim_scores": {
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-cisgv65bzf": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AD-RAG",
+      "paper_tag": "keyword:AD-RAG",
+      "query_text": "autonomous driving systems employing retrieval augmentation",
+      "sim_scores": {
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.011627906976744186,
+          "rank": 26
+        },
+        "openreview-icml-2026-cisgv65bzf": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "openreview-icml-2026-z8svqd3pmi": {
+          "score": 0.011363636363636364,
+          "rank": 28
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.010101010101010102,
+          "rank": 39
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AD-RAG",
+      "paper_tag": "keyword:AD-RAG",
+      "query_text": "retrieval augmented generation",
+      "sim_scores": {
+        "openreview-icml-2026-3hea2wfhpw": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-9yc7mbloxl": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-w6fxg6d6my": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-m9khwqren9": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-nyghacifrk": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "openreview-icml-2026-yxnfgsskcc": {
+          "score": 0.011235955056179775,
+          "rank": 29
+        },
+        "openreview-icml-2026-z8svqd3pmi": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "openreview-icml-2026-vd8hzofz7v": {
+          "score": 0.010869565217391304,
+          "rank": 32
+        },
+        "openreview-icml-2026-9lttzqzxgd": {
+          "score": 0.010416666666666666,
+          "rank": 36
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "AD-RAG",
+      "paper_tag": "keyword:AD-RAG",
+      "query_text": "retrieval augmented generation methods for autonomous driving",
+      "sim_scores": {
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-n2mwmok6pl": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-hw9esvumtm": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-yteeie3ytd": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-ukbd73kfgm": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-cisgv65bzf": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-gbq6eiste4": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-hgwbwnhwvd": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "openreview-icml-2026-xgvzyybzhr": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-z8svqd3pmi": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "openreview-icml-2026-9yc7mbloxl": {
+          "score": 0.009615384615384616,
+          "rank": 44
+        },
+        "openreview-icml-2026-m9khwqren9": {
+          "score": 0.009523809523809525,
+          "rank": 45
+        }
+      }
+    }
+  ],
+  "global_candidate_ids": [
+    "openreview-icml-2026-c4isirb6iv",
+    "openreview-icml-2026-n2mwmok6pl",
+    "openreview-icml-2026-gbq6eiste4",
+    "openreview-icml-2026-tt8lce1nrw",
+    "openreview-icml-2026-as14e8amml",
+    "openreview-icml-2026-hw9esvumtm",
+    "openreview-icml-2026-yteeie3ytd",
+    "openreview-icml-2026-hwmmbbujpo",
+    "openreview-icml-2026-emwu5ry8m9",
+    "openreview-icml-2026-ukbd73kfgm",
+    "openreview-icml-2026-ub6m4bsvwj",
+    "openreview-icml-2026-cisgv65bzf",
+    "openreview-icml-2026-wr05xy9mft",
+    "openreview-icml-2026-6qu03wgp6x",
+    "openreview-icml-2026-hgwbwnhwvd",
+    "openreview-icml-2026-xgvzyybzhr",
+    "openreview-icml-2026-kif7psdcp3",
+    "openreview-icml-2026-xcqnmajjw5",
+    "openreview-icml-2026-ssebms2mga",
+    "openreview-icml-2026-0dngyqndo2",
+    "openreview-icml-2026-sdcoyjz34e",
+    "openreview-icml-2026-ikxfh6alzn",
+    "openreview-icml-2026-p8vz7tuykm",
+    "openreview-icml-2026-c0ddrzomnf",
+    "openreview-icml-2026-fyle5o8g5f",
+    "openreview-icml-2026-zygdikr8uz",
+    "openreview-icml-2026-vjsjpnrfij",
+    "openreview-icml-2026-bz1utqkd58",
+    "openreview-icml-2026-r2rvwpvpk7",
+    "openreview-icml-2026-ut6hebnnqe",
+    "openreview-icml-2026-wkpfacg2fj",
+    "openreview-icml-2026-woiiket6bn",
+    "openreview-icml-2026-z8svqd3pmi",
+    "openreview-icml-2026-tyvjlshke2",
+    "openreview-icml-2026-zsrvkj0ers",
+    "openreview-icml-2026-o8y6cojswa",
+    "openreview-icml-2026-v2h2vzrqcr",
+    "openreview-icml-2026-r8vdduz4s3",
+    "openreview-icml-2026-5a321ueqgs",
+    "openreview-icml-2026-kqt6pf4mva",
+    "openreview-icml-2026-8gsyox51jq",
+    "openreview-icml-2026-9yc7mbloxl",
+    "openreview-icml-2026-c6kqjnro1m",
+    "openreview-icml-2026-udpiy1ndtx",
+    "openreview-icml-2026-m9khwqren9",
+    "openreview-icml-2026-f2cgtzhq4e",
+    "openreview-icml-2026-2uli4uqgrg",
+    "openreview-icml-2026-9wyjjpydfe",
+    "openreview-icml-2026-ymyrr00hfs",
+    "openreview-icml-2026-rkiq95zucw",
+    "openreview-icml-2026-zjnidrb1jq",
+    "openreview-icml-2026-v6xrfejnqv",
+    "openreview-icml-2026-bqkkvguhza",
+    "openreview-icml-2026-9s9v5ntqjm",
+    "openreview-icml-2026-1uu7x9zzjb",
+    "openreview-icml-2026-rw2xhmyrza",
+    "openreview-icml-2026-walbuqiamf",
+    "openreview-icml-2026-rbglc4sk9s",
+    "openreview-icml-2026-xwhzf6wrge",
+    "openreview-icml-2026-kgi3mauxud",
+    "openreview-icml-2026-ds3zoevkwx",
+    "openreview-icml-2026-y54eyjhfqj",
+    "openreview-icml-2026-3hea2wfhpw",
+    "openreview-icml-2026-ixv8eazskc",
+    "openreview-icml-2026-swgwmkigub",
+    "openreview-icml-2026-w6fxg6d6my",
+    "openreview-icml-2026-u9u8ydoovm",
+    "openreview-icml-2026-w34uycrqel",
+    "openreview-icml-2026-j5odclciix",
+    "openreview-icml-2026-bzmt9wj6uw",
+    "openreview-icml-2026-uie6bix2vc",
+    "openreview-icml-2026-eio2petbg4",
+    "openreview-icml-2026-rmzc1j19n8",
+    "openreview-icml-2026-fjwzrbabbx",
+    "openreview-icml-2026-mgtsv2nuik",
+    "openreview-icml-2026-1mxluqvepx",
+    "openreview-icml-2026-il6p7ehu1w",
+    "openreview-icml-2026-shdjbvmwrp",
+    "openreview-icml-2026-wgxd4fkru1",
+    "openreview-icml-2026-cznih1inuf",
+    "openreview-icml-2026-dsrlxmgwxd",
+    "openreview-icml-2026-ubvlue2wrp",
+    "openreview-icml-2026-5jkuqtbpnb",
+    "openreview-icml-2026-jtiplbufn9",
+    "openreview-icml-2026-nyghacifrk",
+    "openreview-icml-2026-4arh5kzrgz",
+    "openreview-icml-2026-f4xazcmug6",
+    "openreview-icml-2026-bngk86bqrr",
+    "openreview-icml-2026-cxchpexywb",
+    "openreview-icml-2026-s7mxhzgv5p",
+    "openreview-icml-2026-4bwa2qdapy",
+    "openreview-icml-2026-ombzhjvuta",
+    "openreview-icml-2026-wcypcixjcz",
+    "openreview-icml-2026-0mvejk4dhe",
+    "openreview-icml-2026-huzqpykebl",
+    "openreview-icml-2026-anwivnjocb",
+    "openreview-icml-2026-ssoxhxwzui",
+    "openreview-icml-2026-2mec3bpbls",
+    "openreview-icml-2026-nz5kjt0qla",
+    "openreview-icml-2026-yxnfgsskcc",
+    "openreview-icml-2026-9uennracsl",
+    "openreview-icml-2026-a9cuw1f0ct",
+    "openreview-icml-2026-b6oq9cg5sh",
+    "openreview-icml-2026-dim2jckgzw",
+    "openreview-icml-2026-skjrkjsvqu",
+    "openreview-icml-2026-fofvtwbgux",
+    "openreview-icml-2026-vd8hzofz7v",
+    "openreview-icml-2026-aydexzhyjr",
+    "openreview-icml-2026-ihbw4rqm7l",
+    "openreview-icml-2026-q9lwegi2b9",
+    "openreview-icml-2026-t1ki6pm2eg",
+    "openreview-icml-2026-f2zhyjbaev",
+    "openreview-icml-2026-y3niycnvap",
+    "openreview-icml-2026-6ltxmfmie4",
+    "openreview-icml-2026-o88fcpapaj",
+    "openreview-icml-2026-9lttzqzxgd",
+    "openreview-icml-2026-vvvbgj9cmc",
+    "openreview-icml-2026-9zz6xqvmkr",
+    "openreview-icml-2026-pzxormsrzn",
+    "openreview-icml-2026-hw8bxmlzqx"
+  ],
+  "global_pool_lane_top_k": 30,
+  "global_pool_limit": 120,
+  "global_pool_guaranteed_per_lane": 2,
+  "global_pool_effective_size": 120,
+  "reranked_at": "2026-07-23T02:54:04.773555+00:00",
+  "llm_ranked": [
+    {
+      "paper_id": "openreview-icml-2026-bz1utqkd58",
+      "score": 10.0,
+      "evidence_en": "Proposes a generative framework for motion planning combining deep learning and model-based methods, directly applicable to autonomous vehicle navigation.",
+      "evidence_cn": "提出结合深度学习和基于模型的规划的生成式运动规划框架，直接适用于自动驾驶车辆导航。",
+      "canonical_evidence": "提出结合深度学习和基于模型的规划的生成式运动规划框架，直接适用于自动驾驶车辆导航。",
+      "tldr_en": "This paper proposes a generative motion planning framework that unifies deep learning and model-based methods by learning a compressed discrete token representation, enabling efficient planning for autonomous vehicle navigation.",
+      "tldr_cn": "运动规划中深度学习与基于模型的方法各有优势，但难以统一。本文提出生成式框架，通过学习高压缩比的自动编码器，将运动规划映射到分层离散令牌的潜在空间，结合维度和排序特性，实现高效规划。该方法在机器人导航等任务上验证，为自动驾驶车辆的运动规划提供了融合数据驱动与专家知识的新范式。",
+      "title_zh": "压缩表示空间中的运动规划",
+      "motivation_cn": "深度学习与基于模型的规划方法各有局限，需要统一框架以利用大规模数据和专家知识。",
+      "method_cn": "学习高压缩比自动编码器，将运动规划映射到分层离散令牌的潜在空间。",
+      "result_cn": "在机器人导航等任务上验证了规划效率和灵活性，优于纯学习或纯模型方法。",
+      "conclusion_cn": "该框架成功融合了学习先验与模型优化，为自动驾驶运动规划提供了新的生成式范式。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-emwu5ry8m9",
+      "score": 10.0,
+      "evidence_en": "Lifelong trajectory planning for autonomous vehicles with non-parametric Bayesian memory and diffusion",
+      "evidence_cn": "利用非参数贝叶斯记忆与扩散模型的自动驾驶车辆终身轨迹规划",
+      "canonical_evidence": "利用非参数贝叶斯记忆与扩散模型的自动驾驶车辆终身轨迹规划",
+      "tldr_en": "Proposes NOMAD, a lifelong trajectory planning framework that integrates non-parametric Bayesian memory with diffusion-based generation to enable continuous adaptation to long-tail scenarios without catastrophic forgetting in autonomous driving.",
+      "tldr_cn": "针对自动驾驶车辆在开放世界中需持续适应稀有场景并保留已有技能的问题，本文提出NOMAD框架，结合非参数贝叶斯记忆与扩散模型动态生成轨迹，通过高斯过程专家不断扩展记忆，避免灾难性遗忘。实验证明该方法能有效应对复杂交通动态，提升终身学习能力，为自动驾驶持续适应提供新方案。",
+      "title_zh": "NOMAD：基于非参数贝叶斯记忆自适应扩散专家的终身轨迹规划",
+      "motivation_cn": "现有轨迹规划方法无法在开放世界中持续适应长尾场景，且存在稳定性-可塑性权衡问题。",
+      "method_cn": "提出NOMAD，集成非参数贝叶斯记忆与扩散轨迹生成，动态映射场景上下文至高斯过程专家。",
+      "result_cn": "实验表明该方法能持续适应罕见场景，避免灾难性遗忘，保持规划性能。",
+      "conclusion_cn": "NOMAD为自动驾驶终身轨迹规划提供了一种平衡新旧技能的有效方案。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-xgvzyybzhr",
+      "score": 10.0,
+      "evidence_en": "Self-correction planner for safe motion planning in autonomous driving",
+      "evidence_cn": "自动驾驶安全运动规划的自校正规划器",
+      "canonical_evidence": "自动驾驶安全运动规划的自校正规划器",
+      "tldr_en": "The paper proposes CorrectionPlanner, an autoregressive planner with a self-correction loop that uses a collision critic to refine unsafe actions, improving safety in autonomous driving.",
+      "tldr_cn": "本文针对自动驾驶中学习型规划器缺乏自校正能力的问题，提出CorrectionPlanner，一种具有提议、评估、校正循环的自回归规划器。通过碰撞批评家预测碰撞并基于校正轨迹生成新动作，迭代提升安全性。实验表明该方法能有效减少碰撞，为安全规划提供了新思路。",
+      "title_zh": "CorrectionPlanner：基于强化学习的自动驾驶自校正规划器",
+      "motivation_cn": "现有学习型规划器一旦提出不安全动作，缺乏显式校正机制，威胁自动驾驶安全。",
+      "method_cn": "提出包含提议、评估、校正循环的自回归规划器，利用碰撞批评家和历史不安全动作序列生成校正动作。",
+      "result_cn": "实验证明该方法能有效减少碰撞，提高规划安全性。",
+      "conclusion_cn": "自校正机制显著提升了自动驾驶规划器的安全性和鲁棒性。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+      "score": 10.0,
+      "evidence_en": "driving VLA model with dynamics CoT for action reasoning in autonomous driving",
+      "evidence_cn": "基于动力学链式思考的自动驾驶动作推理VLA模型",
+      "canonical_evidence": "基于动力学链式思考的自动驾驶动作推理VLA模型",
+      "tldr_en": "Proposes DynVLA, a driving VLA model that forecasts compact world dynamics via a Dynamics Tokenizer before action generation, enabling informed decision-making in autonomous driving; decouples ego- and environment-centric dynamics.",
+      "tldr_cn": "针对自动驾驶决策，提出DynVLA模型，引入动力学链式思考（Dynamics CoT）范式。通过动力学分词器将未来演化压缩为少量token，并解耦自车与环境动态，在动作生成前预测世界动态，使决策更物理合理。实验表明比文本CoT方法更有效，提升决策质量且延迟低。",
+      "title_zh": "DynVLA：学习世界动力学用于自动驾驶动作推理",
+      "motivation_cn": "现有自动驾驶VLA模型缺乏对世界动态的显式建模，导致决策不够物理真实。",
+      "method_cn": "提出DynVLA，用动力学分词器压缩未来状态，解耦自车与环境动态，在动作前生成动力学token。",
+      "result_cn": "在交互密集场景下提升决策质量，且保持低延迟推理。",
+      "conclusion_cn": "动力学CoT为自动驾驶动作推理提供了有效的物理先验，优于文本CoT。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-c4isirb6iv",
+      "score": 9.0,
+      "evidence_en": "Reasoning-VLA generates continuous action trajectories for autonomous driving using spatial-guided queries, addressing planning and control.",
+      "evidence_cn": "Reasoning-VLA利用空间引导查询生成自动驾驶的连续动作轨迹，直接解决规划与控制问题。",
+      "canonical_evidence": "Reasoning-VLA利用空间引导查询生成自动驾驶的连续动作轨迹，直接解决规划与控制问题。",
+      "tldr_en": "Reasoning-VLA proposes a general and efficient VLA framework for autonomous driving that uses learnable action queries guided by spatial representations to generate action trajectories, improving generalization across diverse scenarios.",
+      "tldr_cn": "现有视觉-语言-动作模型在自动驾驶中面临推理效率和场景泛化挑战。本文提出Reasoning-VLA，一个高效通用的动作生成框架，通过可学习的动作查询和预定义的空间表示隐式引导，与推理增强的视觉语言特征交互，并行生成连续动作轨迹。该方法在八个公开数据集上验证了泛化能力，为自动驾驶决策规划提供了新思路。",
+      "title_zh": "Reasoning-VLA：面向自动驾驶的高效空间引导通用视觉-语言-动作推理模型",
+      "motivation_cn": "现有VLA模型在自动驾驶中推理效率低，难以泛化到新车辆配置和驾驶场景。",
+      "method_cn": "提出可学习动作查询，通过预定义空间表示隐式引导，并行生成连续动作轨迹。",
+      "result_cn": "在八个公开数据集上验证，显著提升了动作生成的泛化能力和推理效率。",
+      "conclusion_cn": "Reasoning-VLA为自动驾驶提供了一个高效且通用的决策框架，增强了空间感知和泛化性。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-hgwbwnhwvd",
+      "score": 8.0,
+      "evidence_en": "CoIRL-AD proposes a dual-policy framework integrating IL and RL for offline autonomous driving, addressing planning and control in long-tail scenarios.",
+      "evidence_cn": "CoIRL-AD提出了一种双策略框架，在离线环境中集成模仿学习与强化学习，用于自动驾驶规划与控制，特别针对长尾场景。",
+      "canonical_evidence": "CoIRL-AD提出了一种双策略框架，在离线环境中集成模仿学习与强化学习，用于自动驾驶规划与控制，特别针对长尾场景。",
+      "tldr_en": "CoIRL-AD addresses poor generalization in end-to-end autonomous driving by combining imitation and reinforcement learning in a collaborative-competitive dual-policy framework, using imagined rollouts and latent world models for offline training.",
+      "tldr_cn": "端到端自动驾驶模型在长尾场景中因专家演示稀疏而泛化不足。本文提出CoIRL-AD，一个协同竞争双策略框架，在离线环境中结合模仿学习和强化学习，通过潜在世界模型进行想象性未来推演，以提升规划与控制性能。该方法在多个数据集上验证了有效性，为离线自动驾驶学习提供了新途径。",
+      "title_zh": "CoIRL-AD：自动驾驶中潜在世界模型下的协同竞争模仿强化学习",
+      "motivation_cn": "端到端自动驾驶模仿学习模型在长尾场景泛化差，离线强化学习面临行为多样性不足的问题。",
+      "method_cn": "提出协同竞争双策略框架，解耦模仿与奖励优化，利用潜在世界模型进行想象性未来推演。",
+      "result_cn": "在多个自动驾驶数据集上验证，相比基线方法提升了长尾场景下的规划性能。",
+      "conclusion_cn": "协同竞争框架有效缓解了模仿与强化目标冲突，为离线自动驾驶学习提供了鲁棒方案。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-n2mwmok6pl",
+      "score": 8.0,
+      "evidence_en": "Unified vision-language-action model for end-to-end autonomous driving to align reasoning and action",
+      "evidence_cn": "统一视觉-语言-动作模型用于端到端自动驾驶以对齐推理与动作",
+      "canonical_evidence": "统一视觉-语言-动作模型用于端到端自动驾驶以对齐推理与动作",
+      "tldr_en": "Proposes AutoMoT, a unified VLA model with asynchronous mixture-of-transformers for end-to-end autonomous driving, addressing distribution misalignment between reasoning and action spaces and reducing inference latency for improved driving performance.",
+      "tldr_cn": "针对现有VLM集成在端到端自动驾驶中的推理-动作空间不对齐、预训练能力利用不足与高延迟问题，本文提出AutoMoT，通过异步混合Transformer将推理与动作生成统一到单一模型。实验表明它显著降低策略生成延迟，提升驾驶性能，为端到端自动驾驶提供高效且鲁棒的视觉-语言-动作解决方案。",
+      "title_zh": "AutoMoT：面向端到端自动驾驶的统一视觉-语言-动作模型与异步混合Transformer",
+      "motivation_cn": "当前VLM集成方法存在分布不对齐、预训练推理能力挖掘不充分及高推理延迟等问题。",
+      "method_cn": "提出AutoMoT，利用混合Transformer异步处理视觉与语言，统一推理与动作生成。",
+      "result_cn": "实验证明降低了动作生成延迟，提升了驾驶任务的准确性和鲁棒性。",
+      "conclusion_cn": "AutoMoT为端到端自动驾驶提供了一种高效、统一的视觉-语言-动作框架。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-hw9esvumtm",
+      "score": 8.0,
+      "evidence_en": "Framework for robust cross-domain end-to-end autonomous driving, directly contributes to planning and control",
+      "evidence_cn": "鲁棒跨域端到端自动驾驶框架，直接贡献于规划与控制",
+      "canonical_evidence": "鲁棒跨域端到端自动驾驶框架，直接贡献于规划与控制",
+      "tldr_en": "Proposes RoCA, a Gaussian process-based framework for robust cross-domain end-to-end autonomous driving, outperforming LLM-based methods with lower adaptation cost.",
+      "tldr_cn": "端到端自动驾驶跨域部署面临性能下降和重训练成本高的问题，现有大语言模型方法难以保证性能。本文提出RoCA框架，利用高斯过程学习基础令牌，建模车辆信息的联合分布，实现鲁棒跨域驾驶。实验表明RoCA在跨域场景下稳定且域适应成本低，为端到端自动驾驶的实际应用提供了新方案。",
+      "title_zh": "RoCA：鲁棒跨域端到端自动驾驶",
+      "motivation_cn": "端到端自动驾驶在跨城市等域迁移时性能损失大，大语言模型方法域适应成本高。",
+      "method_cn": "提出RoCA，用高斯过程联合建模自车与周围车辆令牌，实现概率分布学习。",
+      "result_cn": "实验表明RoCA跨域驱动性能稳健，域适应开销低。",
+      "conclusion_cn": "RoCA为端到端自动驾驶的跨域鲁棒性提供了有效且高效的解决方案。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-gbq6eiste4",
+      "score": 7.0,
+      "evidence_en": "Driving world model predicting latent future states for long-horizon autonomous driving",
+      "evidence_cn": "预测潜在未来状态的驾驶世界模型，用于长时域自动驾驶",
+      "canonical_evidence": "预测潜在未来状态的驾驶世界模型，用于长时域自动驾驶",
+      "tldr_en": "Proposes DeepSight, a world model for end-to-end autonomous driving that predicts future latent semantic features in BEV space, enabling long-horizon world state modeling and adaptive text reasoning for robust decisions.",
+      "tldr_cn": "针对自动驾驶中VLM架构的视觉推理模块缺乏场景定制问题，本文提出DeepSight驾驶世界模型，在鸟瞰图空间并行预测连续帧的潜在语义特征，实现长时域未来状态建模，并引入自适应文本推理。实验表明该模型能提升决策鲁棒性和准确性，为自动驾驶长时域规划提供更丰富的前瞻世界理解。",
+      "title_zh": "DeepSight：通过潜在状态预测实现长时域世界建模的端到端自动驾驶",
+      "motivation_cn": "现有端到端驾驶的VLM推理机制缺乏针对自动驾驶场景的深入探索，尤其视觉推理。",
+      "method_cn": "提出DeepSight，在BEV空间预测未来帧的潜在语义特征，并采用自适应文本推理增强。",
+      "result_cn": "实验显示长时域世界建模提升了驾驶决策的鲁棒性和准确性。",
+      "conclusion_cn": "DeepSight通过潜在状态预测增强了自动驾驶的世界理解与前瞻能力。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-yteeie3ytd",
+      "score": 7.0,
+      "evidence_en": "Streaming world model for closed-loop evaluation of autonomous driving policies",
+      "evidence_cn": "用于自动驾驶策略闭环评估的流式世界模型",
+      "canonical_evidence": "用于自动驾驶策略闭环评估的流式世界模型",
+      "tldr_en": "The paper presents VectorWorld, a streaming vector-graph world model that efficiently generates realistic driving scenarios for evaluating planning policies.",
+      "tldr_cn": "本文针对自动驾驶策略闭环仿真中历史不兼容、采样延迟和运动学不可行问题，提出VectorWorld流式向量图世界模型。通过运动感知VAE、边门控扩散模型和物理对齐NPC策略，实现高效的场景生成。实验表明其能实时生成逼真的驾驶场景，助力规划评估。",
+      "title_zh": "VectorWorld：基于向量图扩散流的流式世界模型",
+      "motivation_cn": "现有生成式世界模型存在初始化不兼容、延迟高和运动学不可行等问题。",
+      "method_cn": "提出流式向量图世界模型，结合运动感知VAE、边门控扩散模型和物理对齐NPC策略。",
+      "result_cn": "实验表明能实时生成连贯、物理可行的驾驶场景，优于基线。",
+      "conclusion_cn": "VectorWorld为自动驾驶策略闭环评估提供了高效、逼真的仿真环境。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-cisgv65bzf",
+      "score": 7.0,
+      "evidence_en": "Boundary-driven critical scenario generation for stress-testing autonomous driving planners",
+      "evidence_cn": "边界驱动的关键场景生成用于自动驾驶规划器压力测试",
+      "canonical_evidence": "边界驱动的关键场景生成用于自动驾驶规划器压力测试",
+      "tldr_en": "ScenePilot generates physically solvable yet challenging scenarios for autonomous driving evaluation by targeting the capability boundary of planners.",
+      "tldr_cn": "本文针对自动驾驶评估中安全关键场景稀少且生成方法不可靠的问题，提出ScenePilot框架。通过可行性引导和边界驱动，聚焦物理可解但接近能力边界的场景带。实验表明生成场景能有效暴露规划器弱点，同时保持物理可行性，提升了仿真测试的真实性和严格性。",
+      "title_zh": "ScenePilot：面向自动驾驶的可控边界驱动关键场景生成",
+      "motivation_cn": "自然数据中安全关键场景稀少，现有方法生成的场景要么物理不可解，要么过于激进。",
+      "method_cn": "提出边界驱动框架，聚焦物理可解但接近能力边界的场景带，结合可行性引导。",
+      "result_cn": "生成场景能有效暴露规划器弱点，且保持物理可行性。",
+      "conclusion_cn": "ScenePilot为自动驾驶系统提供了更高效、真实的压力测试场景生成方法。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-ukbd73kfgm",
+      "score": 7.0,
+      "evidence_en": "Multi-view safety-critical driving video generation for AD evaluation",
+      "evidence_cn": "用于自动驾驶评估的多视角安全关键驾驶视频生成",
+      "canonical_evidence": "用于自动驾驶评估的多视角安全关键驾驶视频生成",
+      "tldr_en": "SMD generates realistic multi-view safety-critical driving videos for autonomous driving evaluation, using a VLM-driven adversary and diffusion-based video generation.",
+      "tldr_cn": "本文针对现有自动驾驶生成器无法产生多视角安全关键视频的问题，提出SMD框架。通过GRPO微调的VLM选择对抗车辆，结合轨迹引擎和扩散模型生成逼真多视角视频。实验显示生成的视频高度真实，能有效测试自动驾驶系统性能，填补了多视角视频生成的空白。",
+      "title_zh": "SMD：真实域多视角安全关键驾驶视频生成",
+      "motivation_cn": "现有生成器无法产生自动驾驶系统实际所需的多视角视频。",
+      "method_cn": "结合安全关键轨迹引擎与扩散模型，利用VLM选择对抗车辆并生成多视角视频。",
+      "result_cn": "生成视频真实性高，可用于自动驾驶系统性能测试。",
+      "conclusion_cn": "SMD填补了多视角安全关键视频生成的空白，推动了自动驾驶仿真测试。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-woiiket6bn",
+      "score": 7.0,
+      "evidence_en": "constrained decoding for safe navigation policies, applicable to autonomous driving",
+      "evidence_cn": "安全导航策略的约束解码，可应用于自动驾驶",
+      "canonical_evidence": "安全导航策略的约束解码，可应用于自动驾驶",
+      "tldr_en": "Introduces SafeDec, a constrained decoding framework for transformer-based robot navigation policies that enforces safety specifications in STL, ensuring generated actions comply with safety constraints.",
+      "tldr_cn": "提出SafeDec，一种面向自回归机器人导航策略的约束解码框架，将安全规范表达为信号时序逻辑公式，确保生成的动作序列满足安全要求。该方法可用于自动驾驶车辆的安全规划与控制。",
+      "title_zh": "SafeDec：自回归通用机器人导航策略的安全约束解码",
+      "motivation_cn": "端到端机器人导航策略缺乏行为正确性的显式保证，存在安全隐患。",
+      "method_cn": "提出SafeDec，在解码时将STL安全规范作为约束，强制生成动作符合安全要求。",
+      "result_cn": "在多种导航环境中实现安全动作生成，避免碰撞等风险。",
+      "conclusion_cn": "为基于学习的导航策略提供了安全保障机制，对自动驾驶安全规划有借鉴意义。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-yxnfgsskcc",
+      "score": 5.0,
+      "evidence_en": "agentic GraphRAG framework via end-to-end RL for improved retrieval",
+      "evidence_cn": "基于端到端强化学习的智能体GraphRAG框架，改进检索",
+      "canonical_evidence": "基于端到端强化学习的智能体GraphRAG框架，改进检索",
+      "tldr_en": "Proposes Graph-R1, an agentic GraphRAG framework using end-to-end RL to model retrieval as multi-turn agent-environment interaction, optimizing retrieval steps via rewards.",
+      "tldr_cn": "提出Graph-R1，首个基于端到端强化学习的智能体GraphRAG框架，将检索建模为多轮智能体-环境交互，并通过奖励机制优化检索过程，解决传统GraphRAG构建成本高和固定检索的问题。（通用RAG方法，可潜在用于自动驾驶知识检索）",
+      "title_zh": "Graph-R1：通过端到端强化学习迈向智能体GraphRAG框架",
+      "motivation_cn": "传统GraphRAG存在构建成本高、检索固定、依赖长上下文推理等挑战。",
+      "method_cn": "提出Graph-R1，构建轻量级知识超图，用强化学习训练智能体进行多轮检索。",
+      "result_cn": "在标准RAG数据集上验证，检索效率和生成质量均有提升。",
+      "conclusion_cn": "为RAG系统提供了一种自优化的检索范式，增强了知识增强生成的能力。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-9lttzqzxgd",
+      "score": 5.0,
+      "evidence_en": "RAG context compression framework CORE-RAG to reduce input length",
+      "evidence_cn": "RAG上下文压缩框架CORE-RAG，减少输入长度",
+      "canonical_evidence": "RAG上下文压缩框架CORE-RAG，减少输入长度",
+      "tldr_en": "Proposes CORE-RAG, a performance-driven context compression framework for RAG that optimizes compressed context directly based on generation task performance, eliminating reliance on heuristics.",
+      "tldr_cn": "提出CORE-RAG，一种性能驱动的RAG上下文压缩框架，直接基于生成任务性能优化压缩上下文，摒弃启发式规则，在降低计算成本的同时保持任务性能。（通用RAG方法，可用于自动驾驶场景的检索压缩）",
+      "title_zh": "少即是多：通过性能驱动的上下文压缩提升RAG",
+      "motivation_cn": "检索文档过多导致RAG输入长度剧增，计算开销大，现有压缩方法依赖启发式规则损害性能。",
+      "method_cn": "提出CORE-RAG，通过性能驱动学习直接优化压缩上下文，以适应生成任务。",
+      "result_cn": "在多个RAG基准上，压缩后仍保持高性能，并降低延迟。",
+      "conclusion_cn": "为RAG系统提供了一种高效的上下文压缩方案，实用性广。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-vd8hzofz7v",
+      "score": 5.0,
+      "evidence_en": "uncertainty quantification for RAG via information flow analysis of context grounding",
+      "evidence_cn": "通过信息流分析上下文基础来量化RAG不确定性",
+      "canonical_evidence": "通过信息流分析上下文基础来量化RAG不确定性",
+      "tldr_en": "Uses information flow to build layer-wise traces of context token contributions, providing interpretable uncertainty estimation for grounding in RAG systems.",
+      "tldr_cn": "利用信息流构建逐层上下文中token贡献的追踪，为RAG系统中的上下文基础提供可解释的不确定性估计，帮助判断何时信任语言模型输出。（通用RAG方法，可提高自动驾驶RAG系统的可信度）",
+      "title_zh": "信息流揭示何时信任语言模型",
+      "motivation_cn": "RAG中模型可能未利用相关证据而生成错误回答，需要评估上下文基础的可靠性。",
+      "method_cn": "提出基于信息流的逐层追踪方法，量化每个上下文token对输出的贡献。",
+      "result_cn": "提供可解释的不确定性估计，有效判断生成答案是否基于检索内容。",
+      "conclusion_cn": "为RAG系统的可信度评估提供了新视角，有助于检测错误答案。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-3hea2wfhpw",
+      "score": 5.0,
+      "evidence_en": "tree-based RAG for cross-document multi-hop questions",
+      "evidence_cn": "面向跨文档多跳问题的树结构RAG方法",
+      "canonical_evidence": "面向跨文档多跳问题的树结构RAG方法",
+      "tldr_en": "Proposes Ψ-RAG, a hierarchical abstract tree RAG framework to handle cross-document multi-hop questions, addressing distribution adaptability, structural isolation, and coarse abstraction.",
+      "tldr_cn": "提出Ψ-RAG，一种层次化抽象树RAG框架，解决跨文档多跳检索中的分布适应性差、结构孤立和粗粒度抽象问题，提升多文档推理能力。（通用RAG方法，可用于自动驾驶多源信息检索）",
+      "title_zh": "面向跨文档检索增强生成的层次化抽象树",
+      "motivation_cn": "现有树型RAG在跨文档多跳问题上面临聚类噪声、文档间隔离和细节丢失等挑战。",
+      "method_cn": "提出Ψ-RAG，构建层次化抽象树，增强文档间连接和细粒度表示。",
+      "result_cn": "在跨文档多跳问答数据集上提升检索和生成效果。",
+      "conclusion_cn": "为多文档RAG提供了一种可扩展的树结构索引方案。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-sdcoyjz34e",
+      "score": 5.0,
+      "evidence_en": "Memory-augmented Kalman filtering for continuous navigation, applicable to autonomous vehicle trajectory planning",
+      "evidence_cn": "记忆增强卡尔曼滤波用于连续导航，可应用于自动驾驶轨迹规划",
+      "canonical_evidence": "记忆增强卡尔曼滤波用于连续导航，可应用于自动驾驶轨迹规划",
+      "tldr_en": "Models continuous navigation as recursive Bayesian estimation with memory-augmented Kalman filtering to mitigate error accumulation in vision-language navigation for UAVs.",
+      "tldr_cn": "无人机视觉语言导航中，逐步预测导致位置误差累积，即状态漂移问题。本文借鉴控制理论，将连续预测形式化为递归贝叶斯估计，提出记忆增强卡尔曼滤波方法进行误差校正。实验证明该方法能显著减轻状态漂移，提高轨迹预测准确性，对自动驾驶的连续导航具有借鉴意义。",
+      "title_zh": "通过记忆增强卡尔曼滤波减轻连续导航中的误差累积",
+      "motivation_cn": "现有视觉语言导航模型采用航位推算，导致状态漂移和轨迹预测不准。",
+      "method_cn": "将连续预测建模为递归贝叶斯状态估计，使用记忆增强卡尔曼滤波修正误差。",
+      "result_cn": "实验表明该方法有效纠正状态漂移，提升连续导航的轨迹精度。",
+      "conclusion_cn": "为无人机及自动驾驶的连续轨迹优化提供了误差累积缓解的新思路。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-w6fxg6d6my",
+      "score": 4.0,
+      "evidence_en": "Hyperbolic dense retrieval for RAG, not specific to autonomous driving",
+      "evidence_cn": "双曲密集检索用于RAG，非自动驾驶专用",
+      "canonical_evidence": "双曲密集检索用于RAG，非自动驾驶专用",
+      "tldr_en": "The paper proposes hyperbolic dense retrieval to capture hierarchical semantics in RAG, improving retrieval quality but not applied to autonomous driving.",
+      "tldr_cn": "本文针对RAG密集检索局限于欧几里得空间、无法保留层次语义的问题，引入双曲密集检索。在洛伦兹空间构建全双曲变换器和混合架构，捕获文本层次结构。实验表明检索质量优于欧几里得基线，降低幻觉风险，但未在自动驾驶场景验证。",
+      "title_zh": "HypRAG：用于检索增强生成的双曲密集检索",
+      "motivation_cn": "现有密集检索器局限于欧几里得空间，无法捕获自然语言层次结构，导致语义相似文档被错误关联。",
+      "method_cn": "引入双曲密集检索，在洛伦兹空间构建全双曲变换器HyTE-FH和混合架构HyTE-H。",
+      "result_cn": "在多个基准上检索质量优于欧几里得基线，降低幻觉风险。",
+      "conclusion_cn": "双曲几何为RAG检索提供了更适合层次化语义的表示空间。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-9yc7mbloxl",
+      "score": 4.0,
+      "evidence_en": "Evolving retrieval memory for RAG, not specific to driving",
+      "evidence_cn": "RAG演化检索记忆，非驾驶专用",
+      "canonical_evidence": "RAG演化检索记忆，非驾驶专用",
+      "tldr_en": "GAM-RAG accumulates retrieval experience to build a dynamic index, reducing latency in repeated queries, but is not designed for autonomous driving.",
+      "tldr_cn": "本文针对RAG静态索引导致重复查询遍历开销大的问题，提出GAM-RAG框架。通过积累检索经验构建轻量层次索引，并根据句子级反馈更新记忆。实验表明在反复查询场景中显著减少遍历和延迟，但未在自动驾驶领域应用。",
+      "title_zh": "GAM-RAG：面向检索增强生成的增益自适应记忆",
+      "motivation_cn": "RAG系统通常使用静态索引，处理相关查询时重复多跳遍历，增加延迟和计算成本。",
+      "method_cn": "提出训练无关的GAM-RAG框架，通过积累检索经验构建轻量层次索引，并基于反馈更新记忆。",
+      "result_cn": "在反复查询场景中显著减少遍历次数和延迟。",
+      "conclusion_cn": "动态检索记忆使RAG系统能从经验中学习，提高效率。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-z8svqd3pmi",
+      "score": 4.0,
+      "evidence_en": "Continual retrieval memory for RAG, not driving-specific",
+      "evidence_cn": "RAG持续检索记忆，非驾驶专用",
+      "canonical_evidence": "RAG持续检索记忆，非驾驶专用",
+      "tldr_en": "ERM transforms transient query-time gains into persistent index improvements for RAG, applicable broadly but not demonstrated for autonomous driving.",
+      "tldr_cn": "本文针对RAG中查询适应状态无关、无法累积学习的问题，提出演化检索记忆框架ERM。将查询时增益转化为持久索引更新，通过反馈信号对齐任务效用。实验显示在多个任务上实现持续改进，但未涉及自动驾驶场景。",
+      "title_zh": "RAG不遗忘：持续查询注入的关键记忆",
+      "motivation_cn": "RAG中的查询时适应（如查询扩展）是状态无关的，无法累积学习，且索引侧更新易引入噪声。",
+      "method_cn": "提出演化检索记忆框架，将查询时增益转化为持久索引更新。",
+      "result_cn": "在多个任务上实现持久检索改进，且无显著额外成本。",
+      "conclusion_cn": "ERM实现了RAG系统的持续自我优化。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-m9khwqren9",
+      "score": 4.0,
+      "evidence_en": "Efficient KV caching for RAG via deferred positional encoding",
+      "evidence_cn": "通过延迟位置编码实现RAG的高效KV缓存",
+      "canonical_evidence": "通过延迟位置编码实现RAG的高效KV缓存",
+      "tldr_en": "LazyAttention enables zero-copy, position-agnostic KV reuse for efficient RAG inference, generally applicable but not specific to autonomous driving.",
+      "tldr_cn": "本文针对RAG长上下文推理中KV缓存位置编码限制重用的问题，提出LazyAttention。通过核化延迟位置编码实现位置无关的零拷贝KV复用，在在线重编码下提高效率。实验表明在长上下文场景中显著降低内存和计算开销，但未在自动驾驶领域测试。",
+      "title_zh": "LazyAttention：利用延迟位置编码的高效检索增强生成",
+      "motivation_cn": "现有KV缓存嵌入位置信息，限制了在RAG中的重用，导致效率低下。",
+      "method_cn": "提出LazyAttention注意力机制，通过核化延迟位置编码实现在线重编码和零拷贝复用。",
+      "result_cn": "在长上下文推理中显著提高效率，降低内存开销。",
+      "conclusion_cn": "该方法为非固定位置场景下的高效RAG推理提供了新途径。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    },
+    {
+      "paper_id": "openreview-icml-2026-nyghacifrk",
+      "score": 4.0,
+      "evidence_en": "Adaptive multi-retriever selection for RAG, not specific to driving",
+      "evidence_cn": "RAG自适应多检索器选择，非驾驶专用",
+      "canonical_evidence": "RAG自适应多检索器选择，非驾驶专用",
+      "tldr_en": "The paper learns a diverse portfolio of retrievers for adaptive RAG, improving QA performance but not applied to autonomous driving.",
+      "tldr_cn": "本文针对RAG单一检索器难以应对异质查询的问题，提出基于预期收益目标的检索器组合选择算法。学习多样化子集并训练路由模型，实现自适应检索。在QA基准上超越基线，但未在自动驾驶RAG中验证。",
+      "title_zh": "检索器投资组合：面向自适应RAG的原则性方法",
+      "motivation_cn": "RAG系统通常使用单一检索器，难以应对从简单到复杂的异质查询。",
+      "method_cn": "提出基于预期最优k收益目标的检索器组合选择算法，并学习路由模型。",
+      "result_cn": "在多项QA基准上超越单一检索器和简单多检索器组合。",
+      "conclusion_cn": "自适应检索器组合能显著提升RAG系统性能，为最优检索策略学习提供理论保证。",
+      "matched_requirement_id": "req-composite-ad-rag",
+      "matched_query_tag": "query:ad-rag:composite",
+      "matched_query_text": "Papers central to 我想检索一下关于自动驾驶方面RAG的论文, especially work that connects or combines: retrieval augmented generation methods for autonomous driving; autonomous driving systems employing retrieval augmentation; How does retrieval augmented generation improve autonomous driving systems?; Retrieval augmented generation for perception and planning in self driving cars; Applications of RAG in autonomous vehicle decision making and control."
+    }
+  ],
+  "llm_ranked_at": "2026-07-23T02:59:41.237082+00:00",
+  "display_min_score": 4.0,
+  "pruned_at": "2026-07-23T02:59:41.264780+00:00"
+}

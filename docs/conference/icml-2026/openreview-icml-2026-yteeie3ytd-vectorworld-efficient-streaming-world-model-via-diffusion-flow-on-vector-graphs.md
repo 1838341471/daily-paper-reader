@@ -5,15 +5,15 @@ authors: "Chaokang Jiang, Desen Zhou, Jiuming Liu, Li Sun"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/24d67a0d97ca7e9aef6ed196bbf0184215050cdc.pdf"
 tags: ["query:av-pnc"]
-score: 8.0
-evidence: 提出面向自动驾驶规划策略闭环评估的流式世界模型。
-tldr: 闭环评估自动驾驶策略需要实时交互仿真，而现有生成式世界模型面临历史不兼容初始化、采样延迟超实时预算及运动学不可行累积等问题。本文提出VectorWorld，一种流式向量图世界模型，在回放过程中增量生成以自车为中心的车道-智能体场景。模型结合运动感知门控VAE进行历史兼容初始化，利用边门控关系扩散Transformer与区间条件平均流进行未来场景外推，并设计物理对齐的混合动作NPC策略ΔSim保证运动学可行。实验表明VectorWorld实现超实时生成，支持大规模闭环评估，为自动驾驶策略验证提供了高效逼真的仿真工具。
+score: 7.0
+evidence: 用于自动驾驶策略闭环评估的流式世界模型
+tldr: 本文针对自动驾驶策略闭环仿真中历史不兼容、采样延迟和运动学不可行问题，提出VectorWorld流式向量图世界模型。通过运动感知VAE、边门控扩散模型和物理对齐NPC策略，实现高效的场景生成。实验表明其能实时生成逼真的驾驶场景，助力规划评估。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有生成式世界模型存在历史不兼容初始化、采样延迟超实时与运动学不可行累积问题。
-method: 提出VectorWorld，结合运动感知门控VAE、边门控关系DiT与区间条件MeanFlow，及物理对齐NPC策略ΔSim，增量生成向量图场景。
-result: 实现超实时生成，支持大规模闭环评估，生成场景运动学可行且真实。
-conclusion: 向量图世界模型为自动驾驶策略闭环测试提供高效可扩展仿真工具，加速开发迭代。
+motivation: 现有生成式世界模型存在初始化不兼容、延迟高和运动学不可行等问题。
+method: 提出流式向量图世界模型，结合运动感知VAE、边门控扩散模型和物理对齐NPC策略。
+result: 实验表明能实时生成连贯、物理可行的驾驶场景，优于基线。
+conclusion: VectorWorld为自动驾驶策略闭环评估提供了高效、逼真的仿真环境。
 ---
 
 ## Abstract

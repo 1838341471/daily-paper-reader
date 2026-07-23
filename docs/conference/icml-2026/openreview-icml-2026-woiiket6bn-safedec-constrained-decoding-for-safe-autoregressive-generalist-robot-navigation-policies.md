@@ -1,19 +1,19 @@
 ---
 title: "SafeDec: Constrained Decoding for Safe Autoregressive Generalist Robot Navigation Policies"
-title_zh: SafeDec：安全自回归通用机器人导航策略的约束解码
+title_zh: SafeDec：自回归通用机器人导航策略的安全约束解码
 authors: "Parv kapoor, Akila Ganlath, Michael Clifford, Changliu Liu, Sebastian Scherer, Eunsuk Kang"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/6e455d6687e375fb048d677aeb7229056f70d05a.pdf"
 tags: ["query:av-pnc"]
-score: 4.0
-evidence: 约束解码的安全机器人导航策略可应用于自动驾驶车辆运动规划
-tldr: 现有基于Transformer的端到端机器人导航策略在真实世界中展现出强大的泛化能力，但缺乏明确的行为正确性保证，存在安全隐患。针对此问题，本文提出SafeDec约束解码框架，利用信号时序逻辑公式形式化安全规范，在导航策略生成动作序列时实时施加约束，确保输出行为符合安全要求。该方法无需重新训练模型，可与现有预训练策略集成。实验在多种导航场景中验证了其有效提升了策略的安全性，减少了危险动作，为安全关键的自主系统（包括自动驾驶）提供了通用的安全增强手段。
+score: 7.0
+evidence: 安全导航策略的约束解码，可应用于自动驾驶
+tldr: 提出SafeDec，一种面向自回归机器人导航策略的约束解码框架，将安全规范表达为信号时序逻辑公式，确保生成的动作序列满足安全要求。该方法可用于自动驾驶车辆的安全规划与控制。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 数据驱动的机器人导航策略缺乏行为正确性保证，存在安全隐患。
-method: 提出SafeDec约束解码框架，利用信号时序逻辑公式在解码时施加安全约束。
-result: 实验表明该方法能有效提升导航策略的安全性，减少危险动作。
-conclusion: 为安全关键的自主系统提供了通用的安全增强手段，包括自动驾驶领域。
+motivation: 端到端机器人导航策略缺乏行为正确性的显式保证，存在安全隐患。
+method: 提出SafeDec，在解码时将STL安全规范作为约束，强制生成动作符合安全要求。
+result: 在多种导航环境中实现安全动作生成，避免碰撞等风险。
+conclusion: 为基于学习的导航策略提供了安全保障机制，对自动驾驶安全规划有借鉴意义。
 ---
 
 ## Abstract

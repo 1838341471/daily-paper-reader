@@ -1,19 +1,19 @@
 ---
 title: "DeepSight: Long-Horizon World Modeling via Latent States Prediction for End-to-End Autonomous Driving"
-title_zh: DeepSight：通过潜在状态预测实现端到端自动驾驶的长时域世界建模
+title_zh: DeepSight：通过潜在状态预测实现长时域世界建模的端到端自动驾驶
 authors: "Lingjun Zhang, Changjie Wu, Linzhe Shi, Jiangyang Li, Jiaxin Liu, Lei Yang, Hang Zhang, Mu Xu, Hong Wang"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/48be22be2762cc64031302f430b73cab3cdbdf9d.pdf"
 tags: ["query:av-pnc"]
-score: 9.0
-evidence: 驾驶世界模型预测未来BEV状态，赋能长时域自动驾驶规划
-tldr: 针对端到端自动驾驶中视觉推理缺乏针对性设计的问题，本文提出DeepSight驾驶世界模型，在鸟瞰视图空间中并行预测未来帧的潜在语义特征，实现长时域状态建模，并引入高效自适应文本推理模块增强决策。实验表明该方法在自动驾驶任务中提升了规划准确性和鲁棒性，推动了端到端自动驾驶的发展。
+score: 7.0
+evidence: 预测潜在未来状态的驾驶世界模型，用于长时域自动驾驶
+tldr: 针对自动驾驶中VLM架构的视觉推理模块缺乏场景定制问题，本文提出DeepSight驾驶世界模型，在鸟瞰图空间并行预测连续帧的潜在语义特征，实现长时域未来状态建模，并引入自适应文本推理。实验表明该模型能提升决策鲁棒性和准确性，为自动驾驶长时域规划提供更丰富的前瞻世界理解。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有端到端自动驾驶的推理模块多为通用域直接适配，缺乏针对驾驶场景的深入探索。
-method: 提出DeepSight，构建在BEV空间中预测未来帧潜在特征的世界模型，并集成自适应文本推理机制。
-result: 在自动驾驶基准上，DeepSight显著提升长时域规划性能与决策鲁棒性。
-conclusion: DeepSight通过专用世界模型和推理机制为端到端自动驾驶提供了新的技术路径。
+motivation: 现有端到端驾驶的VLM推理机制缺乏针对自动驾驶场景的深入探索，尤其视觉推理。
+method: 提出DeepSight，在BEV空间预测未来帧的潜在语义特征，并采用自适应文本推理增强。
+result: 实验显示长时域世界建模提升了驾驶决策的鲁棒性和准确性。
+conclusion: DeepSight通过潜在状态预测增强了自动驾驶的世界理解与前瞻能力。
 ---
 
 ## Abstract

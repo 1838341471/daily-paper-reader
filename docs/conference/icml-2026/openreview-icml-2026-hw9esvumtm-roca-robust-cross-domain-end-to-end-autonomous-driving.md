@@ -1,19 +1,19 @@
 ---
 title: "RoCA: Robust Cross-Domain End-to-End Autonomous Driving"
-title_zh: RoCA：鲁棒的跨域端到端自动驾驶框架
+title_zh: RoCA：鲁棒跨域端到端自动驾驶
 authors: "Rajeev Yasarla, Shizhong Han, Hsin-Pai Cheng, Apratim Bhattacharyya, Shweta Mahajan, Litian Liu, Yunxiao Shi, Risheek Garrepalli, Hong Cai, Fatih Porikli"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/95a84909dd20724702715f37ac767abc2e8d6d20.pdf"
 tags: ["query:av-pnc"]
-score: 5.0
-evidence: 提出一种跨域鲁棒的端到端自动驾驶框架，利用高斯过程实现跨域规划与控制
-tldr: 针对端到端自动驾驶跨域部署的挑战，本文提出RoCA框架。该框架通过建模自车与周围车辆信息的联合概率分布，并利用高斯过程学习基令牌，提升了跨域（如城市）的驾驶性能，避免了大型语言模型带来的高昂微调成本。实验表明RoCA在多个城市场景中表现出强鲁棒性，为端到端自动驾驶的实际部署提供了可行方案。
+score: 8.0
+evidence: 鲁棒跨域端到端自动驾驶框架，直接贡献于规划与控制
+tldr: 端到端自动驾驶跨域部署面临性能下降和重训练成本高的问题，现有大语言模型方法难以保证性能。本文提出RoCA框架，利用高斯过程学习基础令牌，建模车辆信息的联合分布，实现鲁棒跨域驾驶。实验表明RoCA在跨域场景下稳定且域适应成本低，为端到端自动驾驶的实际应用提供了新方案。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 端到端自动驾驶跨域部署面临性能下降与高成本微调问题。
-method: 采用高斯过程建模自车与周围车辆信息的联合概率分布，学习可迁移的基令牌。
-result: 在多个城市跨域场景下表现出比现有方法更强的鲁棒性与泛化能力。
-conclusion: RoCA为端到端自动驾驶的跨域适应提供了有效的鲁棒方案。
+motivation: 端到端自动驾驶在跨城市等域迁移时性能损失大，大语言模型方法域适应成本高。
+method: 提出RoCA，用高斯过程联合建模自车与周围车辆令牌，实现概率分布学习。
+result: 实验表明RoCA跨域驱动性能稳健，域适应开销低。
+conclusion: RoCA为端到端自动驾驶的跨域鲁棒性提供了有效且高效的解决方案。
 ---
 
 ## Abstract

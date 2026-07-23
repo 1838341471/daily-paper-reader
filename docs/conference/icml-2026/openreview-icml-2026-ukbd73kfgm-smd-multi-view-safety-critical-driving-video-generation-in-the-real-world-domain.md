@@ -1,19 +1,19 @@
 ---
 title: "SMD: Multi-view Safety-Critical Driving Video Generation in the Real-world Domain"
-title_zh: SMD：真实域中多视角安全关键驾驶视频生成
+title_zh: SMD：真实域多视角安全关键驾驶视频生成
 authors: "Jiawei Zhou, Linye Lyu, Zhuotao Tian, Cheng Zhuo, Yu Li"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/1f05c33822962d68c39d076e6b968d39088c87b1.pdf"
 tags: ["query:av-pnc"]
-score: 4.0
-evidence: 生成带有运动学可行自我轨迹的安全关键驾驶视频，用于评估自动驾驶规划系统
-tldr: 针对现实世界中安全关键场景稀缺的问题，SMD提出首个生成多视角安全关键驾驶视频的框架。它结合安全关键轨迹引擎与扩散模型，生成带有运动学可行自我轨迹的视频，为自动驾驶规划系统提供评估数据。
+score: 7.0
+evidence: 用于自动驾驶评估的多视角安全关键驾驶视频生成
+tldr: 本文针对现有自动驾驶生成器无法产生多视角安全关键视频的问题，提出SMD框架。通过GRPO微调的VLM选择对抗车辆，结合轨迹引擎和扩散模型生成逼真多视角视频。实验显示生成的视频高度真实，能有效测试自动驾驶系统性能，填补了多视角视频生成的空白。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有生成器无法生成现代自动驾驶系统所需的多视角真实视频。
-method: 结合GRPO微调的视觉语言模型选择危险车辆，利用两阶段运动生成产生危险轨迹和可行运动，并通过扩散模型生成多视角视频。
-result: 生成的多视角视频可用于评估自动驾驶规划系统。
-conclusion: SMD为首个在真实域中生成多视角安全关键驾驶视频的框架，有助于自动驾驶系统的安全评估。
+motivation: 现有生成器无法产生自动驾驶系统实际所需的多视角视频。
+method: 结合安全关键轨迹引擎与扩散模型，利用VLM选择对抗车辆并生成多视角视频。
+result: 生成视频真实性高，可用于自动驾驶系统性能测试。
+conclusion: SMD填补了多视角安全关键视频生成的空白，推动了自动驾驶仿真测试。
 ---
 
 ## Abstract

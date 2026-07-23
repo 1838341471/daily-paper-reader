@@ -1,19 +1,19 @@
 ---
 title: "CoIRL-AD: Collaborative-Competitive Imitation-Reinforcement Learning in Latent World Models for Autonomous Driving"
-title_zh: CoIRL-AD：自动驾驶中潜世界模型下的协同-竞争模仿强化学习
+title_zh: CoIRL-AD：自动驾驶中潜在世界模型下的协同竞争模仿强化学习
 authors: "Xiaoji Zheng, Ziyuan Yang, Yanhao Chen, Yuhang Peng, Yuanrong Tang, Gengyuan Liu, Bokui Chen, Jiangtao Gong"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/31d868560d11c7698e65a19c30821e6d9d9866c5.pdf"
 tags: ["query:av-pnc"]
-score: 10.0
-evidence: 面向自动驾驶的协同-竞争模仿强化学习
-tldr: 端到端自动驾驶模型在模仿学习下泛化能力差，尤其在专家示范稀疏的长尾场景中。本文提出CoIRL-AD，一种协同-竞争双策略框架，在离线训练范式下解耦模仿学习与强化学习奖励优化，利用潜世界模型进行想象推演，增强行为多样性。实验表明该方法有效缓解了目标冲突，提升了在罕见场景下的决策性能，为离线强化学习在自动驾驶中的应用提供了新方案。
+score: 8.0
+evidence: CoIRL-AD提出了一种双策略框架，在离线环境中集成模仿学习与强化学习，用于自动驾驶规划与控制，特别针对长尾场景。
+tldr: 端到端自动驾驶模型在长尾场景中因专家演示稀疏而泛化不足。本文提出CoIRL-AD，一个协同竞争双策略框架，在离线环境中结合模仿学习和强化学习，通过潜在世界模型进行想象性未来推演，以提升规划与控制性能。该方法在多个数据集上验证了有效性，为离线自动驾驶学习提供了新途径。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 模仿学习训练的自动驾驶模型在长尾场景泛化差，离线强化学习面临行为多样性不足的挑战。
-method: 提出CoIRL-AD框架，解耦模仿与奖励优化为双策略，利用想象推演和竞争训练。
-result: 实验证明该方法在离线设置下有效提升长尾场景的决策性能。
-conclusion: 为自动驾驶中的离线强化学习提供了新的训练范式。
+motivation: 端到端自动驾驶模仿学习模型在长尾场景泛化差，离线强化学习面临行为多样性不足的问题。
+method: 提出协同竞争双策略框架，解耦模仿与奖励优化，利用潜在世界模型进行想象性未来推演。
+result: 在多个自动驾驶数据集上验证，相比基线方法提升了长尾场景下的规划性能。
+conclusion: 协同竞争框架有效缓解了模仿与强化目标冲突，为离线自动驾驶学习提供了鲁棒方案。
 ---
 
 ## Abstract
