@@ -63,6 +63,35 @@ subscriptions:
           note: ''
       updated_at: '2026-07-22T07:32:38.411Z'
       paused: false
+    - tag: AD-RAG
+      description: 我想检索一下关于自动驾驶方面RAG的论文
+      enabled: true
+      paper_sources:
+        - arxiv
+      keywords:
+        - keyword: retrieval augmented generation
+          keyword_cn: 检索增强生成
+          query: retrieval augmented generation methods for autonomous driving
+        - keyword: autonomous driving
+          keyword_cn: 自动驾驶
+          query: autonomous driving systems employing retrieval augmentation
+      intent_queries:
+        - query: How does retrieval augmented generation improve autonomous driving systems?
+          query_cn: 检索增强生成如何改进自动驾驶系统？
+          enabled: true
+          source: manual
+          note: ''
+        - query: Retrieval augmented generation for perception and planning in self driving cars
+          query_cn: 用于自动驾驶汽车感知和规划的检索增强生成
+          enabled: true
+          source: manual
+          note: ''
+        - query: Applications of RAG in autonomous vehicle decision making and control
+          query_cn: RAG在自动驾驶决策和控制中的应用
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-07-23T02:51:30.330Z'
 source_backends:
   arxiv:
     papers_table: arxiv_papers
