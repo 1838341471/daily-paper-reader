@@ -1,0 +1,397 @@
+Title: Towards Generalizable Trajectory Prediction using Dual-Level Representation Learning and Adaptive Prompting
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Messaoud_Towards_Generalizable_Trajectory_Prediction_using_Dual-Level_Representation_Learning_and_Adaptive_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 13:41:37 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# Towards Generalizable Trajectory Prediction using Dual-Level Representation Learning and Adaptive Prompting 
+
+# Kaouther Messaoud * Matthieu Cord Alexandre Alahi EPFL, Switzerland Valeo.ai, France EPFL, Switzerland 
+
+kaouther.messaoudbenamor@epfl.ch matthieu.cord@valeo.com alexandre.alahi@epfl.ch 
+
+# Abstract 
+
+Existing vehicle trajectory prediction models struggle with generalizability, prediction uncertainties, and handling complex interactions. It is often due to limitations like complex architectures customized for a specific dataset and inefficient multimodal handling. We propose Per ceiver with Reg ister queries ( PerReg+ ), a novel trajectory pre-diction framework that introduces: (1) Dual-Level Repre-sentation Learning via Self-Distillation (SD) and Masked Reconstruction (MR), capturing global context and fine-grained details. Additionally, our approach of recon-structing segment-level trajectories and lane segments from masked inputs with query drop, enables effective use of con-textual information and improves generalization; (2) En-hanced Multimodality using register-based queries and pre-training, eliminating the need for clustering and suppres-sion; and (3) Adaptive Prompt Tuning during fine-tuning, freezing the main architecture and optimizing a small num-ber of prompts for efficient adaptation. PerReg+ sets a state-of-the-art performance on nuScenes [5], Argoverse 2 [42], and Waymo Open Motion Dataset (WOMD) [13]. Remarkably, our model reduces the error by 6.8% on smaller datasets, and multi-dataset training enhances gen-eralization. In cross-domain tests, PerReg+ reduces B-FDE by 11.8% compared to its non-pretrained variant. 
+
+# 1. Introduction 
+
+Accurate trajectory prediction is essential for intelligent agents, such as autonomous vehicles, to safely and effi-ciently navigate dynamic, multi-agent environments, di-rectly impacting road safety and traffic flow. However, modeling complex interactions, adapting to diverse scenes, and managing prediction uncertainties remain challenging due to the dynamic nature of real-world driving. Recent studies [4, 8, 24, 34, 43, 47] have introduced self-supervised * Corresponding author 
+
+Our Work 
+
+MAE Q
+
+Input Features Guiding Queries 
+
+Dropped Features Predicted Trajectory 
+
+Reconstructed Vectors Aligned Scene Vector 
+
+Prior work 
+
+MR & SD 
+
+Masking Masking 
+
+KV 
+
+Figure 1. Comparison between Masked Autoencoder (MAE) and our pretraining strategy with PerReg+. Our approach incorporates dual-level representation learning through Self-Distillation (SD) and Masked Reconstruction (MR). Unlike MAE, which reconstructs each masked point independently, our method uses segment-level queries to reconstruct entire trajectories (past or future) and lane segments, enabling the decoder to infer com-plete paths from fine-grained masked inputs. Additionally, we en-able multimodal prediction during pretraining, allowing the model to leverage additional insights from the reconstruction process. learning (SSL) in trajectory prediction to improve general-ization and performance, using techniques like Contrastive Learning (CL) [27, 43, 47] and Masked Reconstruction (MR) [8, 24, 34, 47] to capture meaningful representations. Additionally, the Perceiver architecture [20, 21], with its efficient processing of multimodal data, has been adapted for trajectory prediction to handle the complexities of real-world inputs. Despite recent advancements, trajectory prediction This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 27564 methods face several key limitations: (1) Complex and non-generalizable architectures —many approaches [24, 37–39, 48] rely on intricate, highly specialized designs that limit their generalizability across new environments; (2) Ineffi-cient multimodality handling —current models [32, 36, 37] often generate numerous trajectory candidates, necessitat-ing computationally intensive clustering, Non-Maximum Suppression (NMS), and ensembling techniques; and (3) Scalability constraints —these methods are typically opti-mized for specific dataset sizes, reducing their effectiveness when scaled to datasets of different sizes. Moreover, the po-tential of integrating SSL with the Perceiver architecture re-mains unexplored, potentially limiting the richness of scene representations necessary for robust forecasting across di-verse conditions. To address these limitations and fully harness the potential of both SSL and the Perceiver architec-ture, we propose a novel approach that integrates SSL techniques—specifically Self-Distillation (SD) [18] and Masked Reconstruction (MR)—within the Perceiver IO architecture for trajectory prediction. These techniques, which are typically applied independently, are combined here to capture both detailed and holistic scene repre-sentations crucial for accurate and adaptable forecasting. Through a teacher-student framework, SD aligns global 
+
+representations within the latent space, ensuring consis-tency even with partial observations, while MR reconstructs masked inputs to facilitate detailed learning. To further improve generalization, we leverage the UniTraj frame-work [14] to pretrain on three diverse trajectory datasets. This multi-dataset pretraining exposes the model to a broad range of driving behaviors and contexts, significantly en-hancing its performance and adaptability. Our contributions include: • Dual-Level Representation Learning. We integrate SD and MR to capture both global scene context and fine-grained details, enhancing the model’s capability to accu-rately model complex interactions and scene dynamics. • Enhanced Multimodality. We incorporate register queries [10] alongside mode prediction queries in the de-coder, and leverage multimodal prediction during pre-training to maximize the benefits of pretraining tasks like scene reconstruction. By keeping the decoder during fine-tuning, the model can efficiently manage multimodal pre-dictions without relying on large trajectory pools, cluster-ing, or suppression, resulting in a more effective approach to trajectory forecasting. • Adaptive Prompt Tuning. During fine-tuning, we freeze the main architecture and use a prompt-based strategy with the decoder to optimize a small set of parameters. By utilizing the clustering learned during pre-training, we generate prompts associated with specific clusters, en-abling efficient adaptation to new scenarios or datasets without retraining the entire model. • Improved Generalization. Evaluated on nuScenes [5], Argoverse 2 [42], and the Waymo Open Motion Dataset [13], PerReg+ achieves state-of-the-art perfor-mance on the UniTraj benchmark. Key results include 6.8% reduction in B-FDE on smaller datasets due to pre-training, improved generalization through multi-dataset training, and an 11.8% reduction in B-FDE in cross-domain tests compared to the non-pretrained variant. Our model demonstrates that integrating a transformer-based architecture with advanced representation learning techniques and large-scale data pretraining leads to richer representations and significant improvements in trajectory prediction accuracy and generalizability. 
+
+# 2. Related Work 2.1. Trajectory Prediction Trajectory Prediction Architectures. Trajectory predic-tion in autonomous driving has advanced through diverse architectures for map encoding and interaction modeling [9, 11, 17, 29, 31–33, 37, 39]. Early CNN-based methods used camera inputs [25] or rasterized maps [6, 9, 30], while recent work favors vectorized representations via trans-formers [8, 17, 32, 33, 37, 46] and GNNs [15, 44, 45, 48]. These include standard, hierarchical, and spatiotemporal transformers [16, 28, 33, 48, 49], as well as GNN de-signs [11, 23, 26], improving traffic agent behavior mod-eling. However, their complexity and parameter count can increase overfitting and reduce generalizability. QCNet [49] addresses this by using query-centric scene encoding, generating trajectories via anchor-free queries and refining them with anchor-based ones for improved diversity. Dif-ferently, we propose to use an architecture with separate queries for scene encoding and trajectory generation to de-couple spatial-temporal context understanding from future prediction. 
+
+Multi-modal Trajectory Generation. In autonomous driving, multi-modal trajectory prediction tackles the uncer-tainties of dynamic driving conditions by generating mul-tiple potential future paths [9, 11, 32]. Some methods [32, 37] output a fixed set of trajectory proposals and em-ploy a winner-takes-all loss that backpropagates only for the closest match to the observed path. Others expand on this by incorporating predefined trajectories or anchor points [6, 40] and often use a two-stage strategy: first identifying feasible goals within drivable areas, then generating plau-sible trajectories toward these goals [3, 19]. Alternatively, some methods generate large trajectory pools [32, 37], ap-plying Non-Maximum Suppression (NMS) and clustering to refine predictions. Building on these foundations, we highlight the benefits of using register queries alongside mode prediction queries within the decoder. 27565 2.2. Self-supervised Trajectory Prediction 
+
+Self-supervised learning (SSL) has shown success in tra-jectory prediction [8, 24, 34, 43, 47], using pretext tasks to improve model generalizability. We categorize SSL ap-proaches by their masking strategy, representation learning approach, architecture retention, and fine-tuning strategy. 
+
+Masking Strategy. Masking strategies differ by granu-larity: fine-grained masking [2, 7, 24, 34] targets individ-ual trajectory and lane points or waypoints, while coarse masking [7, 8] covers entire segments. Fine-grained mask-ing often pairs with fine-grained reconstruction [7, 24, 34], masking each point or segment as a discrete token. Coarse masking typically pairs with coarse reconstruction, learning broader segments ( e.g., past or future trajectories [8]). We combine fine-grained masking with coarse reconstruction to capture spatial detail while supporting broader context. 
+
+Holistic vs. Detailed Representation Learning. In tra-jectory prediction, holistic learning, primarily using con-trastive methods [27, 43, 47], captures high-level seman-tic relationships by distinguishing similar and dissimilar embeddings. Generative methods [8, 24, 34] reconstruct masked inputs to capture finer spatial and temporal de-tails. Our approach combines both, leveraging generaliz-able, high-level features while preserving spatial relation-ships crucial for precise predictions. 
+
+Finetuning the Decoder. After pretraining, most methods, such as [1, 7, 8, 24, 34], retain only the encoder, discard-ing the decoder, though adding a randomly initialized de-coder during fine-tuning risks making the encoder forgets the pretraining knowledge [12]. To the best of our knowl-edge only Forecast-PEFT [41] keeps the pretrained decoder during finetuning to preserve learned representations, high-lighting the need for fine-tuning strategies that adapt the de-coder to multi-modal motion prediction while safeguarding pretraining knowledge. 
+
+Fine-Tuning Strategy. Most trajectory prediction methods [8, 34, 47] fine-tune the entire network for high accuracy, which is computationally intensive. Parameter-Efficient Fine-Tuning (PEFT) [22, 35], by contrast, updates only a subset of parameters to reduce costs. Recent work [41] uses PEFT to target specific components, essential for resource-limited scenarios. We adopt Prompt Tuning (PT) [22] for faster adaptation while retaining pretraining benefits. 
+
+# 3. Methodology 3.1. Preliminary Problem Formulation. Predicting the possible future tra-jectories of an agent in dynamic environments requires multi-modal inputs, specifically its surrounding agents’ his-torical data and road graph information. We define the agents’ history tensor H → R A→T →D h , where A represents the number of agents, T the number of past time steps, and D h the dimensionality of state features, such as posi-tion (x, y ), velocity, and acceleration. The road graph ten-sor R → R S r →P r →D r captures road features represented as polylines, where S r is the number of road segments, P r the number of points per segment, and D r the dimensionality of road features. Given inputs H and R, the task is to learn a mapping function f that predicts the target agent’s multimodal future trajectories ˆY → R M →T → →D y , where M represents the num-ber of prediction modes, T ↑ the number of future time steps, and D y the dimensionality of output states (e.g., predicted positions (x, y )). This prediction task is formalized as: 
+
+ˆY = f (H, R). (1) 
+
+Scene Representation. We first encode H and R into a unified feature space using separate linear layers to ob-tain the agent features A emb → R A→T →D and road features 
+
+R emb → R S r →P r →D , where D is the embedding dimension. Temporal positional encodings are added to A emb to capture sequential dependencies over time, while spatial positional encodings are applied to both A emb and R emb to preserve spatial structure information. The embedded agent and road graph features are then concatenated along the token dimen-sion, forming a mixed input tensor X mixed → R N →D , where 
+
+N is the total number of tokens after concatenation. 
+
+Perceiver IO. The unified scene representation X mixed is processed by the Perceiver IO model, which uses cross-attention and self-attention mechanisms to capture complex spatiotemporal dependencies in high-dimensional data. In the first stage, cross-attention maps the mixed input fea-tures X mixed → R N →D to a fixed-size latent space Z latent →
+
+R L→D , enabling the model to focus on salient information across modalities: 
+
+Z latent = CrossAttention (Q in , X mixed ), (2) where Q in → R L→D denotes learnable latent queries. In the second stage, multiple self-attention layers allow interac-tions among latent representations Z latent , enhancing infor-mation sharing across modalities and temporal dimensions. Finally, an output querying mechanism extracts scenario-specific information from the latent representations gener-ated by the encoder. 
+
+## 3.2. Masked Self-Distillation 
+
+To improve robustness in scene encoding and enhance feature learning, we adopt a teacher-student architecture with two Perceiver encoders. The teacher processes un-masked inputs with future trajectories, while the student uses masked inputs. This setup encourages the student model to learn a generalized and context-aware represen-tation from incomplete information. 27566 Teacher 
+
+Encoder 
+
+> !teacher
+
+Student 
+
+Encoder 
+
+> !student
+
+Decoder 
+
+> !decoder
+
+MLP 
+
+Prompt pool !
+
+Prompt 
+
+selection 
+
+Distill. 
+
+Loss 
+
+Traj. 
+
+Loss 
+
+KV 
+
+EMA 
+
+Reconst. 
+
+Loss 
+
+KV 
+
+Q
+
+Q
+
+Q
+
+KV 
+
+Scenario 
+
+Class 
+
+MLP 
+
+Agent 1 Features Map Features 
+
+Agent 2 Features Missing Features 
+
+Input Queries Scene Vector 
+
+Masking Registers 
+
+Mode Queries 
+
+Reconstruction Queries 
+
+Only used 
+
+in finetuning 
+
+> -unmasked
+> -masked
+
+"!"#$%&"  
+
+> '%(
+> )teacher ,1
+> )student, 1
+> 01!,3!
+> 01"#$%&
+> 3'#($)#"
+> 3*'+,#&'
+> 51
+> 52
+> 58
+
+Figure 2. Overview of the Proposed Trajectory Prediction Model. The model combines agent history and road information into a unified scene representation, processed by the Perceiver IO architecture to predict future trajectories. In the SD process, teacher and student Perceiver encoders operate in coordination: the teacher encoder (updated via Exponential Moving Average (EMA)) processes unmasked data with future trajectories, generating context-rich representations to guide the student encoder, which operates on masked inputs. These representations are aligned through a Cross Entropy Loss after the scene clustering head (MLP). The decoder then utilizes the remaining latent representations for trajectory prediction and segment-level scene reconstruction. During fine-tuning, a prompt pool is introduced, with prompts selected dynamically based on scene clustering, allowing efficient scenario-specific adaptation while preserving the pretrained model’s representations. 
+
+Fine-Grained Input Masking. To promote a compre-hensive understanding of the scene, we apply fine-grained masking to input tensors, covering trajectory points and lane polyline points. Unlike previous work that uses coarse masking (where large contiguous regions are masked), fine-grained masking introduces randomness at a finer scale. This approach better mirrors real-world uncertainties, forc-ing the model to infer missing details based on subtle con-textual cues from the agent history and road features. 
+
+Teacher-Student Encoder Architecture. Let X unmasked and X masked denote the unmasked and masked input ten-sors, respectively. The teacher encoder, denoted f teacher , is updated through an Exponential Moving Average (EMA) of the student encoder f student . The teacher encoder receives 
+
+X unmasked to generate a comprehensive scene representation, while the student encoder processes X masked . By granting the teacher model access to future trajectory information, it generates informative targets that incorporate knowledge of agents’ actual future positions and paths. This enables the teacher to produce more accurate and context-aware repre-sentations, which the student model can learn from during training. The latent representations from the teacher and student encoders are: 
+
+Z teacher = f teacher (X unmasked ),
+
+Z student = f student (X masked ). (3) 
+
+## 3.3. Reconstruction and Trajectory Prediction 
+
+By combining segment-level reconstruction with multi-modal trajectory prediction, the model learns to generate detailed and contextually rich representations beneficial for multimodal prediction. 
+
+Decoder Query Types. To enable the decoder to perform both trajectory prediction and scene reconstruction, we use different types of learned queries. Each query type guides the decoder towards distinct aspects of the input, allowing it to handle multiple tasks in parallel: 
+
+Segment-Level Reconstruction Queries: These queries guide the decoder in reconstructing masked points within larger segments, such as agent trajectories (both past and 27567 future) and lane polyline points. Specifically, two sets of queries, Q agents → R 2→A→D , are used to reconstruct past and future trajectories of each agent, while a set of queries 
+
+Q road → R S r →D is used for reconstructing each lane seg-ment. Positional encodings condition these queries to fo-cus on specific spatial locations, enabling the decoder to infer missing points within each segment based on contex-tual information from the surrounding unmasked points. To further enhance model robustness, we apply random query dropping during training. By randomly omitting a subset of the reconstruction queries at each training step, the model learns to handle incomplete information, fostering a holis-tic scene representation. 
+
+Mode Queries for Trajectory Prediction: A fixed number of mode queries Q modes → R M →D are used to predict the future trajectories of the target agent. Each mode query cor-responds to a possible future trajectory, allowing the model to capture the multimodal nature of potential outcomes. 
+
+Register Queries: These queries, denoted Q reg →
+
+R N R →D , serve as a structured memory for the decoder, storing intermediate scene representations and agent states. This design enables the model to retain knowledge of learned scene dynamics, which is particularly beneficial during fine-tuning. 
+
+Scene Decoding Output. The decoder produces two main outputs: 1. Predicted Future Trajectories and Mode Probabilities: 
+
+For each mode query, the decoder outputs a predicted trajectory and its associated probability, modeling the multimodal distribution of possible futures. We use a Gaussian Mixture Model (GMM) to represent the prob-ability distribution across different modes. 2. Reconstructed Past Trajectories and Lane Features: The decoder reconstructs the masked past trajectories and lane features, encouraging accurate recovery of the miss-ing fine-grained details. Formally, the decoder output is defined as: 
+
+{
+
+( ˆY m , ˆp m )
+
+} Mm=1 
+
+, ˆY recon = f decoder (Z rem student , Q j ) ,j → {modes , agents , road , reg }, (4) where ˆY m is the predicted trajectory for mode m, ˆp m is the predicted probability of mode m, and ˆY recon includes the reconstructed past trajectories and lane features. Here, 
+
+f decoder denotes the decoder network and Z rem student denotes the remaining latent vectors from the student encoder after ex-tracting the first one for SD. 
+
+## 3.4. Loss Functions 
+
+To train the model effectively, we define several loss func-tions for the different tasks. 
+
+Self-Distillation Loss. The first latent vector from the stu-dent encoder, z student ,1 , is mapped through the scene clus-tering head (MLP) to produce logits. These are compared to the corresponding teacher output vector using a cross-entropy loss: 
+
+p student = Softmax (MLP (z student ,1 )) ,p teacher = Softmax (MLP (z teacher ,1 )) ,
+
+L distill = CrossEntropy (p student , p teacher ) ,
+
+(5) where p student and p teacher denote the softmax probability dis-tributions of the first vectors from the student and teacher, respectively. This loss encourages the student to align its representations with the teacher’s unmasked outputs. 
+
+Multimodal Trajectory Prediction Loss. We model the distribution of future trajectories using a GMM. For each mode m, we predict the Gaussian parameters (mean ˆμ m and covariance ˆ! m ) and mode probability ˆp m . The GMM loss is defined as: 
+
+L GMM = ↑ log 
+
+( M∑
+
+> m=1
+
+ˆp m · N 
+
+(
+
+Y | ˆμ m , ˆ! m
+
+))
+
+, (6) where Y is the ground truth future trajectory. 
+
+Reconstruction Loss. For masked agent trajectories and lane polyline points, we apply an L2 reconstruction loss: 
+
+L recon = ∑ ∥ ∥∥Y GT ↑ ˆY recon 
+
+∥∥∥ 22
+
+, (7) where Y GT denotes the ground truth elements (it could be masked or unmasked). 
+
+Total Loss. The total loss is a weighted sum of the individ-ual losses: 
+
+L total = w distill · L distill + w GMM · L GMM + w recon · L recon . (8) Each task’s loss is dynamically balanced via DWA as fol-lows: first, a smoothed loss is computed as 
+
+˜L i = 0 .9 L (t↓1)  
+
+> i
+
++ 0 .1 L (t↓2)  
+
+> i
+
+. (9) A relative ratio is then calculated: 
+
+r i = ˜L i
+
+L (t↓2)  
+
+> i
+
++ ω . (10) This determines the initial task weights: 
+
+w i = n r i
+
+∑ 
+
+> j
+
+r j
+
+. (11) After applying task-specific biases and clipping the weights to the range [w min , w max ], the weights are normalized again to ensure: ∑
+
+> i
+
+w i = n. (12) 27568 3.5. Fine-Tuning with Prompt-Based Clustering 
+
+Unlike previous approaches [7, 8, 34] that discard the de-coder after pretraining, we retain the decoder along with the mode and register queries, allowing for efficient adapta-tion to new scenes while preserving the model’s rich scene representation capabilities. During fine-tuning, we freeze the parameters of the main architecture and we introduce a prompt-based fine-tuning strategy to adapt the model to specific scenarios or datasets. We leverage the scene clustering head, an MLP trained with cross-entropy loss during pretraining (see Equation 5) as a clustering mechanism. This head outputs class log-its that implicitly cluster input sequences based on their learned representations, grouping sequences with similar characteristics. Additionally, we create a pool of prompt sequences P = [ p 1 , p 2 , . . . , p K ], where each prompt se-quence p k corresponds to a specific cluster k, and K is the total number of clusters. Based on the clustering results, These prompts act as cluster-specific embeddings, enabling the model to flexibly adapt to varying scenarios or datasets. During fine-tuning, we optimize only the prompts in the prompt pool and the prediction head, keeping the rest of the architecture frozen. For an input X with a selected prompt 
+
+p k , the model’s output is: 
+
+ˆY = f frozen (X, p k ), (13) where ˆY is the predicted future trajectories and f frozen is the frozen PerReg. By focusing optimization on these prompts, we achieve efficient adaptation without modifying the foun-dational representations learned during pretraining. (Details provided in the supplementary materials) 
+
+# 4. Experiments 
+
+In this section, we evaluate the performance of our pro-posed model, PerReg+, across multiple trajectory predic-tion datasets. We assess the model’s effectiveness under both Single-Dataset Training and Multi-Dataset Training 
+
+settings to explore its ability to generalize across diverse data distributions. Our experiments include comparisons to recent trajectory prediction models and an analysis of Per-Reg+’s out-of-domain generalization capabilities. More ex-periments about our model scaling and PT are provided in the supplementary materials. 
+
+## 4.1. Experimental Setup Datasets. Throughout the experiments, we are using Uni-Traj framework [14]. We consider three datasets of vary-ing sizes: nuScenes [5] (32k samples), AV2 [42](180k sam-ples), and WOMD [13](1.8M samples) and we have limited the training and validation samples to vehicle trajectories. The map range extends to a 100 m radius. The temporal pa-rameters are set to 2 seconds of historical trajectories and 6
+
+second future trajectories. 
+
+Metrics. We employ the UniTraj benchmark metrics in-cluding brier minimum Final Displacement Error (brier-minFDE) [42], minimum average displacement error (mi-nADE), minimum final displacement error (minFDE), and miss rate (MR), where the number of predicted trajectories in the multimodal setting is 6.
+
+Implementation Details. Our model is implemented within the UniTraj framework, using a vanilla Perceiver ar-chitecture with the same hyperparameters as the Multi-Axis Wayformer [32] on WOMD, consistently applied across datasets. The model configuration includes a hidden size of 256, intermediate size of 1024, 2 encoder layers, 8 de-coder layers, and 192 latent queries, outputting 64 Gaussian Mixture Model (GMM) modes. Training is conducted with the AdamW optimizer, an initial learning rate of 2e-4, and a batch size of 128. Input settings consist of 32 surrounding agents, 256 scene polylines, and 20 points per polyline. We apply masking on 90% of history timesteps, 97% of future timesteps, and 75% of map points. Additionally, we use a query drop ratio of 40%. 
+
+## 4.2. Comparison with State-of-the-Art Models 
+
+In Table 1, we compare our model, PerReg, and its pre-trained variant (denoted as PerReg+) with recent trajec-tory prediction models, including AutoBot [17], MTR [37], and Forecast-MAE [8], an SSL-based approach, across the nuScenes, AV2, and WOMD datasets. Results are shown for Single-Dataset Training , where models are trained and evaluated on the same dataset, and Multi-Dataset Training ,where models are trained on all datasets simultaneously. Lower values across all metrics indicate better performance. In Single-Dataset Training , PerReg performs well, par-ticularly with pre-training. For smaller datasets, such as nuScenes and AV2, pre-training improves B-FDE by 11% and 13%, respectively, compared to PerReg, while for the larger WOMD dataset, the improvement is 2.4%. This sug-gests that pre-training is most beneficial for small datasets, as it enables more robust representation learning. In Multi-Dataset Training , PerReg+ shows substantial improvements across datasets by leveraging the larger data pool for more generalized representations. On WOMD, PerReg+ outperforms models like AutoBot and MTR, and on nuScenes and AV2, it achieves competitive or superior performance, with the best scores on several metrics. Overall, PerReg+ shows strong adaptability and perfor-mance across training settings. Pre-training is crucial for smaller datasets, enhancing representation learning, while Multi-Dataset Training further improves results by using di-verse data sources. These findings demonstrate PerReg+’s ability to learn generalized embeddings, achieving compet-itive results in varied trajectory prediction datasets. 27569 Table 1. Quantitative results. Metrics are presented for Single-Dataset Training , where each model is trained and evaluated on the same dataset, and Multi-Dataset Training , where models are trained on all datasets together. Lower values indicate better performance. Dataset Method Pre-training Single-Dataset Training Multi-Dataset Training 
+
+B-FDE ↓ minADE ↓ minFDE ↓ MR ↓ B-FDE ↓ minADE ↓ minFDE ↓ MR ↓
+
+AutoBot [17] ↑ 3.36 1.21 2.62 0.40 3.07 1.12 2.24 0.36 MTR [37] ↑ 2.86 1.06 2.33 0.40 2.27 0.85 1.81 0.32 nuScenes Forecast-MAE [8] ↑ 2.88 1.02 2.26 0.38 2.40 0.85 1.75 0.26 Forecast-MAE [8] + 2.81 0.99 2.17 0.36 2.39 0.84 1.75 0.26 
+
+PerReg (Ours) ↑ 3.06 1.04 2.50 0.42 2.32 0.84 1.76 0.27 
+
+PerReg (Ours) + 2.62 0.93 1.97 0.32 2.28 0.79 1.64 0.25 
+
+AutoBot [17] ↑ 2.51 0.85 1.70 0.27 2.54 0.86 1.73 0.27 MTR [37] ↑ 2.08 0.85 1.68 0.30 1.99 0.82 1.61 0.28 AV2 Forecast-MAE [8] ↑ 2.07 0.75 1.46 0.20 2.04 0.74 1.44 0.20 Forecast-MAE [8] + 2.05 0.74 1.43 0.19 2.04 0.74 1.44 0.19 
+
+PerReg (Ours) ↑ 2.38 0.85 1.75 0.28 2.12 0.76 1.51 0.23 
+
+PerReg (Ours) + 2.07 0.77 1.46 0.21 2.02 0.74 1.41 0.19 
+
+AutoBot [17] ↑ 2.47 0.73 1.65 0.25 2.47 0.74 1.66 0.25 MTR [37] ↑ 2.13 0.78 1.78 0.22 2.13 0.78 1.78 0.33 WOMD Forecast-MAE [8] ↑ 2.36 0.76 1.75 0.28 2.31 0.74 1.69 0.27 Forecast-MAE [8] + 2.30 0.75 1.75 0.28 2.29 0.74 1.68 0.25 
+
+PerReg (Ours) ↑ 2.10 0.65 1.46 0.25 2.09 0.65 1.45 0.22 
+
+PerReg (Ours) + 2.05 0.65 1.42 0.20 2.04 0.65 1.42 0.20 
+
+Table 2. Out-of-Domain Generalization. Evaluation of mod-els trained and fine-tuned on the WOMD dataset and tested on the nuScenes validation data. The results show that PerReg achieves the best out-of-domain generalization, especially when pre-training is applied, demonstrating its ability to generalize to different data distributions. Method Pre-training Evaluation B-FDE ↓ minADE ↓ minFDE ↓ MR ↓                              
+
+> AutoBot [17] ↑3.73 1.42 2.90 0.42 MTR [37] ↑3.10 1.17 2.52 0.43 Forecast-MAE [8] ↑3.30 1.20 2.63 0.40 Forecast-MAE [8] +3.28 1.19 2.60 0.39
+> PerReg (Ours) ↑3.12 1.17 2.51 0.44
+> PerReg (Ours) +2.75 1.01 2.07 0.36
+
+## 4.3. Out-of-Domain Generalization 
+
+Table 2 presents the out-of-domain generalization results, with models trained on WOMD and tested on nuScenes. PerReg+ achieves the best performance across all metrics, significantly surpassing Forecast-MAE and other baselines. Unlike Forecast-MAE, which employs full fine-tuning but gains only minor improvements from pre-training (e.g., 0.6% in B-FDE), PerReg+ uses a prompt-based fine-tuning strategy. By freezing the pretrained model and updating only a set of prompts, PerReg+ preserves generalizable fea-tures, enabling more effective adaptation to unseen data dis-tributions. This approach leads to an 11.8% reduction in B-FDE compared to its non-pretrained variant, demonstrating PerReg+’s superior cross-domain adaptability for trajectory prediction. Table 3. Ablation Study. Quantitative analysis of the impact of individual components in the PerReg+ model on trajectory pre-diction performance. The table shows the incremental improve-ments in the metrics as each module is added: Register-based queries (+Reg), self-distillation (SR), decoder retention (+dec), multimodal prediction (+pred), masked SD (MSD), and prompt tuning (PT). The final PerReg+ model achieves the best results (bold). Grey cells indicate stages without pretraining, and percent-ages in parentheses represent relative improvements in B-FDE. Method Evaluation B-FDE ↓ minADE ↓ minFDE ↓ MR ↓
+
+Per 3.44 1.19 2.87 0.36 
+
++ Reg 3.06 (+11%) 1.04 2.50 0.42 
+
++ SR 3.02 (+1.3%) 1.01 2.46 0.40 
+
++ dec 2.97 (+1.7%) 1.00 2.42 0.38 
+
++ pred 2.82 (+5.0%) 0.97 2.16 0.35 
+
++ MSD 2.64 (+6.4%) 0.95 2.01 0.35 
+
++ PT 2.62 (+0.8%) 0.93 1.97 0.32 
+
+Table 4. Impact of Masking Ratios on Performance. Type Masking Ratio B-FDE ↓ minADE ↓ minFDE ↓ MR ↓                        
+
+> Agents
+> 0.85 2.71 0.96 2.05 0.34
+> 0.92.62 0.93 1.97 0.32
+> 0.95 2.66 0.91 2.01 0.32
+> Lanes
+> 0.65 2.66 0.93 2.01 0.33
+> 0.75 2.62 0.93 1.97 0.32
+> 0.85 2.72 0.95 2.06 0.33
+
+27570 (a) No Pre-training (b) Single-Dataset Pre-training (c) Multi-Dataset Pre-training Figure 3. PerReg Predictions Across Pretraining Settings. Trajectory predictions at a complex intersection (nuScenes) are shown for PerReg without pretraining, with single-dataset, and multi-dataset pretraining. The target vehicle (purple-to-blue) follows a lead vehicle (green) turning left. Ground truth is in red; other agents’ past trajectories fade from light to dark green. 
+
+## 4.4. Ablation Study 
+
+Table 3 presents an ablation study on PerReg+. Start-ing from a baseline where all decoder queries are used for prediction and aggregated via NMS, introducing Reg-ister Queries ( + Reg) reduces B-FDE by 11% by desig-nating six queries for prediction and the rest as registers. Adding Segment-level Reconstruction ( + SR) and retain-ing pre-trained decoder during finetuning ( + dec) further enhances scene understanding, lowering B-FDE to 3.02 and 2.97, respectively. Incorporating the multimodal prediction task during pre-training ( + pred) yields a 5.0% improve-ment, reducing B-FDE to 2.82, while Masked SD ( + MSD) improves learning detailed scene reprentation, lowering B-FDE to 2.76. Prompt Tuning ( + PT) achieves the best performance. Overall, each component contributes incre-mental improvements, with Register Queries and the multi-modal prediction yielding the most significant gains. 
+
+Impact of Masking and Query Drop Ratios. As shown in Table 4 and Figure 4, both masking and reconstruction query drop ratios affect PerReg+ performance on nuScenes. Optimal masking ratios are 0.9 for agents and 0.75 for lanes. Dropping reconstruction queries during pre-training improves B-FDE up to a 40% drop ratio, enhancing robust-ness. Beyond 40%, performance declines due to sparse in-puts, with the worst B-FDE at 100% when reconstruction is fully disabled. A moderate drop ratio ( ↔40%) offers the best trade-off between robustness and accuracy. 
+
+## 4.5. Qualitative Results 
+
+We present sample visualizations of our prediction in Fig-ure 5. PerReg predicts possible paths, including a straight path, left turn, and U-turn, but misses following the lead vehicle’s left turn. Single-dataset pretraining improves ac-curacy, showing potential for a left turn but still missing the U-turn. With multi-dataset pretraining, PerReg+ correctly identifies both the left turn and U-turn possibilities, closely aligning with the lead vehicle’s path. Despite the common tendency to continue straight, the model prioritizes turns        
+
+> 020 40 60 80 100 2.62.65 2.7
+> 2.62
+> Query Drop Ratio (%) B-FDE Figure 4. Impact of Reconstruction Query Drop Ratio. B-FDE for PerReg+ on the nuScenes dataset across varying reconstruction query drop ratios.
+
+due to the vehicle’s position in the leftmost lane, demon-strating how comprehensive pretraining enhances context-sensitive multimodal predictions. 
+
+# 5. Conclusion 
+
+We introduced Perceiver with Register queries (PerReg+), a trajectory prediction model addressing key challenges in autonomous navigation. PerReg+ uses Dual-Level Repre-sentation Learning (SD and MR) to capture global con-text and fine-grained details, Segment-Level Reconstruc-tion for trajectories and lane segments to enhance accuracy, and Register-based Multi-Modality to remove clustering re-quirements for trajectory aggregation. It also features Adap-tive Prompt Tuning for efficient fine-tuning. Evaluated on nuScenes, Argoverse 2, and Waymo Open Motion, PerReg+ achieved state-of-the-art results, with pre-training boosting prediction accuracy and cross-domain generalization. 
+
+# 6. Acknowledgment 
+
+We gratefully acknowledge Valeo for funding our work and extend our sincere thanks to Mohamed Abdelfattah for his valuable and insightful feedback, which significantly en-hanced the quality of this research. 27571 References 
+
+[1] Mohamed Abdelfattah and Alexandre Alahi. S-jepa: A joint embedding predictive architecture for skeletal action recog-nition. In European Conference on Computer Vision , pages 367–384. Springer, 2024. 3 [2] Mohamed Abdelfattah, Mariam Hassan, and Alexandre Alahi. Maskclr: Attention-guided contrastive learning for robust action representation learning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 18678–18687, 2024. 3 [3] G¨ orkay Aydemir, Adil Kaan Akan, and Fatma G¨ uney. Adapt: Efficient multi-agent trajectory prediction with adaptation. In 
+
+Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 8295–8305, 2023. 2 [4] Prarthana Bhattacharyya, Chengjie Huang, and Krzysztof Czarnecki. SSL-lanes: Self-supervised learning for motion forecasting in autonomous driving. In 6th Annual Confer-ence on Robot Learning , 2022. 1 [5] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 11621–11631, 2020. 1, 2, 6 [6] Yuning Chai, Benjamin Sapp, Mayank Bansal, and Dragomir Anguelov. Multipath: Multiple probabilistic anchor trajec-tory hypotheses for behavior prediction. pages 86–99, 2020. 2[7] Hao Chen, Jiaze Wang, Kun Shao, Furui Liu, Jianye Hao, Chenyong Guan, Guangyong Chen, and Pheng-Ann Heng. Traj-mae: Masked autoencoders for trajectory prediction. 
+
+arXiv preprint arXiv:2303.06697 , 2023. 3, 6 [8] Jie Cheng, Xiaodong Mei, and Ming Liu. Forecast-MAE: Self-supervised pre-training for motion forecasting with masked autoencoders. Proceedings of the IEEE/CVF Inter-national Conference on Computer Vision , 2023. 1, 2, 3, 6, 7[9] Henggang Cui, Vladan Radosavljevic, Fang Chou, Tsung Lin, Thi Nguyen, Tzu Huang, Jeff Schneider, and Nemanja Djuric. Multimodal trajectory predictions for autonomous driving using deep convolutional networks. ICRA , 2019. 2 [10] Timoth´ ee Darcet, Maxime Oquab, Julien Mairal, and Piotr Bojanowski. Vision transformers need registers. In The Twelfth International Conference on Learning Representa-tions , 2024. 2 [11] Nachiket Deo, Eric Wolff, and Oscar Beijbom. Multimodal trajectory prediction conditioned on lane-graph traversals. In 
+
+5th Annual Conference on Robot Learning , 2021. 2 [12] Sufeng Duan and Hai Zhao. Encoder and decoder, not one less for pre-trained language model sponsored nmt. In Find-ings of the Association for Computational Linguistics: ACL 2023 , pages 3602–3613, 2023. 3, 1 [13] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R Qi, Yin Zhou, et al. Large scale interactive motion forecasting for autonomous driving: The waymo open mo-tion dataset. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9710–9719, 2021. 1, 2, 6 [14] Lan Feng, Mohammadhossein Bahari, Kaouther Mes-saoud Ben Amor, ´ Eloi Zablocki, Matthieu Cord, and Alexan-dre Alahi. Unitraj: A unified framework for scalable vehi-cle trajectory prediction. arXiv preprint arXiv:2403.15098 ,2024. 2, 6 [15] Jiyang Gao, Chen Sun, Hang Zhao, Yi Shen, Dragomir Anguelov, Congcong Li, and Cordelia Schmid. Vectornet: Encoding hd maps and agent dynamics from vectorized rep-resentation. In CVPR , pages 11525–11533, 2020. 2 [16] Roger Girgis, Florian Golemo, Felipe Codevilla, Martin Weiss, Jim Aldon D’Souza, Samira Ebrahimi Kahou, Felix Heide, and Christopher Pal. Latent variable sequential set transformers for joint multi-agent motion prediction. In In-ternational Conference on Learning Representations , 2021. 2[17] Roger Girgis, Florian Golemo, Felipe Codevilla, Martin Weiss, Jim Aldon D’Souza, Samira Ebrahimi Kahou, Felix Heide, and Christopher Pal. Latent variable sequential set transformers for joint multi-agent motion prediction. In In-ternational Conference on Learning Representations , 2022. 2, 6, 7 [18] Jean-Bastien Grill, Florian Strub, Florent Altch´ e, Corentin Tallec, Pierre Richemond, Elena Buchatskaya, Carl Doersch, Bernardo Avila Pires, Zhaohan Guo, Mohammad Ghesh-laghi Azar, et al. Bootstrap your own latent-a new approach to self-supervised learning. Advances in neural information processing systems , 33:21271–21284, 2020. 2 [19] Junru Gu, Chen Sun, and Hang Zhao. Densetnt: End-to-end trajectory prediction from dense goal sets. In Proceedings of the IEEE/CVF International Conference on Computer Vi-sion , pages 15303–15312, 2021. 2 [20] Andrew Jaegle, Sebastian Borgeaud, Jean-Baptiste Alayrac, Carl Doersch, Catalin Ionescu, David Ding, Skanda Kop-pula, Daniel Zoran, Andrew Brock, Evan Shelhamer, et al. Perceiver io: A general architecture for structured inputs & outputs. arXiv preprint arXiv:2107.14795 , 2021. 1 [21] Andrew Jaegle, Felix Gimeno, Andy Brock, Oriol Vinyals, Andrew Zisserman, and Joao Carreira. Perceiver: General perception with iterative attention. In International confer-ence on machine learning , pages 4651–4664. PMLR, 2021. 1[22] Menglin Jia, Luming Tang, Bor-Chun Chen, Claire Cardie, Serge Belongie, Bharath Hariharan, and Ser-Nam Lim. Vi-sual prompt tuning. In ECCV , pages 709–727. Springer, 2022. 3 [23] Xiaosong Jia, Penghao Wu, Li Chen, Yu Liu, Hongyang Li, and Junchi Yan. Hdgt: Heterogeneous driving graph trans-former for multi-agent trajectory prediction via scene encod-ing. IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) , 2023. 2 [24] Zhiqian Lan, Yuxuan Jiang, Yao Mu, Chen Chen, and Shengbo Eben Li. Sept: Towards efficient scene repre-sentation learning for motion prediction. arXiv preprint arXiv:2309.15289 , 2023. 1, 2, 3 27572 [25] Marius Leordeanu and Iulia Paraicu. Driven by vision: learn-ing navigation by visual localization and trajectory predic-tion. Sensors , 21(3):852, 2021. 2 [26] Ming Liang, Bin Yang, Rui Hu, Yun Chen, Renjie Liao, Song Feng, and Raquel Urtasun. Learning lane graph represen-tations for motion forecasting. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23– 28, 2020, Proceedings, Part II 16 , pages 541–556. Springer, 2020. 2 [27] Yuejiang Liu, Qi Yan, and Alexandre Alahi. Social nce: Con-trastive learning of socially-aware motion representations. In 
+
+ICCV , pages 15118–15129, 2021. 1, 3 [28] Yicheng Liu, Jinghuai Zhang, Liangji Fang, Qinhong Jiang, and Bolei Zhou. Multimodal motion prediction with stacked transformers. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 7577– 7586, 2021. 2 [29] Kaouther Messaoud, Itheri Yahiaoui, Anne Verroust-Blondet, and Fawzi Nashashibi. Non-local social pooling for vehicle trajectory prediction. In 2019 IEEE Intelligent Vehicles Symposium (IV) , pages 975–980, 2019. 2 [30] Kaouther Messaoud, Nachiket Deo, Mohan M Trivedi, and Fawzi Nashashibi. Trajectory prediction for autonomous driving based on multi-head attention with joint agent-map representation. In 2021 IEEE Intelligent Vehicles Symposium (IV) , pages 165–170. IEEE, 2021. 2 [31] Kaouther Messaoud, Itheri Yahiaoui, Anne Verroust-Blondet, and Fawzi Nashashibi. Attention based vehicle tra-jectory prediction. IEEE Transactions on Intelligent Vehi-cles , 6(1):175–185, 2021. 2 [32] Nigamaa Nayakanti, Rami Al-Rfou, Aurick Zhou, Kratarth Goel, Khaled S Refaat, and Benjamin Sapp. Wayformer: Motion forecasting via simple & efficient attention networks. In IEEE International Conference on Robotics and Automa-tion (ICRA) , pages 2980–2987. IEEE, 2023. 2, 6 [33] Jiquan Ngiam, Vijay Vasudevan, Benjamin Caine, Zheng-dong Zhang, Hao-Tien Lewis Chiang, Jeffrey Ling, Rebecca Roelofs, Alex Bewley, Chenxi Liu, Ashish Venugopal, et al. Scene transformer: A unified architecture for predicting fu-ture trajectories of multiple agents. In International Confer-ence on Learning Representations . 2 [34] Mozhgan Pourkeshavarz, Junrui Zhang, and Amir Rasouli. Dyset: A dynamic masked self-distillation approach for ro-bust trajectory prediction. In Computer Vision – ECCV 2024 ,pages 324–342, Cham, 2025. Springer Nature Switzerland. 1, 3, 6 [35] Wang Qi, Yu-Ping Ruan, Yuan Zuo, and Taihao Li. Parameter-efficient tuning on layer normalization for pre-trained language models. arXiv preprint arXiv:2211.08682 ,2022. 3 [36] Ari Seff, Brian Cera, Dian Chen, Mason Ng, Aurick Zhou, Nigamaa Nayakanti, Khaled S Refaat, Rami Al-Rfou, and Benjamin Sapp. Motionlm: Multi-agent motion forecast-ing as language modeling. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 8579– 8590, 2023. 2 [37] Shaoshuai Shi, Li Jiang, Dengxin Dai, and Bernt Schiele. Motion transformer with global intention localization and lo-cal movement refinement. Advances in Neural Information Processing Systems , 35:6531–6543, 2022. 2, 6, 7 [38] Shaoshuai Shi, Li Jiang, Dengxin Dai, and Bernt Schiele. Mtr++: Multi-agent motion prediction with symmetric scene modeling and guided intention querying. IEEE Trans. Pat-tern Anal. Mach. Intell. , 46(5):3955–3971, 2024. [39] Xiaolong Tang, Meina Kan, Shiguang Shan, Zhilong Ji, Jin-feng Bai, and Xilin Chen. Hpnet: Dynamic trajectory fore-casting with historical prediction attention. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15261–15270, 2024. 2 [40] Balakrishnan Varadarajan, Ahmed Hefny, Avikalp Srivas-tava, Khaled S Refaat, Nigamaa Nayakanti, Andre Cornman, Kan Chen, Bertrand Douillard, Chi Pang Lam, Dragomir Anguelov, et al. Multipath++: Efficient information fu-sion and trajectory aggregation for behavior prediction. In 
+
+2022 International Conference on Robotics and Automation (ICRA) , pages 7814–7821. IEEE, 2022. 2 [41] Jifeng Wang, Kaouther Messaoud, Yuejiang Liu, Juergen Gall, and Alexandre Alahi. Forecast-peft: Parameter-efficient fine-tuning for pre-trained motion forecasting mod-els. arXiv preprint arXiv:2407.19564 , 2024. 3 [42] Benjamin Wilson, William Qi, Tanmay Agarwal, John Lambert, Jagjeet Singh, Siddhesh Khandelwal, Bowen Pan, Ratnesh Kumar, Andrew Hartnett, Jhony Kaesemodel Pontes, et al. Argoverse 2: Next generation datasets for self-driving perception and forecasting. arXiv preprint arXiv:2301.00493 , 2023. 1, 2, 6 [43] Chenfeng Xu, Tian Li, Chen Tang, Lingfeng Sun, Kurt Keutzer, Masayoshi Tomizuka, Alireza Fathi, and Wei Zhan. Pretram: Self-supervised pre-training via connecting trajec-tory and map. In ECCV , pages 34–50. Springer, 2022. 1, 3[44] Yi Xu, Lichen Wang, Yizhou Wang, and Yun Fu. Adaptive trajectory prediction via transferable gnn. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 6520–6531, 2022. 2 [45] Wenyuan Zeng, Ming Liang, Renjie Liao, and Raquel Urta-sun. Lanercnn: Distributed representations for graph-centric motion forecasting. 2021 IEEE/RSJ International Confer-ence on Intelligent Robots and Systems (IROS) , pages 532– 539, 2021. 2 [46] Zhejun Zhang, Alexander Liniger, Christos Sakaridis, Fisher Yu, and Luc Van Gool. Real-time motion prediction via het-erogeneous polyline transformer with relative pose encod-ing. In Advances in Neural Information Processing Systems (NeurIPS) , 2023. 2 [47] Yang Zhou, Hao Shao, Letian Wang, Steven Waslander, Hongsheng Li, and Yu Liu. Smartpretrain: Model-agnostic and dataset-agnostic representation learning for motion pre-diction, 2024. 1, 3 [48] Zikang Zhou, Luyao Ye, Jianping Wang, Kui Wu, and Ke-jie Lu. Hivt: Hierarchical vector transformer for multi-agent motion prediction. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 8823–8833, 2022. 2 [49] Zikang Zhou, Jianping Wang, Yung-Hui Li, and Yu-Kai Huang. Query-centric trajectory prediction. In Proceedings 27573 of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition (CVPR) , 2023. 2 27574

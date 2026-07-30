@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "tables": [
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/table-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 874,
+      "height": 224,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/table-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 1820,
+      "height": 534,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/table-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 886,
+      "height": 223,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/table-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 867,
+      "height": 302,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/table-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 857,
+      "height": 241,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/table-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 865,
+      "height": 201,
+      "label": "Table"
+    }
+  ]
+}

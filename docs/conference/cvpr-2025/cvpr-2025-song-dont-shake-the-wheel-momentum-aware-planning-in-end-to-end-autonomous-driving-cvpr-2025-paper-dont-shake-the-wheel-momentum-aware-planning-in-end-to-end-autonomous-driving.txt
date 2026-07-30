@@ -1,0 +1,439 @@
+Title: Don't Shake the Wheel: Momentum-Aware Planning in End-to-End Autonomous Driving
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Song_Dont_Shake_the_Wheel_Momentum-Aware_Planning_in_End-to-End_Autonomous_Driving_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 12:13:57 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Don’t Shake the Wheel: Momentum-Aware Planning in End-to-End Autonomous Driving 
+
+## Ziying Song 1,2,†, Caiyan Jia 1,2,⋆ , Lin Liu 1,2, Hongyu Pan 3, Yongchang Zhang 3,Junming Wang 3,7, Xingyu Zhang 3, Shaoqing Xu 4, Lei Yang 5, Yadan Luo 6,⋆ 
+
+> 1
+
+## School of Computer Science and Technology, Beijing Jiaotong University 
+
+> 2
+
+## Beijing Key Laboratory of Traffic Data Mining and Embodied Intelligence 
+
+> 3
+
+## Horizon Robotics 4University of Macau 5THU 6The University of Queensland 7HKU 
+
+{songziying, cyjia }@bjtu.edu.cn, y.luo@uq.edu.au. 
+
+## Abstract 
+
+End-to-end autonomous driving frameworks enable seam-less integration of perception and planning but often rely on one-shot trajectory prediction, which may lead to unstable control and vulnerability to occlusions in single-frame per-ception. To address this, we propose the Momentum-Aware Driving (MomAD) framework, which introduces trajectory momentum and perception momentum to stabilize and re-fine trajectory predictions. MomAD comprises two core components: (1) Topological Trajectory Matching (TTM) employs Hausdorff Distance to select the optimal planning query that aligns with prior paths to ensure coherence; (2) Momentum Planning Interactor (MPI) cross-attends the selected planning query with historical queries to expand static and dynamic perception files. This enriched query, in turn, helps regenerate long-horizon trajectory and re-duce collision risks. To mitigate noise arising from dy-namic environments and detection errors, we introduce ro-bust instance denoising during training, enabling the plan-ning model to focus on critical signals and improve its robustness. We also propose a novel Trajectory Predic-tion Consistency (TPC) metric to quantitatively assess plan-ning stability. Experiments on the nuScenes dataset demon-strate that MomAD achieves superior long-term consistency (≥ 3s) compared to SOTA methods. Moreover, evalua-tions on the curated Turning-nuScenes shows that MomAD reduces the collision rate by 26% and improves TPC by 0.97m (33.45%) over a 6s prediction horizon, while closed-loop on Bench2Drive demonstrates an up to 16.3% im-provement in success rate. The source code is available at 
+
+https://github.com/adept-thu/MomAD .       
+
+> †Intern of Horizon Robotics, ⋆Corresponding author. (a) Deterministic Planning (b) Multi-modal Trajectory t-1 t
+> 0.1 0.5 0.3 0.5
+> 0.7
+> 0.1 0.3
+> 0.7
+> t-1 t
+> 0.1 0.5 0.3 0.5
+> 0.7
+> 0.1 0.1 0.2 0.1 0.3 0.4 0.1
+> Trajectory Matching
+> 0.3 0.2 0.2
+> 0.6
+> (c) Momentum Planning ( Ours )
+
+Figure 1. (a) Deterministic Planning [14, 15, 19, 32] predicts deterministic trajectories, but lacks action diversity, posing safety risks. (b) Multi-modal Trajectory Planning [4, 27, 28] selects the highest-scoring trajectory among the multi-modal trajectories, yet fails to ensure stability and consistency, having risks in vehicle trembling. (c) Momentum Planning leverages the trajectory and perception momentum to enhance current planning through histor-ical guidance to overcome temporal inconsistency. This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 22432 1. Introduction 
+
+Autonomous driving [3, 25, 29] has undergone a transfor-mative shift from modular, manually crafted pipelines to a more integrated, end-to-end paradigm [15, 19, 24]. Un-like traditional approaches that handle tasks like detection, tracking, mapping, motion prediction, and planning in iso-lation, the end-to-end framework emphasizes seamless in-tegration. By prioritizing planning, it strategically directs information from upstream perception modules, thereby en-hancing robustness and reliability in dynamic driving envi-ronments. Achieving high-quality planning in end-to-end frame-works hinges on accurately predicting the future trajec-tory prediction for the ego vehicle [1, 4, 7, 15, 19, 27]. Such future prediction requires a long-horizon understand-ing of both static and dynamic environmental factors, in-cluding map elements and interactions with surrounding agents. For instance, UniAD [15] queries the ego context from detailed bird’s-eye-view (BEV) maps at each times-tamp, while VAD [19] uses an ego query to retrieve sur-rounding context. The retrieved information then informs the planner, which predicts a deterministic trajectory for the vehicle, as illustrated in Figure 1 (a). Nevertheless, optimal trajectory prediction is inherently stochastic due to the un-predictability of other road users’ intentions, varying road conditions, and the ambiguity introduced by human driving behaviors. This stochastic nature complicates the regres-sion target, making deterministic predictions suboptimal and even risk-prone, potentially leading to severe collisions. To mitigate these uncertainties, methods such as VADv2 [4] and SparseDrive [27] leverage probabilistic modeling to capture the continuous planning action space, producing multi-modal trajectories that consider various possible be-haviors of road agents, as shown in Figure 1 (b). While effective, these multi-modal approaches are typically one-shot and solely on the current perception frame. This lim-itation makes them susceptible to occlusion or loss of key visual cues, which can degrade multi-modal trajectory qual-ity. Additionally, without temporal consistency, consecutive trajectories may lack coherence, causing unstable vehicle control and introducing undesirable directional shifts and oscillations. To stabilize trajectory prediction, we draw inspiration from human driving behaviors and introduce the concept of momentum into autonomous driving. In physics, momen-tum reflects an object’s tendency to maintain its velocity based on speed and direction [16]. Analogously, in driv-ing, momentum captures the smooth, forward progression of movement informed by past trajectories and modulated by present conditions. As illustrated in Figure 1 (c), by ex-plicitly integrating historical trajectories with current pre-dictions, we aim to achieve smoother and more coherent planning outcomes. To this end, we propose an end-to-end Momentum-Aware Driving (MomAD) framework, which incorporates momentum awareness to deliver stable and re-sponsive planning in driving scenarios. MomAD interprets momentum on two levels: (1) trajectory momentum : By aligning candidate multi-modal trajectory with prior predic-tions, abrupt shifts in ego vehicle’s path can be minimized, ensuring consistent control and a more comfortable driving experience. (2) perception momentum : By aggregating his-torical context and attending to map elements and surround-ings over time, the model broadens its perspective, captur-ing subtle agent intentions missed in single-frame observa-tions. To implement these ideas, we introduce (1) Topolog-ical Trajectory Matching (TTM) : we first use this mod-ule to minimize planning discrepancies across time steps by employing the Hausdorff Distance to identify multi-modal trajectory proposals that best align with past plan-ning results. This approach ensures temporal coherence by preventing excessive deviation from previous trajecto-ries. (2) Momentum Planning Interactor (MPI) : Since the selected trajectory may still be biased toward the cur-rent perception and sacrifice long-horizon considerations, we cross-attends the current best planning query with his-torical plan queries, which implicitly convey critical long-term ego-temporal, ego-agent, and ego-map information as key and value vectors. This interaction enriches the current query with long-horizon perception momentum, improving its context awareness. To enhance robustness against en-vironmental noise and perception errors, we incorporate a Robust Instance Denoising Module in the perception stage. By introducing controlled perturbations during training, the model learns to denoise perception inputs, achieving re-silience to dynamic changes and misdetections. To evaluate the planning stability of MomAD, we pro-pose a new Trajectory Prediction Consistency (TPC) met-ric to measure consistency between predicted and histor-ical trajectories. Experiments demonstrate that MomAD can maintain long-term consistency ( ≥ 3 seconds). Given that most scenes in nuScenes involve straight roads, which limit the assessment of temporal inconsistency, we curated a Turning-nuScenes validation set from turning scenarios within the nuScenes dataset to provide a more challenging evaluation, where our approach outperforms state-of-the-art end-to-end frameworks. For example, our MomAD reduces the collision rate by 26% and the TPC by 0.97m compared to SparseDrive [27] for a 6-second horizon prediction in the Turning-nuScenes validation set. 
+
+## 2. Related Work 
+
+End-to-end autonomous driving, which learns directly from raw sensor data to generate planning trajectories or driv-ing commands, eliminates manual feature extraction [3, 25]. End-to-end autonomous driving methods [5, 6, 8–13, 15, 18–21, 23, 26, 28, 30–36] have garnered increased atten-22433 MLP    
+
+> Topological
+> Trajectory Matching
+> Trajectory Predictor
+> Refined
+> 1
+> 2
+> 3
+> + Noise training
+> Add & Norm ×3
+> MLP
+> Cross Attn
+> QK V
+> Self Attn
+> Encoder Denoise  (σ)
+> Self Attn
+> Multi-view Images
+> Image Encoder
+> Detection&Tracking  Online  Mapping
+> Currect
+> index  Long-horizon Query Mixer
+
+Sparse  Perception Momentum Planning 
+
+> Momentum Planning Interactor
+> History
+> Hausdorff
+> Distance
+> Select
+
+Temporal 
+
+Consistent 
+
+> History
+
+Figure 2. The overall architecture of MomAD. MomAD, as a multi-modal trajectory end-to-end autonomous driving method, first encodes multi-view images into feature maps, then learns a sparse scene representation through a robust instance denoising via perturbation module, and finally performs a momentum planning through Topological Trajectory Matching (TTM) module and Momentum Planning Interactor (MPI) module to accomplish planning tasks. Our approach addresses critical challenges of stability and robustness in dynamic driving conditions. A Add    
+
+> CConcat
+> EEmbed
+> Multiply
+> Instance Feature
+> Trajectory Predictor
+> Refined
+> Trajectory Predictor
+> A
+> CE
+> MLP MLP
+> Refined
+> Ego Anchor Long-horizon Query Mixer Long-horizon Query Mixer
+> MLP
+> LSTM
+> K,V
+> Cross-Attn
+> Q
+
+Figure 3. The illustration of Momentum Planning Interactor (MPI). MPI cross-attends a selected planning query with histori-cal queries to expand static and dynamic perception files, resulting in an enriched query that improves long-horizon trajectory gener-ation and reduces collision risks. 
+
+tion. UniAD [15] effectively integrates information from various preceding tasks, including perception, prediction, and planning modules to assist in trajectory planning, and achieves significant performance improvements. VAD [19] models driving scenarios as fully vectorized representations and employs explicit instance-level planning constraints to enhance planning safety. However, they [5, 11, 14, 15, 19] adopt a deterministic approach to trajectory prediction, which fails to account for trajectory diversity and may in-troduce risks due to intermediate regression results. VADv2 [4] proposes probabilistic planning to address the limita-tions of deterministic trajectory prediction, enabling multi-modal trajectory predictions. Building upon the multi-modal trajectory planning framework, SparseDrive [27] de-signs planning and motion prediction modules to achieve SOTA performance and efficiency on the nuScenes dataset. However, while multi-modal trajectory planning methods [4, 27, 28] have achieved SOTA performance, they overlook the temporal inconsistency caused by maximum score off-sets. Regarding temporal inconsistency, existing methods only address temporal instance characteristics up to now, and they entirely overlook the issue of temporal planning consistency. In this work, we focus on this issue, aiming to address it using the concept of momentum planning. 
+
+## 3. Method 
+
+Framework Overview. Figure 2 presents an overview of the proposed MomAD system, which integrates sparse per-ception and momentum-aware planning. To capture key dy-namic and static instances interacting with the ego vehicle, the sparse perception module builds upon the SparseDrive [27] to encode multi-view image features, which are ag-gregated into instance features Fins  
+
+> t
+
+for road agents and map elements at time step t. These features are obtained by sampling keypoints around the anchor boxes and poly-lines, feeding into the detection/tracking and online map-ping blocks for accurate predictions. The core of MomAD is the joint motion and momentum-aware planning module, which comprises two main components: (1) Topological Trajectory Matching (Sec 3.1), which explicitly selects the candidate trajectory that best matches the prior path among all multi-modal trajectories to ensure temporal coherence; and (2) Momentum Planning Interaction (Sec 3.2), which expands the perceptive field by cross-attending the selected candidate trajectory’s planning query with queries from the previous time step in the long-horizon query mixer. This approach provides a broader view of the surrounding en-vironment and the intentions of other agents. The refined query is then processed by the planning head to generate updated multi-modal trajectories. Since the planning mod-ule heavily relies on detection and map instance features, we introduce a robust instance denoising via perturbation module (Sec 3.3) within the sparse perception component during training. This ensures robustness by reducing sen-sitivity to noisy perception features, enhancing the stability of trajectory prediction and planning. 22434 3.1. Topological Trajectory Matching (TTM) 
+
+The proposed TTM module is inspired by the continuity of human driving behavior, where the optimal trajectories T ∗
+
+> t
+
+are influenced by the historical path Tt−1 to maintain tem-poral consistency and stability. Let Tt = {T kt }Kk=1 denote a set of K multi-modal candidate trajectories generated at time step t, where each trajectory T kt = {(xkt,i , y kt,i )}Nt
+
+> i=1
+
+consists of Nt predicted waypoints. Typically, K is set to 
+
+6×3 to account for six trajectory proposals for each of three possible commands (left, right, and straight), and Nt is cho-sen as 6 or 12 representing 0.5s interval for a 3- or 6-second prediction horizon. 
+
+Trajectory Coordinate Transformation. Since the histor-ical and current predicted trajectories are generated in the ego vehicle’s coordinate system at different moments, it is essential to transform them into a common coordinate sys-tem for accurate matching. This transformation from mo-ment t to t − 1 is achieved as follows: 
+
+T kt ← R−1
+
+> t−1
+
+(T kt − Γt−1), ∀k ∈ [K], (1) where Rt−1 and Γt−1 denote the rotation and translation matrix, respectively. 
+
+Trajectory Distance Measurement. Simple Euclidean dis-tance is inadequate for capturing the global alignment of trajectories, as it only measures pointwise proximity and is highly sensitive to local variations. This limitation becomes especially apparent in complex scenarios such as turns or varying point densities, where close points may not repre-sent the alignment of the entire trajectory path. To address these limitations, TTM employs the Hausdorff distance as a more robust metric for evaluating trajectory alignment. The Hausdorff distance captures both local and global trajectory structures by measuring the maximum deviation between two sets of points, effectively quantifying the worst-case alignment between the candidate and historical trajectories. For each candidate trajectory T kt , the Hausdorff distance to the historical trajectory Tt−1 is computed as, 
+
+d1 = sup  
+
+> p∈Tkt
+
+inf 
+
+> h∈Tt−1
+
+∥p − h∥, d 2 = sup 
+
+> h∈Tt−1
+
+inf  
+
+> p∈Tkt
+
+∥h − p∥,dH (T kt , T t−1) = max( d1, d 2),
+
+(2) where p ∈ T kt and h ∈ Tt−1 represent waypoints in the can-didate and historical trajectories, respectively. The Haus-dorff distance considers the furthest point discrepancies be-tween trajectories in both directions, ensuring that even mi-nor global misalignments are captured. TTM then selects the trajectory T k∗ 
+
+> t
+
+that minimizes this distance: 
+
+k∗ = arg min 
+
+> k∈[K]
+
+dH (T kt , T t−1) (3) This selection enforces continuity, aligning with historical driving patterns and providing stable trajectory predictions that are less prone to sudden shifts. 
+
+3.2. Momentum Planning Interactor (MPI) 
+
+While TTM selects the most consistent trajectory T k∗ 
+
+> t
+
+based on historical alignment, T k∗ 
+
+> t
+
+is solely based on the cur-rent perception Fins , which may lack a comprehensive view of the environment and be sensitive to occlusions. There-fore, the MPI module, as illustrated in Figure 3, incorpo-rates a long-horizon query mixer to enrich the selected plan-ning query Qp∗ 
+
+> t
+
+∈ RDq of T k∗ 
+
+> t
+
+with historical planning query Qpt−1 ∈ RK×Dq and the associated planning scores 
+
+Spt−1 ∈ RK , implicitly capturing a broader understanding of the surrounding context and other agents’ intentions over time. Here, Dq represents the latent dimension of planning queries. This enriched planing query ˜Qp∗ 
+
+> t
+
+∈ RDq will be combined with instance features to re-generate an improved trajectory ˜Tt ∈ RK×Nt×2.
+
+Long-horizon Query Mixer. To achieve a robust percep-tion of temporal momentum, the query mixer allows cross-attention between the selected candidate trajectory’s plan-ning query with multi-modal planning queries from the pre-vious time step. The historical planning queries Qpt−1 and associated scores Spt−1 are combined through element-wise interaction and processed with an LSTM to simulate tem-poral evolution: 
+
+Qp′ 
+
+> t−1
+
+= LSTM  σ(Spt−1) ◦ MLP( Qpt−1) , (4) where σ(·) indicates the sigmoid function, MLP : RDq 7 →
+
+RDq the linear transform and ◦ the element-wise product. The LSTM processes this interaction, producing a surro-gate multi-modal query Qp′ 
+
+> t−1
+
+∈ RK×Dq that captures the temporal evolution of planning queries. To aggregate histor-ical information, the current planning query Qp∗ 
+
+> t
+
+is used as a query in a cross-attention module. The result ˜Qp∗ 
+
+> t
+
+incor-porates long-term spatiotemporal context, which is further combined with the planning instance features and the en-coded ego-anchor position information to inform the subse-quent trajectory predictor: 
+
+˜Qp∗ 
+
+> t
+
+= Attention( Qp∗ 
+
+> t
+
+, Qp′
+
+> t−1
+
+, Qp′
+
+> t−1
+
+).
+
+˜Tt, ˜St = PlanHead( ˜Qp∗ 
+
+> t
+
+, Fins  
+
+> t
+
+), (5) The PlanHead module then generates refined ˜Tt, ˜St. The best trajectory T ∗ 
+
+> t
+
+is then selected based on the highest scores among multi-modal outputs. Importantly, while the best trajectory is chosen based on the multi-modal trajec-tory scores, unlike previous selections, the current multi-modal trajectories now fully consider the temporal consis-tency. This approach provides a stable, temporally-aware planning solution that is robust to occlusions and noise, sig-nificantly improving trajectory stability and control in com-plex driving environments. 22435 3.3. Robust Instance Denoising via Perturbation 
+
+Our trajectory prediction and refinement rely heavily on the instance features Fins  
+
+> t
+
+of road agents and map elements provided by the sparse perception module. However, due to detector instability and the dynamically changing map, these instance features may be noisy, potentially introduc-ing errors in downstream planning. To enhance the sta-bility of planning against such noisy inputs, we introduce controlled noise perturbations during training and employ a lightweight encoder-decoder transformer block (see Fig-ure 2) to learn effective denoising. This approach enables the model to distinguish between essential and extraneous features, reducing the impact of perception noise on trajec-tory predictions. During test-time inference, this denois-ing capability allows the trajectory predictor to be resilient to fluctuations in instance features. As a result, the model can produce smoother, more stable trajectories even in chal-lenging scenarios with occlusions, temporary obstacles, or misdetections. 
+
+## 4. Experiments 
+
+4.1. Experimental Setup 
+
+Datasets. We conducted extensive experiments on the widely adopted nuScenes dataset [2] to evaluate tasks in-cluding detection, online mapping and planning in an open-loop setting. The nuScenes dataset comprises 1,000 driving scenes, with 700 and 150 sequences allocated for training and validation. Each scene spans around 20 seconds and contains roughly 40 key-frames annotated at 2Hz, where each sample includes six images captured by surrounding cameras covering 360° FOV horizontally and point clouds collected by both LiDAR and radar sensors. Since most planning tasks in nuScenes focus predominantly on go-straight commands, we curate a challenging subset of turn-ing scenarios to form the Turning-nuScenes dataset, aimed at verifying the temporal consistency of predicted trajec-tories across time steps. Planning samples for turns are selected by setting the threshold between 3s and 0.5s of ‘gt ego fut trajs’ to 25. The turning nuScenes validation dataset constitutes only one-tenth of the full nuScenes val-idation set, including 17 scenes with 680 samples. We use 
+
+Bench2Drive [17], a closed-loop evaluation protocol under CARLA Leaderboard 2.0 for end-to-end autonomous driv-ing. It provides an official training set, where we use the base set (1000 clips) for fair comparison with all the other baselines. We use the official 220 routes for evaluation. 
+
+Evaluation Metrics for Planning. For planning evalua-tion, we adopt the commonly used L2 Displacement Er-ror (L2) and Collition Rate to assess planning performance. The calculation of the L2 error follows VAD [19] and the collision rate is aligned with SparseDrive [27]. However, the mainstream planning metrics cannot faithfully reveal the stability of predicted trajectories. Therefore, we introduce a novel metric, Trajectory Prediction Consistency ( TPC ), to measure the disparity between current predicted trajecto-ries and historical predicted trajectories, allowing for a more comprehensive assessment of the consistency of trajecto-ries. With coordinates transformed, the TPC between the current predicted trajectory T Pred  
+
+> t
+
+and historical one T Pred 
+
+> t−1
+
+is defined as, 
+
+TPC = 1
+
+NT
+
+vuut NX
+
+> i=1
+
+ T Pred  
+
+> t
+
+− T Pred 
+
+> t−1
+
+2 · T Mask GT 
+
+
+
+, (6) where NT is the total number of GT trajectories in the vali-dation set, and T Mask GT is the mask for trajectories exceed-ing the overlapped time period of two trajectories. Our 
+
+TPC metric evaluates whether autonomous vehicles adhere to predicted trajectories, ensuring continuity across frames. Notably, the TPC metric provides a statistical perspective on the dataset-wide evaluation rather than at the individual sample level. 
+
+4.2. Main Results 
+
+To conduct a comprehensive comparison, we have under-taken an exhaustive analysis of two distinct metrics pre-sented in Table 1, which are derived from UniAD [15] and VAD [19]. It is noteworthy that, aside from Table 1, all other tables rely on the VAD [19] evaluation metrics for their as-sessments. 
+
+4.2.1 Planning Results NuScenes. As shown in Table 1, MomAD achieves an L2 error of 0.60m, a collision rate of 0.09%, and a TPC of 0.54m, respectively. Compared to SOTAs like UniAD [15], VAD [19] and SparseDrive [27], our method shows SOTA performance in planning results. It is worth noting that we have made significant improvements in TPC, which directly proves our effectiveness in timing consistency. It is worth noting that we achieved significant improvements in TPC at 0.30m, 0.53m, and 0.78m at 1s, 2s, and 3s on the nuScenes dataset, directly demonstrating our effectiveness in tempo-ral consistency. Additionally, our MomAD is straightfor-ward and achieves an FPS of 7.8, a slightly slower than SparseDrive. In summary, our MomAD effectively utilizes the smoothing advantage of Momentum and has a signifi-cant effect on improving temporal consistency. 
+
+Turning-nuScenes. As noted in [22], the nuScenes dataset features many straight routes, which limits the assessment of end-to-end methods. The simplicity of these paths can mask a model’s true performance in complex sce-narios. To address this, we evaluated our MomAD on the Turing-nuScenes validation set, as shown in Table 2. SparseDrive [27], a SOTA end-to-end method utilizing 22436 Table 1. Planning results on the nuScenes validation dataset. † denotes evaluation protocol used in UniAD [15]. ∗ denotes results reproduced with the official checkpoint. As Ref. [22] states, we deactivate the ego status information for a fair comparison. 
+
+Method Input Backbone L2 (m) ↓ Col . Rate (%) ↓ TPC (m) ↓ FPS ↑
+
+1s 2s 3s Avg . 1s 2s 3s Avg . 1s 2s 3s Avg .
+
+UniAD † [15] Camera ResNet101 0.48 0.96 1.65 1.03 0.05 0.17 0.71 0.31 0.45 0.89 1.54 0.96 1.8 (A100) VAD † [19] Camera ResNet50 0.54 1.15 1.98 1.22 0.10 0.24 0.96 0.43 0.47 0.83 1.43 0.91 -
+
+SparseDrive †∗ [27] Camera ResNet50 0.44 0.92 1.69 1.01 0.07 0.19 0.71 0.32 0.39 0.77 1.41 0.85 9.0 (RTX4090) MomAD (Ours) † Camera ResNet50 0.43 0.88 1.62 0.98 0.06 0.16 0.68 0.30 0.37 0.74 1.30 0.80 7.8 (RTX4090) UniAD [15] Camera ResNet101 0.45 0.70 1.04 0.73 0.62 0.58 0.63 0.61 0.41 0.68 0.97 0.68 1.8 (A100) VAD [19] Camera ResNet50 0.41 0.70 1.05 0.72 0.03 0.19 0.43 0.21 0.36 0.66 0.91 0.64 -
+
+SparseDrive [27] Camera ResNet50 0.29 0.58 0.96 0.61 0.01 0.05 0.18 0.08 0.30 0.57 0.85 0.57 9.0 (RTX4090) MomAD (Ours) Camera ResNet50 0.31 0.57 0.91 0.60 0.01 0.05 0.22 0.09 0.30 0.53 0.78 0.54 7.8 (RTX4090) 
+
+Table 2. Planning results on the Turning -nuScenes validation dataset. SparseDrive [27] is a SOTA end-to-end multi-modal trajectory planning method. Red indicates improvement. We follow the VAD [19] evaluation metric. 
+
+Method L2 (m) ↓ Col . Rate (%) ↓ TPC (m) ↓
+
+1s 2s 3s Avg . 1s 2s 3s Avg . 1s 2s 3s Avg .
+
+SparseDrive [27] 0.35 0.77 1.46 0.86 0.04 0.17 0.98 0.40 0.34 0.70 1.33 0.79 
+
+MomAD (Ours) 0.33 -0.02 0.70 -0.07 1.24 -0.22 0.76 -0.10 0.03 -0.01 0.13 -0.04 0.79 -0.19 0.32 -0.08 0.32 -0.02 0.54 -0.16 1.05 -0.28 0.63 -0.16 
+
+Table 3. Long trajectory planning results on the nuScenes and 
+
+Turning -nuScenes validation sets. We train models for 10 epochs for 6s-horizon prediction. T-nuScenes indicates the challenging 
+
+Turning -nuScenes . We follow the VAD [19] evaluation metric.                                                     
+
+> Split Method L2 (m) ↓Col .Rate (%) ↓TPC (m) ↓
+> 4s 5s 6s 4s 5s 6s 4s 5s 6s
+> nuScenes SparseDrive [27] 1.75 2.32 2.95 0.87 1.54 2.33 1.33 1.66 1.99
+> MomAD 1.67 1.98 2.45 0.83 1.43 2.13 1.19 1.45 1.61
+> -0.09 -0.34 -0.50 -0.04 -0.11 -0.20 -0.14 -0.21 -0.38
+> T-nuScenes SparseDrive [27] 2.07 2.71 3.36 0.91 1.71 2.57 1.54 2.31 2.90
+> MomAD 1.80 2.07 2.51 0.85 1.57 2.31 1.37 1.58 1.93
+> -0.27 -0.64 -0.85 -0.06 -0.14 -0.26 -0.17 -0.73 -0.97
+
+Table 4. Open-loop and Closed-loop results on Bench2Drive 
+
+(V0.0.3) under base training set. ‘mmt’ refers multi-modal trajec-tory variant of VAD and ∗ the re-implementation.                                                
+
+> Method Open-loop Metric Closed-loop Metric Avg .L2 ↓DS ↑SR (%) ↑Effi ↑Comf ↑
+> VAD 0.91 42.35 15.00 157.94 46.01
+> VAD mmt ∗0.89 42.87 15.91 158.12 47.22
+> MomAD (Euclidean) 0.87 44.22 16.91 161.77 48.70
+> MomAD 0.85 45.35 17.44 162.09 49.34
+> SparseDrive ∗0.87 44.54 16.71 170.21 48.63
+> MomAD (Euclidean) 0.84 46.12 17.45 173.35 50.98
+> MomAD 0.82 47.91 18.11 174.91 51.20
+
+multi-modal trajectories, performs well across various sce-narios but struggles with driving stability during turns. In contrast, MomAD exhibits superior consistency in trajec-tory predictions, as indicated by the TPC metric. Over-all, MomAD not only delivers effective trajectory predic-tions under standard conditions but also maintains reliabil-ity amid dynamic changes and complex environments. 
+
+Long Trajectory Prediction. Accurate long trajectory pre-diction is vital for enhancing the stability of autonomous driving, is useful to evaluate molels’ ability to address tem-poral inconsistency issues in multi-modal trajectory plan-ning. As shown in Table 3, we compared SparseDrive and MomAD in 4-6s long trajectory prediction on the nuScenes and Turning-nuScenes dataset, demonstrating a signifi-cant performance improvement. Specifically, in nuScenes dataset, compared with SparseDrive, MomAD experienced a decrease of 0.09m (5.14%), 0.34m (14.66%), and 0.50m (16.95%) in the 4s, 5s, and 6s of L2 error, a decrease of 0.04%, 0.11%, and 0.20% in the 4s, 5s, and 6s of collision rate, and a decrease of 0.14m (10.53%), 0.21m (12.65%), and 0.38m (19.10%) in the 4s, 5s, and 6s of TPC, re-spectively. Futhermore, in Turning-nuScenes dataset, com-pared with SparseDrive, MomAD experienced a decrease of 0.27m (13.04%), 0.64m (23.62%), and 0.85m (25.30%) in the 4s, 5s, and 6s of L2 error, a decrease of 0.06%, 0.14%, and 0.26% in the 4s, 5s, and 6s of collision rate, and a decrease of 0.17m (11.04%), 0.73m (31.60%), and 0.97m (32.45%) in the 4s, 5s, and 6s of TPC, respectively. In sum-mary, our MomAD has improved the performance of long trajectory predictions, which further proves that MomAD can effectively alleviate the problem of temporal inconsis-tency. 
+
+Bench2Drive. We have included evaluations on the chal-lenging closed-loop results on Bench2Drive dataset, as shown in Table 4, w which covers 44 interactive scenes (e.g. , cut-ins, overtaking, detours) and 220 routes across diverse weather conditions and locations. Our MomAD improves success rate by 16.3% and 8.4% over the VAD multi-modal variant and SparseDrive, and enhances the Comfortness score (trajectory smoothness) by 7.2% and 
+
+5.3% , demonstrating its effectiveness. 22437 Table 5. Perception and motion results on the nuScenes validation dataset. † indicates the results are reproduced with the official check-point. AP d denotes AP divider . AP b denotes AP boundary . mADE denotes minADE . mFDE denotes minFDE .                                                                                                                      
+
+> Method 3D Object Detection Multi-Object Tracking Online Mapping Motion Prediction mAP ↑NDS ↑mATE ↓mASE ↓mAOE ↓mAVE ↓mAAE ↓AMOTA ↑AMOTP ↓Recall ↑IDS ↓mAP ↑AP ped ↑AP d↑AP b↑mADE ↓mFDE ↓MR ↓EPA ↑
+> UniAD [15] 0.380 0.498 0.684 0.277 0.383 0.381 0.192 0.359 1.320 0.467 906 ----0.71 1.02 0.151 0.456
+> VAD †[19] 0.312 0.435 0.610 0.288 0.541 0.534 0.228 ----47.6 40.6 51.5 50.6 ----
+> SparseDrive [27] 0.418 0.525 0.566 0.275 0.552 0.261 0.190 0.386 1.254 0.499 886 55.1 49.9 57.0 58.4 0.62 0.99 0.136 0.482
+> MomAD (Ours) 0.423 0.531 0.561 0.269 0.549 0.258 0.188 0.391 1.243 0.509 853 55.9 50.7 58.1 58.9 0.61 0.98 0.137 0.499
+
+Figure 4. Visualization results of MomAD compared with UniAD, VAD and SparseDrive across multiple frames. The proposed MomAD achieves temporal consistency whichever from the predicted trajectory compared with ground truth (GT) or from the TPC metric. Table 6. Ablation studies of the sparse perception module in Mo-mAD on the nuScenes validation split. The Encoder and Denoise (σ) module is denoted as ED . MP represents Momentum plan-ning. NS is the Gaussian noise factor controlling the noise level. Noise is applied during training only. We follow the VAD [19] evaluation metric.                                                                                                          
+
+> ED MP NS Detection Tracking Online Mapping Motion Planning (Avg .)mAP ↑NDS ↑AMOTA ↑mAP ↑AP ped ↑mADE ↓L2 ↓Col .↓TPC ↓
+> 0.0 0.407 0.521 0.381 55.0 49.3 0.63 0.62 0.14 0.56
+> !0.0 0.405 0.520 0.380 55.1 49.5 0.63 0.61 0.13 0.55
+> !0.1 0.420 0.530 0.390 55.8 50.5 0.58 0.61 0.12 0.55
+> !!0.0 0.417 0.528 0.386 55.4 50.6 0.63 0.61 0.11 0.55
+> !!0.05 0.421 0.529 0.388 55.6 50.8 0.62 0.61 0.11 0.54
+> !!0.1 0.423 0.531 0.391 55.9 50.7 0.61 0.60 0.09 0.54
+> !!0.2 0.418 0.520 0.388 54.4 49.2 0.63 0.62 0.18 0.58
+> !!0.3 0.412 0.518 0.383 54.0 48.8 0.65 0.64 0.22 0.61
+
+4.2.2 Perception and Motion Prediction Results 
+
+Sparse representation is efficient but suffers from instabil-ity issues caused by the variability of instance features. To address these issues, we have enhanced the instance fea-tures using the Encoder and Denoise ( σ) module (denoted as ED ) within the sparse perception framework, ensuring 
+
+Table 7. Impact of history frames in MomAD on the Turning-nuScenes validation set. t denotes the frame number, where 1 in-dicates the history is empty (represented by 0), 2 signifies that the historical result corresponds to the previous 1 frame, and 3 indi-cates that the historical result pertains to the previous 2 frames. We follow the VAD [19] evaluation metric. 
+
+ED MP NS t L2(m) ↓ Col . Rate(%) ↓ TPC(m) ↓
+
+2s 3s Avg. 2s 3s Avg. 2s 3s Avg. 0.77 1.46 0.86 0.17 0.98 0.40 0.70 1.33 0.79 
+
+! 2 0.71 1.27 0.77 0.14 0.83 0.34 0.55 1.07 0.65 
+
+! 0.1 0.77 1.45 0.86 0.18 0.97 0.39 0.69 1.33 0.79 
+
+! ! 0.1 1 0.78 1.48 0.88 0.18 0.98 0.39 0.70 1.35 0.81 
+
+! ! 0.1 2 0.70 1.24 0.76 0.13 0.79 0.32 0.54 1.05 0.63 
+
+! ! 0.1 3 0.72 1.27 0.78 0.14 0.84 0.35 0.56 1.09 0.66 
+
+end-to-end stability for autonomous driving. As shown in Table 5, our MomAD perception module includes 3D ob-ject detection, multi-object tracking, and online mapping tasks. For 3D object detection, MomAD achieves 42.3% mAP and 53.1% NPS, improving the mAP by 0.5% and the NDS by 0.6% compared to the baseline SparseDrive [27]. For multi-object tracking, MomAD achieves an AMOTA of 22438 Table 8. Ablation studies of the impact of the different mod-ules in MP on the Turning-nuScenes validation dataset. QM de-notes Long-horizon Query Mixer, TP denotes Trajectory Predic-tor. Add refers to the addition operation between the historical planning query Qpt−1 and the selected planning query Qp∗                                              
+
+> t. We follow the VAD [19] evaluation metric.
+> QM Add TP L2 (m) ↓Col .Rate (%) ↓TPC (m) ↓
+> 2s 3s Avg. 2s 3s Avg. 2s 3s Avg. 0.77 1.46 0.86 0.17 0.98 0.40 0.70 1.33 0.79
+> !!0.76 1.38 0.82 0.14 0.88 0.36 0.62 1.21 0.67
+> !!0.70 1.24 0.76 0.13 0.79 0.32 0.54 1.05 0.63
+
+39.1%, surpassing the baseline SparseDrive by 0.5%. For online mapping, compared to 55.1% mAP for the baseline SparseDrive, our MomAD achieves 55.9% mAP, improv-ing the mAP by 0.8%. For motion prediction, our MomAD outperforms SparseDrive [27] and UniAD [15], achieves better motion prediction performance by considering the in-fluence of an ego vehicle on other agents. In detail, Our Mo-mAD achieves a 0.61m minADE, 0.98 minFDE, and 13.7% MR, and 0.499 EPA, respectively. 
+
+4.3. Ablation Study 
+
+Roles of ‘ED’ module in Sparse Perception. Sparse rep-resentation end-to-end methods yield efficient computation but unstable metrics. Further details are available in the Appendix. As shown in Table 6, the Encoder and Denoise (σ) module ( ED ) within sparse perception enhances the in-stance features, significantly impacts the overall pipeline. By introducing Gaussian noise and employing techniques, the robustness of instance features is improved, particularly when training with Noisy at 0.1. Our findings suggest that a controlled level of noise can enhance the end-to-end capa-bilities of sparse methods during training, offering insights for the community on sparse end-to-end methods. 
+
+Roles of ‘MP’ module in Planing. As Li et al. [22] have stated, most end-to-end autonomous driving methods per-form poorly in turning scenarios. As shown in Table 7, to better evaluate the planning performance of end-to-end methods in turning scenarios, our MomAD is evaluated on the Turning-nuScenes validation dataset rather than only on the full nuScenes validation dataset. Specifically, un-der the premise of executing ‘ED’, at t = 1 , providing a 0 value to the MP module does not improve performance. We have tried to change the MLP operation of the planning to a more complex operation, but it does not enhance the re-sults. However, when t = 2 , historical queries and results are used, L2 (Avg) reaches 0.76m, Col. (Avg) reaches 0.32 %, and TPC reaches 0.63m, which represents a significant improvement. In addition, when t = 3 , more frames are fused, the improvement has actually decreased, which may be due to the uncertainty introduced by the departure of his-torical features, but there is still an overall improvement. 
+
+Roles of different sub-modules in ‘MP’ module. As shown in Table 8, we conducted an in-depth analysis of the internal mechanism of momentum planning. We found that simply using the native ‘Add’ operation to regenerate the planning results can achieve a good improvement, with L2 (Avg.), Col. (Avg.), and TPC (Avg.) decreasing by 0.04m, 0.04%, and 0.12m, respectively. However, the ‘Add’ op-eration alone does not fully utilize historical features. Our Long-horizon Query Mixer has achieved the current opti-mal performance. Overall, historical results are very impor-tant for current outcomes, and their reasonable utilization can maximize the performance of end-to-end planning. 
+
+4.4. Visualization 
+
+As shown in Figure 4, we showcase multi-frame qualita-tive comparisons of end-to-end solutions, including UniAD [15], VAD [19], SparseDrive [27], and the proposed Mo-mAD. In a representative turning scenario, the MomAD ap-proach demonstrates superior long-term awareness of sur-rounding vehicles, reducing the likelihood of collisions. Additionally, it generates smoother ego-vehicle trajecto-ries (shown in yellow and blue) that closely align with the ground-truth trajectory (in red). This highlights its strong temporal consistency and lower TPC scores. Additional vi-sualizations for various driving commands are provided in the Appendix. 
+
+## 5. Conclusion and Future Work 
+
+The proposed MomAD framework addresses key chal-lenges in planning stability and robustness for end-to-end autonomous driving. By leveraging trajectory momen-tum and perception momentum, MomAD stabilizes trajec-tory predictions through Topological Trajectory Matching (TTM) and Momentum Planning Interactor (MPI), ensur-ing temporal coherence and enriching long-horizon context. Evaluations on nuScenes, the curated Turning-nuScenes validation set, and Bench2Drive demonstrate its superior performance in reducing collision rates and improving tra-jectory consistency compared to SOTA methods. While MomAD improves temporal consistency in long-horizon trajectory prediction, a gap remains due to mode collapse induced by the standard teacher-forcing approach to trajec-tory regression, limiting trajectory diversity. Future work will explore diffusion models and speculative decoding to enhance trajectory diversity while balancing efficiency. 
+
+## Acknowledgements 
+
+We appreciate the valuable discussions with Wenchao Sun, Bo Jiang, and Bencheng Liao from Horizon Robotics. This work was supported by the National Key R&D Program of China (2018AAA0100302). 22439 References 
+
+[1] Szil´ ard Aradi. Survey of deep reinforcement learning for motion planning of autonomous vehicles. IEEE Transactions on Intelligent Transportation Systems , 23(2):740–759, 2020. 2[2] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 11621–11631, 2020. 5 [3] Li Chen, Penghao Wu, Kashyap Chitta, Bernhard Jaeger, An-dreas Geiger, and Hongyang Li. End-to-end autonomous driving: Challenges and frontiers. IEEE Transactions on Pat-tern Analysis and Machine Intelligence , 2024. 2 [4] Shaoyu Chen, Bo Jiang, Hao Gao, Bencheng Liao, Qing Xu, Qian Zhang, Chang Huang, Wenyu Liu, and Xinggang Wang. Vadv2: End-to-end vectorized autonomous driving via probabilistic planning. arXiv preprint arXiv:2402.13243 ,2024. 1, 2, 3 [5] Zhili Chen, Maosheng Ye, Shuangjie Xu, Tongyi Cao, and Qifeng Chen. Ppad: Iterative interactions of prediction and planning for end-to-end autonomous driving. In European Conference on Computer Vision , pages 239–256. Springer, 2025. 2, 3 [6] Jie Cheng, Yingbing Chen, Xiaodong Mei, Bowen Yang, Bo Li, and Ming Liu. Rethinking imitation-based planners for autonomous driving. In 2024 IEEE International Conference on Robotics and Automation (ICRA) , pages 14123–14130. IEEE, 2024. 2 [7] Laur` ene Claussmann, Marc Revilloud, Dominique Gruyer, and S´ ebastien Glaser. A review of motion planning for high-way autonomous driving. IEEE Transactions on Intelligent Transportation Systems , 21(5):1826–1848, 2020. 2 [8] Felipe Codevilla, Matthias M¨ uller, Antonio L´ opez, Vladlen Koltun, and Alexey Dosovitskiy. End-to-end driving via conditional imitation learning. In 2018 IEEE international conference on robotics and automation (ICRA) , pages 4693– 4700. IEEE, 2018. 2 [9] Felipe Codevilla, Matthias M¨ uller, Antonio L´ opez, Vladlen Koltun, and Alexey Dosovitskiy. End-to-end driving via con-ditional imitation learning. In 2018 IEEE International Con-ference on Robotics and Automation (ICRA) , pages 4693– 4700, 2018. [10] Felipe Codevilla, Eder Santana, Antonio M. Lopez, and Adrien Gaidon. Exploring the limitations of behavior cloning for autonomous driving. In Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) , 2019. [11] Simon Doll, Niklas Hanselmann, Lukas Schneider, Richard Schulz, Marius Cordts, Markus Enzweiler, and Hendrik Lensch. Dualad: Disentangling the dynamic and static world for end-to-end driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 14728–14737, 2024. 3 [12] Mingzhe Guo, Zhipeng Zhang, Yuan He, Ke Wang, and Lip-ing Jing. End-to-end autonomous driving without costly modularization and 3d manual annotation. arXiv preprint arXiv:2406.17680 , 2024. [13] Peiyun Hu, Aaron Huang, John Dolan, David Held, and Deva Ramanan. Safe local motion planning with self-supervised freespace forecasting. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 12732–12741, 2021. 2 [14] Shengchao Hu, Li Chen, Penghao Wu, Hongyang Li, Junchi Yan, and Dacheng Tao. St-p3: End-to-end vision-based au-tonomous driving via spatial-temporal feature learning. In 
+
+European Conference on Computer Vision , pages 533–549. Springer, 2022. 1, 3 [15] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, Lewei Lu, Xiaosong Jia, Qiang Liu, Jifeng Dai, Yu Qiao, and Hongyang Li. Planning-oriented autonomous driv-ing. In Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition (CVPR) , pages 17853– 17862, 2023. 1, 2, 3, 5, 6, 7, 8 [16] Xiangdong Ji, Yizhuang Liu, Yu-Sheng Liu, Jian-Hui Zhang, and Yong Zhao. Large-momentum effective theory. Reviews of Modern Physics , 93(3):035005, 2021. 2 [17] Xiaosong Jia, Zhenjie Yang, Qifeng Li, Zhiyuan Zhang, and Junchi Yan. Bench2drive: Towards multi-ability bench-marking of closed-loop end-to-end autonomous driving. Ad-vances in Neural Information Processing Systems , 37:819– 844, 2025. 5 [18] Bo Jiang, Shaoyu Chen, Xinggang Wang, Bencheng Liao, Tianheng Cheng, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, and Chang Huang. Perceive, interact, predict: Learning dynamic and static clues for end-to-end motion pre-diction. arXiv preprint arXiv:2212.02181 , 2022. 2 [19] Bo Jiang, Shaoyu Chen, Qing Xu, Bencheng Liao, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. Vad: Vectorized scene representa-tion for efficient autonomous driving. In Proceedings of the IEEE/CVF International Conference on Computer Vision ,pages 8340–8350, 2023. 1, 2, 3, 5, 6, 7, 8 [20] Bo Jiang, Shaoyu Chen, Bencheng Liao, Xingyu Zhang, Wei Yin, Qian Zhang, Chang Huang, Wenyu Liu, and Xinggang Wang. Senna: Bridging large vision-language models and end-to-end autonomous driving, 2024. [21] Zhenxin Li, Kailin Li, Shihao Wang, Shiyi Lan, Zhiding Yu, Yishen Ji, Zhiqi Li, Ziyue Zhu, Jan Kautz, Zuxuan Wu, et al. Hydra-mdp: End-to-end multimodal planning with multi-target hydra-distillation. arXiv preprint arXiv:2406.06978 ,2024. 2 [22] Zhiqi Li, Zhiding Yu, Shiyi Lan, Jiahan Li, Jan Kautz, Tong Lu, and Jose M Alvarez. Is ego status all you need for open-loop end-to-end autonomous driving? In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14864–14873, 2024. 5, 6, 8 [23] Jiageng Mao, Yuxi Qian, Junjie Ye, Hang Zhao, and Yue Wang. Gpt-driver: Learning to drive with gpt. arXiv preprint arXiv:2310.01415 , 2023. 2 [24] Aditya Prakash, Kashyap Chitta, and Andreas Geiger. Multi-modal fusion transformer for end-to-end autonomous driv-22440 ing. In 2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2021. 2 [25] Ziying Song, Lin Liu, Feiyang Jia, Yadan Luo, Caiyan Jia, Guoxin Zhang, Lei Yang, and Li Wang. Robustness-aware 3d object detection in autonomous driving: A review and outlook. IEEE Transactions on Intelligent Transportation Systems , pages 1–30, 2024. 2 [26] Haisheng Su, Wei Wu, and Junchi Yan. Difsd: Ego-centric fully sparse paradigm with uncertainty denoising and itera-tive refinement for efficient end-to-end autonomous driving. 
+
+arXiv preprint arXiv:2409.09777 , 2024. 2 [27] Wenchao Sun, Xuewu Lin, Yining Shi, Chuang Zhang, Hao-ran Wu, and Sifa Zheng. Sparsedrive: End-to-end au-tonomous driving via sparse scene representation. arXiv preprint arXiv:2405.19620 , 2024. 1, 2, 3, 5, 6, 7, 8 [28] Junming Wang, Xingyu Zhang, Zebin Xing, Songen Gu, Xi-aoyang Guo, Yang Hu, Ziying Song, Qian Zhang, Xiaoxiao Long, and Wei Yin. He-drive: Human-like end-to-end driv-ing with vision language models, 2024. 1, 2, 3 [29] Li Wang, Xinyu Zhang, Ziying Song, Jiangfeng Bi, Guoxin Zhang, Haiyue Wei, Liyao Tang, Lei Yang, Jun Li, Caiyan Jia, et al. Multi-modal 3d object detection in autonomous driving: A survey and taxonomy. IEEE Transactions on In-telligent Vehicles , 2023. 2 [30] Penghao Wu, Xiaosong Jia, Li Chen, Junchi Yan, Hongyang Li, and Yu Qiao. Trajectory-guided control prediction for end-to-end autonomous driving: A simple yet strong base-line. In Advances in Neural Information Processing Systems ,pages 6119–6132. Curran Associates, Inc., 2022. 2 [31] Zeyu Yang, Nan Song, Wei Li, Xiatian Zhu, Li Zhang, and Philip HS Torr. Deepinteraction++: Multi-modality interaction for autonomous driving. arXiv preprint arXiv:2408.05075 , 2024. [32] Tengju Ye, Wei Jing, Chunyong Hu, Shikun Huang, Ling-ping Gao, Fangzhen Li, Jingke Wang, Ke Guo, Wencong Xiao, Weibo Mao, Hang Zheng, Kun Li, Junbo Chen, and Kaicheng Yu. Fusionad: Multi-modality fusion for predic-tion and planning tasks of autonomous driving, 2023. 1 [33] Wenyuan Zeng, Wenjie Luo, Simon Suo, Abbas Sadat, Bin Yang, Sergio Casas, and Raquel Urtasun. End-to-end inter-pretable neural motion planner. In 2019 IEEE/CVF Confer-ence on Computer Vision and Pattern Recognition (CVPR) ,2019. [34] Yunpeng Zhang, Deheng Qian, Ding Li, Yifeng Pan, Yong Chen, Zhenbao Liang, Zhiyao Zhang, Shurui Zhang, Hongxu Li, Maolei Fu, et al. Graphad: Interaction scene graph for end-to-end autonomous driving. arXiv preprint arXiv:2403.19098 , 2024. [35] Zhejun Zhang, Alexander Liniger, Dengxin Dai, Fisher Yu, and Luc Van Gool. End-to-end urban driving by imitat-ing a reinforcement learning coach. In Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) , pages 15222–15232, 2021. [36] Wenzhao Zheng, Ruiqi Song, Xianda Guo, and Long Chen. Genad: Generative end-to-end autonomous driving. arXiv preprint arXiv:2402.11502 , 2024. 2 22441

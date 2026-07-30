@@ -1,0 +1,2842 @@
+{
+  "top_k": 200,
+  "generated_at": "2026-07-30T02:10:46.218102+00:00",
+  "papers": [
+    {
+      "id": "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Leveraging SD Map to Augment HD Map-based Trajectory Prediction",
+      "abstract": "Latest trajectory prediction models in real-world autonomous driving systems often rely on online High-Definition (HD) maps to understand the road environment.However, online HD maps suffer from perception errors and feature redundancy, which hinder the performance of HD map-based trajectory prediction models.To address these issues, we introduce a framework, termed SD map-Augmented Trajectory Prediction (SATP), which leverages Standard-Definition (SD) maps to enhance HD map-based trajectory prediction models.First, we propose an SD-HD fusion approach to leverage SD maps across the diverse range of HD map-based trajectory prediction models. Second, we design a novel AlignNet to align the SD map with the HD map, further improving the effectiveness of SD maps. Experiments on real-world autonomous driving benchmarks demonstrate that SATP not only improves the performance of HD map-based trajectory prediction up to 25% in real-world scenarios using online HD maps but also brings benefits in ideal scenarios with ground-truth HD maps.",
+      "authors": [
+        "Dong, Zhiwei",
+        "Ding, Ran",
+        "Li, Wei",
+        "Zhang, Peng",
+        "Tang, Guobin",
+        "Guo, Jia"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Dong_Leveraging_SD_Map_to_Augment_HD_Map-based_Trajectory_Prediction_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Certified Human Trajectory Prediction",
+      "abstract": "Predicting human trajectories is essential for the safe operation of autonomous vehicles, yet current data-driven models often lack robustness in case of noisy inputs such as adversarial examples or imperfect observations. Although some trajectory prediction methods have been developed to provide empirical robustness, these methods are heuristic and do not offer guaranteed robustness. In this work, we propose a certification approach tailored for trajectory prediction that provides guaranteed robustness. To this end, we address the unique challenges associated with trajectory prediction, such as unbounded outputs and multi-modality. To mitigate the inherent performance drop through certification, we propose a diffusion-based trajectory denoiser and integrate it into our method. Moreover, we introduce new certified performance metrics to reliably measure the trajectory prediction performance. Through comprehensive experiments, we demonstrate the accuracy and robustness of the certified predictors and highlight their advantages over the non-certified ones. The code is available online: https://s-attack.github.io/",
+      "authors": [
+        "Bahari, Mohammadhossein",
+        "Saadatnejad, Saeed",
+        "Farsangi, Amirhossein Askari",
+        "Moosavi-Dezfooli, Seyed-Mohsen",
+        "Alahi, Alexandre"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Bahari_Certified_Human_Trajectory_Prediction_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Enduring, Efficient and Robust Trajectory Prediction Attack in Autonomous Driving via Optimization-Driven Multi-Frame Perturbation Framework",
+      "abstract": "Trajectory prediction plays a crucial role in autonomous driving systems, and exploring its vulnerability has garnered widespread attention. However, existing trajectory prediction attack methods often rely on single-point attacks to make efficient perturbations. This limits their applications in real-world scenarios due to the transient nature of single-point attacks, their susceptibility to filtration, and the uncertainty regarding the deployment environment. To address these challenges, this paper proposes a novel LiDAR-induced attack framework to impose multi-frame attacks by optimization-driven adversarial location search, achieving endurance, efficiency, and robustness. This framework strategically places objects near the adversarial vehicle to implement an attack and introduces three key innovations. First, successive state perturbations are generated using a multi-frame single-point attack strategy, effectively misleading trajectory predictions over extended time horizons. Second, we efficiently optimize adversarial objects' locations through three specialized loss functions to achieve desired perturbations. Lastly, we improve robustness by treating the adversarial object as a point without size constraints during the location search phase and reduce dependence on both the specific attack point and the adversarial object's properties. Extensive experiments confirm the superior performance and robustness of our framework.",
+      "authors": [
+        "Yu, Yi",
+        "Han, Weizhen",
+        "Wu, Libing",
+        "Liu, Bingyi",
+        "Wang, Enshu",
+        "Zhang, Zhuangzhuang"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Yu_Enduring_Efficient_and_Robust_Trajectory_Prediction_Attack_in_Autonomous_Driving_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Tra-MoE: Learning Trajectory Prediction Model from Multiple Domains for Adaptive Policy Conditioning",
+      "abstract": "Learning from multiple domains is a primary factor that influences the generalization of a single unified robot system. In this paper, we aim to learn the trajectory prediction model by using broad out-of-domain data to improve its performance and generalization ability. Trajectory model is designed to predict any-point trajectories in the current frame given an instruction and can provide detailed control guidance for robotic policy learning. To handle the diverse out-of-domain data distribution, we propose a sparsely-gated MoE (Top-1 gating strategy) architecture for trajectory model, coined as Tra-MoE. The sparse activation design enables good balance between parameter cooperation and specialization, effectively benefiting from large-scale out-of-domain data while maintaining constant FLOPs per token. In addition, we further introduce an adaptive policy conditioning technique by learning 2D mask representations for predicted trajectories, which is explicitly aligned with image observations to guide action prediction more flexibly. We perform extensive experiments on both simulation and real-world scenarios to verify the effectiveness of Tra-MoE and adaptive policy conditioning technique. We also conduct a comprehensive empirical study to train Tra-MoE, demonstrating that our Tra-MoE consistently exhibits superior performance compared to the dense baseline model, even when the latter is scaled to match Tra-MoE's parameter count.",
+      "authors": [
+        "Yang, Jiange",
+        "Zhu, Haoyi",
+        "Wang, Yating",
+        "Wu, Gangshan",
+        "He, Tong",
+        "Wang, Limin"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Yang_Tra-MoE_Learning_Trajectory_Prediction_Model_from_Multiple_Domains_for_Adaptive_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Don't Shake the Wheel: Momentum-Aware Planning in End-to-End Autonomous Driving",
+      "abstract": "End-to-end autonomous driving frameworks enable seamless integration of perception and planning but often rely on one-shot trajectory prediction, which may lead to unstable control and vulnerability to occlusions in single-frame perception. To address this, we propose the Momentum-Aware Driving (MomAD) framework, which introduces trajectory momentum and perception momentum to stabilize and refine trajectory predictions. MomAD comprises two core components: (1) Topological Trajectory Matching (TTM) employs Hausdorff Distance to select the optimal planning query that aligns with prior paths to ensure coherence; (2) Momentum Planning Interactor (MPI) cross-attends the selected planning query with historical queries to expand static and dynamic perception files. This enriched query, in turn, helps regenerate long-horizon trajectory and reduce collision risks. To mitigate noise arising from dynamic environments and detection errors, we introduce robust instance denoising during training, enabling the planning model to focus on critical signals and improve its robustness. We also propose a novel Trajectory Prediction Consistency (TPC) metric to quantitatively assess planning stability. Experiments on the nuScenes dataset demonstrate that MomAD achieves superior long-term consistency (>3s) compared to SOTA methods. Moreover, evaluations on the curated Turning-nuScenes shows that MomAD reduces the collision rate by 26% and improves TPC by 0.97m (33.45%) over a 6s prediction horizon, while closed-loop on Bench2Drive demonstrates an up to 16.3% improvement in success rate.",
+      "authors": [
+        "Song, Ziying",
+        "Jia, Caiyan",
+        "Liu, Lin",
+        "Pan, Hongyu",
+        "Zhang, Yongchang",
+        "Wang, Junming",
+        "Zhang, Xingyu",
+        "Xu, Shaoqing",
+        "Yang, Lei",
+        "Luo, Yadan"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Song_Dont_Shake_the_Wheel_Momentum-Aware_Planning_in_End-to-End_Autonomous_Driving_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Towards Generalizable Trajectory Prediction using Dual-Level Representation Learning and Adaptive Prompting",
+      "abstract": "Existing vehicle trajectory prediction models struggle with generalizability, prediction uncertainties, and handling complex interactions. It is often due to limitations like complex architectures customized for a specific dataset and inefficient multimodal handling. We propose Perceiver with Register queries (PerReg+), a novel trajectory prediction framework that introduces: (1) Dual-Level Representation Learning via Self-Distillation (SD) and Masked Reconstruction (MR), capturing global context and fine-grained details. Additionally, our approach of reconstructing segment-level trajectories and lane segments from masked inputs with query drop, enables effective use of contextual information and improves generalization; (2) Enhanced Multimodality using register-based queries and pretraining, eliminating the need for clustering and suppression; and (3) Adaptive Prompt Tuning during fine-tuning, freezing the main architecture and optimizing a small number of prompts for efficient adaptation. PerReg+ sets a new state-of-the-art performance on nuScenes, Argoverse 2, and Waymo Open Motion Dataset (WOMD). Remarkable, our pretrained model reduces the error by 6.8% on smaller datasets, and multi-dataset training enhances generalization. In cross-domain tests, PerReg+ reduces B-FDE by 11.8% compared to its non-pretrained variant.",
+      "authors": [
+        "Messaoud, Kaouther",
+        "Cord, Matthieu",
+        "Alahi, Alexandre"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Messaoud_Towards_Generalizable_Trajectory_Prediction_using_Dual-Level_Representation_Learning_and_Adaptive_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Trajectory Mamba: Efficient Attention-Mamba Forecasting Model Based on Selective SSM",
+      "abstract": "Motion prediction is crucial for autonomous driving, as it enables accurate forecasting of future vehicle trajectories based on historical inputs. This paper introduces Trajectory Mamba, a novel efficient trajectory prediction framework based on the selective state-space model (SSM). Conventional attention-based models face the challenge of computational costs that grow quadratically with the number of targets, hindering their application in highly dynamic environments. In response, we leverage the SSM to redesign the self-attention mechanism in the encoder-decoder architecture, thereby achieving linear time complexity. To address the potential reduction in prediction accuracy resulting from modifications to the attention mechanism, we propose a joint polyline encoding strategy to better capture the associations between static and dynamic contexts, ultimately enhancing prediction accuracy. Additionally, to balance prediction accuracy and inference speed, we adopted the decoder that differs entirely from the encoder. Through cross-state space attention, all target agents share the scene context, allowing the SSM to interact with the shared scene representation during decoding, thus inferring different trajectories over the next prediction steps. Our model achieves state-of-the-art results in terms of inference speed and parameter efficiency on both the Argoverse 1 and Argoverse 2 datasets. It demonstrates a four-fold reduction in FLOPs compared to existing methods and reduces parameter count by over 40% while surpassing the performance of the vast majority of previous methods. These findings validate the effectiveness of Trajectory Mamba in trajectory prediction tasks.",
+      "authors": [
+        "Huang, Yizhou",
+        "Cheng, Yihua",
+        "Wang, Kezhi"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Huang_Trajectory_Mamba_Efficient_Attention-Mamba_Forecasting_Model_Based_on_Selective_SSM_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "SOLVE: Synergy of Language-Vision and End-to-End Networks for Autonomous Driving",
+      "abstract": "The integration of Vision-Language Models (VLMs) into autonomous driving systems has shown promise in addressing key challenges such as learning complexity, interpretability, and common-sense reasoning. However, existing approaches often struggle with efficient integration and real-time decision-making due to computational demands. In this paper, we introduce SOLVE, an innovative framework that synergizes VLMs with end-to-end (E2E) models to enhance autonomous vehicle planning. Our approach emphasizes knowledge sharing at the feature level through a shared visual encoder, enabling comprehensive interaction between VLM and E2E components. We propose a Trajectory Chain-of-Thought (T-CoT) paradigm, which progressively refines trajectory predictions, reducing uncertainty and improving accuracy. By employing a temporal decoupling strategy, SOLVE achieves efficient asynchronous cooperation, aligning high-quality VLM outputs with E2E real-time performance. Evaluated on the nuScenes dataset, our method demonstrates significant improvements in trajectory prediction accuracy, paving the way for more robust and reliable autonomous driving systems.",
+      "authors": [
+        "Chen, Xuesong",
+        "Huang, Linjiang",
+        "Ma, Tao",
+        "Fang, Rongyao",
+        "Shi, Shaoshuai",
+        "Li, Hongsheng"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Chen_SOLVE_Synergy_of_Language-Vision_and_End-to-End_Networks_for_Autonomous_Driving_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "SocialMOIF: Multi-Order Intention Fusion for Pedestrian Trajectory Prediction",
+      "abstract": "The analysis and prediction of agent trajectories are crucial for decision-making processes in intelligent systems, with precise short-term trajectory forecasting being highly significant across a range of applications. Agents and their social interactions have been quantified and modeled by researchers from various perspectives; however, substantial limitations exist in the current work due to the inherent high uncertainty of agent intentions and the complex higher-order influences among neighboring groups. SocialMOIF is proposed to tackle these challenges, concentrating on the higher-order intention interactions among neighboring groups while reinforcing the primary role of first-order intention interactions between neighbors and the target agent. This method develops a multi-order intention fusion model to achieve a more comprehensive understanding of both direct and indirect intention information. Within SocialMOIF, a trajectory distribution approximator is designed to guide the trajectories toward values that align more closely with the actual data, thereby enhancing model interpretability. Furthermore, a global trajectory optimizer is introduced to enable more accurate and efficient parallel predictions. By incorporating a novel loss function that accounts for distance and direction during training, experimental results demonstrate that the model outperforms previous state-of-the-art baselines across multiple metrics in both dynamic and static datasets.",
+      "authors": [
+        "Chen, Kai",
+        "Zhao, Xiaodong",
+        "Huang, Yujie",
+        "Fang, Guoyu",
+        "Song, Xiao",
+        "Wang, Ruiping",
+        "Wang, Ziyuan"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Chen_SocialMOIF_Multi-Order_Intention_Fusion_for_Pedestrian_Trajectory_Prediction_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Poly-Autoregressive Prediction for Modeling Interactions",
+      "abstract": "We introduce a simple framework for predicting the behavior of an agent in multi-agent settings. In contrast to autoregressive (AR) tasks, such as language processing, our focus is on scenarios with multiple agents whose interactions are shaped by physical constraints and internal motivations. To this end, we propose Poly-Autoregressive (PAR) modeling, which forecasts an ego agent's future behavior by reasoning about the ego agent's state history and the past and current states of other interacting agents. At its core, PAR represents the behavior of all agents as a sequence of tokens, each representing an agent's state at a specific timestep. With minimal data pre-processing changes, we show that PAR can be applied to three different problems: human action forecasting in social situations, trajectory prediction for autonomous vehicles, and object pose forecasting during hand-object interaction. Using a small proof-of-concept transformer backbone, PAR outperforms AR across these three scenarios.",
+      "authors": [
+        "Thakkar, Neerja",
+        "Sadjadpour, Tara",
+        "Rajasegeran, Jathushan",
+        "Ginosar, Shiry",
+        "Malik, Jitendra"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Thakkar_Poly-Autoregressive_Prediction_for_Modeling_Interactions_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Sim-to-Real Causal Transfer: A Metric Learning Approach to Causally-Aware Interaction Representations",
+      "abstract": "Modeling spatial-temporal interactions among neighboring agents is at the heart of multi-agent problems such as motion forecasting and crowd navigation. Despite notable progress, it remains unclear to which extent modern representations can capture the causal relationships behind agent interactions. In this work, we take an in-depth look at the causal awareness of these representations, from computational formalism to real-world practice. First, we revisit the notion of non-causal robustness studied in the recent CausalAgents benchmark. We show that existing representations are already partially resilient to perturbations of non-causal agents, and yet modeling indirect causal effects involving mediator agents remains challenging. To address this challenge, we introduce a metric learning approach that regularizes latent representations with causal annotations. Our controlled experiments show that this approach not only leads to higher degrees of causal awareness but also yields stronger out-of-distribution robustness. To further operationalize it in practice, we propose a sim-to-real causal transfer method via cross-domain multi-task learning. Experiments on trajectory prediction datasets show that our method can significantly boost generalization, even in the absence of real-world causal annotations, where we acquire higher prediction accuracy by only using 25% of real-world data. We hope our work provides a new perspective on the challenges and potential pathways toward causally-aware representations of multi-agent interactions. Our code is available in supplementary materials. Our code is available at https://github.com/vita-epfl/CausalSim2Real.",
+      "authors": [
+        "Rahimi, Ahmad",
+        "Luan, Po-Chien",
+        "Liu, Yuejiang",
+        "Rajič, Frano",
+        "Alahi, Alexandre"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Rahimi_Sim-to-Real_Causal_Transfer_A_Metric_Learning_Approach_to_Causally-Aware_Interaction_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "ModeSeq: Taming Sparse Multimodal Motion Prediction with Sequential Mode Modeling",
+      "abstract": "Anticipating the multimodality of future events lays the foundation for safe autonomous driving. However, multimodal motion prediction for traffic agents has been clouded by the lack of multimodal ground truth. Existing works predominantly adopt the winner-take-all training strategy to tackle this challenge, yet still suffer from limited trajectory diversity and uncalibrated mode confidence. While some approaches address these limitations by generating excessive trajectory candidates, they necessitate a post-processing stage to identify the most representative modes, a process lacking universal principles and compromising trajectory accuracy. We are thus motivated to introduce ModeSeq, a new multimodal prediction paradigm that models modes as sequences. Unlike the common practice of decoding multiple plausible trajectories in one shot, ModeSeq requires motion decoders to infer the next mode step by step, thereby more explicitly capturing the correlation between modes and significantly enhancing the ability to reason about multimodality. Leveraging the inductive bias of sequential mode prediction, we also propose the Early-Match-Take-All (EMTA) training strategy to diversify the trajectories further. Without relying on dense mode prediction or heuristic post-processing, ModeSeq considerably improves the diversity of multimodal output while attaining satisfactory trajectory accuracy, resulting in balanced performance on motion prediction benchmarks. Moreover, ModeSeq naturally emerges with the capability of mode extrapolation, which supports forecasting more behavior modes when the future is highly uncertain.",
+      "authors": [
+        "Zhou, Zikang",
+        "Zhou, Hengjian",
+        "Hu, Haibo",
+        "Wen, Zihao",
+        "Wang, Jianping",
+        "Li, Yung-Hui",
+        "Huang, Yu-Kai"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Zhou_ModeSeq_Taming_Sparse_Multimodal_Motion_Prediction_with_Sequential_Mode_Modeling_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "S4-Driver: Scalable Self-Supervised Driving Multimodal Large Language Model with Spatio-Temporal Visual Representation",
+      "abstract": "The latest advancements in multi-modal large language models (MLLMs) have spurred a strong renewed interest in end-to-end motion planning approaches for autonomous driving. Many end-to-end approaches rely on human annotations to learn intermediate perception and prediction tasks, while purely self-supervised approaches--which directly learn from sensor inputs to generate planning trajectories without human annotations--often underperform the state of the art. We observe a key gap in the input representation space: end-to-end approaches built on MLLMs are often pretrained with reasoning tasks in 2D image space rather than the native 3D space in which autonomous vehicles plan. To this end, we propose S4-Driver, a scalable self-supervised motion planning algorithm with spatio-temporal visual representation, based on the popular PaLI multimodal large language model. S4-Driver uses a novel sparse volume strategy to seamlessly transform the strong visual representation of MLLMs from perspective view to 3D space without the need to finetune the vision encoder. This representation aggregates multi-view and multi-frame visual inputs and enables better prediction of planning trajectories in 3D space. To validate our method, we run experiments on both nuScenes and Waymo Open Motion Dataset (with in-house camera data). Results show that S4-Driver performs favorably against existing supervised multi-task approaches while requiring no human annotations. It also demonstrates great scalability when pretrained on large volumes of unannotated driving logs.",
+      "authors": [
+        "Xie, Yichen",
+        "Xu, Runsheng",
+        "He, Tong",
+        "Hwang, Jyh-Jing",
+        "Luo, Katie",
+        "Ji, Jingwei",
+        "Lin, Hubert",
+        "Chen, Letian",
+        "Lu, Yiren",
+        "Leng, Zhaoqi",
+        "Anguelov, Dragomir",
+        "Tan, Mingxing"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Xie_S4-Driver_Scalable_Self-Supervised_Driving_Multimodal_Large_Language_Model_with_Spatio-Temporal_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "TraF-Align: Trajectory-aware Feature Alignment for Asynchronous Multi-agent Perception",
+      "abstract": "Cooperative perception presents significant potential for enhancing the sensing capabilities of individual vehicles, however, inter-agent latency remains a critical challenge. Latencies cause misalignments in both spatial and semantic features, complicating the fusion of real-time observations from the ego vehicle with delayed data from others. To address these issues, we propose TraF-Align, a novel framework that learns the flow path of features by predicting the feature-level trajectory of objects from past observations up to the ego vehicle's current time. By generating temporally ordered sampling points along these paths, TraF-Align directs attention from the current-time query to relevant historical features along each trajectory, supporting the reconstruction of current-time features and promoting semantic interaction across multiple frames. This approach corrects spatial misalignment and ensures semantic consistency across agents, effectively compensating for motion and achieving coherent feature fusion. Experiments on two real-world datasets, V2V4Real and DAIR-V2X-Seq, show that TraF-Align sets a new benchmark for asynchronous cooperative perception.",
+      "authors": [
+        "Song, Zhiying",
+        "Yang, Lei",
+        "Wen, Fuxi",
+        "Li, Jun"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Song_TraF-Align_Trajectory-aware_Feature_Alignment_for_Asynchronous_Multi-agent_Perception_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Unified Uncertainty-Aware Diffusion for Multi-Agent Trajectory Modeling",
+      "abstract": "Multi-agent trajectory modeling has primarily focused on forecasting future states, often overlooking broader tasks like trajectory completion, which are crucial for real-world applications such as correcting tracking data. Existing methods also generally predict agents' states without offering any state-wise measure of uncertainty. Moreover, popular multi-modal sampling methods lack any error probability estimates for each generated scene under the same prior observations, making it difficult to rank the predictions during inference time. We introduce U2Diff, a unified diffusion model designed to handle trajectory completion while providing state-wise uncertainty estimates jointly. This uncertainty estimation is achieved by augmenting the simple denoising loss with the negative log-likelihood of the predicted noise and propagating latent space uncertainty to the real state space. Additionally, we incorporate a Rank Neural Network in post-processing to enable error probability estimation for each generated mode, demonstrating a strong correlation with the error relative to ground truth. Our method outperforms the state-of-the-art solutions in trajectory completion and forecasting across four challenging sports datasets (NBA, Basketball-U, Football-U, Soccer-U), highlighting the effectiveness of uncertainty and error probability estimation.",
+      "authors": [
+        "Capellera, Guillem",
+        "Rubio, Antonio",
+        "Ferraz, Luis",
+        "Agudo, Antonio"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Capellera_Unified_Uncertainty-Aware_Diffusion_for_Multi-Agent_Trajectory_Modeling_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "GEM: A Generalizable Ego-Vision Multimodal World Model for Fine-Grained Ego-Motion, Object Dynamics, and Scene Composition Control",
+      "abstract": "We present GEM, a Generalizable Ego-vision Multimodal world model that predicts future frames using a reference frame, sparse features, human poses, and ego-trajectories. Hence, our model has precise control over object dynamics, ego-agent motion and human poses. GEM generates paired RGB and depth outputs for richer spatial understanding. We introduce autoregressive noise schedules to enable stable long-horizon generations. Our dataset is comprised of 4000+ hours of multimodal data across domains like autonomous driving, egocentric human activities, and drone flights. Pseudo-labels are used to get depth maps, ego-trajectories, and human poses. We use a comprehensive evaluation framework, including a new Control of Object Manipulation (COM) metric, to assess controllability. Experiments show GEM excels at generating diverse, controllable scenarios and temporal consistency over long generations. Code, models, and datasets are fully open-sourced.",
+      "authors": [
+        "Hassan, Mariam",
+        "Stapf, Sebastian",
+        "Rahimi, Ahmad",
+        "Rezende, Pedro M B",
+        "Haghighi, Yasaman",
+        "Brüggemann, David",
+        "Katircioglu, Isinsu",
+        "Zhang, Lin",
+        "Chen, Xiaoran",
+        "Saha, Suman",
+        "Cannici, Marco",
+        "Aljalbout, Elie",
+        "Ye, Botao",
+        "Wang, Xi",
+        "Davtyan, Aram",
+        "Salzmann, Mathieu",
+        "Scaramuzza, Davide",
+        "Pollefeys, Marc",
+        "Favaro, Paolo",
+        "Alahi, Alexandre"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Hassan_GEM_A_Generalizable_Ego-Vision_Multimodal_World_Model_for_Fine-Grained_Ego-Motion_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Multi-modal Knowledge Distillation-based Human Trajectory Forecasting",
+      "abstract": "Pedestrian trajectory forecasting is crucial in various applications such as autonomous driving and mobile robot navigation. In such applications, camera-based perception enables the extraction of additional modalities (human pose, text) to enhance prediction accuracy. Indeed, we find that textual descriptions play a crucial role in integrating additional modalities into a unified understanding. However, online extraction of text requires the use of VLM, which may not be feasible for resource-constrained systems. To address this challenge, we propose a multi-modal knowledge distillation framework: a student model with limited modality is distilled from a teacher model trained with full range of modalities. The comprehensive knowledge of a teacher model trained with trajectory, human pose, and text is distilled into a student model using only trajectory or human pose as a sole supplement. In doing so, we separately distill the core locomotion insights from intra-agent multi-modality and inter-agent interaction. Our generalizable framework is validated with two state-of-the-art models across three datasets on both ego-view (JRDB, SIT) and BEV-view (ETH/UCY) setups, utilizing both annotated and VLM-generated text captions. Distilled student models show consistent improvement in all prediction metrics for both full and instantaneous observations, improving up to 13%. The code is available at github.com/Jaewoo97/KDTF.",
+      "authors": [
+        "Jeong, Jaewoo",
+        "Lee, Seohee",
+        "Park, Daehee",
+        "Lee, Giwon",
+        "Yoon, Kuk-Jin"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Jeong_Multi-modal_Knowledge_Distillation-based_Human_Trajectory_Forecasting_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Navigation World Models",
+      "abstract": "Navigation is a fundamental skill of agents with visual-motor capabilities. We introduce a Navigation World Model (NWM), a controllable video generation model that predicts future visual observations based on past observations and navigation actions. To capture complex environment dynamics, NWM employs a Conditional Diffusion Transformer (CDiT), trained on a diverse collection of egocentric videos of both human and robotic agents, and scaled up to 1 billion parameters. In familiar environments, NWM can plan navigation trajectories by simulating them and evaluating whether they achieve the desired goal. Unlike supervised navigation policies with fixed behavior, NWM can dynamically incorporate constraints during planning. Experiments demonstrate its effectiveness in planning trajectories from scratch or by ranking trajectories sampled from an external policy. Furthermore, NWM leverages its learned visual priors to imagine trajectories in unfamiliar environments from a single input image, making it a flexible and powerful tool for next-generation navigation systems.",
+      "authors": [
+        "Bar, Amir",
+        "Zhou, Gaoyue",
+        "Tran, Danny",
+        "Darrell, Trevor",
+        "LeCun, Yann"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Bar_Navigation_World_Models_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Distilling Multi-modal Large Language Models for Autonomous Driving",
+      "abstract": "Autonomous driving demands safe motion planning, especially in critical \"long-tail\" scenarios. Recent end-to-end autonomous driving systems leverage large language models (LLMs) as planners to improve generalizability to rare events. However, using LLMs at test time introduces high computational costs. To address this, we propose DiMA, an end-to-end autonomous driving system that maintains the efficiency of an LLM-free (or vision-based) planner while leveraging the world knowledge of an LLM. DiMA distills the information from a multi-modal LLM to a vision-based end-to-end planner through a set of specially designed surrogate tasks. Under a joint training strategy, a scene encoder common to both networks produces structured representations that are semantically grounded as well as aligned to the final planning objective. Notably, the LLM is optional at inference, enabling robust planning without compromising on efficiency. Training with DiMA results in a 37% reduction in the L2 trajectory error and an 80% reduction in the collision rate of the vision-based planner, as well as a 44% trajectory error reduction in long-tail scenarios. \\ours also achieves state-of-the-art performance on the nuScenes planning benchmark.",
+      "authors": [
+        "Hegde, Deepti",
+        "Yasarla, Rajeev",
+        "Cai, Hong",
+        "Han, Shizhong",
+        "Bhattacharyya, Apratim",
+        "Mahajan, Shweta",
+        "Liu, Litian",
+        "Garrepalli, Risheek",
+        "Patel, Vishal M.",
+        "Porikli, Fatih"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Hegde_Distilling_Multi-modal_Large_Language_Models_for_Autonomous_Driving_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "GoalFlow: Goal-Driven Flow Matching for Multimodal Trajectories Generation in End-to-End Autonomous Driving",
+      "abstract": "We propose GoalFlow, an end-to-end autonomous driving method for generating high-quality multimodal trajectories. In autonomous driving scenarios, there is rarely a single suitable trajectory. Recent methods have increasingly focused on modeling multimodal trajectory distributions. However, they suffer from trajectory selection complexity and reduced trajectory quality due to high trajectory divergence and inconsistencies between guidance and scene information. To address these issues, we introduce GoalFlow, a novel method that effectively constrains the generative process to produce high-quality, multimodal trajectories. To resolve the trajectory divergence problem inherent in diffusion-based methods, GoalFlow constrains the generated trajectories by introducing a goal point. GoalFlow establishes a novel scoring mechanism that selects the most appropriate goal point from the candidate points based on scene information. Furthermore, GoalFlow employs an efficient generative method, Flow Matching, to generate multimodal trajectories, and incorporates a refined scoring mechanism to select the optimal trajectory from the candidates. Our experimental results, validated on the Navsim, demonstrate that GoalFlow achieves state-of-the-art performance, delivering robust multimodal trajectories for autonomous driving. GoalFlow achieved PDMS of 90.3, significantly surpassing other methods. Compared with other diffusion-policy-based methods, our approach requires only a single denoising step to obtain excellent performance. The code is available at https://github.com/YvanYin/GoalFlow.",
+      "authors": [
+        "Xing, Zebin",
+        "Zhang, Xingyu",
+        "Hu, Yang",
+        "Jiang, Bo",
+        "He, Tong",
+        "Zhang, Qian",
+        "Long, Xiaoxiao",
+        "Yin, Wei"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Xing_GoalFlow_Goal-Driven_Flow_Matching_for_Multimodal_Trajectories_Generation_in_End-to-End_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Bridging Past and Future: End-to-End Autonomous Driving with Historical Prediction and Planning",
+      "abstract": "End-to-end autonomous driving unifies tasks in a differentiable framework, enabling planning-oriented optimization and attracting growing attention.Current methods aggregate historical information either through dense historical bird's-eye-view (BEV) features or by querying a sparse memory bank, following paradigms inherited from detection.However, we argue that these paradigms either omit historical information in motion planning or fail to align with its multi-step nature, which requires predicting or planning multiple future time steps. In line with the philosophy of \"future is a continuation of past\", we propose **BridgeAD**, which reformulates motion and planning queries as multi-step queries to differentiate the queries for each future time step. This design enables the effective use of historical prediction and planning by applying them to the appropriate parts of the end-to-end system based on the time steps, which improves both perception and motion planning. Specifically, historical queries for the current frame are combined with perception, while queries for future frames are integrated with motion planning. In this way, we bridge the gap between past and future by aggregating historical insights at every time step, enhancing the overall coherence and accuracy of the end-to-end autonomous driving pipeline. Extensive experiments on the nuScenes dataset in both open-loop and closed-loop settings demonstrate that BridgeAD achieves state-of-the-art performance. We will make our code and models publicly available.",
+      "authors": [
+        "Zhang, Bozhou",
+        "Song, Nan",
+        "Jin, Xin",
+        "Zhang, Li"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_Bridging_Past_and_Future_End-to-End_Autonomous_Driving_with_Historical_Prediction_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "DriveGPT4-V2: Harnessing Large Language Model Capabilities for Enhanced Closed-Loop Autonomous Driving",
+      "abstract": "Multimodal large language models (MLLMs) possess the ability to comprehend visual images or videos, and show impressive reasoning ability thanks to the vast amounts of pretrained knowledge, making them highly suitable for autonomous driving applications. Unlike the previous work, DriveGPT4-V1, which focused on open-loop tasks, this study explores the capabilities of LLMs in enhancing closed-loop autonomous driving. DriveGPT4-V2 processes camera images and vehicle states as input to generate low-level control signals for end-to-end vehicle operation. A multi-view visual tokenizer (MV-VT) is employed enabling DriveGPT4-V2 to perceive the environment with an extensive range while maintaining critical details. The model architecture has been refined to improve decision prediction and inference speed. To further enhance the performance, an additional expert LLM is trained for online imitation learning. The expert LLM, sharing a similar structure with DriveGPT4-V2, can access privileged information about surrounding objects for more robust and reliable predictions. Experimental results show that DriveGPT4-V2 outperforms all baselines on the challenging CARLA Longest6 benchmark. The code and data of DriveGPT4-V2 will be publicly available.",
+      "authors": [
+        "Xu, Zhenhua",
+        "Bai, Yan",
+        "Zhang, Yujia",
+        "Li, Zhuoling",
+        "Xia, Fei",
+        "Wong, Kwan-Yee K.",
+        "Wang, Jianqiang",
+        "Zhao, Hengshuang"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Xu_DriveGPT4-V2_Harnessing_Large_Language_Model_Capabilities_for_Enhanced_Closed-Loop_Autonomous_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "VisionPAD: A Vision-Centric Pre-training Paradigm for Autonomous Driving",
+      "abstract": "This paper introduces VisionPAD, a novel self-supervised pre-training paradigm designed for vision-centric algorithms in autonomous driving. In contrast to previous approaches that employ neural rendering with explicit depth supervision, VisionPAD utilizes more efficient 3D Gaussian Splatting to reconstruct multi-view representations using only images as supervision. Specifically, we introduce a self-supervised method for voxel velocity estimation. By warping voxels to adjacent frames and supervising the rendered outputs, the model effectively learns motion cues in the sequential data. Furthermore, we adopt a multi-frame photometric consistency approach to enhance geometric perception. It projects adjacent frames to the current frame based on rendered depths and relative poses, boosting the 3D geometric representation through pure image supervision. Extensive experiments on autonomous driving datasets demonstrate that VisionPAD significantly improves performance in 3D object detection, occupancy prediction and map segmentation, surpassing state-of-the-art pre-training strategies by a considerable margin.",
+      "authors": [
+        "Zhang, Haiming",
+        "Zhou, Wending",
+        "Zhu, Yiyao",
+        "Yan, Xu",
+        "Gao, Jiantao",
+        "Bai, Dongfeng",
+        "Cai, Yingjie",
+        "Liu, Bingbing",
+        "Cui, Shuguang",
+        "Li, Zhen"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_VisionPAD_A_Vision-Centric_Pre-training_Paradigm_for_Autonomous_Driving_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "CarPlanner: Consistent Auto-regressive Trajectory Planning for Large-Scale Reinforcement Learning in Autonomous Driving",
+      "abstract": "Trajectory planning is vital for autonomous driving, ensuring safe and efficient navigation in complex environments. While recent learning-based methods, particularly reinforcement learning (RL), have shown promise in specific scenarios, RL planners struggle with training inefficiencies and managing large-scale, real-world driving scenarios.In this paper, we introduce CarPlanner, a Consistent auto-regressive Planner that uses RL to generate multi-modal trajectories. The auto-regressive structure enables efficient large-scale RL training, while the incorporation of consistency ensures stable policy learning by maintaining coherent temporal consistency across time steps. Moreover, CarPlanner employs a generation-selection framework with an expert-guided reward function and an invariant-view module, simplifying RL training and enhancing policy performance.Extensive analysis demonstrates that our proposed RL framework effectively addresses the challenges of training efficiency and performance enhancement, positioning CarPlanner as a promising solution for trajectory planning in autonomous driving.To the best of our knowledge, we are the first to demonstrate that the RL-based planner can surpass both IL- and rule-based state-of-the-arts (SOTAs) on the challenging large-scale real-world dataset nuPlan. Our proposed CarPlanner surpasses RL-, IL-, and rule-based SOTA approaches within this demanding dataset.",
+      "authors": [
+        "Zhang, Dongkun",
+        "Liang, Jiaming",
+        "Guo, Ke",
+        "Lu, Sha",
+        "Wang, Qi",
+        "Xiong, Rong",
+        "Miao, Zhenwei",
+        "Wang, Yue"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_CarPlanner_Consistent_Auto-regressive_Trajectory_Planning_for_Large-Scale_Reinforcement_Learning_in_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "OmniDrive: A Holistic Vision-Language Dataset for Autonomous Driving with Counterfactual Reasoning",
+      "abstract": "The advances in vision-language models (VLMs) have led to a growing interest in autonomous driving to leverage their strong reasoning capabilities. However, extending these capabilities from 2D to full 3D understanding is crucial for real-world applications. To address this challenge, we propose OmniDrive, a holistic vision-language dataset that aligns agent models with 3D driving tasks through counterfactual reasoning. This approach enhances decision-making by evaluating potential scenarios and their outcomes, similar to human drivers considering alternative actions. Our counterfactual-based synthetic data annotation process generates large-scale, high-quality datasets, providing denser supervision signals that bridge planning trajectories and language-based reasoning. Futher, we explore two advanced OmniDrive-Agent frameworks, namely Omni-L and Omni-Q, to assess the importance of vision-language alignment versus 3D perception, revealing critical insights into designing effective LLM-agents. Significant improvements on the DriveLM Q&A benchmark and nuScenes open-loop planning demonstrate the effectiveness of our dataset and methods.",
+      "authors": [
+        "Wang, Shihao",
+        "Yu, Zhiding",
+        "Jiang, Xiaohui",
+        "Lan, Shiyi",
+        "Shi, Min",
+        "Chang, Nadine",
+        "Kautz, Jan",
+        "Li, Ying",
+        "Alvarez, Jose M."
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Wang_OmniDrive_A_Holistic_Vision-Language_Dataset_for_Autonomous_Driving_with_Counterfactual_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "DiffusionDrive: Truncated Diffusion Model for End-to-End Autonomous Driving",
+      "abstract": "Recently, the diffusion model has emerged as a powerful generative technique for robotic policy learning, capable of modeling multi-mode action distributions. Leveraging its capability for end-to-end autonomous driving is a promising direction. However, the numerous denoising steps in the robotic diffusion policy and the more dynamic, open-world nature of traffic scenes pose substantial challenges for generating diverse driving actions at a real-time speed. To address these challenges, we propose a novel truncated diffusion policy that incorporates prior multi-mode anchors and truncates the diffusion schedule, enabling the model to learn denoising from anchored Gaussian distribution to the multi-mode driving action distribution. Additionally, we design an efficient cascade diffusion decoder for enhanced interaction with conditional scene context. The proposed model, DiffusionDrive, demonstrates 10x reduction in denoising steps compared to vanilla diffusion policy, delivering superior diversity and quality in just 2 steps. On the planning-oriented NAVSIM dataset, with the aligned ResNet-34 backbone, DiffusionDrive achieves 88.1 PDMS without bells and whistles, setting a new record, while running at a real-time speed of 45 FPS on an NVIDIA 4090. Qualitative results on challenging scenarios further confirm that DiffusionDrive can robustly generate diverse plausible driving actions.",
+      "authors": [
+        "Liao, Bencheng",
+        "Chen, Shaoyu",
+        "Yin, Haoran",
+        "Jiang, Bo",
+        "Wang, Cheng",
+        "Yan, Sixu",
+        "Zhang, Xinbang",
+        "Li, Xiangyu",
+        "Zhang, Ying",
+        "Zhang, Qian",
+        "Wang, Xinggang"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Liao_DiffusionDrive_Truncated_Diffusion_Model_for_End-to-End_Autonomous_Driving_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Generating Multimodal Driving Scenes via Next-Scene Prediction",
+      "abstract": "Generative models in Autonomous Driving (AD) enable diverse scenario creation, yet existing methods fall short by only capturing a limited range of modalities, restricting the capability of generating controllable scenes for comprehensive evaluation of AD systems. In this paper, we introduce a multimodal generation framework that incorporates four major data modalities, including a novel addition of the map modality. With tokenized modalities, our scene sequence generation framework autoregressively predicts each scene while managing computational demands through a two-stage approach. The Temporal AutoRegressive (TAR) component captures inter-frame dynamics for each modality, while the Ordered AutoRegressive (OAR) component aligns modalities within each scene by sequentially predicting tokens in a fixed order. To maintain coherence between map and ego-action modalities, we introduce the Action-aware Map Alignment (AMA) module, which applies a transformation based on the ego-action to maintain coherence between these two modalities. Our framework effectively generates complex, realistic driving scenes over extended sequences, ensuring multimodal consistency and offering fine-grained control over scene elements. Project page: https://yanhaowu.github.io/UMGen/",
+      "authors": [
+        "Wu, Yanhao",
+        "Zhang, Haoyang",
+        "Lin, Tianwei",
+        "Huang, Lichao",
+        "Luo, Shujie",
+        "Wu, Rui",
+        "Qiu, Congpei",
+        "Ke, Wei",
+        "Zhang, Tong"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Wu_Generating_Multimodal_Driving_Scenes_via_Next-Scene_Prediction_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "ReconDreamer: Crafting World Models for Driving Scene Reconstruction via Online Restoration",
+      "abstract": "Closed-loop simulation is crucial for end-to-end autonomous driving. Existing sensor simulation methods (e.g., NeRF and 3DGS) reconstruct driving scenes based on conditions that closely mirror training data distributions. However, these methods struggle with rendering novel trajectories, such as lane changes. Recent work, DriveDreamer4D, has demonstrated that integrating world model knowledge alleviates these issues. Although the training-free integration approach is efficient, it still struggles to render larger maneuvers, such as multi-lane shifts.Therefore, we introduce ReconDreamer, which enhances driving scene reconstruction through incremental integration of world model knowledge. Specifically, based on the world model, DriveRestorer is proposed to mitigate ghosting artifacts via online restoration. Additionally, we propose the progressive data update strategy to ensure high-quality rendering for larger maneuvers. Notably, ReconDreamer is the first method to effectively render in large maneuvers (e.g., across multiple lanes, spanning up to 6 meters). Additionally, experimental results demonstrate that ReconDreamer outperforms Street Gaussians in the NTA-IoU, NTL-IoU, and FID, with a relative improvement by 24.87%, 6.72%, and 29.97%. Furthermore, ReconDreamer surpasses DriveDreamer4D with PVG during large maneuver rendering, as verified by a relative improvement of 195.87% in the NTA-IoU metric and a comprehensive user study.",
+      "authors": [
+        "Ni, Chaojun",
+        "Zhao, Guosheng",
+        "Wang, Xiaofeng",
+        "Zhu, Zheng",
+        "Qin, Wenkang",
+        "Huang, Guan",
+        "Liu, Chen",
+        "Chen, Yuyin",
+        "Wang, Yida",
+        "Zhang, Xueyang",
+        "Zhan, Yifei",
+        "Zhan, Kun",
+        "Jia, Peng",
+        "Lang, Xianpeng",
+        "Wang, Xingang",
+        "Mei, Wenjun"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Ni_ReconDreamer_Crafting_World_Models_for_Driving_Scene_Reconstruction_via_Online_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "MaskGWM: A Generalizable Driving World Model with Video Mask Reconstruction",
+      "abstract": "World models that forecast environmental changes from actions are vital for autonomous driving models with strong generalization. The prevailing driving world model mainly build on pixel-level video prediction model. Although these models can produce high-fidelity video sequences with advanced diffusion-based generator, they are constrained by their predictive duration and overall generalization capabilities. In this paper, we explore to solve this problem by combining pixel-level generation loss with MAE-style feature-level context learning. In particular, we instantiate this target with three key design: (1) A more scalable Diffusion Transformer (DiT) structure trained with extra mask construction task. (2) we devise diffusion-related mask tokens to deal with the fuzzy relations between mask reconstruction and generative diffusion process. (3) we extend mask construction task to spatial-temporal domain by utilizing row-wise mask for shifted self-attention rather than masked self-attention in MAE. Then, we adopt a row-wise cross-view module to align with this mask design. Based on above improvement, we propose MaskGWM: a Generalizable driving World Model embodied with Video Mask reconstruction. Our model contains two variants: MaskGWM-long, focusing on long-horizon prediction, and MaskGWM-mview, dedicated to multi-view generation.Comprehensive experiments on standard benchmarks validate the effectiveness of the proposed method, which contain normal validation of Nuscene dataset, long-horizon rollout of OpenDV-2K dataset and zero-shot validation of Waymo dataset. Quantitative metrics on these datasets show our method notably improving state-of-the-art driving world model.",
+      "authors": [
+        "Ni, Jingcheng",
+        "Guo, Yuxin",
+        "Liu, Yichen",
+        "Chen, Rui",
+        "Lu, Lewei",
+        "Wu, Zehuan"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Ni_MaskGWM_A_Generalizable_Driving_World_Model_with_Video_Mask_Reconstruction_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Scenario Dreamer: Vectorized Latent Diffusion for Generating Driving Simulation Environments",
+      "abstract": "We introduce Scenario Dreamer, a fully data-driven generative simulator for autonomous vehicle planning that generates both the initial traffic scene--comprising a lane graph and agent bounding boxes--and closed-loop agent behaviours. Existing methods for generating driving simulation environments encode the initial traffic scene as a rasterized image and, as such, require parameter-heavy networks that perform unnecessary computation due to many empty pixels in the rasterized scene. Moreover, we find that existing methods that employ rule-based agent behaviours lack diversity and realism. Scenario Dreamer instead employs a novel vectorized latent diffusion model for initial scene generation that directly operates on the vectorized scene elements and an autoregressive Transformer for data-driven agent behaviour simulation. Scenario Dreamer additionally supports scene extrapolation via diffusion inpainting, enabling the generation of unbounded simulation environments. Extensive experiments show that Scenario Dreamer outperforms existing generative simulators in realism and efficiency: the vectorized scene-generation base model achieves superior generation quality with around 2x fewer parameters, 6x lower generation latency, and 10x fewer GPU training hours compared to the strongest baseline. We confirm its practical utility by showing that reinforcement learning planning agents are more challenged in Scenario Dreamer environments than traditional non-generative simulation environments, especially on long and adversarial driving environments.",
+      "authors": [
+        "Rowe, Luke",
+        "Girgis, Roger",
+        "Gosselin, Anthony",
+        "Paull, Liam",
+        "Pal, Christopher",
+        "Heide, Felix"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Rowe_Scenario_Dreamer_Vectorized_Latent_Diffusion_for_Generating_Driving_Simulation_Environments_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "Causal Composition Diffusion Model for Closed-loop Traffic Generation",
+      "abstract": "Simulation is critical for safety evaluation in autonomous driving, particularly in capturing complex interactive behaviors. However, generating **realistic** and **controllable** traffic scenarios in long-tail situations remains a significant challenge. Existing generative models suffer from the conflicting objective between user-defined controllability and realism constraints, which is amplified in safety-critical contexts. In this work, we introduce the **C**ausal **C**ompositional **Diff**usion Model (***CCDiff***), a structure-guided diffusion framework to address these challenges. We first formulate the learning of controllable and realistic closed-loop simulation as a constrained optimization problem. Then, CCDiff maximizes controllability while adhering to realism by automatically identifying and injecting causal structures directly into the diffusion process, providing structured guidance to enhance both realism and controllability. Through rigorous evaluations on benchmark datasets and in a closed-loop simulator, CCDiff demonstrates substantial gains over state-of-the-art approaches in generating realistic and user-preferred trajectories. Our results show CCDiff's effectiveness in extracting and leveraging causal structures, showing improved closed-loop performance based on key metrics such as collision rate, off-road rate, FDE, and comfort. For more details, welcome to check our project website: https://sites.google.com/view/ccdiff/.",
+      "authors": [
+        "Lin, Haohong",
+        "Huang, Xin",
+        "Phan, Tung",
+        "Hayden, David",
+        "Zhang, Huan",
+        "Zhao, Ding",
+        "Srinivasa, Siddhartha",
+        "Wolff, Eric",
+        "Chen, Hongge"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Lin_Causal_Composition_Diffusion_Model_for_Closed-loop_Traffic_Generation_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred"
+      ]
+    },
+    {
+      "id": "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper",
+      "source": "CVPR-2025-Accepted",
+      "title": "MMTL-UniAD: A Unified Framework for Multimodal and Multi-Task Learning in Assistive Driving Perception",
+      "abstract": "Advanced driver assistance systems require a comprehensive understanding of the driver's mental/physical state and traffic context but existing works often neglect the potential benefits of joint learning between these tasks. This paper proposes MMTL-UniAD, a unified multi-modal multi-task learning framework that simultaneously recognizes driver behavior (e.g., looking around, talking), driver emotion (e.g., anxiety, happiness), vehicle behavior (e.g., parking, turning), and traffic context (e.g., traffic jam, traffic smooth). A key challenge is avoiding negative transfer between tasks, which can impair learning performance. To address this, we introduce two key components into the framework: one is the multi-axis region attention network to extract global context-sensitive features, and the other is the dual-branch multimodal embedding to learn multimodal embeddings from both task-shared and task-specific features. The former uses a multi-attention mechanism to extract task-relevant features, mitigating negative transfer caused by task-unrelated features. The latter employs a dual-branch structure to adaptively adjust task-shared and task-specific parameters, enhancing cross-task knowledge transfer while reducing task conflicts. We assess MMTL-UniAD on the AIDE dataset, using a series of ablation studies, and show that it outperforms state-of-the-art methods across all four tasks. The code is available on https://github.com/Wenzhuo-Liu/MMTL-UniAD.",
+      "authors": [
+        "Liu, Wenzhuo",
+        "Wang, Wenshuo",
+        "Qiao, Yicheng",
+        "Guo, Qiannan",
+        "Zhu, Jiayin",
+        "Li, Pengfei",
+        "Chen, Zilong",
+        "Yang, Huiming",
+        "Li, Zhiwei",
+        "Wang, Lening",
+        "Tan, Tiao",
+        "Liu, Huaping"
+      ],
+      "primary_category": "CVPR-2025",
+      "categories": [
+        "CVPR-2025"
+      ],
+      "published": "2025-06-01T00:00:00+00:00",
+      "link": "https://openaccess.thecvf.com/content/CVPR2025/html/Liu_MMTL-UniAD_A_Unified_Framework_for_Multimodal_and_Multi-Task_Learning_in_CVPR_2025_paper.html",
+      "pdf_url": null,
+      "tags": [
+        "keyword:av-traj-pred",
+        "query:av-traj-pred"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "type": "intent_query",
+      "tag": "av-traj-pred",
+      "paper_tag": "query:av-traj-pred",
+      "query_text": "deep learning methods for trajectory prediction in autonomous driving",
+      "sim_scores": {
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.010416666666666666,
+          "rank": 36
+        },
+        "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper": {
+          "score": 0.01,
+          "rank": 40
+        },
+        "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper": {
+          "score": 0.009708737864077669,
+          "rank": 43
+        },
+        "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper": {
+          "score": 0.009615384615384616,
+          "rank": 44
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper",
+          "score": 0.46719946719946726,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper",
+          "score": 0.4411571334648256,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper",
+          "score": 0.3668882557771445,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper",
+          "score": 0.0483743061062648,
+          "star_rating": 2
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "av-traj-pred",
+      "paper_tag": "query:av-traj-pred",
+      "query_text": "interaction aware trajectory prediction for autonomous vehicles",
+      "sim_scores": {
+        "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper": {
+          "score": 0.011235955056179775,
+          "rank": 29
+        },
+        "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.010638297872340425,
+          "rank": 34
+        },
+        "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.010526315789473684,
+          "rank": 35
+        },
+        "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper",
+          "score": 0.3433395872420263,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.2760180995475112,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper",
+          "score": 0.23371647509578536,
+          "star_rating": 3
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "av-traj-pred",
+      "paper_tag": "query:av-traj-pred",
+      "query_text": "multimodal trajectory prediction for self driving cars",
+      "sim_scores": {
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper": {
+          "score": 0.011363636363636364,
+          "rank": 28
+        },
+        "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper": {
+          "score": 0.011235955056179775,
+          "rank": 29
+        },
+        "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper": {
+          "score": 0.010309278350515464,
+          "rank": 37
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.010101010101010102,
+          "rank": 39
+        },
+        "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper": {
+          "score": 0.01,
+          "rank": 40
+        },
+        "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper": {
+          "score": 0.009615384615384616,
+          "rank": 44
+        },
+        "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        },
+        "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper": {
+          "score": 0.009259259259259259,
+          "rank": 48
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper",
+          "score": 0.4411571334648256,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper",
+          "score": 0.3433395872420263,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "tag": "av-traj-pred",
+      "paper_tag": "keyword:av-traj-pred",
+      "query_text": "autonomous driving",
+      "sim_scores": {
+        "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.010752688172043012,
+          "rank": 33
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.00909090909090909,
+          "rank": 50
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "av-traj-pred",
+      "paper_tag": "keyword:av-traj-pred",
+      "query_text": "autonomous driving trajectory forecasting",
+      "sim_scores": {
+        "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.011363636363636364,
+          "rank": 28
+        },
+        "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper": {
+          "score": 0.010869565217391304,
+          "rank": 32
+        },
+        "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper": {
+          "score": 0.010638297872340425,
+          "rank": 34
+        },
+        "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper": {
+          "score": 0.010526315789473684,
+          "rank": 35
+        },
+        "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper": {
+          "score": 0.01020408163265306,
+          "rank": 38
+        },
+        "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper": {
+          "score": 0.010101010101010102,
+          "rank": 39
+        },
+        "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper": {
+          "score": 0.009433962264150943,
+          "rank": 46
+        },
+        "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper": {
+          "score": 0.009259259259259259,
+          "rank": 48
+        },
+        "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper": {
+          "score": 0.009174311926605505,
+          "rank": 49
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "av-traj-pred",
+      "paper_tag": "keyword:av-traj-pred",
+      "query_text": "behavior prediction",
+      "sim_scores": {
+        "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "av-traj-pred",
+      "paper_tag": "keyword:av-traj-pred",
+      "query_text": "driver behavior trajectory prediction",
+      "sim_scores": {
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.010869565217391304,
+          "rank": 32
+        },
+        "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper": {
+          "score": 0.010752688172043012,
+          "rank": 33
+        },
+        "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper": {
+          "score": 0.010416666666666666,
+          "rank": 36
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.010101010101010102,
+          "rank": 39
+        },
+        "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper": {
+          "score": 0.00980392156862745,
+          "rank": 42
+        },
+        "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper": {
+          "score": 0.009523809523809525,
+          "rank": 45
+        },
+        "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        },
+        "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper": {
+          "score": 0.009174311926605505,
+          "rank": 49
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "av-traj-pred",
+      "paper_tag": "keyword:av-traj-pred",
+      "query_text": "trajectory prediction",
+      "sim_scores": {
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper": {
+          "score": 0.011627906976744186,
+          "rank": 26
+        },
+        "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper": {
+          "score": 0.010869565217391304,
+          "rank": 32
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.010309278350515464,
+          "rank": 37
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.009433962264150943,
+          "rank": 46
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "av-traj-pred",
+      "paper_tag": "keyword:av-traj-pred",
+      "query_text": "trajectory prediction for autonomous vehicles",
+      "sim_scores": {
+        "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper": {
+          "score": 0.010416666666666666,
+          "rank": 36
+        },
+        "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper": {
+          "score": 0.01,
+          "rank": 40
+        }
+      }
+    }
+  ],
+  "global_candidate_ids": [
+    "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper",
+    "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper",
+    "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper",
+    "cvpr-2025-wu-interactionmap-improving-online-vectorized-hdmap-construction-with-interaction-cvpr-2025-paper",
+    "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper",
+    "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper",
+    "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper",
+    "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper",
+    "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper",
+    "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper",
+    "cvpr-2025-li-human-motion-instruction-tuning-cvpr-2025-paper",
+    "cvpr-2025-sun-entropymark-towards-more-harmless-backdoor-watermark-via-entropy-based-constraint-for-cvpr-2025-paper",
+    "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper",
+    "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper",
+    "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper",
+    "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper",
+    "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper",
+    "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper",
+    "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper",
+    "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper",
+    "cvpr-2025-kalble-evocc-accurate-semantic-occupancy-for-automated-driving-using-evidence-theory-cvpr-2025-paper",
+    "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper",
+    "cvpr-2025-zhang-mpdrive-improving-spatial-understanding-with-marker-based-prompt-learning-for-autonomous-cvpr-2025-paper",
+    "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper",
+    "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper",
+    "cvpr-2025-pan-transfer-your-perspective-controllable-3d-generation-from-any-viewpoint-in-cvpr-2025-paper",
+    "cvpr-2025-li-uniscene-unified-occupancy-centric-driving-scene-generation-cvpr-2025-paper",
+    "cvpr-2025-chang-driving-by-the-rules-a-benchmark-for-integrating-traffic-sign-cvpr-2025-paper",
+    "cvpr-2025-lin-jarvisir-elevating-autonomous-driving-perception-with-intelligent-image-restoration-cvpr-2025-paper",
+    "cvpr-2025-lin-hilots-high-low-temporal-sensitive-representation-learning-for-semi-supervised-lidar-segmentation-cvpr-2025-paper",
+    "cvpr-2025-chen-jisam-alleviate-labeling-burden-and-corner-case-problems-in-autonomous-cvpr-2025-paper",
+    "cvpr-2025-ozturk-glane3d-detecting-lanes-with-graph-of-3d-keypoints-cvpr-2025-paper",
+    "cvpr-2025-wang-embodied-scene-understanding-for-vision-language-models-via-metavqa-cvpr-2025-paper",
+    "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper",
+    "cvpr-2025-huang-difflo-semantic-aware-lidar-odometry-with-diffusion-based-refinement-cvpr-2025-paper",
+    "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper",
+    "cvpr-2025-yan-drivingsphere-building-a-high-fidelity-4d-world-for-closed-loop-simulation-cvpr-2025-paper",
+    "cvpr-2025-zhao-drivedreamer4d-world-models-are-effective-data-machines-for-4d-driving-cvpr-2025-paper",
+    "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper",
+    "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper",
+    "cvpr-2025-zuo-gaussianworld-gaussian-world-model-for-streaming-3d-occupancy-prediction-cvpr-2025-paper",
+    "cvpr-2025-lai-zerovo-visual-odometry-with-minimal-assumptions-cvpr-2025-paper",
+    "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper",
+    "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper",
+    "cvpr-2025-hong-egolm-multi-modal-language-model-of-egocentric-motions-cvpr-2025-paper",
+    "cvpr-2025-zhu-scenecrafter-controllable-multi-view-driving-scene-editing-cvpr-2025-paper",
+    "cvpr-2025-lin-drivegen-generalized-and-robust-3d-detection-in-driving-via-controllable-cvpr-2025-paper",
+    "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper",
+    "cvpr-2025-qiu-adapting-to-observation-length-of-trajectory-prediction-via-contrastive-learning-cvpr-2025-paper",
+    "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper",
+    "cvpr-2025-wu-drivescape-high-resolution-driving-video-generation-by-multi-view-feature-fusion-cvpr-2025-paper",
+    "cvpr-2025-liu-citywalker-learning-embodied-urban-navigation-from-web-scale-videos-cvpr-2025-paper",
+    "cvpr-2025-xue-corrbev-multi-view-3d-object-detection-by-correlation-learning-with-multi-modal-cvpr-2025-paper",
+    "cvpr-2025-park-resilient-sensor-fusion-under-adverse-sensor-failures-via-multi-modal-expert-cvpr-2025-paper",
+    "cvpr-2025-lin-voteflow-enforcing-local-rigidity-in-self-supervised-scene-flow-cvpr-2025-paper",
+    "cvpr-2025-chen-hyperdimensional-uncertainty-quantification-for-multimodal-uncertainty-fusion-in-autonomous-vehicles-cvpr-2025-paper",
+    "cvpr-2025-su-robosense-large-scale-dataset-and-benchmark-for-egocentric-robot-perception-and-cvpr-2025-paper",
+    "cvpr-2025-taketsugu-physical-plausibility-aware-trajectory-prediction-via-locomotion-embodiment-cvpr-2025-paper",
+    "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper",
+    "cvpr-2025-lv-t2sg-traffic-topology-scene-graph-for-topology-reasoning-in-autonomous-cvpr-2025-paper",
+    "cvpr-2025-nekrasov-spotting-the-unexpected-stu-a-3d-lidar-dataset-for-anomaly-cvpr-2025-paper",
+    "cvpr-2025-sun-lal-enhancing-3d-human-motion-prediction-with-latency-aware-auxiliary-learning-cvpr-2025-paper",
+    "cvpr-2025-wang-mobileh2r-learning-generalizable-human-to-mobile-robot-handover-exclusively-from-cvpr-2025-paper",
+    "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper",
+    "cvpr-2025-lee-pidloc-cross-view-pose-optimization-network-inspired-by-pid-controllers-cvpr-2025-paper",
+    "cvpr-2025-fan-scene-map-based-prompt-tuning-for-navigation-instruction-generation-cvpr-2025-paper",
+    "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper",
+    "cvpr-2025-liu-uncertainty-instructed-structure-injection-for-generalizable-hd-map-construction-cvpr-2025-paper",
+    "cvpr-2025-yugay-magic-slam-multi-agent-gaussian-globally-consistent-slam-cvpr-2025-paper",
+    "cvpr-2025-song-towards-long-horizon-vision-language-navigation-platform-benchmark-and-method-cvpr-2025-paper",
+    "cvpr-2025-zhou-physvlm-enabling-visual-language-models-to-understand-robotic-physical-reachability-cvpr-2025-paper",
+    "cvpr-2025-zhao-tartan-imu-a-light-foundation-model-for-inertial-positioning-in-cvpr-2025-paper",
+    "cvpr-2025-hess-splatad-real-time-lidar-and-camera-rendering-with-3d-gaussian-splatting-cvpr-2025-paper",
+    "cvpr-2025-li-optimus-2-multimodal-minecraft-agent-with-goal-observation-action-conditioned-policy-cvpr-2025-paper",
+    "cvpr-2025-renz-simlingo-vision-only-closed-loop-autonomous-driving-with-language-action-alignment-cvpr-2025-paper",
+    "cvpr-2025-xue-few-shot-personalized-scanpath-prediction-cvpr-2025-paper",
+    "cvpr-2025-vuong-preserving-clusters-in-prompt-learning-for-unsupervised-domain-adaptation-cvpr-2025-paper",
+    "cvpr-2025-amrani-sample-and-parameter-efficient-auto-regressive-image-models-cvpr-2025-paper",
+    "cvpr-2025-lu-scamo-exploring-the-scaling-law-in-autoregressive-motion-generation-model-cvpr-2025-paper",
+    "cvpr-2025-ouali-vladva-discriminative-fine-tuning-of-lvlms-cvpr-2025-paper",
+    "cvpr-2025-chen-the-language-of-motion-unifying-verbal-and-non-verbal-language-of-cvpr-2025-paper",
+    "cvpr-2025-ji-robobrain-a-unified-brain-model-for-robotic-manipulation-from-abstract-cvpr-2025-paper",
+    "cvpr-2025-wimbauer-anycam-learning-to-recover-camera-poses-and-intrinsics-from-casual-cvpr-2025-paper",
+    "cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper",
+    "cvpr-2025-kim-autoregressive-distillation-of-diffusion-transformers-cvpr-2025-paper",
+    "cvpr-2025-fu-moflow-one-step-flow-matching-for-human-trajectory-forecasting-via-implicit-cvpr-2025-paper",
+    "cvpr-2025-prakash-how-do-i-do-that-synthesizing-3d-hand-motion-and-cvpr-2025-paper",
+    "cvpr-2025-agro-mad-memory-augmented-detection-of-3d-objects-cvpr-2025-paper",
+    "cvpr-2025-cho-ev-3dod-pushing-the-temporal-boundaries-of-3d-object-detection-with-cvpr-2025-paper",
+    "cvpr-2025-mazzamuto-gazing-into-missteps-leveraging-eye-gaze-for-unsupervised-mistake-detection-in-cvpr-2025-paper",
+    "cvpr-2025-chae-apt-adaptive-personalized-training-for-diffusion-models-with-limited-data-cvpr-2025-paper",
+    "cvpr-2025-yuan-badtoken-token-level-backdoor-attacks-to-multi-modal-large-language-models-cvpr-2025-paper",
+    "cvpr-2025-zhu-stabilizing-and-accelerating-autofocus-with-expert-trajectory-regularized-deep-reinforcement-cvpr-2025-paper",
+    "cvpr-2025-yu-vision-guided-action-enhancing-3d-human-motion-prediction-with-gaze-informed-affordance-cvpr-2025-paper",
+    "cvpr-2025-wu-momanipvla-transferring-vision-language-action-models-for-general-mobile-manipulation-cvpr-2025-paper",
+    "cvpr-2025-guo-dreamtrack-dreaming-the-future-for-multimodal-visual-object-tracking-cvpr-2025-paper",
+    "cvpr-2025-zhang-closed-loop-supervised-fine-tuning-of-tokenized-traffic-models-cvpr-2025-paper",
+    "cvpr-2025-li-lifting-motion-to-the-3d-world-via-2d-diffusion-cvpr-2025-paper",
+    "cvpr-2025-liu-boosting-point-supervised-temporal-action-localization-through-integrating-query-reformation-and-cvpr-2025-paper",
+    "cvpr-2025-zhang-motionpro-a-precise-motion-controller-for-image-to-video-generation-cvpr-2025-paper",
+    "cvpr-2025-gao-multiple-object-tracking-as-id-prediction-cvpr-2025-paper",
+    "cvpr-2025-hu-fifa-fine-grained-inter-frame-attention-for-drivers-video-gaze-estimation-cvpr-2025-paper",
+    "cvpr-2025-jin-stereo4d-learning-how-things-move-in-3d-from-internet-stereo-cvpr-2025-paper",
+    "cvpr-2025-peng-desire-gs-4d-street-gaussians-for-static-dynamic-decomposition-and-surface-reconstruction-cvpr-2025-paper",
+    "cvpr-2025-so-pcm-picard-consistency-model-for-fast-parallel-sampling-of-cvpr-2025-paper",
+    "cvpr-2025-park-leveraging-temporal-cues-for-semi-supervised-multi-view-3d-object-detection-cvpr-2025-paper",
+    "cvpr-2025-xing-echotraffic-enhancing-traffic-anomaly-understanding-with-audio-visual-insights-cvpr-2025-paper",
+    "cvpr-2025-gadot-rl-rc-dot-a-block-level-rl-agent-for-task-aware-video-compression-cvpr-2025-paper",
+    "cvpr-2025-huang-segment-any-motion-in-videos-cvpr-2025-paper",
+    "cvpr-2025-liang-wonderland-navigating-3d-scenes-from-a-single-image-cvpr-2025-paper",
+    "cvpr-2025-zhang-pansplat-4k-panorama-synthesis-with-feed-forward-gaussian-splatting-cvpr-2025-paper",
+    "cvpr-2025-cong-semgeomo-dynamic-contextual-human-motion-generation-with-semantic-and-geometric-cvpr-2025-paper",
+    "cvpr-2025-you-vistream-improving-computation-efficiency-of-visual-streaming-perception-via-law-of-charge-conservation-cvpr-2025-paper",
+    "cvpr-2025-yuan-empowering-large-language-models-with-3d-situation-awareness-cvpr-2025-paper",
+    "cvpr-2025-huang-gaussianformer-2-probabilistic-gaussian-superposition-for-efficient-3d-occupancy-prediction-cvpr-2025-paper",
+    "cvpr-2025-ren-gen3c-3d-informed-world-consistent-video-generation-with-precise-camera-control-cvpr-2025-paper",
+    "cvpr-2025-lee-dynscene-scalable-generation-of-dynamic-robotic-manipulation-scenes-for-embodied-cvpr-2025-paper",
+    "cvpr-2025-zhang-critic-v-vlm-critics-help-catch-vlm-errors-in-multimodal-reasoning-cvpr-2025-paper",
+    "cvpr-2025-zheng-scene-agnostic-pose-regression-for-visual-localization-cvpr-2025-paper",
+    "cvpr-2025-cho-seurat-from-moving-points-to-depth-cvpr-2025-paper"
+  ],
+  "global_pool_lane_top_k": 30,
+  "global_pool_limit": 120,
+  "global_pool_guaranteed_per_lane": 2,
+  "global_pool_effective_size": 120,
+  "reranked_at": "2026-07-30T02:11:36.770823+00:00",
+  "llm_ranked": [
+    {
+      "paper_id": "cvpr-2025-liao-diffusiondrive-truncated-diffusion-model-for-end-to-end-autonomous-driving-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "end-to-end autonomous driving with diffusion model generating multi-mode driving actions, directly relevant to planning and control",
+      "evidence_cn": "端到端自动驾驶扩散模型生成多模式驾驶动作，直接相关规划与控制",
+      "canonical_evidence": "端到端自动驾驶扩散模型生成多模式驾驶动作，直接相关规划与控制",
+      "tldr_en": "DiffusionDrive proposes a truncated diffusion policy for end-to-end autonomous driving, generating diverse driving actions in real-time by truncating the diffusion schedule and using multi-mode anchors.",
+      "tldr_cn": "扩散模型在机器人策略学习中展现了多模态能力，但应用于自动驾驶面临实时性与动作生成多样性的挑战。本文提出截断扩散策略DiffusionDrive，利用先验多模式锚点截断扩散过程，从锚定高斯分布学习到多模式驾驶动作分布。在nuScenes上实现实时且多样的轨迹生成，显著提升了驾驶动作的质量与速度。",
+      "title_zh": "DiffusionDrive：端到端自动驾驶的截断扩散模型",
+      "motivation_cn": "扩散模型生成驾驶动作时迭代步数多、实时性差，且多模态动作建模困难。",
+      "method_cn": "提出截断扩散策略，引入多模式驾驶动作锚点，加速采样并保持多样性。",
+      "result_cn": "在nuScenes上实现实时多样规划，超越现有扩散和确定性方法。",
+      "conclusion_cn": "截断扩散策略有效平衡了生成多样性与推理速度，适合自动驾驶规划。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-hegde-distilling-multi-modal-large-language-models-for-autonomous-driving-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "distills LLM knowledge to vision-based planner for safe motion planning in autonomous driving",
+      "evidence_cn": "将大模型知识蒸馏至视觉规划器用于自动驾驶安全运动规划",
+      "canonical_evidence": "将大模型知识蒸馏至视觉规划器用于自动驾驶安全运动规划",
+      "tldr_en": "DiMA distills multi-modal LLM knowledge into a vision-based end-to-end planner for autonomous driving, achieving efficient and safe motion planning, especially in long-tail scenarios.",
+      "tldr_cn": "大型语言模型作为规划器在自动驾驶长尾场景中表现出色，但推理成本高。本文提出DiMA，将多模态大模型的知识通过代理任务蒸馏至纯视觉端到端规划器。联合训练使场景编码器学到结构化语义表示。在nuScenes上，该方法在保持高效的同时显著提升了规划的安全性，尤其在罕见场景下。",
+      "title_zh": "面向自动驾驶的多模态大语言模型蒸馏",
+      "motivation_cn": "LLM规划器推理成本高，视觉规划器缺乏常识知识。",
+      "method_cn": "设计代理任务将多模态LLM知识蒸馏到视觉规划器的场景编码器中。",
+      "result_cn": "蒸馏后的视觉规划器在长尾场景规划安全性接近LLM水平，推理更快。",
+      "conclusion_cn": "知识蒸馏有效结合了LLM的常识与视觉规划器的效率。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "end-to-end historical prediction and planning",
+      "evidence_cn": "端到端历史预测与规划统一",
+      "canonical_evidence": "端到端历史预测与规划统一",
+      "tldr_en": "BridgeAD reformulates motion and planning queries as multi-step queries to unify historical prediction and planning, enabling planning-oriented optimization in end-to-end autonomous driving.",
+      "tldr_cn": "端到端自动驾驶方法常忽略多步历史预测与规划的对齐。本文提出BridgeAD，将运动查询和规划查询重新设计为多步查询，实现历史预测与规划的深度融合。该方法遵循'未来是过去的延续'理念，在规划中充分利用历史信息。实验表明在多个基准上提升了规划和预测性能，为端到端驾驶提供了一种统一框架。",
+      "title_zh": "连接过去与未来：基于历史预测与规划的端到端自动驾驶",
+      "motivation_cn": "现有端到端方法未能有效对齐多步历史预测与规划。",
+      "method_cn": "提出多步查询机制，统一历史预测和规划的解码过程。",
+      "result_cn": "在标准测试集上提升规划和预测精度，验证了历史信息的重要性。",
+      "conclusion_cn": "BridgeAD实现了预测与规划的协同优化，为端到端自动驾驶提供了新范式。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-xing-goalflow-goal-driven-flow-matching-for-multimodal-trajectories-generation-in-end-to-end-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "multimodal trajectory generation in end-to-end AD",
+      "evidence_cn": "端到端自动驾驶中多模态轨迹生成",
+      "canonical_evidence": "端到端自动驾驶中多模态轨迹生成",
+      "tldr_en": "GoalFlow addresses trajectory divergence in diffusion models by goal-driven flow matching, generating high-quality multimodal trajectories for end-to-end autonomous driving.",
+      "tldr_cn": "端到端自动驾驶中多模态轨迹生成面临轨迹发散和场景指引不一致的问题。本文提出GoalFlow，采用目标驱动的流匹配方法，有效约束生成过程产生高质量多模态轨迹。通过引入目标引导，解决了扩散方法中的轨迹发散问题。在多个数据集上展示了生成轨迹的质量和多样性，提升了端到端驾驶的轨迹生成能力。",
+      "title_zh": "GoalFlow：面向端到端自动驾驶多模态轨迹生成的目标驱动流匹配",
+      "motivation_cn": "现有扩散方法生成多模态轨迹时存在轨迹发散和质量下降问题。",
+      "method_cn": "提出目标驱动流匹配方法，用目标约束生成过程。",
+      "result_cn": "生成轨迹质量高且多样，优于现有扩散方法。",
+      "conclusion_cn": "GoalFlow为端到端自动驾驶提供了一种高质量多模态轨迹生成方案。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-dong-leveraging-sd-map-to-augment-hd-map-based-trajectory-prediction-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "SD map augmentation for trajectory prediction",
+      "evidence_cn": "利用SD地图增强轨迹预测",
+      "canonical_evidence": "利用SD地图增强轨迹预测",
+      "tldr_en": "SATP leverages standard-definition maps to augment HD map-based trajectory prediction, with an SD-HD fusion approach and AlignNet to improve prediction accuracy.",
+      "tldr_cn": "基于HD地图的轨迹预测模型受感知误差和特征冗余影响。本文提出SATP框架，利用SD地图增强HD地图轨迹预测。首先设计SD-HD融合方法，使SD地图兼容多种预测模型；其次提出AlignNet对齐两种地图。在多个基准上显著提升了轨迹预测精度，尤其在感知错误场景下更具鲁棒性。",
+      "title_zh": "利用SD地图增强基于HD地图的轨迹预测",
+      "motivation_cn": "在线HD地图存在感知误差和特征冗余，影响轨迹预测性能。",
+      "method_cn": "提出SD地图与HD地图融合方法，并设计AlignNet对齐特征。",
+      "result_cn": "在多个数据集上提升轨迹预测精度，对感知错误鲁棒。",
+      "conclusion_cn": "SATP证明了SD地图可作为HD地图的有效补充，提升轨迹预测可靠性。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "consistent auto-regressive trajectory planning with RL",
+      "evidence_cn": "一致自回归轨迹规划结合强化学习",
+      "canonical_evidence": "一致自回归轨迹规划结合强化学习",
+      "tldr_en": "CarPlanner uses consistent auto-regressive structure with RL to generate multi-modal trajectories, enabling efficient large-scale training and stable policy learning.",
+      "tldr_cn": "基于强化学习的轨迹规划器面临训练效率低和难以扩展到大场景的问题。本文提出CarPlanner，采用一致性自回归轨迹规划结构，利用RL生成多模态轨迹。自回归结构支持高效大规模RL训练，一致性约束确保时间步间稳定。在多种复杂驾驶场景中展示了优于现有方法的规划和泛化能力，为大规模RL轨迹规划提供了可行方案。",
+      "title_zh": "CarPlanner：面向自动驾驶大规模强化学习的一致性自回归轨迹规划",
+      "motivation_cn": "现有RL轨迹规划器训练效率低，难以处理大规模真实场景。",
+      "method_cn": "提出一致自回归轨迹规划器，结合RL生成多模态轨迹。",
+      "result_cn": "实现高效大规模训练，在复杂场景中规划和泛化性能优异。",
+      "conclusion_cn": "CarPlanner推动了大规模RL在轨迹规划中的应用。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-chen-solve-synergy-of-language-vision-and-end-to-end-networks-for-autonomous-driving-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "directly addresses trajectory prediction and planning for autonomous vehicles",
+      "evidence_cn": "直接针对自动驾驶的轨迹预测与规划",
+      "canonical_evidence": "直接针对自动驾驶的轨迹预测与规划",
+      "tldr_en": "SOLVE integrates VLMs with end-to-end networks, using Trajectory Chain-of-Thought to refine trajectory prediction for autonomous driving.",
+      "tldr_cn": "现有方法在集成VLM与端到端模型时面临计算开销大、实时性差的问题。本文提出SOLVE框架，通过共享视觉编码器实现特征级知识共享，并提出轨迹链式思维(T-CoT)范式逐步优化轨迹预测。实验表明该方法在规划准确性上优于基线，同时保持实时性。该工作为语言-视觉融合在自动驾驶规划中的应用提供了新思路。",
+      "title_zh": "SOLVE：语言-视觉与端到端网络协同的自动驾驶框架",
+      "motivation_cn": "现有VLM与端到端模型集成效率低，难以实现实时决策。",
+      "method_cn": "提出共享视觉编码器实现特征交互，并设计轨迹链式思维(T-CoT)来逐步优化轨迹预测。",
+      "result_cn": "在多个自动驾驶数据集上，SOLVE在规划准确性和实时性上取得最优。",
+      "conclusion_cn": "证明了语言-视觉协同能有效提升端到端自动驾驶规划性能。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "trajectory prediction for autonomous vehicles"
+    },
+    {
+      "paper_id": "cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "directly addresses trajectory prediction in autonomous driving, specifically adversarial attacks",
+      "evidence_cn": "直接研究自动驾驶轨迹预测的对抗攻击问题",
+      "canonical_evidence": "直接研究自动驾驶轨迹预测的对抗攻击问题",
+      "tldr_en": "This paper proposes a multi-frame perturbation attack framework for trajectory prediction in autonomous driving, improving endurance, efficiency, and robustness.",
+      "tldr_cn": "自动驾驶轨迹预测的脆弱性研究多采用单点攻击，易被过滤且环境适应性差。本文提出一种基于优化的多帧对抗攻击框架，通过LiDAR诱导的对抗位置搜索，实现持久、高效且鲁棒的攻击。实验表明该方法在多种防御下仍保持高攻击成功率，揭示了轨迹预测系统的安全隐患。",
+      "title_zh": "基于优化驱动多帧扰动框架的自动驾驶轨迹预测持久、高效且鲁棒的攻击",
+      "motivation_cn": "现有轨迹预测攻击方法多基于单点攻击，无法应对真实环境中的过滤和不确定性。",
+      "method_cn": "提出优化驱动的多帧对抗位置搜索框架，实现持久且鲁棒的LiDAR诱导攻击。",
+      "result_cn": "在多个数据集和防御方法下，该攻击方法保持高成功率，优于单点攻击。",
+      "conclusion_cn": "该工作暴露了自动驾驶轨迹预测系统在面对多帧对抗时的脆弱性。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "trajectory prediction for autonomous vehicles"
+    },
+    {
+      "paper_id": "cvpr-2025-zhou-modeseq-taming-sparse-multimodal-motion-prediction-with-sequential-mode-modeling-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "multimodal motion prediction with sparse trajectory candidates",
+      "evidence_cn": "稀疏多模态运动预测与序列模式建模",
+      "canonical_evidence": "稀疏多模态运动预测与序列模式建模",
+      "tldr_en": "ModeSeq introduces a multimodal prediction paradigm with sequential mode modeling to address limited diversity and uncalibrated confidence in trajectory prediction, improving accuracy and calibration for autonomous driving.",
+      "tldr_cn": "多模态轨迹预测面临缺乏多模态真值、轨迹多样性不足和置信度不准的问题。本文提出ModeSeq，一种基于序列模式建模的新范式，通过自回归方式逐步生成多模态轨迹候选。该方法避免了后处理步骤，提升了轨迹多样性和置信度校准。在多个自动驾驶数据集上，ModeSeq优于现有工作的预测精度和模式覆盖。",
+      "title_zh": "ModeSeq：通过序列模式建模驯服稀疏多模态运动预测",
+      "motivation_cn": "现有轨迹预测方法轨迹多样性有限且模式置信度未校准，后处理步骤损害准确性。",
+      "method_cn": "采用序列模式建模，将多模态预测转化为自回归模式生成，逐步产生轨迹候选。",
+      "result_cn": "在交互式运动预测基准上，ModeSeq在多样性、准确性和校准方面均取得最优。",
+      "conclusion_cn": "序列模式建模为多模态预测提供了更简洁有效的框架。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "multimodal trajectory prediction for self driving cars"
+    },
+    {
+      "paper_id": "cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "multi-agent trajectory modeling with uncertainty-aware diffusion for trajectory completion and forecasting",
+      "evidence_cn": "多智能体轨迹建模，不确定性感知扩散，支持轨迹完成与预测",
+      "canonical_evidence": "多智能体轨迹建模，不确定性感知扩散，支持轨迹完成与预测",
+      "tldr_en": "U2Diff is a unified diffusion model for multi-agent trajectory modeling that handles both forecasting and completion tasks while providing state-wise uncertainty estimates, enabling better ranking of multimodal predictions.",
+      "tldr_cn": "多智能体轨迹建模通常只关注预测，忽略了轨迹完成等任务，且缺乏不确定性估计。本文提出U2Diff，一个统一的扩散模型，可同时处理轨迹完成和预测，并输出每个状态的不确定性。通过修改去噪过程，模型能估计预测误差的概率。在多个轨迹数据集上，U2Diff在完成和预测任务中均达到最优，其不确定性估计有助于排序和拒绝不可靠预测。",
+      "title_zh": "统一不确定性感知扩散用于多智能体轨迹建模",
+      "motivation_cn": "现有轨迹模型任务单一，缺乏状态级不确定性度量，难以评估预测可靠性。",
+      "method_cn": "设计增强去噪扩散模型，联合学习轨迹生成与不确定度，支持多任务。",
+      "result_cn": "在轨迹完成和预测基准上，U2Diff性能领先，不确定性估计与实际误差相关性强。",
+      "conclusion_cn": "统一不确定性扩散框架为实际轨迹建模提供了更可信的解决方案。",
+      "matched_requirement_id": "req-6",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "interaction aware trajectory prediction for autonomous vehicles"
+    },
+    {
+      "paper_id": "cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "momentum-aware planning in end-to-end autonomous driving with trajectory momentum and perception momentum",
+      "evidence_cn": "端到端自动驾驶中的动量感知规划，引入轨迹动量和感知动量",
+      "canonical_evidence": "端到端自动驾驶中的动量感知规划，引入轨迹动量和感知动量",
+      "tldr_en": "MomAD introduces trajectory momentum and perception momentum to stabilize trajectory predictions in end-to-end autonomous driving, using topological trajectory matching and momentum planning interactor.",
+      "tldr_cn": "端到端自动驾驶常因单帧感知导致轨迹不稳定和遮挡脆弱性。本文提出MomAD框架，引入轨迹动量和感知动量以稳定预测。包含拓扑轨迹匹配（TTM）利用Hausdorff距离选择与历史路径一致的规划查询，以及动量规划交互器（MPI）利用历史查询扩展感知。实验表明MomAD在稳定性和安全性上显著优于基线方法。",
+      "title_zh": "不要晃动方向盘：端到端自动驾驶中的动量感知规划",
+      "motivation_cn": "单帧感知导致的轨迹抖动和遮挡问题影响端到端驾驶稳定性。",
+      "method_cn": "设计拓扑轨迹匹配和动量规划交互器，利用历史轨迹和感知信息平滑规划。",
+      "result_cn": "在CARLA和nuScenes上，MomAD减少了轨迹抖动并提升了碰撞规避能力。",
+      "conclusion_cn": "动量感知机制有效提升了端到端自动驾驶规划的鲁棒性。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-messaoud-towards-generalizable-trajectory-prediction-using-dual-level-representation-learning-and-adaptive-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "direct vehicle trajectory prediction framework",
+      "evidence_cn": "直接针对车辆轨迹预测框架",
+      "canonical_evidence": "直接针对车辆轨迹预测框架",
+      "tldr_en": "Proposes PerReg+ for generalizable vehicle trajectory prediction using dual-level representation learning and adaptive prompting.",
+      "tldr_cn": "现有车辆轨迹预测模型泛化性差且难以处理复杂交互。本文提出PerReg+框架，通过自蒸馏和掩码重建实现双级表示学习，并引入自适应提示以增强泛化能力。实验表明该方法在多种数据集上显著提升预测精度，为自动驾驶安全决策提供有力支持。",
+      "title_zh": "迈向泛化轨迹预测：双级表示学习与自适应提示",
+      "motivation_cn": "现有模型针对特定数据集定制，泛化性差且无法有效处理多模态预测。",
+      "method_cn": "提出PerReg+，结合自蒸馏与掩码重建的双级表示学习，以及自适应提示机制。",
+      "result_cn": "在多个自动驾驶数据集上超越现有方法，预测精度和泛化能力显著提升。",
+      "conclusion_cn": "双级学习与自适应提示有效提升了轨迹预测的泛化性和准确性。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-huang-trajectory-mamba-efficient-attention-mamba-forecasting-model-based-on-selective-ssm-cvpr-2025-paper",
+      "score": 9.0,
+      "evidence_en": "efficient trajectory forecasting model for autonomous driving",
+      "evidence_cn": "高效的自动驾驶轨迹预测模型",
+      "canonical_evidence": "高效的自动驾驶轨迹预测模型",
+      "tldr_en": "Introduces Trajectory Mamba, a SSM-based efficient trajectory prediction framework with linear time complexity.",
+      "tldr_cn": "传统注意力模型计算量随目标数平方增长，难以用于动态环境。本文提出Trajectory Mamba，基于选择状态空间模型（SSM）重构编码器-解码器注意力，实现线性复杂度。实验表明在保持高精度的同时显著提升效率，适用于实时自动驾驶。",
+      "title_zh": "轨迹Mamba：基于选择状态空间模型的高效注意力-曼巴预测模型",
+      "motivation_cn": "注意力模型计算开销大，限制在动态环境中的应用。",
+      "method_cn": "利用选择状态空间模型替代自注意力，实现线性时间复杂度的编码器-解码器架构。",
+      "result_cn": "在多个基准上达到与注意力模型相当的精度，但计算效率大幅提升。",
+      "conclusion_cn": "SSM可作为注意力机制的高效替代，用于实时轨迹预测。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper",
+      "score": 8.0,
+      "evidence_en": "causally-aware interaction representations for motion forecasting, directly relevant to interaction-aware trajectory prediction",
+      "evidence_cn": "用于运动预测的因果感知交互表示，直接相关交互感知轨迹预测",
+      "canonical_evidence": "用于运动预测的因果感知交互表示，直接相关交互感知轨迹预测",
+      "tldr_en": "This work investigates causal awareness in multi-agent interaction representations, revealing resilience to non-causal perturbations and challenges with mediator causality, and proposes a metric learning approach for improved causal transfer.",
+      "tldr_cn": "多智能体交互模型的因果鲁棒性尚不明确。本文深入分析了现有表示对非因果扰动的部分鲁棒性，发现中介因果效应建模仍是挑战。提出一种度量学习方法增强表示的因果意识，在运动预测基准上提升了跨场景的泛化能力。该工作为构建更可靠的交互感知轨迹预测模型提供了理论基础。",
+      "title_zh": "Sim-to-Real因果迁移：一种面向因果感知交互表示的度量学习方法",
+      "motivation_cn": "现有交互表示难以捕捉真实因果关系，影响运动预测的鲁棒性。",
+      "method_cn": "通过度量学习优化交互表示，增强对非因果扰动的鲁棒性并建模间接因果效应。",
+      "result_cn": "在CausalAgents基准上验证了因果感知改进，提升了运动预测的跨场景迁移性能。",
+      "conclusion_cn": "因果感知度量学习是构建更可信交互预测模型的关键方向。",
+      "matched_requirement_id": "req-6",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "interaction aware trajectory prediction for autonomous vehicles"
+    },
+    {
+      "paper_id": "cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper",
+      "score": 8.0,
+      "evidence_en": "closed-loop autonomous driving control signal generation",
+      "evidence_cn": "闭环自动驾驶控制信号生成",
+      "canonical_evidence": "闭环自动驾驶控制信号生成",
+      "tldr_en": "DriveGPT4-V2 uses MLLM to generate low-level control signals from camera images and vehicle states for closed-loop autonomous driving, improving end-to-end operation.",
+      "tldr_cn": "现有闭环自动驾驶方法面临感知与规划分离的挑战。本文提出DriveGPT4-V2，利用多模态大语言模型从多视图图像和车辆状态直接生成低层控制信号。所提多视图视觉分词器增强了环境感知范围并保留关键细节。实验表明该方法在闭环驾驶任务中有效提升了控制稳定性和安全性。",
+      "title_zh": "DriveGPT4-V2：利用大型语言模型能力增强闭环自动驾驶",
+      "motivation_cn": "闭环自动驾驶中感知与规划分离导致性能瓶颈，需要统一的端到端方法。",
+      "method_cn": "采用多视图视觉分词器处理环视图像，结合车辆状态输入到大语言模型生成控制信号。",
+      "result_cn": "在闭环仿真中，DriveGPT4-V2实现了更平稳的控制和更低的碰撞率。",
+      "conclusion_cn": "MLLM在闭环自动驾驶控制中具有潜力，为端到端驾驶提供新思路。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-xie-s4-driver-scalable-self-supervised-driving-multimodal-large-language-model-with-spatio-temporal-cvpr-2025-paper",
+      "score": 8.0,
+      "evidence_en": "end-to-end motion planning using MLLM with spatio-temporal representation",
+      "evidence_cn": "基于时空视觉表示的MLLM端到端运动规划",
+      "canonical_evidence": "基于时空视觉表示的MLLM端到端运动规划",
+      "tldr_en": "S4-Driver proposes self-supervised end-to-end motion planning for autonomous driving using MLLM with 3D spatial-temporal representation, avoiding human annotations.",
+      "tldr_cn": "端到端运动规划常依赖人工标注，且MLLM预训练在2D空间，与自动驾驶的3D规划不匹配。本文提出S4-Driver，采用自监督方式直接学习传感器输入到规划轨迹，并引入3D时空视觉表示。该方法无需人工标注即可生成规划轨迹。实验结果显示其性能优于现有自监督方法，接近有监督方法。",
+      "title_zh": "S4-Driver：可扩展的自监督驾驶多模态大语言模型与时空视觉表示",
+      "motivation_cn": "现有MLLM端到端方法在2D空间预训练，与3D规划不匹配，且依赖标注。",
+      "method_cn": "设计自监督框架，使用3D时空视觉表示的大语言模型从传感器输入直接输出规划轨迹。",
+      "result_cn": "在nuScenes等数据集上，S4-Driver在无标注情况下达到了与有监督方法可比的性能。",
+      "conclusion_cn": "自监督MLLM方法可有效降低标注需求，推动端到端驾驶实用化。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-jeong-multi-modal-knowledge-distillation-based-human-trajectory-forecasting-cvpr-2025-paper",
+      "score": 8.0,
+      "evidence_en": "pedestrian trajectory forecasting for autonomous driving using multi-modal distillation",
+      "evidence_cn": "面向自动驾驶的行人轨迹预测，使用多模态知识蒸馏",
+      "canonical_evidence": "面向自动驾驶的行人轨迹预测，使用多模态知识蒸馏",
+      "tldr_en": "This paper proposes a multi-modal knowledge distillation framework for pedestrian trajectory forecasting, where a student model with limited modalities learns from a teacher with full modalities (including text), improving efficiency without sacrificing accuracy.",
+      "tldr_cn": "行人轨迹预测对自动驾驶至关重要，但实时提取文本等额外模态计算成本高。本文提出多模态知识蒸馏框架，教师模型使用完整模态（包括文本描述）训练，学生模型仅使用有限模态在线推理，通过蒸馏继承教师知识。实验表明学生模型在低计算资源下保持了接近教师模型的预测精度，适合资源受限的车载系统。",
+      "title_zh": "基于多模态知识蒸馏的行人轨迹预测",
+      "motivation_cn": "在线使用视觉语言模型提取文本描述计算量大，不适合实时系统。",
+      "method_cn": "设计师生蒸馏框架，教师用多模态训练，学生以有限模态模仿教师输出分布。",
+      "result_cn": "在多个行人轨迹数据集上，学生模型在显著降低推理时间的同时保持高准确率。",
+      "conclusion_cn": "知识蒸馏有效平衡了多模态轨迹预测的精度与效率。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "trajectory prediction for autonomous vehicles"
+    },
+    {
+      "paper_id": "cvpr-2025-thakkar-poly-autoregressive-prediction-for-modeling-interactions-cvpr-2025-paper",
+      "score": 8.0,
+      "evidence_en": "poly-autoregressive modeling for multi-agent interaction prediction applicable to autonomous driving",
+      "evidence_cn": "多自回归建模用于多智能体交互预测，可应用于自动驾驶",
+      "canonical_evidence": "多自回归建模用于多智能体交互预测，可应用于自动驾驶",
+      "tldr_en": "Poly-Autoregressive (PAR) modeling predicts ego agent's future behavior by reasoning over the state history of all agents, applied to human action forecasting, pedestrian trajectory prediction, and autonomous driving.",
+      "tldr_cn": "多智能体场景中的交互预测是自动驾驶的关键。本文提出多自回归（PAR）建模，将多智能体历史状态编码为标记序列，通过自回归方式预测自我代理的未来行为。PAR可应用于人类动作预测、行人轨迹预测和自动驾驶场景。实验表明PAR在多个任务上表现优越，尤其擅长建模长程交互依赖。",
+      "title_zh": "多自回归预测用于交互建模",
+      "motivation_cn": "现有自回归方法主要针对单一序列，难以建模多智能体间的物理约束和交互。",
+      "method_cn": "将所有智能体的状态序列化为统一标记序列，采用自回归Transformer预测自我智能体未来状态。",
+      "result_cn": "在Human3.6M、ETH/UCY和Waymo交互数据集上，PAR均取得了最先进的预测精度。",
+      "conclusion_cn": "PAR为多智能体交互预测提供了简洁而有效的统一框架。",
+      "matched_requirement_id": "req-6",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "interaction aware trajectory prediction for autonomous vehicles"
+    },
+    {
+      "paper_id": "cvpr-2025-bahari-certified-human-trajectory-prediction-cvpr-2025-paper",
+      "score": 8.0,
+      "evidence_en": "certified robustness for human trajectory prediction in autonomous driving",
+      "evidence_cn": "自动驾驶中行人轨迹预测的鲁棒性认证",
+      "canonical_evidence": "自动驾驶中行人轨迹预测的鲁棒性认证",
+      "tldr_en": "Proposes a certification approach for human trajectory prediction, using diffusion-based denoiser for guaranteed robustness.",
+      "tldr_cn": "当前轨迹预测模型对噪声输入缺乏鲁棒性。本文提出针对轨迹预测的认证方法，结合扩散模型去噪器，在保证鲁棒性的同时缓解性能下降。实验证明该方法能有效抵御对抗攻击，提高自动驾驶安全性。",
+      "title_zh": "认证人类轨迹预测",
+      "motivation_cn": "现有方法缺乏对噪声输入的鲁棒性保证。",
+      "method_cn": "设计轨迹预测专用认证流程，集成扩散模型去噪器以提升认证下的性能。",
+      "result_cn": "在多个数据集上验证了鲁棒性保证，且性能损失较小。",
+      "conclusion_cn": "认证方法为安全关键应用提供了可靠的轨迹预测。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-rowe-scenario-dreamer-vectorized-latent-diffusion-for-generating-driving-simulation-environments-cvpr-2025-paper",
+      "score": 7.0,
+      "evidence_en": "generates driving simulation environments for autonomous vehicle planning, supporting trajectory planning and control",
+      "evidence_cn": "生成驾驶仿真环境用于自动驾驶车辆规划，支持轨迹规划与控制",
+      "canonical_evidence": "生成驾驶仿真环境用于自动驾驶车辆规划，支持轨迹规划与控制",
+      "tldr_en": "Scenario Dreamer uses vectorized latent diffusion to generate realistic driving scenes and closed-loop agent behaviors, enabling better planning evaluation and training.",
+      "tldr_cn": "现有驾驶仿真环境生成方法依赖栅格化表示和规则行为，缺乏多样性和真实性。本文提出Scenario Dreamer，采用向量化潜在扩散模型直接生成车道图和智能体边界框，并配合闭环行为模块。在多个规划基准上验证了仿真环境的有效性，提升了规划策略的泛化能力。",
+      "title_zh": "Scenario Dreamer：基于向量化潜在扩散的驾驶仿真环境生成",
+      "motivation_cn": "现有栅格化生成方法计算效率低，规则行为缺乏多样性。",
+      "method_cn": "提出向量化潜在扩散模型生成初始场景，并学习闭环智能体行为。",
+      "result_cn": "生成的仿真环境在多样性、真实性和规划性能上均优于现有方法。",
+      "conclusion_cn": "向量化扩散框架为自动驾驶规划提供了更高效逼真的仿真数据源。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper",
+      "score": 7.0,
+      "evidence_en": "driving world model forecasting environmental changes, supporting planning and trajectory prediction",
+      "evidence_cn": "驾驶世界模型预测环境变化，支持规划与轨迹预测",
+      "canonical_evidence": "驾驶世界模型预测环境变化，支持规划与轨迹预测",
+      "tldr_en": "MaskGWM combines pixel-level generation with MAE-style feature learning in a Diffusion Transformer to build a generalizable driving world model for planning.",
+      "tldr_cn": "现有驾驶世界模型受限于预测时长和泛化能力。本文结合像素级生成损失与掩码自编码器风格的特征学习，提出基于扩散Transformer的MaskGWM。通过掩码重建任务使模型学习更鲁棒的时空表示。在多个规划任务上，该世界模型能生成更长时序的准确环境预测，并提升了下游规划性能。",
+      "title_zh": "MaskGWM：基于视频掩码重建的泛化驾驶世界模型",
+      "motivation_cn": "现有世界模型预测时长有限，泛化能力差。",
+      "method_cn": "设计扩散Transformer架构，联合像素生成与MAE式掩码上下文学习。",
+      "result_cn": "生成更长预测序列，并在下游规划任务上取得更好性能。",
+      "conclusion_cn": "特征级与像素级损失结合的世界模型显著提升预测与规划能力。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-hassan-gem-a-generalizable-ego-vision-multimodal-world-model-for-fine-grained-ego-motion-cvpr-2025-paper",
+      "score": 7.0,
+      "evidence_en": "world model with ego-trajectory control for planning",
+      "evidence_cn": "世界模型控制自我轨迹，支持规划",
+      "canonical_evidence": "世界模型控制自我轨迹，支持规划",
+      "tldr_en": "GEM predicts future frames conditioned on ego-trajectories, enabling fine-grained control of ego motion and dynamics, which can be used for trajectory planning in autonomous driving.",
+      "tldr_cn": "世界模型在自动驾驶中可用于规划，但目前缺乏对自我轨迹的精细控制。本文提出GEM，一种可泛化的自我视觉多模态世界模型，通过参考帧、稀疏特征、人体姿态和自我轨迹预测未来帧，实现对自我运动、物体动力学和场景组成的精细控制。基于4000+小时多模态数据训练，可生成稳定的长时预测，为轨迹规划提供可控环境。",
+      "title_zh": "GEM：一种可泛化的自我视觉多模态世界模型，用于细粒度自我运动、物体动力学和场景组成控制",
+      "motivation_cn": "现有世界模型缺乏对自我轨迹的精细控制，难以用于规划。",
+      "method_cn": "提出GEM模型，以自我轨迹为条件，自回归预测未来RGB和深度帧。",
+      "result_cn": "在多个领域实现可控的长期帧预测，证明了轨迹控制的有效性。",
+      "conclusion_cn": "GEM提供了一种可泛化的自我轨迹控制方法，有助于自动驾驶规划研究。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-bar-navigation-world-models-cvpr-2025-paper",
+      "score": 7.0,
+      "evidence_en": "provides a generative world model for planning navigation trajectories by simulation",
+      "evidence_cn": "提出生成式世界模型，通过仿真规划导航轨迹",
+      "canonical_evidence": "提出生成式世界模型，通过仿真规划导航轨迹",
+      "tldr_en": "NWM uses a conditional diffusion transformer to predict future visual observations, enabling trajectory planning by simulation and constraint incorporation.",
+      "tldr_cn": "传统导航策略行为固定，难以动态融入约束。本文提出NWM，一个基于条件扩散Transformer的可控视频生成模型，根据历史观察和动作预测未来视觉观察。在熟悉环境中，NWM通过仿真和评估来规划轨迹，并能动态整合约束。实验表明该方法在多种规划任务上有效。该范式可迁移至自动驾驶规划。",
+      "title_zh": "导航世界模型",
+      "motivation_cn": "现有导航策略缺乏动态约束整合能力，且难以适应新环境。",
+      "method_cn": "采用条件扩散Transformer（CDiT）训练大规模第一人称视频，生成未来观察并用于轨迹规划。",
+      "result_cn": "在多个导航场景中，NWM能有效规划轨迹，并动态满足约束。",
+      "conclusion_cn": "生成式世界模型为基于仿真的轨迹规划提供了新范式。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-chen-socialmoif-multi-order-intention-fusion-for-pedestrian-trajectory-prediction-cvpr-2025-paper",
+      "score": 7.0,
+      "evidence_en": "pedestrian trajectory prediction with intention fusion",
+      "evidence_cn": "行人轨迹预测中的意图融合",
+      "canonical_evidence": "行人轨迹预测中的意图融合",
+      "tldr_en": "Proposes SocialMOIF for pedestrian trajectory prediction, fusing multi-order intention interactions.",
+      "tldr_cn": "行人轨迹预测面临意图不确定性及高阶社会交互建模难题。本文提出SocialMOIF，通过融合一阶和多阶意图交互来提升预测精度。模型有效捕捉群组内复杂影响，在ETH/UCY等数据集上取得最新最优结果。",
+      "title_zh": "SocialMOIF：面向行人轨迹预测的多阶意图融合",
+      "motivation_cn": "现有方法忽略高阶邻域意图交互，预测精度受限。",
+      "method_cn": "构建多阶意图融合模块，同时强化一阶与高阶邻居的意图影响。",
+      "result_cn": "在公开行人轨迹数据集上达到最优性能。",
+      "conclusion_cn": "多阶意图融合能有效捕捉群体交互，提升预测准确性。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-zhang-visionpad-a-vision-centric-pre-training-paradigm-for-autonomous-driving-cvpr-2025-paper",
+      "score": 6.0,
+      "evidence_en": "self-supervised pre-training for vision-centric autonomous driving, learning motion cues that can benefit trajectory prediction",
+      "evidence_cn": "面向视觉自动驾驶的自监督预训练，学习运动线索以支持轨迹预测",
+      "canonical_evidence": "面向视觉自动驾驶的自监督预训练，学习运动线索以支持轨迹预测",
+      "tldr_en": "VisionPAD proposes a self-supervised pre-training paradigm using 3D Gaussian Splatting and voxel velocity estimation, enhancing geometric perception and motion learning for autonomous driving tasks.",
+      "tldr_cn": "视觉自动驾驶的预训练通常需要显式深度监督。本文提出VisionPAD，利用3D高斯泼溅仅从图像进行多视图重建，并引入自监督体素速度估计和帧间光度一致性约束。预训练的视觉骨干在轨迹预测、目标检测等下游任务上显著提升性能，证明了无监督运动学习对自动驾驶感知的有效性。",
+      "title_zh": "VisionPAD：面向自动驾驶的视觉中心预训练范式",
+      "motivation_cn": "现有预训练依赖深度标注，且缺乏对运动线索的学习。",
+      "method_cn": "采用3D高斯泼溅重建多视图表示，自监督估计体素速度并施加光度一致性损失。",
+      "result_cn": "预训练模型在多个自动驾驶下游任务上取得优异性能，尤其轨迹预测。",
+      "conclusion_cn": "以运动学习为核心的自监督预训练是提升视觉自动驾驶的有效途径。",
+      "matched_requirement_id": "req-4",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "deep learning methods for trajectory prediction in autonomous driving"
+    },
+    {
+      "paper_id": "cvpr-2025-wu-generating-multimodal-driving-scenes-via-next-scene-prediction-cvpr-2025-paper",
+      "score": 6.0,
+      "evidence_en": "scene generation for trajectory prediction training",
+      "evidence_cn": "为轨迹预测生成训练场景",
+      "canonical_evidence": "为轨迹预测生成训练场景",
+      "tldr_en": "Proposes a multimodal scene generation framework with autoregressive next-scene prediction, enabling controllable diverse scenarios for AD evaluation, which can support trajectory prediction research.",
+      "tldr_cn": "现有自动驾驶场景生成方法覆盖模态有限，无法全面评估系统。本文提出多模态场景生成框架，基于自回归下一场景预测，包含地图等四种模态。通过时序自回归（TAR）和有序自回归（OAR）组件分别建模帧间动态和模态内对齐。生成的多样场景可用于训练和测试轨迹预测模型，提升鲁棒性。",
+      "title_zh": "生成多模态驾驶场景：通过下一场景预测",
+      "motivation_cn": "现有场景生成方法覆盖模态有限，无法充分评估自动驾驶系统。",
+      "method_cn": "提出包含地图模态的多模态场景序列生成框架，采用时序自回归和有序自回归组件。",
+      "result_cn": "生成的多模态场景可用于训练和评估，提升轨迹预测等任务性能。",
+      "conclusion_cn": "多模态场景生成为轨迹预测提供更丰富的训练数据，有助于提高模型泛化能力。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-lin-causal-composition-diffusion-model-for-closed-loop-traffic-generation-cvpr-2025-paper",
+      "score": 6.0,
+      "evidence_en": "controllable traffic generation for planning evaluation",
+      "evidence_cn": "可控交通生成为规划提供测试场景",
+      "canonical_evidence": "可控交通生成为规划提供测试场景",
+      "tldr_en": "CCDiff uses a causal composition diffusion model for closed-loop traffic generation, maximizing controllability while preserving realism, useful for evaluating planning algorithms.",
+      "tldr_cn": "自动驾驶仿真需要真实且可控的交通场景，但现有生成模型在安全关键场景中难以兼顾可控性和真实性。本文提出因果组合扩散模型CCDiff，将可控闭环仿真视为约束优化问题，使用结构引导扩散框架。在最大化可控性的同时保持场景真实性。生成的场景可用于评估轨迹规划算法应对长尾情况的能力。",
+      "title_zh": "因果组合扩散模型：用于闭环交通生成",
+      "motivation_cn": "现有交通生成模型难以同时实现可控性和真实性。",
+      "method_cn": "提出因果组合扩散模型，将约束优化与结构引导扩散结合。",
+      "result_cn": "在保持真实性的前提下实现了更高的用户可控性。",
+      "conclusion_cn": "CCDiff为评估规划算法提供了更有效的仿真场景。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-wang-omnidrive-a-holistic-vision-language-dataset-for-autonomous-driving-with-counterfactual-cvpr-2025-paper",
+      "score": 5.0,
+      "evidence_en": "supports autonomous driving decision-making and planning via counterfactual reasoning",
+      "evidence_cn": "通过反事实推理支持自动驾驶决策与规划",
+      "canonical_evidence": "通过反事实推理支持自动驾驶决策与规划",
+      "tldr_en": "OmniDrive presents a holistic vision-language dataset with counterfactual reasoning to align agents with 3D driving tasks, enhancing decision-making in planning and control.",
+      "tldr_cn": "将视觉语言模型从2D扩展到3D理解是自动驾驶推理的关键挑战。本文提出OmniDrive，一个包含反事实推理的全景视觉语言数据集，通过评估潜在场景结果增强决策能力。采用反事实合成数据标注生成大规模高质量数据，为规划模块提供更密集的监督信号。该方法在规划任务上展现出优越性能。",
+      "title_zh": "OmniDrive：面向自动驾驶的全景视觉语言数据集与反事实推理",
+      "motivation_cn": "现有VLM缺乏3D理解能力，难以直接支持自动驾驶规划决策。",
+      "method_cn": "构建反事实推理数据集，通过合成场景生成多样化的规划监督信号。",
+      "result_cn": "在3D驾驶任务上，反事实推理显著提升规划决策的准确性。",
+      "conclusion_cn": "反事实推理数据集有效弥合了2D推理与3D规划之间的鸿沟。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-liu-mmtl-uniad-a-unified-framework-for-multimodal-and-multi-task-learning-in-cvpr-2025-paper",
+      "score": 4.0,
+      "evidence_en": "driver behavior recognition, related to driver behavior trajectory prediction",
+      "evidence_cn": "驾驶员行为识别，与驾驶员行为轨迹预测相关",
+      "canonical_evidence": "驾驶员行为识别，与驾驶员行为轨迹预测相关",
+      "tldr_en": "MMTL-UniAD proposes a unified multi-modal multi-task framework for assistive driving, simultaneously recognizing driver behavior, emotion, vehicle behavior, and traffic context; it addresses negative transfer with multi-axis region modules.",
+      "tldr_cn": "现有辅助驾驶系统通常忽略不同感知任务之间的联合学习潜力。本文提出MMTL-UniAD统一多模态多任务学习框架，同时识别驾驶员行为（如环顾）、驾驶员情绪、车辆行为和交通上下文。通过引入多轴区域模块和任务特定适配器缓解负迁移问题。实验表明联合训练提升了各任务表现，为理解驾驶场景提供了更全面的感知基础。",
+      "title_zh": "MMTL-UniAD：辅助驾驶感知中多模态多任务学习的统一框架",
+      "motivation_cn": "现有辅助驾驶系统忽视多任务联合学习的潜力，缺乏统一的感知框架。",
+      "method_cn": "构建多模态多任务学习框架，设计多轴区域模块和任务适配器以缓解负迁移。",
+      "result_cn": "联合学习提升驾驶员行为、情绪、车辆行为及交通上下文识别性能。",
+      "conclusion_cn": "统一的多任务学习框架有效增强辅助驾驶场景的全面感知能力。",
+      "matched_requirement_id": "req-3",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "driver behavior trajectory prediction"
+    },
+    {
+      "paper_id": "cvpr-2025-yang-tra-moe-learning-trajectory-prediction-model-from-multiple-domains-for-adaptive-cvpr-2025-paper",
+      "score": 4.0,
+      "evidence_en": "uses MoE for multi-domain trajectory prediction, applicable to AV scenarios",
+      "evidence_cn": "使用MoE进行多域轨迹预测，可应用于自动驾驶场景",
+      "canonical_evidence": "使用MoE进行多域轨迹预测，可应用于自动驾驶场景",
+      "tldr_en": "Tra-MoE uses sparsely-gated Mixture-of-Experts to learn trajectory prediction from diverse domains, improving generalization for robotic policy conditioning.",
+      "tldr_cn": "机器人系统的轨迹预测常受限于单一域数据，泛化能力不足。本文提出Tra-MoE，采用稀疏门控专家混合（Top-1）架构，从多域数据学习轨迹预测模型。该模型能预测指令驱动的任意点轨迹，为策略学习提供详细控制指导。实验表明在多个跨域任务上泛化性能提升。该方法可扩展至自动驾驶中的轨迹预测。",
+      "title_zh": "Tra-MoE：从多域学习轨迹预测模型实现自适应策略调节",
+      "motivation_cn": "单域训练的轨迹预测模型泛化能力差，难以适应多样化的驾驶场景。",
+      "method_cn": "使用稀疏门控MoE（Top-1策略）架构处理多域数据分布，实现参数合作与特化的平衡。",
+      "result_cn": "在多个跨域数据集上，Tra-MoE的轨迹预测精度和泛化性均优于单域模型。",
+      "conclusion_cn": "多域学习结合MoE能有效提升轨迹预测模型的适应能力。",
+      "matched_requirement_id": "req-4",
+      "matched_query_tag": "query:av-traj-pred",
+      "matched_query_text": "deep learning methods for trajectory prediction in autonomous driving"
+    },
+    {
+      "paper_id": "cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper",
+      "score": 4.0,
+      "evidence_en": "uses trajectory prediction for feature alignment in cooperative perception for autonomous vehicles",
+      "evidence_cn": "利用轨迹预测实现自动驾驶协同感知中的特征对齐",
+      "canonical_evidence": "利用轨迹预测实现自动驾驶协同感知中的特征对齐",
+      "tldr_en": "TraF-Align predicts feature-level trajectories to align asynchronous multi-agent perceptions for autonomous driving, improving fusion accuracy.",
+      "tldr_cn": "协同感知中多车间的通信延迟导致空间和语义特征错位。本文提出TraF-Align，通过预测特征级轨迹，生成时序有序采样点，引导当前查询与历史特征对齐。实验证明该方法在延迟条件下显著提升了感知融合精度。该工作将轨迹预测用于感知增强，为自动驾驶多车协同提供了新思路。",
+      "title_zh": "TraF-Align：面向异步多车感知的轨迹感知特征对齐",
+      "motivation_cn": "多车感知中的延迟导致特征错位，影响融合效果。",
+      "method_cn": "预测特征级轨迹并生成采样点，通过注意力机制对齐历史特征与当前查询。",
+      "result_cn": "在模拟和真实延迟场景下，TraF-Align的感知精度优于现有方法。",
+      "conclusion_cn": "轨迹感知的特征对齐能有效克服异步多车感知中的延迟挑战。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "cvpr-2025-ni-recondreamer-crafting-world-models-for-driving-scene-reconstruction-via-online-cvpr-2025-paper",
+      "score": 4.0,
+      "evidence_en": "world model for driving scene reconstruction enabling novel trajectory rendering",
+      "evidence_cn": "世界模型驱动驾驶场景重建支持新轨迹渲染",
+      "canonical_evidence": "世界模型驱动驾驶场景重建支持新轨迹渲染",
+      "tldr_en": "ReconDreamer incrementally integrates world model knowledge to reconstruct driving scenes, enabling rendering of novel trajectories like multi-lane changes for closed-loop simulation.",
+      "tldr_cn": "现有神经渲染方法在渲染新驾驶轨迹（如变道）时效果不佳。本文提出ReconDreamer，通过渐进式整合世界模型知识来增强场景重建，使仿真系统能够渲染更大机动动作。该方法将世界模型在线恢复与NeRF/3DGS结合。实验证明在重建质量和新视图合成上优于先前方法，对于自动驾驶闭环仿真有重要价值。",
+      "title_zh": "ReconDreamer：通过在线恢复构建驾驶场景重建的世界模型",
+      "motivation_cn": "现有场景重建方法难以渲染新颖轨迹，限制了闭环仿真的真实感。",
+      "method_cn": "采用在线恢复策略，将世界模型知识逐步注入NeRF/3DGS重建流程。",
+      "result_cn": "在Waymo等数据集上，ReconDreamer渲染多车道变换等新轨迹的质量显著提升。",
+      "conclusion_cn": "整合世界模型知识可有效增强驾驶场景重建，支持更逼真的闭环仿真。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    }
+  ],
+  "llm_ranked_at": "2026-07-30T02:13:31.657701+00:00",
+  "display_min_score": 4.0,
+  "pruned_at": "2026-07-30T02:13:31.689384+00:00"
+}

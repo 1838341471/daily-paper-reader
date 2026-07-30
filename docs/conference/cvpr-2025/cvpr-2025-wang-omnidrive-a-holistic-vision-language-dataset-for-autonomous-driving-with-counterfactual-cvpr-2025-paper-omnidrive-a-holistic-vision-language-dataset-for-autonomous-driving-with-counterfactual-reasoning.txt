@@ -1,0 +1,308 @@
+Title: OmniDrive: A Holistic Vision-Language Dataset for Autonomous Driving with Counterfactual Reasoning
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Wang_OmniDrive_A_Holistic_Vision-Language_Dataset_for_Autonomous_Driving_with_Counterfactual_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 12:14:04 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# OmniDrive: A Holistic Vision-Language Dataset for Autonomous Driving with Counterfactual Reasoning 
+
+## Shihao Wang 1,2∗, Zhiding Yu 1†, Xiaohui Jiang 3, Shiyi Lan 1, Min Shi 1∗,Nadine Chang 1, Jan Kautz 1, Ying Li 3, Jose M. Alvarez 1,
+
+1NVIDIA 2The Hong Kong Polytechnic University 3Beijing Institute of Technology https://github.com/NVlabs/OmniDrive Decision making & Planning 
+
+> Decision making & Planning
+
+√
+
+× Counterfactual & Reasoning Simulated Trajectory ‧ Traffic Light        
+
+> ‧Collision
+> ‧Drivable Area
+> Rules Refer Actual Trajectory QA Generation
+> ‧Ego Condition
+> ‧3D Objects
+> ‧Map Elements
+> ‧Multi-view Image
+> Infos Generate Question
+> Scene Description
+> General Traffic Rule 3D Grounding
+> OmniDrive
+> Counterfactual Reasoning Muti-view Images
+> 3D Position Multi-view Image Features Omni-L MLP Projector
+> Omni-Q Q-Former
+
+…
+
+> Large Language Model
+
+…
+
+> 3D Perception
+
+Figure 1. OmniDrive is a holistic vision-language dataset for autonomous driving, utilizing counterfactual reasoning to generate high-quality QA data from simulated and actual trajectories. We explore two baseline models: Omni-Q, which designs vision-language models (VLMs) from a 3D perception standpoint, and Omni-L, which builds from VLMs to enhance 3D integration. 
+
+## Abstract 
+
+The advances in vision-language models (VLMs) have led to a growing interest in autonomous driving to leverage their strong reasoning capabilities. However, extending these capabilities from 2D to full 3D understanding is crucial for real-world applications. To address this challenge, we propose OmniDrive, a holistic vision-language dataset that aligns agent models with 3D driving tasks through counter-factual reasoning. This approach enhances decision-making by evaluating potential scenarios and their outcomes, simi-lar to human drivers considering alternative actions. Our counterfactual-based synthetic data annotation process gen-erates large-scale, high-quality datasets, providing denser supervision signals that bridge planning trajectories and language-based reasoning. Futher, we explore two advanced OmniDrive-Agent frameworks, namely Omni-L and Omni-Q, to assess the importance of vision-language alignment ver-sus 3D perception, revealing critical insights into designing effective LLM-agents. Significant improvements on the Driv-eLM Q&A benchmark and nuScenes open-loop planning demonstrate the effectiveness of our dataset and methods. 
+
+## 1. Introduction 
+
+The recent rapid development of 2D Vision-Language Mod-els (VLMs) [ 1, 20 , 25 ] and their strong reasoning capabil-ities have led to a stream of applications in end-to-end au-tonomous driving [ 4, 34 , 41 , 48 , 53 ]. However, extending capabilities from 2D to 3D understanding is crucial for un-locking potential in real-world applications. Although pre-vious works [ 33 , 42 ] have shown successful applications of LLM-agents in autonomous driving (AD), a holistic and principled framework from dataset to LLM-agent is needed to fully extend VLMs’ 2D understanding and reasoning ca-pabilities to 3D geometric and spatial understanding. Recent drive LLM-agent works feature the importance of datasets [ 8, 33 , 34 , 38 , 41 , 42 ]. Many are presented as question-answering (Q&A) datasets to train and benchmark the LLM-agent for either reasoning or planning. Noteably, benchmarks that involve planning [ 8, 41 , 42 ] still resort to us-ing expert trajectories for an open-loop setting on real-world sessions ( e.g . nuScenes). However, recent studies [ 22 , 54 ]
+
+> *
+
+Work done during an internship at NVIDIA. 
+
+> †
+
+Corresponding author: zhidingy@nvidia.com. This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 22442 reveal several limitations of open-loop evaluation: implicit biases towards ego status, overly simple planning scenarios, and easy overfit to expert trajectories. 
+
+OmniDrive: VLM Dataset. Expert driving actions provide only sparse supervision [ 5, 23 ], primarily reflecting safe tra-jectories without delving into the complex decision-making and underlying reasoning processes. Relying solely on this sparse supervision makes it challenging to effectively opti-mize end-to-end driving models. Counterfactual reasoning involves evaluating potential scenarios and their outcomes, similar to how human drivers consider various possibilities to make safer decisions. Therefore, we combine counterfactual reasoning with the chain-of-thought capabilities of VLMs, as shown in Fig. 1. This approach creates a more effective con-nection between planning trajectories and language-based reasoning. Additionally, we found that using simulated trajectories for counterfactual reasoning efficiently identifies key traffic elements in a scene. This process creates a structured and simplified 3D scene representation, making it easier for GPT to understand 3D scenes and generate more effective 3D driving Q&A data. To ensure quality, we utilize a rule-based checklist to assess the consequences of potential trajectories. Based on these results, we design prompts for GPT-4 to generate coherent Q&A, which helps identify which objects require attention and evaluate outcomes based on trajectories. A human-in-the-loop approach is employed in designing the checklist and prompts, ensuring comprehensive coverage of all scenarios. This methodology ensures that data generation is both reliable and interpretable. 
+
+Omni-L/Q: LLM-agents. Designing effective Driving Vision-Language Models [ 8, 41 , 48 ] (VLMs) presents a com-plex and underexplored challenge. A fundamental question is whether to build upon existing 2D VLMs[ 25 , 26 ] and align them with 3D space, or to integrate current 3D perception stacks [ 21 , 27 , 35 , 49 ] into a vision-language framework. To address this, we explore two promising Large Language Model (LLM) frameworks Omni-L and Omni-Q. The Omni-L utilizes state-of-the-art (SoTA) MLP-projection approach (LLaVA [ 24 , 25 ]), which enhances the performance of exist-ing VLMs. The Omni-Q is based on the BEV architecture employed by StreamPETR [ 27 , 28 , 46 ], incorporating Q-Former’s [ 20 ] design to investigate the synergy between LLMs and traditional autonomous driving perception tasks. By addressing crucial considerations in the design of au-tonomous driving LLM-Agents, we conduct a comprehen-sive comparison of these paradigms in tasks such as coun-terfactual reasoning and open-loop planning. Our findings indicate that migrating 2D VLMs to 3D is a more straight-forward approach compared to integrating traditional 3D perception stacks into VLMs. 
+
+Contributions. We propose OmniDrive, a holistic frame-work for end-to-end autonomous driving with counterfactual-centric dataset and LLM-agents. With OmniDrive, (1) We introduce a counterfactual-based 3D driving Q&A design pipeline that allows for scalable, high-quality data generation. (2) Models pre-trained on OmniDrive showed significant improvement when tested on DriveLM Q&A benchmark and nuScenes open-loop planning, demonstrating the effectiveness and quality of our dataset. (3) We explore and compare two advanced frameworks Omni-L and Omni-Q, providing critical insights for de-signing effective LLM-Agents. 
+
+## 2. OmniDrive 
+
+We propose OmniDrive, the counterfactual-based synthetic data on nuScenes [ 3] with high quality Q&A pairs covering perception, reasoning and planning in 3D domain. OmniDrive features a human-in-the-loop Q&A gener-ation pipeline using rule-based checklist and GPT-4. As shown in Fig. 2, the data generation process can be divided into: planning-oriented key-frame selection, counterfactual-based checklist and prompt design, human-in-the-loop qual-ity assurance, and large-scale data iteration. 
+
+2.1. Planning-oriented key-frame selection. 
+
+Autonomous driving datasets often contain significant redun-dancy, so we focus on selecting representative key-frames to prototype our data processing strategy. We begin by ex-tracting CLIP [ 39 ] embeddings from the front view images of the nuScenes [ 3] dataset to capture diverse perceptual elements such as landmarks, traffic lights, and lane markings. Using these embeddings, we apply the K-means algorithm to cluster the data, selecting 20% of the cluster centers. This ensures that the most semantically representative data is cho-sen, covering various static and dynamic traffic elements. Next, we further filter the data based on the vehicle’s future trajectory. We apply K-means clustering again, this time se-lecting 200 cluster centers. These centers represent different vehicle dynamics, reflecting driving behaviors such as stop-ping, moving forward, turning left, turning right, U-turns, accelerating, decelerating, and maintaining constant speed. This approach effectively compresses the dataset, ensur-ing that our algorithm design can comprehensively cover all these scenarios. By selecting keyframes, we streamline the process, allowing for more effective rule-based checklist design and prompt iteration. Once the checklist and prompts are verified to cover these scenarios, we iterate on the dataset at a larger scale. This targeted approach ensures that the most relevant data is used for further development. 22443 Nuscenes Datasets CLIP Image Encoder Semantic Features Semantic Similarity Sample Key-frames K-means Clutering Key-frames Trajectory Similarity Sample Key-frame Selection Checklist     
+
+> ‧Traffic Light
+> ‧Collision
+> ‧Drivable Area
+> Prompt
+> The panoramic views depict a serene, overcast day in a residential or office… Traffic Light Existing: False
+> ├── opposite-flow, straight lane [(+40.5, +18.8), (+35.1, +15.4), (+29.7, +12.0), (+24.3, +8.6)] …
+> Scene-level description
+> Scene Info
+> Quality Check
+> Not Qualified
+> What to do? Moving straight.
+> Data Qualified Large-Scale Data Generation
+> Counterfactual
+
+Figure 2. The proposed counterfactual-based synthetic Q&A data generation pipeline integrates semantic key-frame selection, counterfactual-based checklist and prompt design, and human-in-the-loop quality checks to create high-quality Q&A pairs. 
+
+2.2. Counterfactual checklist and prompt design. 
+
+Although GPT-4 has powerful ablitity in long-context pro-cessing, it cannot effectively understand 3D scenes when directly inputting images, 3D objects, lane markings, and scene definitions. It’s difficult to determine the driving sta-tus of vehicles or the relationships between traffic elements. This issue becomes more severe as the number of traffic elements in the scene increases. To address this, we draw inspiration from counterfactual reasoning and represented the entire scene centered around simulated planned trajectories. In this section, we primarily introduce the types of prompts we input into GPT-4 and how we design checklist on counterfactual principles to enhance the quality of Q&A data generation. 
+
+Simulated trajectories. We first cluster the driving trajecto-ries from the entire nuScenes dataset. We then classified the cluster centers into categories such as stopping, moving for-ward, turning left, turning right, making U-turns, accelerat-ing, decelerating, and maintaining a constant speed. In each scene, we simulated these driving behaviors to assess their feasibility. and designed a checklist to determine whether these trajectories violated any traffic rules. 
+
+Counterfactual checklist. For fixed categories, such as object collisions, road boundary collisions, and running red lights, we use the 3D object detection, centerline and road element topology annotations from nuScenes [ 3 ] and OpenLane-v2 [ 45 ] dataset. We design a rule-based checklist to validate these scenarios. However, relying solely on annotated perception elements cannot cover all traffic rules. Therefore, we convert the sim-ulated driving trajectories into high-level decision-making information (this step also involves rule design, such as ob-ject and lane assignment, and determining lane-changing behavior, etc.). We then use GPT-4 to analyze the images and assess whether the driving behavior is safe and complies with traffic regulations. We found that using GPT-4 for coun-terfactual reasoning based on the high-level decision making still achieves good accuracy and interpretability. 
+
+Expert trajectory. We also take the log replay trajectory from nuScenes [ 3] as input prompt. The expert trajectories are classified into different types for high-level decision making. We also identify an object as “close”, if its minimum distance to the trajectory is smaller than 10 meters in the next 3 seconds. The close objects are then listed below the expert trajectory. 
+
+Caption. To improve the quality of Q&A data generation, we utilize counterfactual principles to structure and sim-plify the 3D perception annotations, avoiding the need to input lengthy and unordered scene information. To provide additional contextual information, we also prompt GPT-4 to generate captions, enhancing OCR capabilities and the recognition of open-world object categories. When both the image and extensive scene information are fed into GPT-4 simultaneously, it tends to overlook details in the image. Therefore, we first prompt GPT-4 to produce a scene description based on multi-view input only. As shown in the top block of Tab. 1, we stitch the three frontal views and three rear views into two separate images and feed them into GPT-4. We prompt GPT-4 to include the following details: 1) mention weather, time of day, scene type, and other image contents; 2) understand the general direction of each view ( e.g . the first frontal view being front-left); and 3) avoid mentioning the contents from each view independently, instead describing positions relative to the ego vehicle. 
+
+2.3. Q&A generation. 
+
+In the bottom block of the Tab. 1, we describe the different types of Q&A responses obtained by using the above context information: 
+
+Scene description. We directly take caption (prompt type 1 in Tab. 1) as the answer of scene description. 
+
+Attention. Given the simulated and expert trajectories, run simulation to identify close objects. At the same time, we also allowed GPT-4 to use its own common sense to identify threatening traffic elements. 
+
+Counterfactual reasoning. Given the simulated trajectories, 22444 Prompt type 1: Caption 
+
+The images depict a daytime setting in a controlled-access area, likely a parking lot or a service entrance of a commercial or industrial facility. On the left, there’s a grassy area with trees and a building with blue accents. Moving towards the center, we see a security checkpoint... <omitted >
+
+Prompt type 2: Simulated decision and trajectory 
+
+Simulated decision: Moderate Speed, Left Turn Simulated trajectory: [PT, (+4.85, -0.08), (+9.71, -0.22), ..., (+27.42, -0.93)]. Out of the drivable area 
+
+Prompt type 3: Expert decision and trajectory 
+
+Expert decision: Moving Slowly, Lane Keeping, Go Straight Expert trajectory: [PT, (+0.76, +0.02), (+1.45, +0.03), ..., (+3.44, +0.12)]. Objects need attention: 
+
+|— straight lane [(-2.6, +0.5), (+1.2, +0.7), (+5.0, +0.9), (+8.8, +1.0)] 
+
+| |— movable object.trafficcone at (+8.2, +2.4) 
+
+| |— human.pedestrian.moving at (+4.4, -7.2) ... <omitted >
+
+Conversation type 1: Attention 
+
+Question: What traffic elements should I be aware of while driving in this area? Answer: There are movable traffic cones at various points along your path: one directly in front at (+8.2, +2.4), and others in the surrounding lanes, such as those at (+4.7, -6.3).... <omitted >
+
+Conversation type 2: Counterfactual reasoning 
+
+Question: If I decide to accelerate and make a left turn, what could be the consequences? Answer: It appears that you would be turning into the lane designated for allowing from right to left driving. This maneuver could potentially lead to a collision with oncoming traffic... <omitted >
+
+Conversation type 3: Decision making and planning 
+
+Question: What should be my next action given the current driving situation, and why? Answer: The most suitable trajectory to follow would be [PT, (+0.76, +0.02), (+1.45, +0.03),...,(+3.44, +0.12)]. This trajectory ensures that you remain in your current straight lane, avoid any obstacles... <omitted >
+
+Other Conversations: 
+
+... <omitted >
+
+Table 1. An example to illustrate the counterfactual-based data generation pipeline. The top block shows contexts such as captions and boxes used to prompt GPT-4, and the bottom block shows the four types of responses. 
+
+we simulate to check if the trajectories violate the traffic rules, such as run a red light, collision to other objects or the road boundary. 
+
+Decision making and planning. We present the high-level decision making as well as the expert trajectory and use GPT-4 to reason why this trajectory is safe, given the previous prompt and response information as context. 
+
+General conversation. We also prompt GPT-4 with generat-ing multi-turn dialogues based on caption information and image content, involving the object countings, color, relative position, and OCR-type tasks. We found that this approach helps improve the model’s recognition of long-tail objects. We design checklists on selected keyframes, followed by prompt design and Q&A generation. We manually verify the quality of the Q&A generated from these data. Once our design meets the generalization requirements, we initiate large-scale data generation. This process involves human-in-the-loop quality assurance and large-scale data iteration. 
+
+## 3. OmniDrive-agent 
+
+Designing effective Driving VLMs is a complex challenge. We consider two primary design approaches: To explore these approaches, we propose two frameworks: Omni-L and Omni-Q. Omni-L leverages the MLP from LLaVA [ 25 ] to align multi-view image features to language 22445 LLM      
+
+> Aligned Image Features Omni-Q Projector Omni-L Projector Multi-view Image Features
+> ……
+> Hybrid Attention
+> Cross Attention QKVQKV+3D PE Image Features Carrier +Perception Omni-Q Omni-L Image Features Linear
+> GELU
+> Linear 3D PE +
+
+Figure 3. Overall pipeline of Omni-L and Omni-Q. The Omni-L. Omni-L follows the 2D VLM design of LLAVA, introducing 3D positional encoding and using MLP layers for vision-language alignment. Omni-Q is based on 3D BEV perception, aligning its architecture with the Q-Former design. 
+
+embedding. Omni-Q is inspired by the BEV architecture of StreamPETR [ 46 ] and incorporates Q-Former’s [ 20 ] de-sign to build the interaction between LLMs and traditional autonomous driving tasks. Both Omni-L/Q use a shared visual encoder to extract multi-view image features Fm ∈ RN ×C×H×W . The ex-tracted features are combined with the positional encoding 
+
+Pm and then fed into the projector. The visual features are aligned with the text in the projector and then fed into the large language model for text generation tasks. The main difference between Omni-L and Omni-Q lies in the design of the projector. One prioritizes vision-language alignment, while the other focuses on 3D perception tasks. 
+
+3.1. Omni-Q 
+
+The Transformer decoder in Q-Former [ 20 ] and the sparse query-based 3D perception models, represented by Stream-PETR [ 46 ], share highly similar architecture designs. To enhance the localization abilities of the VLMs, we consider introducing the design of 3D position encoding Pm and the supervision of the query-based perception models to the training of VLMs. As shown in Fig. 3, in QFormer, we ini-tialize the detection queries and carrier queries and perform self-attention to exchange their information, which can be summarized by the following formula: 
+
+(Q, K, V ) = ( [Qc, Q d], [Qc, Q d], [Qc, Q d]),
+
+˜Q = Multi-head Attention (Q, K, V ). (1) 
+
+[·] is the concatenation operation. For simplicity, we omit the position encoding. Then these queries collect information from multi-view images via: 
+
+(Q, K, V ) = ( [Qc, Q d], P m + Fm, F m),
+
+˜Q = Multi-head Attention (Q, K, V ). (2) After that, the perception queries Qd are used to predict the categories and coordinates of the foreground elements. The carrier queries Qc are sent to a MLP to align with the dimension of LLM tokens ( e.g . 4096 dimensions in LLaMA2-7B [ 43 ]) and further used for text generation fol-lowing LLaVA [25]. In Omni-Q, the carrier queries play the role of the visual-language alignment. Additionally, this design enables carrier queries to leverage the geometric priors provided by the 3D position encoding, while also allowing them to lever-age query-based representations acquired through the 3D perception tasks. 
+
+3.2. Omni-L 
+
+Omni-L follows the design of LLaVA [ 25 ], utilizing a sim-ple MLP for aligning the visual-language embedding space. We extend LLaVA’s single image input to multiple images, flattening the multi-view image features Fm and feeding them into the large language model. To distinguish differ-ent viewpoints, we add 3D position encoding Pm to each image patch. However, for training stability, these position encoding weights are initialized to zero. 
+
+3.3. Training strategy 
+
+The training of Omni-L/Q comprises two stages: 2D-Pretraining and 3D-Finetuning. In the initial stage, we pretrain the VLMs on 2D image tasks to initialize the Q-Former/MLP Projector. Following this, the model is fine-tuned on 3D-related driving tasks ( e.g . motion planning, coutner-factual reasoning, etc.). In both stages, we calcu-late the text generation loss without considering contrasting learning and matching loss for in BLIP-2 [20]. 
+
+## 4. Experiment 
+
+4.1. Implementation details 
+
+Our model uses EVA-02-L [ 12 ] as the vision encoder. It applies masked image modeling to distill CLIP [ 39 ], which can extract language-aligned vision features. During the 2D pre-training stage, the training data and strategies, including batchsize, learning rate, and optimizer 22446 Method Ego Status L2 (m) ↓ Collision (%) ↓ Intersection (%) ↓                                                                                                                                                                                                                 
+
+> BEV Planner 1s 2s 3s Avg. 1s 2s 3s Avg. 1s 2s 3s Avg. ST-P3 --1.59 †2.64 †3.73 †2.65 †0.69 †3.62 †8.39 †4.23 †2.53 †8.17 †14.4 †8.37 †
+> UniAD --0.59 1.01 1.48 1.03 0.16 0.51 1.64 0.77 0.35 1.46 3.99 1.93 UniAD ✓✓0.20 0.42 0.75 0.46 0.02 0.25 0.84 0.37 0.20 1.33 3.24 1.59
+> VAD-Base --0.69 1.22 1.83 1.25 0.06 0.68 2.52 1.09 1.02 3.44 7.00 3.82 VAD-Base ✓✓0.17 0.34 0.60 0.37 0.04 0.27 0.67 0.33 0.21 2.13 5.06 2.47 Ego-MLP -✓0.15 0.32 0.59 0.35 0.00 0.27 0.85 0.37 0.27 2.52 6.60 2.93 BEV-Planner --0.30 0.52 0.83 0.55 0.10 0.37 1.30 0.59 0.78 3.79 8.22 4.26 BEV-Planner++ ✓✓0.16 0.32 0.57 0.35 0.00 0.29 0.73 0.34 0.35 2.62 6.51 3.16 Omni-Q --1.15 1.96 2.84 1.98 0.80 3.12 7.46 3.79 1.66 3.86 8.26 4.59 Omni-Q++ ✓✓0.14 0.29 0.55 0.33 0.00 0.13 0.78 0.30 0.56 2.48 5.96 3.00 Omni-L ‡--1.47 2.43 3.38 2.43 0.29 2.84 6.54 3.22 1.23 3.27 7.21 3.90 Omni-L++ ‡-✓0.31 0.62 1.06 0.66 0.35 2.41 0.92 0.64 2.78 2.48 5.62 3.63 Omni-L --1.43 2.34 3.24 2.34 0.23 1.47 4.00 1.90 0.90 2.82 6.16 3.29 Omni-L++ -✓0.15 0.36 0.70 0.40 0.06 0.27 0.72 0.35 0.49 1.99 4.86 2.45
+
+Table 2. Comparison on nuScenes Open-loop planning. For a fair comparison, we referred to the reproduced results in BEV-Planner [ 22 ]. †: The official implementation of ST-P3 (ID-0) utilized partial erroneous ground truth. ‡: The model was trained using only the trajectory prediction task for open-loop planning, without utilizing our generated OmniDrive Q&A data. 
+
+are the same as LLaVA v1.5’s [ 24 ]. In the finetuning stage, the model is trained by AdamW [ 29 ] optimizer with a batch size of 16. The learning rate for the projector is 4e-4, while the visual encoder and the LLM’s learning rates are 2e-5. The cosine annealing policy is used for training stability. We also explore alternative architectures. The BEV-MLP approach uses LSS method [ 35 , 36 ] to transform perspective features into a BEV feature map. We implement temporal modeling following SOLOFusion [ 35 ]. The BEV features will be consecutively fed into a MLP projector and a LLM. In the following section, both our models – Omni-Q and Omni-L – are trained on OmniDrive unless stated otherwise. 
+
+4.2. Dataset & metrics 
+
+OmniDrive The proposed OmniDrive dataset involves cap-tioning, open-loop planning and counterfactual reasoning tasks. In this section, we elaborate on how we assess the performance of models on our dataset. For caption-related tasks, such as scene description and the selection of attention objects, we utilize the commonly employed language-based metrics to evaluate the sentence similarity CIDEr [ 44 ]. Fol-lowing BEV-Planner [ 22 ], Collision Rate and Intersection Rate with the road boundary are adopted to evaluate the performance of Open-loop planning. To evaluate the perfor-mance of the counterfactual reasoning, we ask GPT-3.5 to extract keywords based on the predictions. The keywords include ‘safety,’ ‘collision,’, ‘running a red light,’ and ‘out of the drivable area.’ Then we compare extracted keywords with the ground truth to calculate the Precision and Recall 
+
+for each category of the accident. 
+
+DriveLM The DriveLM [ 41 ] dataset is designed for end-to-end autonomous driving, featuring Graph Visual Question 
+
+Dataset Acc. CG. Blue RL. Cl. Mat. Score 
+
+DriveLM 0.60 0.65 0.50 0.71 0.07 0.36 0.53 +OmniDrive 0.70 0.65 0.52 0.73 0.13 0.37 0.56 +LLaVA665k 0.76 0.63 0.53 0.73 0.15 0.37 0.57 +Both 0.78 0.64 0.54 0.73 0.15 0.37 0.58 
+
+Table 3. The performance of Omni-L on the DriveLM bench-mark. We added pre-training with OmniDrive and LLaVA665k, which significantly improves performance. 
+
+Answering (GVQA) to handle complex dependencies. It includes 696 scenes from the nuScenes dataset, with 4,072 samples and around 0.3 million image-question pairs. These questions cover perception, prediction, planning, and behav-ior, helping to fine-tune models and improve performance. DriveLM’s evaluation metrics include language metrics like BLEU, ROUGE L, and CIDEr for text generation, accuracy for multiple-choice questions, and the ChatGPT Score for open-ended Q&A. The Match Score assesses the alignment of predicted 2D boxes with ground truth objects. The final score is the weighted combination of GPT Score (0.4), Lan-guage Score (0.2), Match Score (0.2), and Accuracy (0.2). 
+
+4.3. Discussion on open-loop planning 
+
+We compare Omni-L and Omni-Q with previous SoTA vision-based planners on nuScenes open-loop planning in Tab. 2. The VLM-based open-loop planning can also achieve comparable performance to SoTA methods when using ego status. However, as mentioned in BEV-planner [ 22 ], encod-ing the ego status significantly improves the metrics across all methods. We found that large language models tend to overfit more easily to ego status. Omni-Q exhibits weaker 22447 Ablation Exp. Safe Red Light Collision Drivable Area P R P R P R P RArchitecture                                             
+
+> Omni-L 72.1 58.0 59.2 63.3 34.3 71.3 49.1 59.2
+> Omni-Q 70.7 49.0 57.6 58.3 32.3 72.6 48.5 58.6 BEV-MLP 70.2 17.3 48.7 53.6 31.1 70.4 32.4 56.6
+> Perception No Lane 67.7 57.3 58.1 59.6 31.0 56.7 47.9 56.8
+> Supervision No Object & Lane 69.0 57.8 51.3 61.2 30.0 53.2 45.3 57.1
+> Table 4. Analysis on OmniDrive counterfactual reasoning and open-loop planning (without ego status). P and R represent Precision and Recall respectively. “No Object” and “No Lane” indicate no corresponding 3D perception supervision in Omni-Q.
+
+VLM capabilities, making the overfitting more pronounced compared to Omni-L, as evidenced by a lower L2 error but a higher collision rate. Omni-L performs significantly bet-ter than Omni-Q without using ego status. Additionally, if the model is trained solely on trajectory prediction tasks, the distribution modeling capability of the language model can degrade, leading to poor open-loop planning results. However, training with our Q&A data without ego status effectively mitigates this issue, reducing the collision rate from 3.22% to 1.90% and the intersection rate from 3.90% to 3.29%. Critically, training Omni-L with both OmniDrive and ego status leads to significant improvements across metrics. 
+
+4.4. Results on DriveLM dataset 
+
+Our dataset, OmniDrive, plays a crucial role in pre-training. Training with only DriveLM dataset leads to an average score of 53%. However, incorporating our pre-training data boosts performance by 3%. Additionally, when combined with LLaVA665K pre-training, our data still provides a sig-nificant improvement. Although our annotations are highly automated, the OmniDrive dataset maintains high quality through counterfactual-based checklist and human-in-the-loop validation. 
+
+4.5. Planning with counterfactual reasoning 
+
+We evaluated our OmniDrive counterfactual reasoning tasks in Tab. 4. We observe that Omni-L, designed from a VLM perspective, performs better on average ( e.g . 72.1% Preci-sion and 58.0% Recall in safety tasks) compared to Omni-Q. However, Omni-Q benefits from 3D perception supervi-sion, showing improvements in tasks like collision detection (32.3% Precision and 72.6% Recall) compared to those with-out 3D supervision. The combination of BEV features and MLP results in poorer performance due to pre-training gaps (e.g . 17.3% Recall in safety tasks). 
+
+4.6. Ablation study & analysis 
+
+In Tab. 5, we illustrate the performance of different archi-tectures on OmniDrive counterfactual reasoning, language ability, and nuScenes open-loop planning. It shows a posi-tive correlation between language ability and performance in these tasks. Omni-L excels with a counterfactual AP of 53.7%, AR of 63.0%, and a Language CIDEr score of 73.2, alongside better open-loop planning metrics (Col 1.90%, In-ter 3.29%). In contrast, Omni-Q, despite benefiting from 3D perception, has lower results with a counterfactual AP of 52.3%, AR of 59.6%, and a CIDEr score of 68.6, due to weaker foundational language skills. This highlights the need for future exploration on aligning traditional 3D percep-tion stacks with language spaces to enhance performance. 
+
+## 5. Related works 
+
+5.1. End-to-end autonomous driving 
+
+The objective of end-to-end autonomous driving is to create a fully differentiable system that spans from sensor input to control signals [ 37 , 52 , 55 ]. The current technical road-map is primarily divided into two paths: open-loop autonomous driving and closed-loop autonomous driving. In the open-loop autonomous driving, the training and evaluation processes are generally conducted on log-replayed real world datasets [38 ]. Pioneering work UniAD [ 14 ] and VAD [ 17 ] integrate modularized design of perception tasks such as object detection, tracking, and semantic segmentation into a unified planning framework. However, Ego-MLP [ 54 ] and BEV-Planner [ 22 ] highlight the limitations of open-loop end-to-end driving benchmarks. In these benchmarks, models may overfit the ego-status in-formation to achieve unreasonably high performance. Re-searchers are addressing the challenges in open-loop evalua-tion by introducing closed-loop benchmarks. Recent works, e.g., MILE [ 13 ], ThinkTwice [ 16 ], VADv2 [ 5] leverage CARLA [ 9 ] as the simulator, which enables the creation of virtual environments with feedback from other agents. Researchers urgently need a reasonable way to evaluate end-to-end autonomous driving systems in the real world. VLM models enable us to perform interpretable analysis and con-duct counterfactual reasoning based on a specific trajectory, thereby enhancing the safety redundancy of the agent. 22448 Abaltion Exp. Counterfactual Language Open-loop AP (%) ↑ AR (%) ↑ CIDEr ↑ Col (%) ↓ Inter (%) ↓
+
+Architecture 
+
+Omni-L 53.7 63.0 73.2 1.90 3.29 
+
+Omni-Q 52.3 59.6 68.6 3.79 4.59 BEV-MLP 45.6 49.5 59.5 4.43 8.56 
+
+Perception No Lane 51.2 57.6 67.8 4.65 8.71 
+
+Supervision No Object & Lane 48.9 57.3 67.8 6.77 8.43  
+
+> Table 5. Analysis on nuScenes open-loop planning and OmniDrive counterfactual reasoning and language ability.
+
+5.2. Vision-language models 
+
+vision-language models leverage LLMs and various modal-ities’ encoders to successfully bridge the gap between lan-guage and other modalities and perform well on multimodal tasks ranging from visual question answer, captioning, and open-world detection. Some VLMs such as CLIP [ 39 ] and ALIGN [ 15 ] utilize contrastive learning to create a simi-lar embedding space for both language and vision. More recently, others such as BLIP-2 [ 20 ] explicitly targets multi-modal tasks and takes multimodal inputs. For these models, there are two common techniques in order to align language and other input modalities: self-attention and cross-attention. LLaVa [ 25 ], PaLM-E [ 10 ], PaLI [ 6], and RT2 [ 56 ] utilize self-attention for alignment by interleaving or concatenat-ing image and text tokens in fixed sequence lengths. How-ever, self-attention based VLMs are unable to handle high resolution inputs and are unsuitable for autonomous driv-ing with multi-camera high solution images. Conversely, Flamingo [ 1], Qwen-VL [ 2], BLIP-2 [ 20 ], utilize cross-attention and are able to extract a fixed number of visual tokens regardless of image resolution. Because of this, our model utilizes Qformer architecture from BLIP-2 to handle our high resolution images. 
+
+5.3. Drive LLM-agents and benchmarks 
+
+Drive LLM-agents. Given LLM’ high performance and ability to align modalities with language, there is a rush to incorporate VLMs/LLMs with autonomous driving (AD). Most AD VLMs methods attempt to create explainable au-tonomous driving with end-to-end learning. DriveGPT4 leverages LLMs to generate reasons for car actions while also predicting car’s next control signals [ 53 ]. Similarly, Drive Anywhere proposes a patch-aligned feature extraction for VLMs that allow it to provide text query-able driving decisions [ 47 ]. Other works leverage VLMs through graph-based VQA (DriveLM) [ 41 ] or chain-of-thought (CoT) de-sign [ 42 , 50 ]. They explicitly solve multiple driving tasks alongside typical VLM tasks, such as generating scene de-scription and analysis, prediction, and planning. 
+
+Benchmarks. To evaluate AD perception and planning, there are various datasets that capture perception, plan-ning, steering, motion data (ONCE [ 32 ], nuScenes [ 3], CARLA [ 9 ], Waymo [ 11 ]). However, datasets with more comprehensive lanugage annotations are required to evalu-ate Drive LLM methods. Datasets focused on perception and tracking include reasoning, or descriptive like captions range from nuScenes-QA [ 38 ], NuPrompt, [ 51 ]. HAD and Talk2Car both contain human like advice to best navi-gate the car [ 7, 19 ], while LaMPilot contains labels meant to evaluate transition from human commands to drive ac-tion [ 30 ]. Beyond scene descriptions, DRAMA [ 31 ] and Rank2Tell [ 40 ] focus on risk object localization. Contrastly, BDD-X, Reason2Drive focus on car explainability by provid-ing reasons behind ego car’s action and behavior [ 18 , 33 , 34 ]. LingoQA [ 33 ] has introduced counterfactual questions into the autonomous driving QA dataset. We believe that the in-terpretability and safety redundancy of autonomous driving in the open-loop setting can be further enhanced by applying counterfactual reasoning to 3D trajectory analysis. 
+
+## 6. Conclusion 
+
+We present OmniDrive, a holistic framework designed to ad-vance end-to-end autonomous driving using LLM-agents. By introducing a counterfactual-based 3D driving Q&A pipeline, we enable scalable, high-quality data generation that significantly enhances decision-making capabilities. Pre-trained models on OmniDrive exhibit significant improve-ments on the DriveLM QA benchmark and nuScenes open-loop planning, underscoring the effectiveness and quality of our dataset. Furthermore, our exploration of two advanced frameworks, Omni-L and Omni-Q, provides valuable in-sights into the design of effective LLM-agents, highlighting the advantages of vision-language alignment in 3D spaces. These frameworks demonstrate the potential for improved reasoning and perception by integrating language models with 3D environmental understanding. 
+
+Limitations. The simulation of counterfactual outcomes, despite moving beyond single trajectories, does not yet con-sider reactions from other agents. As research on closed-loop planning simulators progresses, we aim to use closed-loop results to enhance effectiveness. 22449 7. Acknowledgments 
+
+The team would like to give special thanks to the NVIDIA TSE Team, including Le An, Chengzhe Xu, Yuchao Jin, and Josh Park, for their exceptional work on the TensorRT deployment of OmniDrive. 
+
+## References 
+
+[1] Jean-Baptiste Alayrac, Jeff Donahue, Pauline Luc, Antoine Miech, Iain Barr, Yana Hasson, Karel Lenc, Arthur Mensch, Katherine Millican, Malcolm Reynolds, et al. Flamingo: a visual language model for few-shot learning. In NeurIPs ,2022. 1, 8 [2] Jinze Bai, Shuai Bai, Shusheng Yang, Shijie Wang, Sinan Tan, Peng Wang, Junyang Lin, Chang Zhou, and Jingren Zhou. Qwen-VL: A frontier large vision-language model with versatile abilities. arXiv:2308.12966 , 2023. 8 [3] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gian-carlo Baldan, and Oscar Beijbom. nuScenes: A multimodal dataset for autonomous driving. In CVPR , 2020. 2, 3, 8 [4] Long Chen, Oleg Sinavski, Jan H ¨unermann, Alice Karn-sund, Andrew James Willmott, Danny Birch, Daniel Maund, and Jamie Shotton. Driving with LLMs: Fusing object-level vector modality for explainable autonomous driving. 
+
+arXiv:2310.01957 , 2023. 1 [5] Shaoyu Chen, Bo Jiang, Hao Gao, Bencheng Liao, Qing Xu, Qian Zhang, Chang Huang, Wenyu Liu, and Xinggang Wang. VADv2: End-to-end vectorized autonomous driving via probabilistic planning. arXiv:2402.13243 , 2024. 2, 7 [6] Xi Chen, Xiao Wang, Soravit Changpinyo, AJ Piergio-vanni, Piotr Padlewski, Daniel Salz, Sebastian Good-man, Adam Grycner, Basil Mustafa, Lucas Beyer, et al. PaLI: A jointly-scaled multilingual language-image model. 
+
+arXiv:2209.06794 , 2022. 8 [7] Thierry Deruyttere, Simon Vandenhende, Dusan Grujicic, Luc Van Gool, and Marie Francine Moens. Talk2Car: Taking control of your self-driving car. In EMNLP-IJCNLP , 2019. 8 [8] Xinpeng Ding, Jinahua Han, Hang Xu, Xiaodan Liang, Wei Zhang, and Xiaomeng Li. Holistic autonomous driving un-derstanding by bird’s-eye-view injected multi-modal large models. arXiv:2401.00988 , 2024. 1, 2 [9] Alexey Dosovitskiy, German Ros, Felipe Codevilla, Antonio Lopez, and Vladlen Koltun. Carla: An open urban driving simulator. In CoRL , 2017. 7, 8 [10] Danny Driess, Fei Xia, Mehdi SM Sajjadi, Corey Lynch, Aakanksha Chowdhery, Brian Ichter, Ayzaan Wahid, Jonathan Tompson, Quan Vuong, Tianhe Yu, et al. Palm-e: An em-bodied multimodal language model. arXiv:2303.03378 , 2023. 8[11] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R. Qi, Yin Zhou, Zoey Yang, Aur’elien Chouard, Pei Sun, Jiquan Ngiam, Vijay Vasudevan, Alexander McCauley, Jonathon Shlens, and Dragomir Anguelov. Large scale in-teractive motion forecasting for autonomous driving: The waymo open motion dataset. In ICCV , 2021. 8 [12] Yuxin Fang, Quan Sun, Xinggang Wang, Tiejun Huang, Xin-long Wang, and Yue Cao. EVA-02: A visual representation for neon genesis. arXiv:2303.11331 , 2023. 5 [13] Anthony Hu, Gianluca Corrado, Nicolas Griffiths, Zak Murez, Corina Gurau, Hudson Yeo, Alex Kendall, Roberto Cipolla, and Jamie Shotton. Model-based imitation learning for urban driving. In NeurIPS , 2022. 7 [14] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In CVPR ,2023. 7 [15] Chao Jia, Yinfei Yang, Ye Xia, Yi-Ting Chen, Zarana Parekh, Hieu Pham, Quoc Le, Yun-Hsuan Sung, Zhen Li, and Tom Duerig. Scaling up visual and vision-language representation learning with noisy text supervision. In ICML , 2021. 8 [16] Xiaosong Jia, Penghao Wu, Li Chen, Jiangwei Xie, Conghui He, Junchi Yan, and Hongyang Li. Think Twice before Driv-ing: Towards scalable decoders for end-to-end autonomous driving. In CVPR , 2023. 7 [17] Bo Jiang, Shaoyu Chen, Qing Xu, Bencheng Liao, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. VAD: Vectorized scene representation for efficient autonomous driving. arXiv:2303.12077 , 2023. 7 [18] Jinkyu Kim, Anna Rohrbach, Trevor Darrell, John Canny, and Zeynep Akata. Textual explanations for self-driving vehicles. 
+
+ECCV , 2018. 8 [19] Jinkyu Kim, Teruhisa Misu, Yi-Ting Chen, Ashish Tawari, and John Canny. Grounding human-to-vehicle advice for self-driving vehicles. In CVPR , 2019. 8 [20] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. BLIP-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. In ICML , 2023. 1, 2, 5, 8 [21] Zhiqi Li, Hanming Deng, Tianyu Li, Yangyi Huang, Chong-hao Sima, Xiangwei Geng, Yulu Gao, Wenhai Wang, Yang Li, and Lewei Lu. BEVFormer++ : Improving bevformer for 3d camera-only object detection: 1st place solution for waymo open dataset challenge 2022. 2023. 2 [22] Zhiqi Li, Zhiding Yu, Shiyi Lan, Jiahan Li, Jan Kautz, Tong Lu, and Jose M Alvarez. Is ego status all you need for open-loop end-to-end autonomous driving? arXiv:2312.03031 ,2023. 1, 6, 7 [23] Zhenxin Li, Kailin Li, Shihao Wang, Shiyi Lan, Zhiding Yu, Yishen Ji, Zhiqi Li, Ziyue Zhu, Jan Kautz, Zuxuan Wu, Yu-Gang Jiang, and Jose M. Alvarez. Hydra-mdp: End-to-end multimodal planning with multi-target hydra-distillation, 2024. 2 [24] Haotian Liu, Chunyuan Li, Yuheng Li, and Yong Jae Lee. Improved baselines with visual instruction tuning. 
+
+arXiv:2310.03744 , 2023. 2, 6 [25] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. NeurIPS, 2023. 1, 2, 4, 5, 8 [26] Haotian Liu, Chunyuan Li, Yuheng Li, Bo Li, Yuanhan Zhang, Sheng Shen, and Yong Jae Lee. LLaVA-NeXT: Improved reasoning, ocr, and world knowledge, 2024. 2 [27] Yingfei Liu, Tiancai Wang, Xiangyu Zhang, and Jian Sun. PETR: Position embedding transformation for multi-view 3d object detection. arXiv:2203.05625 , 2022. 2 22450 [28] Yingfei Liu, Junjie Yan, Fan Jia, Shuailin Li, Qi Gao, Tian-cai Wang, Xiangyu Zhang, and Jian Sun. PETRv2: A uni-fied framework for 3d perception from multi-camera images. 
+
+arXiv:2206.01256 , 2022. 2 [29] Ilya Loshchilov and Frank Hutter. SGDR: Stochastic gradient descent with warm restarts. arXiv:1608.03983 , 2016. 6 [30] Yunsheng Ma, Can Cui, Xu Cao, Wenqian Ye, Peiran Liu, Juanwu Lu, Amr Abdelraouf, Rohit Gupta, Kyungtae Han, Aniket Bera, et al. LaMPilot: An open benchmark dataset for autonomous driving with language model programs. 
+
+arXiv:2312.04372 , 2023. 8 [31] Srikanth Malla, Chiho Choi, Isht Dwivedi, Joon Hee Choi, and Jiachen Li. DRAMA: Joint risk localization and caption-ing in driving. In WACV , 2023. 8 [32] Jiageng Mao, Minzhe Niu, Chenhan Jiang, Xiaodan Liang, Yamin Li, Chaoqiang Ye, Wei Zhang, Zhenguo Li, Jie Yu, Chunjing Xu, et al. One million scenes for autonomous driving: Once dataset. 2021. 8 [33] Ana-Maria Marcu, Long Chen, Jan H ¨unermann, Alice Karn-sund, Benoit Hanotte, Prajwal Chidananda, Saurabh Nair, Vijay Badrinarayanan, Alex Kendall, Jamie Shotton, et al. LingoQA: Video question answering for autonomous driving. 
+
+arXiv:2312.14115 , 2023. 1, 8 [34] Ming Nie, Renyuan Peng, Chunwei Wang, Xinyue Cai, Jian-hua Han, Hang Xu, and Li Zhang. Reason2Drive: Towards interpretable and chain-based reasoning for autonomous driv-ing. arXiv:2312.03661 , 2023. 1, 8 [35] Jinhyung Park, Chenfeng Xu, Shijia Yang, Kurt Keutzer, Kris Kitani, Masayoshi Tomizuka, and Wei Zhan. Time will tell: New outlooks and a baseline for temporal multi-view 3d object detection. arXiv:2210.02443 , 2022. 2, 6 [36] Jonah Philion and Sanja Fidler. Lift, splat, shoot: Encoding images from arbitrary camera rigs by implicitly unprojecting to 3d. In ECCV , 2020. 6 [37] Aditya Prakash, Kashyap Chitta, and Andreas Geiger. Multi-modal fusion transformer for end-to-end autonomous driving. In CVPR , 2021. 7 [38] Tianwen Qian, Jingjing Chen, Linhai Zhuo, Yang Jiao, and Yu-Gang Jiang. NuScenes-QA: A multi-modal visual ques-tion answering benchmark for autonomous driving scenario. 
+
+arXiv:2305.14836 , 2023. 1, 7, 8 [39] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervision. In ICML , 2021. 2, 5, 8 [40] Enna Sachdeva, Nakul Agarwal, Suhas Chundi, Sean Roelofs, Jiachen Li, Mykel Kochenderfer, Chiho Choi, and Behzad Dariush. Rank2Tell: A multimodal driving dataset for joint importance ranking and reasoning. In WACV , 2024. 8 [41] Chonghao Sima, Katrin Renz, Kashyap Chitta, Li Chen, Hanxue Zhang, Chengen Xie, Ping Luo, Andreas Geiger, and Hongyang Li. DriveLM: Driving with graph visual question answering. arXiv:2312.14150 , 2023. 1, 2, 6, 8 [42] Xiaoyu Tian, Junru Gu, Bailin Li, Yicheng Liu, Chenxu Hu, Yang Wang, Kun Zhan, Peng Jia, Xianpeng Lang, and Hang Zhao. DriveVLM: The convergence of autonomous driving and large vision-language models. arXiv:2402.12289 , 2024. 1, 8 [43] Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale, et al. Llama 2: Open foundation and fine-tuned chat models. 
+
+arXiv:2307.09288 , 2023. 5 [44] Ramakrishna Vedantam, C Lawrence Zitnick, and Devi Parikh. CIDEr: Consensus-based image description eval-uation. In CVPR , 2015. 6 [45] Huijie Wang, Tianyu Li, Yang Li, Li Chen, Chonghao Sima, Zhenbo Liu, Bangjun Wang, Peijin Jia, Yuting Wang, Shengyin Jiang, et al. OpenLane-V2: A topology reasoning benchmark for unified 3d hd mapping. NeurIPs , 2024. 3 [46] Shihao Wang, Yingfei Liu, Tiancai Wang, Ying Li, and Xi-angyu Zhang. Exploring object-centric temporal modeling for efficient multi-view 3d object detection. arXiv:2303.11926 ,2023. 2, 5 [47] Tsun-Hsuan Wang, Alaa Maalouf, Wei Xiao, Yutong Ban, Alexander Amini, Guy Rosman, Sertac Karaman, and Daniela Rus. Drive Anywhere: Generalizable end-to-end autonomous driving with multi-modal foundation models. 
+
+arXiv:2310.17642 , 2023. 8 [48] Wenhai Wang, Jiangwei Xie, ChuanYang Hu, Haoming Zou, Jianan Fan, Wenwen Tong, Yang Wen, Silei Wu, Hanming Deng, Zhiqi Li, et al. DriveMLM: Aligning multi-modal large language models with behavioral planning states for autonomous driving. arXiv:2312.09245 , 2023. 1, 2 [49] Yue Wang, Guizilini Vitor Campagnolo, Tianyuan Zhang, Hang Zhao, and Justin Solomon. DETR3D: 3d object detec-tion from multi-view images via 3d-to-2d queries. In CoRL ,2022. 2 [50] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou, et al. Chain-of-thought prompting elicits reasoning in large language models. 
+
+NeurIPS , 2022. 8 [51] Dongming Wu, Wencheng Han, Tiancai Wang, Yingfei Liu, Xiangyu Zhang, and Jianbing Shen. Language prompt for autonomous driving. arXiv:2309.04379 , 2023. 8 [52] Penghao Wu, Xiaosong Jia, Li Chen, Junchi Yan, Hongyang Li, and Yu Qiao. Trajectory-guided control prediction for end-to-end autonomous driving: A simple yet strong baseline. In NeurIPS , 2022. 7 [53] Zhenhua Xu, Yujia Zhang, Enze Xie, Zhen Zhao, Yong Guo, Kenneth KY Wong, Zhenguo Li, and Hengshuang Zhao. DriveGPT4: Interpretable end-to-end autonomous driving via large language model. arXiv:2310.01412 , 2023. 1, 8 [54] Jiang-Tian Zhai, Ze Feng, Jinhao Du, Yongqiang Mao, Jiang-Jiang Liu, Zichang Tan, Yifu Zhang, Xiaoqing Ye, and Jing-dong Wang. Rethinking the open-loop evaluation of end-to-end autonomous driving in nuscenes. arXiv:2305.10430 ,2023. 1, 7 [55] Zhejun Zhang, Alexander Liniger, Dengxin Dai, Fisher Yu, and Luc Van Gool. End-to-end urban driving by imitating a reinforcement learning coach. In ICCV , 2021. 7 [56] Brianna Zitkovich, Tianhe Yu, Sichun Xu, Peng Xu, Ted Xiao, Fei Xia, Jialin Wu, Paul Wohlhart, Stefan Welker, Ayzaan 22451 Wahid, et al. RT-2: Vision-language-action models transfer web knowledge to robotic control. In CoRL , 2023. 8 22452

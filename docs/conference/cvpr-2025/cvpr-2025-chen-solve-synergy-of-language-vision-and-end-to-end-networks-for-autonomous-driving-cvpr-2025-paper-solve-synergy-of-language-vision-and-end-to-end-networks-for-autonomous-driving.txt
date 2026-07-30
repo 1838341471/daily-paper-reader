@@ -1,0 +1,290 @@
+Title: SOLVE: Synergy of Language-Vision and End-to-End Networks for Autonomous Driving
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Chen_SOLVE_Synergy_of_Language-Vision_and_End-to-End_Networks_for_Autonomous_Driving_CVPR_2025_paper.pdf
+
+Published Time: Mon, 19 May 2025 12:08:23 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# SOLVE: Synergy of Language-Vision and End-to-End Networks for Autonomous Driving 
+
+## Xuesong Chen 1, 3, 4* Linjiang Huang 2* Tao Ma 1 Rongyao Fang 1 Shaoshuai Shi 3 † Hongsheng Li 1, 4† 1MMLab, CUHK 2 Institute of Artificial Intelligence, Beihang University  
+
+> 3
+
+## Voyager Research, Didi Chuxing 4 CPII under InnoHK 
+
+{chenxuesong@link, hsli@ee }.cuhk.edu.hk, ljhuang@buaa.edu.cn, shaoshuaics@gmail.com 
+
+## Abstract 
+
+The integration of Vision-Language Models (VLMs) into au-tonomous driving systems has shown promise in addressing key challenges such as learning complexity, interpretabil-ity, and common-sense reasoning. However, existing ap-proaches often struggle with efficient integration and real-time decision-making due to computational demands. In this paper, we introduce SOLVE, an innovative framework that synergizes VLMs with end-to-end (E2E) models to en-hance autonomous vehicle planning. Our approach em-phasizes knowledge sharing at the feature level through a shared visual encoder, enabling comprehensive interaction between VLM and E2E components. We propose a Trajec-tory Chain-of-Thought (T-CoT) paradigm, which progres-sively refines trajectory predictions, reducing uncertainty and improving accuracy. By employing a temporal de-coupling strategy, SOLVE achieves efficient cooperation by aligning high-quality VLM outputs with E2E real-time per-formance. Evaluated on the nuScenes dataset, our method demonstrates significant improvements in trajectory predic-tion accuracy, paving the way for more robust and reliable autonomous driving systems. 
+
+## 1. Introduction 
+
+Over the past two decades, autonomous driving has always been a key research focus, with the potential to significantly revolutionize transportation [25, 32, 41]. Thanks to rapid advances in deep learning for perception [22, 26, 34, 38], prediction [14, 29, 31], and planning [4, 11, 16, 37, 40], end-to-end autonomous driving [8, 16–19, 49] has gained prominence, where the entire driving process—from per-ception to planning—is learned within a unified framework. Typically, these methods predict future trajectories or con-trol signals directly from sensor inputs, bypassing distinct    
+
+> *Equal contributions
+> †Corresponding authors Vison
+> Encoder
+> VLM
+> End -to -end
+> Model
+> Synergy
+> ......
+> VLM End -to -end
+> Model
+> ......
+> Initial trajector y
+> (b) Ours
+> Image Sequence
+> Image Sequence
+> (a) Previous Method
+> Final trajector y
+
+Figure 1. Previous methods combine VLM and end-to-end networks through post-processing, while our method combines VLM and end-to-end networks through both feature-level synergy (shared visual encoder) and trajectory-level synergy. 
+
+decision-making steps. Through extensive data training, end-to-end approaches have demonstrated impressive plan-ning capabilities, providing a streamlined and competitive alternative to traditional modular pipelines [5, 21, 33]. End-to-end autonomous driving, while promising, still faces significant challenges, such as learning complex-ity [7], insufficient common-sense reasoning [13, 30], lim-ited interpretability [20, 35], and causal confusion [10, 24]. For instance, current approaches may misinterpret trucks carrying traffic cones as roadblocks or mistake billboard im-ages of vehicles for real obstacles, resulting in unnecessary braking. Recent advancements in large Vision-Language Models (VLMs) [1, 23, 28] offer a potential solution to these challenges. VLMs, through extensive training on di-verse datasets, can simplify learning complexity by pro-viding a more intuitive understanding of various scenar-ios. Additionally, the logical and commonsense knowl-edge provided by VLMs enhances autonomous driving sys-tems, allowing them to better interpret driving environments and make safer decisions in complex situations. However, VLMs still face limitations in areas such as efficiency and 3D perception, which pose challenges for their integration into an end-to-end autonomous driving framework. Some initial explorations have been made to leverage VLMs within the realm of autonomous driving. For exam-This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 12068 ple, DriveVLM [41] introduces a dual-system architecture that integrates the classic perception-prediction-planning (3P) pipeline with VLMs. As shown in Figure 1(a), the VLM and the end-to-end (E2E) model operate indepen-dently and cooperate at the trajectory level, e.g ., using the E2E planner to refine the trajectory predictions made by the VLM. However, this strategy limits information and knowl-edge sharing between the VLM and the E2E model. For example, the E2E model cannot leverage the high-level rea-soning abilities of VLM to pay more attention to critical objects or understand their intents, which is crucial for colli-sion avoidance. Similarly, the VLM cannot integrate the 3D perception capabilities of the E2E model for precise scene comprehension, which is essential for accurate planning. In this work, we introduce SOLVE, an innovative frame-work that promotes synergy between the VLM and the E2E model, emphasizing both knowledge and planning in-tegration. As Figure 1 shows, besides the trajectory-level cooperation, which is already explored in previous ap-proaches [41], our method enhances feature-level knowl-edge sharing through a shared vision encoder, facilitating comprehensive collaboration between the VLM and the E2E model. Leveraging the Q-Former design, the shared encoder efficiently compresses surrounding foreground ob-jects (e.g., cars, pedestrians), background maps (e.g., lane centerlines), and environmental cues (e.g., traffic lights, weather, time of day) into unified visual tokens, reducing redundant feature extraction. Consequently, the Q-Former is designed to operate feature collection and alignment with various perception queries sequentially. This structural alignment enhances consistency across vision perception and control domains, significantly facilitating knowledge sharing and easing the difficulties of scene understanding. To boost precision and efficiency in trajectory prediction, we meticulously optimize the VLM and the E2E model. To address the challenges of VLM in directly generating fine-grained trajectories in an auto-regressive manner, we introduce the Trajectory Chain-of-Thought (T-CoT). This new paradigm progressively refines trajectories by using a predefined trajectory bank and chain-style reasoning. Ini-tially, a trajectory adapter transforms each candidate tra-jectory from the trajectory bank into trajectory tokens that align with text and visual tokens, enabling the network to select the most suitable trajectory. Subsequently, the se-lected trajectory serves as a foundation for the next round of refinement, ultimately generating the final trajectory. Given that VLM can produce high-quality trajectories but at a significant computational cost, we propose a tem-poral decoupling strategy to enable cooperation between the VLM and the E2E model. Unlike previous methods [9], which perform feature-level asynchronization, our ap-proach operates at the trajectory level, specifically aiming to enhance trajectory accuracy. The framework implements a memory-based mechanism where VLM-generated trajecto-ries are stored and subsequently accessed by the E2E net-work as initialization priors, accommodating a temporal offset from the current state. This approach leverages priors of VLM to asynchronously enhance E2E network perfor-mance while maintaining real-time system operation capa-bilities. In summary, our contributions are three-fold: • We propose SOLVE, an innovative framework that pro-motes synergy between the VLM and the E2E model, em-phasizing both knowledge and trajectory integration. • We propose the Trajectory Chain-of-Thought (T-CoT), which progressively refines trajectories through a prede-fined trajectory bank and chain-style reasoning. • We demonstrate the effectiveness of our proposed ap-proach through extensive experiments, and our frame-work achieves state-of-the-art results for open-loop plan-ning on the nuScenes benchmark. 
+
+## 2. Related Work 
+
+2.1. End-to-end Autonomous Driving 
+
+In the early stage, autonomous driving systems often fol-low a modular design and are equipped with rule-based planners. This design hurdles the system’s generalization ability and leads to limited performance. In contrast, end-to-end driving is a fully differentiable system from sen-sors to control signals, optimizing the entire system to di-rectly map perception inputs to planning outputs. Some early works primarily rely on data-driven approaches to train neural networks for end-to-end autonomous driving. These methods show promise, despite challenges with in-terpretability. The growth in driving data further pro-motes end-to-end autonomous driving, with models like UniAD [16] and PARA-Drive [47] using Transformers for multi-task learning like object tracking and planning, en-hancing performance through additional supervision. Fur-thermore, VAD [18] introduces vectorized scene represen-tation for better accuracy and speed, with VAD-v2 [8] fur-ther improving planning by capturing uncertainty. Besides, methods such as AD-MLP [49] employ a simple multi-layer perceptron (MLP) that relies solely on ego vehicle status information, highlighting the potential over-reliance on ego status in simpler driving scenarios while also re-vealing limitations in utilizing perception data effectively. BEV-Planner [27] integrates various perception inputs in a bird’s-eye view (BEV) format, aiming to enhance planning capabilities in more complex traffic situations by leveraging richer environmental context. 
+
+2.2. VLMs for Autonomous Driving 
+
+Nevertheless, end-to-end autonomous driving often suf-fers from limitations, such as learning complexity [7], in-12069 sufficient common-sense reasoning [13, 30], limited inter-pretability [20, 35], and causal confusion [10, 24]. There is an urgent need to improve these systems for real-world applications. Integrating Vision-Language Models (VLMs) into autonomous driving systems has gained significant attention due to their potential to enhance explainability, reasoning, and generalization in driving tasks. For in-stance, models like DriveGPT4 [48] utilize VLMs to pre-dict control signals while simultaneously providing expla-nations for vehicle actions through an iterative question-and-answer format. Similarly, Drive Anywhere [46] em-ploys patch-aligned feature extraction from multi-modal large language models (MLLMs) to facilitate text-based driving decision-making, while OmniDrive [44] introduces a 3D vision-language model architecture aimed at improv-ing reasoning and planning capabilities. Other innovative approaches, such as DriveLM [36], leverage graph-based visual question-answering (VQA) techniques. In a comple-mentary manner, Drive-with-LLMs [6] encodes perception data into latent space using a Transformer network, which is then processed by an LLM to forecast future trajectories. However, most of these VLM-based approaches requires a large computation cost, which cannot achieve real-time decision making. DriveVLM [41] stands out as the first model to merge VLMs with end-to-end architectures, pre-dicting low-frequency trajectories through chain-of-thought reasoning that are refined by an end-to-end model to pro-duce final planning outputs. Despite its promising perfor-mance, it only fosters cooperation at the trajectory level, overlooking the high-level complementarity between the VLM and the end-to-end model. 
+
+## 3. SOLVE 
+
+In this section, we provide a detailed introduction to SOLVE. Figure 2 illustrates the overall architecture. We uti-lize a Sequential Q-Former (SQ-Former) to obtain rich and condensed visual cues from sequences image input (Sec-tion 3.1). These visual cues are shared between the Vision-Language Model (VLM) and the end-to-end (E2E) model, enabling efficient feature-level knowledge integration. Ad-ditionally, we introduce a Trajectory Chain-of-Thought (T-CoT) mechanism (Section 3.2) that refines trajectory pre-dictions from coarse to fine through chain-style reasoning. By aligning the trajectory predictions of the VLM with E2E real-time processing in a time-decoupled cooperation man-ner (Section 3.3), SOLVE achieves the balance between ac-curacy and computational efficiency. Finally, we introduce our multi-stage training strategy (Section 3.4) to further pro-mote feature-level synergy and trajectory prediction. 
+
+3.1. SQ-Former 
+
+Visual cues play a pivotal role in autonomous driving, of-fering foreground information, scene map information, and environmental cues. These elements help the system to ac-curately predict vehicle behavior and plan safe routes, en-hancing overall decision-making and navigation capabili-ties. However, abundant visual information can also intro-duce interference in autonomous driving, such as irrelevant background clutter or reflections. Effectively filtering and extracting useful visual information ensures accuracy and efficiency for autonomous driving. To harness the relevant information from observations, we categorize useful visual cues into three groups, as shown in Figure 3. The first group includes scene-level static or holistic environmental details, such as weather, time of day, and traffic conditions. The second group concentrates on dynamic participants on the road, such as vehicles and pedestrians. The third group contains dynamic map cues, 
+
+e.g ., lanes. Here, we present Sequential Q-Former (SQ-Former), a Q-Former-style architecture that sequentially compresses these groups of visual cues into a fixed num-ber of condensed visual queries, aligning perception with reasoning and planning. Specifically, the SQ-Former is built upon an image encoder, mapping the multi-view im-ages into high-level features Fi ∈ RN ×C×H×W , where 
+
+N, C, H, W denotes the number of views, channels, height and width, respectively. The extracted features are for-warded into the SQ-Former to progressively collect both static and dynamic visual cues from observations. Inspired by StreamPETR [43], we begin with a set of collector queries Qc. These queries are input into a transformer de-coder to capture static cues of the first group, which can be formulated as: 
+
+Q(s) 
+
+> c
+
+= fs(Qc, Fi + Pi), (1) where Pi denotes the 3D position embedding. fs stands for the transformer decoder, which includes interleaved self-attention and cross-attention layers to promote interaction between queries and extract informative static cues, respec-tively. Afterward, the updated collector queries Q(s) 
+
+> c
+
+are concatenated with task-specific queries Q▲, where ▲ rep-resents different tasks, such as object detection (d) or map understanding (m). These queries are then fed into sepa-rate transformer decoders. In SQ-Former, we sequentially conduct this process, following a pre-defined order of per-ception tasks, which can be written as: 
+
+Q(s, ▲[1: n])  
+
+> c
+
+, ˜Q▲[n]
+
+= f▲[n]
+
+ [Q(s, ▲[1: n−1])  
+
+> c
+
+, Q▲[n]], Fi + Pi, M, (2) where [·] denotes the concatenation operation, and f▲[n] is the transformer decoder specific to the n-th task. We intro-duce the memory bank M, following StreamPETR [43], to incorporate the temporal dynamics of the driving sce-nario. In this framework, Qc(s, ▲[1: n]) and ˜Q▲[n] represent the collector queries enriched with visual cues for tasks 112070 Collector queries  
+
+> Visual
+> tokens
+> Q-Former
+> Encode
+> Perception loss
+> Vision
+> Adapter
+
+Vision Language Model    
+
+> Text
+> tokens
+> Drive -CoT
+> QA Data
+> Trajectory
+> Adapter
+> Trajectory
+> tokens
+> Predicted
+> Trajectory
+> Planner
+> Final Trajectory
+> Multi -view image
+> sequence
+> User: With this trajectory as a reference
+> <point_token >…<point_token >. Please
+> provide a planning trajectory for the car.
+> Trajectory Chain -of -Thought
+
+SOLVE -E2E         
+
+> …
+> <traj0> <traj1> <traj2> <trajN >
+> Trajectory
+> User: Please choose the best
+> Trajectory <traj1>
+> , …
+> <traj3> . according to the
+> current scenario.
+> VLM: The planning trajectory
+> is [PT (+1.0, 0.1), (+2.0, 0.2),
+> …, (+6.0, 0.6].
+> VLM: The best
+> one is <traj1> .
+
+SOLVE -
+
+VLM 
+
+> Ego
+> Embed
+> Async.
+
+Figure 2. The overall framework of the proposed SOLVE. Self  / Cross      
+
+> Attn
+> Det. Dec.
+> Lane Dec.
+> 'HW
+> /RVV
+> .9.9.9
+> Image
+> Feature
+> /DQH
+> /RVV
+> Collector
+> Query
+> Det.
+> Query
+> Lane
+> Query
+> Temporal
+> Det. Query
+> Temporal
+> Lane Query
+
+Figure 3. The detail of the proposed SQ-Former. We first capture the static cues from multi-view images and then sequentially align the model with different perception tasks. 
+
+through n, and the updated task-specific queries, respec-tively. These updated queries are then used to align with the 
+
+n-th task. The collector queries are sent to a vision adapter to match the dimensions of the VLM, with an ego token appended for trajectory prediction. According to our experiments, the sequential design en-sures that SQ-Former captures rich, condensed visual cues from various perception tasks, enhancing synergy between them. For example, compared to OmniDrive [44] that uses 512 queries, our method achieves superior performance with only 384 queries, significantly reducing the compu-tational cost of the following VLM. 
+
+3.2. Trajectory Chain-of-Thought 
+
+AD-MLP [49] has demonstrated that even a simple plan-ner can achieve moderate results using only ego status. However, it lacks the ability to reason and integrate logi-cal knowledge, which is crucial for a safe and reliable au-tonomous driving system. To address this limitation, we introduce VLM to enhance the system’s reasoning abilities. Specifically, we provide the VLM with visual and ego inputs, along with high-quality question-answering (QA) pairs that encompass perception, reasoning, and plan-ning [44]. Unlike previous methods, we meticulously develop a Trajectory Chain-of-Thought (T-CoT) process for the planning phase, employing a coarse-to-fine pro-cedure for trajectory prediction. Notably, there are sev-eral methods, such as DriveCoT [45], DriveLM [36] and DriveVLM [41], have demonstrated the effectiveness of CoT in autonomous driving. However, their reasoning chain spans from perception to planning, requiring multiple rounds of reasoning and lengthy textual output, resulting in significant computational costs. In contrast, our trajectory CoT operates at the trajectory level, refining trajectories in several steps and requiring minimal output. To make the T-CoT work at the trajectory level, we first construct a trajectory bank containing 36 candidate trajec-tories (with corresponding ego status and history trajectory) by clustering training set trajectories using the k-means al-gorithm for each navigation command (forward, left-turn and right-turn). Next, we utilize the current ego status and historical trajectory as a feature vector, calculate its similar-ity with the corresponding feature vectors to the clustered trajectories, and then use a top-k operation to select the 
+
+kl trajectories that are closest to the current feature vector. These are combined with a trajectory predicted by an MLP, which uses only ego information and historical data as in-put [49], resulting in kl + 1 candidate trajectories. We intro-duce clustered trajectories because, although the coarse tra-jectories are already acceptable, some predicted trajectories still deviate significantly from the ground truth. Retriev-ing clustered trajectories provides a pull-back mechanism to correct these inaccuracies. With the trajectory bank, the VLM is tasked with progressively outputting predictions in two stages: trajectory selection and trajectory refinement. 
+
+Trajectory selection prompts the VLM to choose the most accurate trajectory from the candidates, based on ego and environmental information. To reduce computa-tional costs, the endpoint of each candidate trajectory is 12071 0XOWL YLHZ,PDJH        
+
+> Large Language Model
+> Vision Adaptor Trajectory Adaptor Text Encoder
+> <Image> Please select the best
+> planning trajectory from <Traj1>
+> <Traj2> <Traj3> for the ego car
+> according to current scene.
+> ,QVWUXFWLRQ 7UDMHFWRU\
+
+Figure 4. The illustration of combination of the proposed trajec-tory tokens with image tokens and text tokens for the large lan-guage model-based planning. 
+
+encoded into a single token through the proposed trajec-tory adapter and inserted into the textual prompt as follows: 
+
+Here are predefined trajectories <Traj 1>, <Traj 2>, · · · ,
+
+<Traj kl+1 >. Please select the best trajectory for the ego car according to the current scenario. , as shown in Figure 4. 
+
+Trajectory refinement involves generating a refined tra-jectory after selecting the reference trajectory. The refer-ence trajectory consists of waypoints, denoted by W =
+
+{w1, w 2, . . . , w n}, where wi = ( xi, y i), representing the vehicle’s path over a future period with predetermined in-tervals. Each waypoint of the reference trajectory is en-coded into a waypoint token and injected into the textual prompt as follows: With the selected trajectory as a refer-ence <Point 1>, <Point 2>, · · · , <Point n>, please provide the planning trajectory for the ego car, which has a velocity of SPEED m/s and an acceleration of ACCEL m /s2.
+
+3.3. Time-decoupled Synergy Prediction 
+
+Our planning-oriented synergy system operates at both feature-level (shared SQ-Former feature) and the trajectory-level, aiming to further enhance final trajectory accuracy. This strategy combines the advanced capabilities of VLMs in generating high-accuracy trajectories with the efficiency of a streamlined E2E model. Specifically, we deploy a simple planner that incorpo-rates cross-attention mechanisms between multiple plan-ning queries and collector queries and then it employs an MLP to project these queries into the final output trajectories. The initialization of the planning queries are performed by encoding position embedding from clustering trajectories from the training set, following SparseDrive [39]. The incorporation between the SQ-Former and the simple planner constructs an E2E model, a pipeline frequently adopted in prior systems. Upon generating a trajectory from the VLM, we put it into memory. The end-to-end network can obtain the lat-est VLM predicted trajectory from the memory (with a de-lay from the current time) as an additional trajectory ini-tialization. Specifically, we task the VLM with predicting trajectories over extended time horizons (longer than both the VLM’s latency and the prediction horizon required by the end-to-end model). Consequently, despite the VLM’s latency, the E2E model can still asynchronously leverage the VLM’s long-term trajectories to obtain additional high-quality trajectory initialization and get the final collabora-tive predicted trajectory. 
+
+3.4. Training Strategy 
+
+We employ a multi-stage training strategy for SOLVE. In the first stage, we employ the same QA pairs as proposed by OmniDrive [44], prompting the VLM by incorporating LoRA layers [15] to address inquiries related to scene de-scription, perception, prediction, and planning. Through QA training, the collector queries in the visual encoder are optimized to comprehensively encode vital scene informa-tion while maintaining efficiency. Subsequently, we train a trajectory adapter to ensure that it can encode predefined trajectories into a feature space compatible with the VLM. We then train the end-to-end planning head while freezing the previously trained SQ-Former, vision adapter, and trajectory adapter. In the subsequent phase, leveraging these pre-trained weights, we jointly optimize the VLM and end-to-end plan-ning head without freezing any components. During this phase, we employ the proposed T-CoT to augment the rea-soning capabilities of the VLM. Finally, our trajectory-level synergy strategy involves ex-clusively refining the end-to-end planner by leveraging the trajectory forecasted by the VLM in historical frames as an additional initialized planning query for the current frame. 
+
+## 4. Experiments 
+
+4.1. Dataset and Implementation Details 
+
+NuScenes Dataset. We utilize the nuScenes [3] dataset to train and evaluate our method. This comprehensive, large-scale driving dataset is tailored for urban environments, fea-turing 1,000 driving scenes, each approximately 20 sec-onds long. It encompasses diverse sensor data, includ-ing surround-view camera images and LiDAR point clouds, along with extensive annotations such as 3D bounding boxes, ego vehicle trajectories, and road maps. For training of VLM, we employ the OmniDrive-nuScenes [44] dataset, a planning-oriented extension of the nuScenes dataset with additional annotations, including perception, prediction, and planning-related QA. Specifically, the dataset features two distinct QA paradigms: Offline QA, which focuses on scene-level reasoning through tasks such as scene descrip-tion, attention analysis, and decision validation using lan-guage models; and Online QA, which emphasizes 3D spa-12072 Method Ego Status L2 (m) ↓ Collision (%) ↓                                                                                                                                     
+
+> 1s 2s 3s Avg. 1s 2s 3s Avg. UniAD [16] -0.59 1.01 1.48 1.03 0.16 0.51 1.64 0.77 UniAD [16] ✓0.20 0.42 0.75 0.46 0.02 0.25 0.84 0.37 VAD-Base [18] -0.69 1.22 1.83 1.25 0.06 0.68 2.52 1.09 VAD-Base [18] ✓0.17 0.34 0.60 0.37 0.04 0.27 0.67 0.33 AD-MLP [49] -0.15 0.32 0.59 0.35 0.00 0.27 0.85 0.37 BEV-Planner [27] -0.30 0.52 0.83 0.55 0.10 0.37 1.30 0.59 BEV-Planner++ [27] ✓0.16 0.32 0.57 0.35 0.00 0.29 0.73 0.34 DriveVLM [41] ✓0.18 0.34 0.68 0.40 ----OmniDrive [44] ✓0.14 0.29 0.55 0.33 0.00 0.13 0.78 0.30 EMMA [17] ✓0.14 0.29 0.54 0.32 ----DriveVLM-Dual [41] ✓0.15 0.29 0.48 0.31 ----Ours-E2E ✓0.14 0.28 0.50 0.31 0.04 0.17 0.68 0.30 Ours-E2E (Async) ✓0.13 0.27 0.50 0.30 0.04 0.17 0.65 0.29 Ours-VLM ✓0.13 0.25 0.47 0.28 0.00 0.16 0.43 0.20
+> Table 1. Performance comparison of various methods on the NuScenes dataset for open-loop planning. Methods are evaluated with or without ego status consideration. The proposed methods, particularly SOLVE-VLM, demonstrate superior accuracy and safety, achieving the lowest average L2 error and collision rates.
+
+tial understanding through tasks like 2D-to-3D grounding, proximity analysis, and lane-based object detection using geometric labels. 
+
+Evaluation Metrics. Following previous works [27], we employ displacement error (L2 distance) and collision rate as the primary metrics. 
+
+Implementation Details. We use LLaVA v1.5 [28], whose component of language model is based on LLaMA-7B, as our default large vision-language model, demonstrating ex-ceptional performance in tasks such as question answering, visual localization, and text recognition. We replace its vi-sion encoder with our SQ-Former. For the SQ-Former, we employ a predefined task order of image → 3D detection →
+
+lane detection. The image encoder is initialized using EVA-02-L [12]. For the detection decoder and lane decoder, we adopt the architecture from StreamPETR [43]. The num-bers of object queries, lane queries, and the sequential col-lector queries are set to 900, 300, and 384, respectively. 
+
+4.2. Comparison with State-of-the-art Methods 
+
+As shown in Table 1, SOLVE-E2E and SOLVE-VLM achieved SOTA results in their respective tracks. Specifi-cally, among end-to-end networks, SOLVE-E2E surpassed UniAD [16], VAD [18], and BEV-planner [27] by 0.15, 0.06, and 0.04, respectively, in terms of L2 (m) error, which shows that SOLVE can better imitate the driving behavior of human experts. On the other hand, SOLVE achieves 0.07%, 0.03%, and 0.07% lower collision rates than UniAD, VAD, and BEV-planner, respectively, which shows that it has more accurate spatial judgment ability than others and can avoid other objects as much as possible when planning tra-jectories. It is worth noting that SOLVE-E2E achieved sim-ilar performance to DriveVLM-dual. This proves the supe-riority of the joint training of SOLVE’s shared visual en-coder. Specifically, other end-to-end methods only train vi-sual encoders through detection or segmentation tasks, but lack scene understanding capabilities and may miss impor-tant visual cues during the encoding process. In contrast, we use VLM’s comprehensive QA task, including perception, prediction, and planning, to ensure that the visual encoder encodes important features in the input signal, such as key objects that need to be avoided, while ignoring some in-formation that is not important for planning, such as some unimportant objects behind the vehicle. On the other hand, SOLVE-VLM achieves the highest performance compared to other VLM-based methods, sur-passing OmniDrive [44] and DriveVLM [41] by 0.05 and 0.03 in terms of L2 error, using large language models of similar capacities (DriveVLM uses QwenVL-7.7B [2], OmniDrive and our SOLVE-VLM use LLaVA1.5-7B [42]). This experiment proves that 1) our proposed SQ-former can effectively compress visual features and better release the reasoning ability of the language model. 2) Our joint train-ing scheme of sharing SQ-Former enables VLM to obtain effective auxiliary supervision from the end-to-end model branch to improve performance. Finally, using the future trajectory predicted by VLM in the historical frame as the initialization of the current moment, SOLVE-E2E (Async) achieves better performance than SOLVE-E2E, with an im-provement of 0.01 in terms of L2 (m) error. 
+
+4.3. Qualitative Results 
+
+We show two planning results of SOLVE in Fig. 5. To a better understanding of the scene, we also provide input 12073 Figure 5. Qualitative results of SOLVE, where red lines, blue lines and yellow lines mean the planning results from VLM, E2E-Async and E2E modules. The ego car (green box) and ground truth trajectory (green line) are shown in the right BEV images. 
+
+surrounding camera images and project the planning trajec-tories to the front camera image. As shown in the figure, for simple straight-ahead scenarios (see first row), both VLM and the E2E model can predict trajectories that match the expert trajectory. However, for more complex scenarios, the trajectory predicted by the end-to-end model may devi-ate from the center line of the lane (see yellow line in sec-ond row). At the same time, VLM can better understand the scenario and keep the trajectory in the middle of the lane. Besides, with the help of VLM-predicted trajectories, E2E-Async can predict better trajectories than E2E networks. 
+
+4.4. Ablation Studies 
+
+We conduct comprehensive ablation studies to verify the effectiveness of each component in SOLVE. Unless other-wise mentioned, we train both the SQ-Former and VLM for 6 epochs to optimize computational resources while main-taining experimental rigor. We take L2 (cm) as the default metric for comparison. 
+
+Effects of query number of SQ-former. Table 2 displays the VLM performances of using different numbers of SQ-former queries to encode visual information. First, too few collector query numbers ( i.e. 256) can only represent lim-ited features, which may easily lead to the loss of visual features, resulting in the lowest performance. Second, too many collector queries ( i.e. 512) may introduce redundant information while increasing the capacity of the SQ-former. It will also increase the amount of computation during VLM training and inference. Finally, we choose 384 queries as our default option to balance performance and computation. 
+
+Effects of different designs of visual information encod-ing in SQ-Former. Table 3 investigates the impact of dif-ferent visual information encoding strategies for VLM. Q means the initial learnable query and the arrows indicate 12074 Number of SQ-Former’s queries L2 (cm) ↓                                                   
+
+> 1s 2s 3s Avg 256 14.1 29.2 54.5 32.6 384 14.1 29.0 54.0 32.3 512 14.2 29.2 54.4 32.6
+> Table 2. Effects of the number of queries of SQ-Former to encode temporal vision information.
+> Method L2 (cm) ↓
+> 1s 2s 3s Avg Q→Det →Lane 14.3 29.5 55.0 33.0 Q→Img →Det →Lane 14.1 29.0 54.0 32.3 Q→Img →Lane →Det 14.2 29.1 54.4 32.6
+> Table 3. Different designs of visual feature encoding in SQ-Former, where Q means the initial learnable query and →means the order of cross attention.
+
+the order in which SQ-Former encodes different elements, including image features, detection query, and lane query. Comparing the first and second rows of the table, we can find that incorporating the encoding of the overall image features can achieve a 0.7 performance improvement of L2, which proves that some scene-level clues contained in the image features, such as road conditions and weather, are beneficial to VLM’s trajectory planning. Comparing the second and third rows of the table, we find that the encod-ing order of different elements also affects the performance. Encoding the detection query first and then the lane query can achieve a 0.3 L2 improvement compared to the reverse order. We use the design in the second row as our choice. 
+
+Effects of trajectory CoT for VLM planning. Table 4 investigates the impact of the proposed trajectory CoT for VLM. Results demonstrate that direct trajectory prediction without CoT yields suboptimal performance, highlighting the inherent challenges VLMs face in auto-regressive nu-merical prediction tasks. The integration of trajectory CoT, through reference trajectories and trajectory tokens, pro-vides crucial location priors, reducing the uncertainty of direct waypoint prediction and yielding a 1.1 performance improvement. Our analysis of reference trajectory quantity reveals that insufficient samples ( e.g ., 4) constrain trajectory diversity, though still achieving a 0.9 improvement over the baseline. Conversely, excessive samples ( e.g ., 8), while pro-viding more optional initial references, increase both tra-jectory selection complexity and computational overhead. Based on this trade-off analysis, we empirically determine 6 reference trajectories as the optimal configuration, balanc-ing performance and computational efficiency. 
+
+Effects of sharing SQ-Former. Table 5 shows the im-pact of shared SQ-Former features on the performance of the E2E planner and VLM planner. The results indicate that feature sharing and joint training protocols significantly outperform independently trained networks. The E2E net-Method Trajectory number L2 (cm) ↓                                                
+
+> 1s 2s 3s Avg
+> w/o CoT -13.6 26.9 47.8 29.5 CoT 4 (3+1) 12.6 25.7 47.3 28.6 6 (5+1) 12.5 25.6 47.1 28.4 8 (7+1) 12.5 25.6 47.1 28.4
+> Table 4. Effects of the proposed T-CoT. The trajectory number means the selected top-k and 1 predicted trajectories.
+> Method SQ-Former L2 (cm) ↓
+> 1s 2s 3s Avg E2E w/o sharing 14.9 29.6 53.2 32.5 sharing 14.2 28.1 50.5 31.0 VLM w/o sharing 12.8 26.0 48.3 29.0 sharing 12.6 25.5 47.3 28.4
+> Table 5. Effects of sharing SQ-Former features to the E2E module and the VLM module.
+
+work exhibits a 1.5 cm reduction in L2 error when utiliz-ing shared SQ-Former features, suggesting that question-answering supervision enables more effective feature ex-traction for planning compared to conventional detection and segmentation supervision alone. Similarly, VLM per-formance improves by 0.6 through E2E network integra-tion. This contrasts with DriveVLM’s approach of trajec-tory initialization through post-processing, which shows no significant improvement in VLM’s planning capabilities. 
+
+## 5. Conclusion 
+
+In this work, we introduce SOLVE, an innovative frame-work that fosters synergy between the Vision-Language Model (VLM) and the end-to-end (E2E) model, em-phasizing both knowledge and planning integration. To tackle the challenges faced by VLMs in directly gener-ating fine-grained trajectories in an auto-regressive man-ner, we present the Trajectory Chain-of-Thought (T-CoT), which progressively refines trajectories using a predefined trajectory bank and chain-style reasoning. Additionally, we propose a temporal decoupling strategy to facilitate co-operation between the VLM and the E2E model. Exper-iments on the nuScenes dataset demonstrate that our ap-proach achieves state-of-the-art results. 
+
+## 6. Acknowledgement 
+
+This project is funded in part by National Key R&D Pro-gram of China Project 2022ZD0161100, by the Centre for Perceptual and Interactive Intelligence (CPII) Ltd un-der the Innovation and Technology Commission (ITC)’s InnoHK, by General Research Fund of Hong Kong RGC Project 14204021, by NSFC-RGC Joint Fund Project N CUHK498/24. Hongsheng Li is a PI of CPII under the InnoHK. 12075 References 
+
+[1] Jean-Baptiste Alayrac, Jeff Donahue, Pauline Luc, Antoine Miech, Iain Barr, Yana Hasson, Karel Lenc, Arthur Mensch, Katherine Millican, Malcolm Reynolds, et al. Flamingo: a visual language model for few-shot learning. NeurIPS , 35: 23716–23736, 2022. 1 [2] J Bai, S Bai, S Yang, S Wang, S Tan, P Wang, J Lin, C Zhou, and J Qwen-VL Zhou. A versatile vision-language model for understanding, localization, text reading, and beyond. arXiv preprint arXiv:2308.12966 , 2023. 6 [3] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Giancarlo Baldan, and Oscar Beijbom. nuscenes: A mul-timodal dataset for autonomous driving. In CVPR , pages 11621–11631, 2020. 5 [4] Holger Caesar, Juraj Kabzan, Kok Seang Tan, Whye Kit Fong, Eric Wolff, Alex Lang, Luke Fletcher, Oscar Beijbom, and Sammy Omari. nuplan: A closed-loop ml-based plan-ning benchmark for autonomous vehicles. arXiv preprint arXiv:2106.11810 , 2021. 1 [5] Changfang Chen, Yingmin Jia, Minglei Shu, and Yinglong Wang. Hierarchical adaptive path-tracking control for au-tonomous vehicles. IEEE Transactions on Intelligent Trans-portation Systems , 16(5):2900–2912, 2015. 1 [6] Long Chen, Oleg Sinavski, Jan H¨ unermann, Alice Karnsund, Andrew James Willmott, Danny Birch, Daniel Maund, and Jamie Shotton. Driving with llms: Fusing object-level vec-tor modality for explainable autonomous driving. In ICRA ,pages 14093–14100. IEEE, 2024. 3 [7] Li Chen, Penghao Wu, Kashyap Chitta, Bernhard Jaeger, An-dreas Geiger, and Hongyang Li. End-to-end autonomous driving: Challenges and frontiers. IEEE TPAMI , 2024. 1, 2[8] Shaoyu Chen, Bo Jiang, Hao Gao, Bencheng Liao, Qing Xu, Qian Zhang, Chang Huang, Wenyu Liu, and Xinggang Wang. Vadv2: End-to-end vectorized autonomous driving via probabilistic planning. arXiv preprint arXiv:2402.13243 ,2024. 1, 2 [9] Yuan Chen, Zi-han Ding, Ziqin Wang, Yan Wang, Lijun Zhang, and Si Liu. Asynchronous large language model en-hanced planner for autonomous driving. In ECCV , pages 22–38. Springer, 2025. 2 [10] Pim De Haan, Dinesh Jayaraman, and Sergey Levine. Causal confusion in imitation learning. NeurIPS , 32, 2019. 1, 3 [11] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R Qi, Yin Zhou, et al. Large scale interactive mo-tion forecasting for autonomous driving: The waymo open motion dataset. In ICCV , pages 9710–9719, 2021. 1 [12] Yuxin Fang, Quan Sun, Xinggang Wang, Tiejun Huang, Xin-long Wang, and Yue Cao. Eva-02: A visual representation for neon genesis. Image and Vision Computing , 149:105171, 2024. 6 [13] Daocheng Fu, Xin Li, Licheng Wen, Min Dou, Pinlong Cai, Botian Shi, and Yu Qiao. Drive like a human: Rethinking autonomous driving with large language models. In WACV ,pages 910–919, 2024. 1, 3 [14] Junru Gu, Chen Sun, and Hang Zhao. Densetnt: End-to-end trajectory prediction from dense goal sets. In ICCV , pages 15303–15312, 2021. 1 [15] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu Chen. Lora: Low-rank adaptation of large language models. arXiv preprint arXiv:2106.09685 , 2021. 5 [16] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In 
+
+CVPR , pages 17853–17862, 2023. 1, 2, 6 [17] Jyh-Jing Hwang, Runsheng Xu, Hubert Lin, Wei-Chih Hung, Jingwei Ji, Kristy Choi, Di Huang, Tong He, Paul Covington, Benjamin Sapp, et al. Emma: End-to-end multimodal model for autonomous driving. arXiv preprint arXiv:2410.23262 ,2024. 6 [18] Bo Jiang, Shaoyu Chen, Qing Xu, Bencheng Liao, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. Vad: Vectorized scene representation for efficient autonomous driving. In ICCV , pages 8340– 8350, 2023. 2, 6 [19] Bo Jiang, Shaoyu Chen, Bencheng Liao, Xingyu Zhang, Wei Yin, Qian Zhang, Chang Huang, Wenyu Liu, and Xing-gang Wang. Senna: Bridging large vision-language mod-els and end-to-end autonomous driving. arXiv preprint arXiv:2410.22313 , 2024. 1 [20] Taotao Jing, Haifeng Xia, Renran Tian, Haoran Ding, Xiao Luo, Joshua Domeyer, Rini Sherony, and Zhengming Ding. Inaction: Interpretable action decision making for au-tonomous driving. In ECCV , pages 370–387. Springer, 2022. 1, 3 [21] Felix Kunz, Dominik Nuss, J¨ urgen Wiest, Hendrik Deusch, Stephan Reuter, Franz Gritschneder, Alexander Scheel, Manuel St¨ ubler, Martin Bach, Patrick Hatzelmann, et al. Au-tonomous driving at ulm university: A modular, robust, and sensor-independent fusion approach. In IEEE Intelligent Ve-hicles Symposium , pages 666–673. IEEE, 2015. 1 [22] Alex H Lang, Sourabh Vora, Holger Caesar, Lubing Zhou, Jiong Yang, and Oscar Beijbom. Pointpillars: Fast encoders for object detection from point clouds. In CVPR , pages 12697–12705, 2019. 1 [23] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. pages 19730–19742. PMLR, 2023. 1 [24] Jiankun Li, Hao Li, Jiangjiang Liu, Zhikang Zou, Xiaoqing Ye, Fan Wang, Jizhou Huang, Hua Wu, and Haifeng Wang. Exploring the causality of end-to-end autonomous driving. 
+
+arXiv preprint arXiv:2407.06546 , 2024. 1, 3 [25] Ying Li, Lingfei Ma, Zilong Zhong, Fei Liu, Michael A Chapman, Dongpu Cao, and Jonathan Li. Deep learning for lidar point clouds in autonomous driving: A review. IEEE Transactions on Neural Networks and Learning Systems , 32 (8):3412–3432, 2020. 1 [26] Zhiqi Li, Wenhai Wang, Hongyang Li, Enze Xie, Chong-hao Sima, Tong Lu, Yu Qiao, and Jifeng Dai. Bevformer: Learning bird’s-eye-view representation from multi-camera 12076 images via spatiotemporal transformers. In ECCV , pages 1– 18. Springer, 2022. 1 [27] Zhiqi Li, Zhiding Yu, Shiyi Lan, Jiahan Li, Jan Kautz, Tong Lu, and Jose M Alvarez. Is ego status all you need for open-loop end-to-end autonomous driving? In CVPR , pages 14864–14873, 2024. 2, 6 [28] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. NeurIPS , 36, 2024. 1, 6 [29] Yicheng Liu, Jinghuai Zhang, Liangji Fang, Qinhong Jiang, and Bolei Zhou. Multimodal motion prediction with stacked transformers. In CVPR , pages 7577–7586, 2021. 1 [30] Jiageng Mao, Junjie Ye, Yuxi Qian, Marco Pavone, and Yue Wang. A language agent for autonomous driving. arXiv preprint arXiv:2311.10813 , 2023. 1, 3 [31] Sajjad Mozaffari, Omar Y Al-Jarrah, Mehrdad Dianati, Paul Jennings, and Alexandros Mouzakitis. Deep learning-based vehicle behavior prediction for autonomous driving applica-tions: A review. IEEE Transactions on Intelligent Trans-portation Systems , 23(1):33–47, 2020. 1 [32] Khan Muhammad, Amin Ullah, Jaime Lloret, Javier Del Ser, and Victor Hugo C de Albuquerque. Deep learning for safe autonomous driving: Current challenges and future direc-tions. IEEE Transactions on Intelligent Transportation Sys-tems , 22(7):4316–4336, 2020. 1 [33] Samyeul Noh and Kyounghwan An. Decision-making framework for automated driving in highway environments. 
+
+IEEE Transactions on Intelligent Transportation Systems , 19 (1):58–71, 2017. 1 [34] Charles R Qi, Hao Su, Kaichun Mo, and Leonidas J Guibas. Pointnet: Deep learning on point sets for 3d classification and segmentation. In CVPR , pages 652–660, 2017. 1 [35] Hao Shao, Letian Wang, Ruobing Chen, Hongsheng Li, and Yu Liu. Safety-enhanced autonomous driving using inter-pretable sensor fusion transformer. In Conference on Robot Learning , pages 726–737. PMLR, 2023. 1, 3 [36] Chonghao Sima, Katrin Renz, Kashyap Chitta, Li Chen, Hanxue Zhang, Chengen Xie, Jens Beißwenger, Ping Luo, Andreas Geiger, and Hongyang Li. Drivelm: Driving with graph visual question answering. arXiv preprint arXiv:2312.14150 , 2023. 3, 4 [37] Haoran Song, Wenchao Ding, Yuxuan Chen, Shaojie Shen, Michael Yu Wang, and Qifeng Chen. Pip: Planning-informed trajectory prediction for autonomous driving. In 
+
+ECCV , pages 598–614. Springer, 2020. 1 [38] Pei Sun, Henrik Kretzschmar, Xerxes Dotiwalla, Aurelien Chouard, Vijaysai Patnaik, Paul Tsui, James Guo, Yin Zhou, Yuning Chai, Benjamin Caine, et al. Scalability in perception for autonomous driving: Waymo open dataset. In CVPR ,pages 2446–2454, 2020. 1 [39] Wenchao Sun, Xuewu Lin, Yining Shi, Chuang Zhang, Hao-ran Wu, and Sifa Zheng. Sparsedrive: End-to-end au-tonomous driving via sparse scene representation. arXiv preprint arXiv:2405.19620 , 2024. 5 [40] Siyu Teng, Xuemin Hu, Peng Deng, Bai Li, Yuchen Li, Yunfeng Ai, Dongsheng Yang, Lingxi Li, Zhe Xuanyuan, Fenghua Zhu, et al. Motion planning for autonomous driv-ing: The state of the art and future perspectives. IEEE Trans-actions on Intelligent Vehicles , 8(6):3692–3711, 2023. 1 [41] Xiaoyu Tian, Junru Gu, Bailin Li, Yicheng Liu, Yang Wang, Zhiyong Zhao, Kun Zhan, Peng Jia, Xianpeng Lang, and Hang Zhao. Drivevlm: The convergence of autonomous driving and large vision-language models. arXiv preprint arXiv:2402.12289 , 2024. 1, 2, 3, 4, 6 [42] Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timoth´ ee Lacroix, Baptiste Rozi` ere, Naman Goyal, Eric Hambro, Faisal Azhar, et al. Llama: Open and efficient foundation language models. 
+
+arXiv preprint arXiv:2302.13971 , 2023. 6 [43] Shihao Wang, Yingfei Liu, Tiancai Wang, Ying Li, and Xi-angyu Zhang. Exploring object-centric temporal modeling for efficient multi-view 3d object detection. In ICCV , pages 3621–3631, 2023. 3, 6 [44] Shihao Wang, Zhiding Yu, Xiaohui Jiang, Shiyi Lan, Min Shi, Nadine Chang, Jan Kautz, Ying Li, and Jose M Alvarez. Omnidrive: A holistic llm-agent framework for autonomous driving with 3d perception, reasoning and planning. arXiv preprint arXiv:2405.01533 , 2024. 3, 4, 5, 6 [45] Tianqi Wang, Enze Xie, Ruihang Chu, Zhenguo Li, and Ping Luo. Drivecot: Integrating chain-of-thought reasoning with end-to-end driving. arXiv preprint arXiv:2403.16996 , 2024. 4[46] Tsun-Hsuan Wang, Alaa Maalouf, Wei Xiao, Yutong Ban, Alexander Amini, Guy Rosman, Sertac Karaman, and Daniela Rus. Drive anywhere: Generalizable end-to-end au-tonomous driving with multi-modal foundation models. In 
+
+ICRA , pages 6687–6694. IEEE, 2024. 3 [47] Xinshuo Weng, Boris Ivanovic, Yan Wang, Yue Wang, and Marco Pavone. Para-drive: Parallelized architecture for real-time autonomous driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 15449–15458, 2024. 2 [48] Zhenhua Xu, Yujia Zhang, Enze Xie, Zhen Zhao, Yong Guo, Kwan-Yee K Wong, Zhenguo Li, and Hengshuang Zhao. Drivegpt4: Interpretable end-to-end autonomous driving via large language model. IEEE Robotics and Automation Let-ters , 2024. 3 [49] Jiang-Tian Zhai, Ze Feng, Jinhao Du, Yongqiang Mao, Jiang-Jiang Liu, Zichang Tan, Yifu Zhang, Xiaoqing Ye, and Jingdong Wang. Rethinking the open-loop evaluation of end-to-end autonomous driving in nuscenes. arXiv preprint arXiv:2305.10430 , 2023. 1, 2, 4, 6 12077

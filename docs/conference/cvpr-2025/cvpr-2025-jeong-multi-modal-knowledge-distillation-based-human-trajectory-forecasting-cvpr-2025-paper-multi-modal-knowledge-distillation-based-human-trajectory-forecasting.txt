@@ -1,0 +1,326 @@
+Title: Multi-modal Knowledge Distillation-based Human Trajectory Forecasting
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Jeong_Multi-modal_Knowledge_Distillation-based_Human_Trajectory_Forecasting_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 12:41:30 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# Multi-modal Knowledge Distillation-based Human Trajectory Forecasting 
+
+# Jaewoo Jeong 1, Seohee Lee 1, Daehee Park 2†, Giwon Lee 1, and Kuk-Jin Yoon 11Visual Intelligence Lab., KAIST, Korea 
+
+> 2
+
+# Intelligent Systems and Learning Lab., DGIST, Korea 
+
+# Abstract 
+
+Pedestrian trajectory forecasting is crucial in various applications such as autonomous driving and mobile robot navigation. In such applications, camera-based percep-tion enables the extraction of additional modalities (hu-man pose, text) to enhance prediction accuracy. Indeed, we find that textual descriptions play a crucial role in in-tegrating additional modalities into a unified understand-ing. However, online extraction of text requires the use of VLM, which may not be feasible for resource-constrained systems. To address this challenge, we propose a multi-modal knowledge distillation framework: a student model with limited modality is distilled from a teacher model trained with full range of modalities. The comprehensive knowledge of a teacher model trained with trajectory, hu-man pose, and text is distilled into a student model us-ing only trajectory or human pose as a sole supplement. In doing so, we separately distill the core locomotion in-sights from intra-agent multi-modality and inter-agent in-teraction. Our generalizable framework is validated with two state-of-the-art models across three datasets on both ego-view (JRDB, SIT) and BEV-view (ETH/UCY) setups, utilizing both annotated and VLM-generated text captions. Distilled student models show consistent improvement in all prediction metrics for both full and instantaneous obser-vations, improving up to ∼13%. The code is available at 
+
+github.com/Jaewoo97/KDTF .
+
+# 1. Introduction 
+
+Trajectory forecasting aims to predict the future 2D trajec-tory of an agent based on its historical trajectory [10, 14, 15, 33, 44, 51, 59, 60, 63, 64]. This predictive capabil-ity is widely applied in fields such as autonomous driv-ing [9, 16, 17, 24, 35, 36, 43–45, 66, 70], mobile robot navigation [4, 50, 52], and surveillance systems [1, 32, 46]. These applications depend on accurately forecasting the tra-jectories of human or vehicles to prevent collisions, enable smooth navigation, and improve situational awareness. 
+
+> †This work was completed as a Ph.D candidate at KAIST.
+> Figure 1. Multi-modal data such as human pose and text greatly improve trajectory forecasting performance. However, expensive modalities such as text are not readily available during application. Thus, we transfer the extensive knowledge from full modalities to a student model operating on a limited set of modalities.
+
+The main challenge in trajectory forecasting lies in mod-eling the agent’s future intent in locomotion. A clear objec-tive on the purpose of locomotion such as a short-term (1 ∼2seconds) destination significantly improves the prediction accuracy [20, 33]. In that sense, human agents naturally in-teract via visual signals to convey such intention to nearby agents during their maneuvers. Vehicles blink signal lights, bikers raise their arms, pedestrians rotate their torsos, all of which indicate their intent in locomotion to avoid collision with others. Diverse applications of trajectory forecasting allow for an effortless acquisition of these visual cues. In autonomous driving, vehicles employ various complemen-tary sensors alongside RGB cameras as the primary tool for perception [5, 53]. Mobile robots and surveillance systems also rely on RGB cameras for perception and interaction with its surrounding environment and agents [4, 39]. Recent works attempt to extract and utilize additional modalities from these visual inputs. Extrinsics such as 2D, 3D human pose and bounding boxes have been examined to complement understanding human motion dynamics [50]. For vehicle trajectory forecasting, vision language models This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 24222 (VLM) are utilized to leverage textual descriptions of the perceived environment and surrounding agents for general-ization [2, 41, 43, 57]. Compared to uni-modal trajectory forecasting with a sequence of mere 2D numerical coor-dinates, reasoning with multi-modal features allows for a more comprehensive understanding of agent’s motion intent and a correspondingly accurate prediction. Additionally, we find that textual descriptions on loco-motion are essential for integrating additional modalities into a cohesive insight. For pedestrian trajectory forecast-ing, text effectively bridges the domain gap between trajec-tory and human pose, yielding the most competent model. This advantage manifests most distinctively in instanta-neous prediction with only few input frames, as visual cues supplement the semantic context lost due to incomplete ob-servation. However, acquiring and processing multi-modal data substantially increases the demand in computational re-sources, which may exceed the capabilities of mobile sys-tems. In particular, acquisition of textual information re-quires the use of a VLM which requires significant compu-tational resources for a reliable performance [7, 25]. Then, how might we leverage textual insights while miti-gating the computational demands associated with their ac-quisition? In this regard, we propose a knowledge distil-lation (KD) [18] framework where a student model oper-ating with limited modalities is trained by a teacher model that utilizes the full range of modalities as shown in Fig. 1. KD resolves the computational burden, as only the afford-able student model modalities are used during inference, while costly modalities are required solely during training. Specifically, the multi-modal insight from the teacher is dis-tilled into the modality-limited student model, enabling it to acquire language-driven comprehensive knowledge. To fully harness the benefits of KD, we focus on pedestrian trajectory forecasting, leveraging three key aspects: i) Dy-namic human pose exhibits a diverse yet coherent correla-tion with locomotion, ii) Pedestrian scenes span diverse in-door and outdoor environments, driving various agent-agent and agent-scene interactions, iii) Ego-view trajectory fore-casting faces frequent occlusion, making it ideal for exploit-ing supplementary modalities. Our framework is validated on three pedestrian tra-jectory forecasting datasets (JRDB [39], SIT [4], and ETH[47]/UCY [27]) and with two state-of-the-art trajectory forecasting models (HiVT [69] and MART [26]). To thor-oughly assess the model’s ability to integrate multi-modal data, we conduct holistic training and evaluation on both full and instantaneous observations. The teacher model leverages trajectory, 3D human pose, and text, while the student model inputs are restricted to trajectory or 3D hu-man pose as the sole supplement. While text annotations on agent’s behavior and inter-agent interaction are used for JRDB, we use VLM [62] to extract agent descriptions on SIT. For both datasets, a SOTA 3D pose extractor [54] is used to extract the 3D pose. We first train the teacher model with regression loss on both full observation and in-stantaneous input setups. The student model is then dis-tilled upon the frozen teacher model, incorporating regres-sion loss and additional distillation loss aligning the core semantic embedding spaces. We treat intra -agent and in-ter -agent embeddings as the core embeddings. Intra-agent embeddings capture coarse locomotive implications from agent-specific modalities. These are further encoded to ac-count for inter-agent relationships, forming complete repre-sentations on future motion intent. Aligning the core latent spaces across both scales enables the student model to gen-eralize its predictive capabilities on the teacher’s extensive multi-modality. As a result, our generalized KD framework improves the distilled student model performance up to 13% on an averaged metric. In summary, our contributions are three-fold: - We show that textual descriptions play a crucial role in blending the modalities into a comprehensive knowledge on human motion. - For the first time, we propose a knowledge distilla-tion framework for human trajectory forecasting where a modality-limited student model acquires the teacher’s full-modal knowledge, including VLM-generated text. - To validate our framework, we parse two datasets that include 3D human pose and text leveraging VLM. 
+
+# 2. Related works 
+
+## 2.1. Multi-modal trajectory forecasting 
+
+Leveraging multi-modal data such as text or human pose has proven essential in recent research for both pedestrian and vehicle trajectory forecasting, particularly in environ-ments where occlusions and complex interactions are preva-lent [41, 43, 50, 57]. For vehicle trajectory forecasting, re-cent works discovered that a language-based reasoning of motion is robust and generalizable [8, 11, 37]. In doing so, leveraging VLM for perception [41, 43, 57] or by directly interacting with a VLM/LLM to predict and plan future be-havior has been studied [56, 65]. However, exploiting the robust knowledge of text on human motion has been less visited. Instead, recent works focuses on leveraging visual cues such as bounding boxes and human poses [50, 52]. To the best of our knowledge, we are first to leverage the inter-modality relationship between human pose, text, and trajec-tory for modeling motion intent. 
+
+## 2.2. Multi-modal knowledge distillation 
+
+While use of additional modalities greatly enhances the per-formance of models on a plethora of tasks [34, 50, 61, 68], these are often limited due to the computational limitations 24223 or requirements of bulky, expensive sensors. Knowledge distillation serves as its solution, namely by conveying the broad knowledge of a model trained on full modalities to a student model with limited input modalities A common protocol is to construct a competent teacher model that uti-lizes the full range of input modalities, upon which a student model is distilled [12, 22, 23, 31, 48, 58]. Two most cru-cial component are defining the target knowledge to transfer and specifically tailoring a distillation method for the target modality [6, 28, 55, 67]. Building on these principles, we are first to propose a KD framework crafted to distill the comprehensive multi-modal knowledge on agent’s motion intent for trajectory forecasting. 
+
+## 2.3. Instantaneous trajectory forecasting 
+
+trajectory forecasting in mobile systems, such as au-tonomous vehicles and robots, must handle unexpected agents and occlusions, relying on motion prediction from limited frames. This poses a considerably disparate, ill-posed nature compared to conventional protocol [3, 10, 42]. A key approach to addressing this challenge is incorporat-ing past trajectories into the prediction process. The missing past trajectory is predicted in addition to its future coun-terpart, thereby teaching the model to implicitly leverage the past trajectories towards predicting the future [29, 30]. Another line of approach related to our work is utilizing knowledge distillation, where a teacher model trained on full past trajectory distills its full knowledge on its instanta-neous counterpart [40, 64]. We take a step forward by lever-aging multi-modality for knowledge distillation. Visual and textual cues greatly supplement the model’s instantaneous prediction performance, and we show that such knowledge could also be effectively conveyed to the student model. 
+
+# 3. Method 
+
+## 3.1. Problem definition 
+
+trajectory forecasting is a task of learning a mapping func-tion between the observed 2D trajectory sequence of N
+
+agents: X : {xtn}−Tp:0  
+
+> N
+
+, and future trajectory Y : F ×{ytn}0: Tf 
+
+> N
+
+, where F is the number of future trajectory pro-posals. We also exploit 3D human pose and text descrip-tions which are given in each frame, respectively notated as: P : {ptn}−Tp:0  
+
+> N
+
+and S : {stn}−Tp:0  
+
+> N
+
+. These modalities are collectively notated as (X , P, S) ∈ M . For JRDB dataset with text annotation on agent interaction, S includes sA and also sR, respectively for agent behavior and interaction re-lationship. For the remaining method section, notations ϕ,
+
+ψ denote transformer and graph networks, respectively. 
+
+## 3.2. Overall framework 
+
+The crux of our KD framework shown in Fig. 2 lies in two aspects: i) Constructing a competent teacher that musters a comprehensive knowledge on motion intent from three modalities: X , P, and S. ii) Conveying such insight to-wards student models treating X or X +P. Additionally, we generalize the framework to be applicable to any regression-based model. In this light, we re-implement two baseline models focusing on two components: a local encoder for encoding the intra-agent modalities and a global encoder for modeling the inter-agent interaction. We distill each en-coder’s representation to its student counterpart, conveying insights on intra-agent intention and inter-agent interaction. Specifically, both teacher and student models share the same design with a sole difference on the number of input modalities. Each have their respective end-to-end models. We first train the teacher model, followed by student model distilled on the frozen pre-trained teacher model. While we detail each component for KD baselines HiVT [69] and MART [26], other baselines are implemented in a similar fashion, detailed in supplementary materials. 
+
+3.2.1 Modality embedder 
+
+We use separate encoders EX 
+
+> M
+
+, E P 
+
+> M
+
+, E S 
+
+> M
+
+to encode each modality. Following conventional approaches, trajectory embedding is obtained using a MLP. Depending on the model, normalized global position and temporal difference of positions are both encoded or selectively encoded as tra-jectory embedding: zxtn = EX 
+
+> M
+
+(X ). In addition, EX 
+
+> M
+
+also encodes heading angle for trajectory-only student models to acquire context on instantaneous forecasting given 1 frame. For text, we use a pre-trained TinyBERT encoder [21] to ob-tain the sentences’ class tokens as text embeddings, thereby introducing semantic context: zstn = ES 
+
+> M
+
+(S). For human pose, we use an MLP to encode the SMPL theta parameters into pose embedding: zptn = EP 
+
+> M
+
+(P). We use simple MLP networks for embedders to focus on the effects of cross-modality fusion via these embeddings, not the processing of obtaining the embeddings itself. As a result, we obtain modality-specific embeddings for X , P, and S as: 
+
+Z = {zxtn, z ptn, z sA
+
+> tn
+
+, z sR
+
+> tn
+
+} ∈ RNA×Tp×D (1) 
+
+3.2.2 Local encoder 
+
+The local encoder EL fuses modalities in both the modal-ity ( M) and temporal ( Tp) dimensions, capturing a detailed representation of each agent’s behavior. Since all base-line models are transformer-based, we use cross-attention to fuse modalities. MART originally processed X with an MLP, which we replace with a transformer module EL to encode both M and Tp axes via holistic attention. A class token qn is added with the modalities to acquire a represen-tative embedding for each agent, similar to BERT [13]. 
+
+qn = EMART L (Z) = ϕM,T p (qn, z x, z p, z s) (2) 24224 Figure 2. We first pre-train a teacher model that leverages the full range of modalities, upon which a student model with limited modalities (X + P or X ) is distilled from scratch. Regression losses for three observation settings ( Tp, 2, 1) are applied to both teacher and student, while additional KD losses guide the student to robustly encode intra-agent modalities ( Q) and inter-agent interactions ( H). 
+
+For HiVT, modality and temporal dimensions are pro-cessed sequentially to support graph-based interaction mod-eling per frame. Unlike standard transformer encoders that apply attention across embeddings simultaneously, HiVT’s graph-based approach models relationships between each agent and its neighbors individually. Prior to encod-ing, HiVT rotates each neighbor’s trajectory to the ego vehicle’s heading vector coordinates, achieving rotation-invariant embeddings. Such design aims to encode a more thorough agent representation by adaptively handling each inter-agent relationship. We extend this design to incor-porate human pose for neighbors within a threshold τ , ad-dressing pose correlations in a rotation-invariant manner to more effectively capture motion intents from subtle interac-tions and nuances reflected in pose. For each frame, agent modalities (X t, Pt, St)i and the neighbor modalities (X t, Pt)j are encoded as follows: 
+
+{zx, z p, z s}i = E({xt, p t, s t}i)
+
+{zx, z p}i = E({Rji xt, R ji pt}j ) (3) 
+
+qtn = EHiVT L (M)= ψM ([( zx, z p, z s)i, (zx, z p, z s)j , (vji )e])  (4) 
+
+ψM[() i, () j , () e] denotes a graph operation encoding the ego ( i) feature via cross attention with neighbor ( j) and edge (e) features. vji denotes a vector from j to i position at time 
+
+t = 0 . Rji represents a rotation matrix that maps the neigh-bor trajectory from global coordinates to agent’s heading vector coordinates. Then, the temporal domain is encoded by a transformer as in EMART L . The resulting embedding 
+
+qn ∈ RN × D comprehensively represents the coarse mo-tion intents inferred from multi-modal input. 
+
+3.2.3 Global encoder 
+
+The global encoder EG subsequently attends to inter-agent interaction among qn, forming complete implications on socially compliant locomotion. MART employs a group prediction-based transformer model to incorporate inter-agent interactions, a design that aligns well with the integra-tion of additional modalities. Leveraging these modalities enhances the robustness of inter-agent relationship infer-ences, thereby supporting more reliable group assignments. 
+
+H = EMART G (Q) = ϕN (Q) (5) For HiVT, we again exploit the advantages of a graph-based model by respectively leveraging text for each inter-action. JRDB explicitly includes text annotations on the relationship between agents, such as “They are standing to-gether and having conversation.” These text embeddings are used to encode edge attributes along with a spatial cue of 2D vector at t=0 across agent-neighbor pairs as follows: 
+
+H = EHiVT G (Q) = ψN ([( qn)i, (qn)j , (vji , s R,ji )])  (6) 
+
+3.2.4 Decoder 
+
+We use a standard MLP decoder D that maps the global encoder output H ∈ RNA×D to future trajectory forecasts with multiple proposals, Y ∈ RF ×Tf ×2.
+
+## 3.3. Training objectives 
+
+3.3.1 Regression loss 
+
+We regress each model with their corresponding default losses for both teacher and student models: L2 for MART and Negative Log Likelihood for HiVT. Compared to a con-ventional protocol of only training with full past observa-tion, we also train the models with instantaneous observa-tions (1 or 2 frames) to thoroughly assess the model’s ability 24225 in integrating multi-modality for challenging situations. All observations other than the last 2 or 1 frames are padded for the instantaneous prediction setting. These losses are no-tated as LFreg , L2reg , L1reg , each corresponding to loss with full, 2 frames, and 1 frame of observation. The teacher model is first trained via these regression losses. 
+
+3.3.2 Knowledge distillation loss 
+
+We distill the two core knowledges in trajectory forecast-ing: 1. Q, the fusion of intra-agent multi-modalities into a coarse motion intent, 2. H, the refined implications on fu-ture locomotion incorporating agent interactions. In doing so, we apply KL divergence between the teacher ( QT , HT )and student latents ( QS , HS ) to align their distributions. 
+
+LKD = LLKD + LGKD 
+
+= LKL (QT ∥QS ) + LKL (HT ∥HS ) (7) For HiVT, we add an additional regularization term for training stability and use cosine similarity for KD: 
+
+LLKD = λcos Lcos (QT , Q S ) + LKL (N ∥ QS )
+
+LGKD = λcos Lcos (HT , H S ) + LKL (N ∥ HS ) (8) Again, LKL is computed for all three types of observa-tions: LFKD , L2KD , L1KD , each denoting full, 2, and 1 frame of observation. The overall loss for a student model is: 
+
+L = λreg LFreg + L2reg + L1reg + LFKD + L2KD + L1KD  (9) Where λ denotes scaling factor: 0.5 for λcos and 3 for 
+
+λreg . These losses guide the student to predict future trajec-tories while aligning its core latents with the teacher. By mimicking the teacher’s behavior while learning to forecast the future, the student is encouraged to operate as robustly or even surpass the teacher via improved generalization. 
+
+# 4. Experiment 
+
+## 4.1. Dataset 
+
+We test our model on three datasets: JRDB [39], SIT [4], and ETH [47]/UCY [27]. JRDB and SIT are the largest datasets for human tracking and prediction from a robot per-specitve, suitable for developing our framework with their affluent visual features. In addition, traditional ETH/UCY benchmark is also tested upon to show the versatility of our approach even on limited visual features. For JRDB and SIT, we utilize 3D human pose and text captions as an additional modality of visual feature. We extract the SMPL theta parameters of 3D human pose us-ing [54] for each visible agent. Unlike previous works [20, 50, 52], we use SMPL representation for human pose for improved generalizability as discussed in supplementary materials. For text captions, annotated text descriptions [19] are parsed to describe intra-agent behavior and inter-agent interaction for JRDB dataset. For SIT dataset, we use PLLaVa [62] to caption agent descriptions from consecutive frames of cropped images of agents, using prompt “What is the person doing?”. As JRDB dataset includes more diverse scenes and agent behaviors, with up to 38 agents and a 2 ×
+
+longer duration, we treat JRDB as our primary dataset for KD and the ablation studies. Both JRDB and SIT are parsed with 2.5FPS to predict 12 frames given 8 frames, matching the ETH/UCY dataset configuration. For ETH/UCY dataset, its BEV-view and low resolu-tion present disparate limitations compared to JRDB and SIT datasets. While human pose has been used as visual feature for JRDB and SIT, neither 3D or 2D pose are able to be accurately extracted due to low visibility of human pose. Therefore, we resort to 2D image features of cropped images from pretrained CLIP image encoder [49] as visual features. For text captions, VLM models were incompetent in accurately captioning agent behavior for BEV-views. In-stead, we implement a rule-based approach to generate text captions that describe the map context, such as “There is an obstacle in the right.” Further details regarding datasets are scrutinized in the supplementary materials. 
+
+## 4.2. Metrics 
+
+We use the widely used metrics for trajectory forecasting, Average Displacement Error (ADE) and Final Displace-ment Error (FDE). For all experimentation, we predict 6 modes ( F ) of future trajectories to assess the model’s com-petence in predicting a few accurate trajectories rather than over-populating similar trajectories. We also evaluate per-formance on instantaneous forecasting, where only the most recent one or two frames of the past trajectory are given, de-noted as ADE 1 and ADE 2.
+
+## 4.3. Baselines 
+
+We choose the following works as baselines and addition-ally perform KD on underlined models. We precisely mod-ify each model to have similar number of parameters. Fur-ther details are found in the supplementary materials. 
+
+HiVT [69] is a graph-based network designed with attention-based computation. We choose HiVT for KD due to its SOTA performance and flexibility in incorporating ad-ditional modalities across both ego and interaction dimen-sions, enabled by its graph-based architecture. 
+
+MART [26] is a transformer-based network and is one of most recent SOTA model for pedestrian trajectory forecast-ing. We choose MART for KD to demonstrate generalizing our KD framework on any transformer-based models, even ones not specifically designed to handle multi-modality. 
+
+ST [50] (socialTransmotion) is a transformer-based model for human trajectory forecasting designed to handle addi-24226 Figure 3. Qualitative results on JRDB with X + P HiVT model. The model outperforms its baseline counterpart with KD. Improved accuracy is demonstrated on all instantaneous and full observations. Origin denotes robot position, and bubbles represent text annotations. Table 1. Prediction results on JRDB with multimodal inputs: human pose P and text S. Bold denotes best. Lower is better.                                                                                
+
+> MHiVT MART ADE ADE 2ADE 1FDE FDE 2FDE 1Ave. +% 1ADE ADE 2ADE 1FDE FDE 2FDE 1Ave. +%
+> X0.221 0.240 0.342 0.432 0.467 0.632 -0.286 0.275 0.395 0.545 0.526 0.753 -
+> X+P0.229 0.242 0.364 0.441 0.465 0.659 -2.84 0.287 0.282 0.366 0.543 0.538 0.682 +2.02
+> X+S0.224 0.230 0.285 0.432 0.444 0.540 +6.53 0.261 0.265 0.301 0.496 0.506 0.564 +12.41
+> X+P+S0.220 0.227 0.280 0.423 0.435 0.521 +8.38 0.258 0.256 0.289 0.491 0.486 0.538 +14.98
+
+Table 2. KD on ETH/UCY (average) with HiVT student model using X . % measures improvement with KD. Bold denotes best. Grey background highlights results with our KD framework.                                                  
+
+> Model w/ KD ADE ADE 2ADE 1FDE FDE 2FDE 1
+> Ave. + % LED -0.312 0.334 0.600 1.008 1.017 1.427 -ST -0.319 0.319 0.605 0.853 0.855 1.224 -0.364 0.369 0.571 0.852 0.862 1.166 MART ✓0.347 0.353 0.553 0.807 0.817 1.141 +3.80
+> 0.314 0.320 0.555 0.718 0.726 1.132 HiVT ✓0.304 0.317 0.546 0.698 0.727 1.122 +1.55
+
+tional human modalities such as 2D, 3D pose and bounding boxes. This aligns with the motivations of our framework and makes it a suitable candidate for comparison. 
+
+LED [38] is a transformer-based diffusion model achiev-ing SOTA performance on pedestrian trajectory forecasting, chosen to compare our work on various types of learning-based models including diffusion models. 
+
+# 5. Results 
+
+## 5.1. Quantitative results 
+
+5.1.1 Multi-modal teacher model 
+
+As with any KD framework, we start off by constructing a competent teacher model via leveraging diverse modalities. Table 1 demonstrates the performance improvement with the use of additional modalities. Both HiVT and MART gradually improves over all metrics with more modality supplements, achieving up to 14.98% improvement in per-formance. Such significant improvement demonstrates that 
+
+P and S greatly aids understanding motion intent and inter-preting the corresponding future motion. 
+
+> 1Average of % improvement for each metric. Same for all Ave. +% notations in the remainder of the paper.
+
+Specifically, S plays a key role in building robust knowl-edge. For both models, the addition of P results in limited improvement, primarily due to the noise introduced during pose extraction. In contrast, all metrics considerably im-prove with S, reflecting the strong correlation between hu-man motion and language. Leveraging this correlation fully exploits the potential of human pose as shown by further im-provement from X +P to X +P +S, even when X to X +P
+
+has shown degradation for HiVT. This shows that language bridges the domain gap between trajectory and noisy human pose, forming a more comprehensive understanding of mo-tion intent. Use of modalities is particularly beneficial on instantaneous settings, as additional modalities supplement the missing context of instantaneous trajectory, improving up to 27% for ADE 1 on MART from X to X + P + S.
+
+5.1.2 Multi-modal knowledge distillation 
+
+Full modality X + P + S model is used as a teacher for all datasets. Table 2 and 3 show the improvements made with KD. For ego-view datasets JRDB and SIT, we choose Stu-dent model using X and X + P. A consistent improvement over most metrics on all settings is observed, improving up to 13% on SIT dataset. Notably, the performance of both modality type students improves with KD, even when only 
+
+X is used as input modality. This improvement shows the unlocking of the potential of numerical trajectories to grasp the semantic context-based motion intent from the knowl-edge of other modalities. For JRDB dataset which contains considerable amount of training data, HiVT’s vanilla X model performs consid-erably well with full TF input. In such case, the advantages of KD is spotlighted on instantaneous prediction where the 24227 Table 3. KD results on JRDB and SIT dataset. Full modality X + P + S model is chosen as teacher model. KD is performed on student models using modality X and X + P. % measures improvement with KD. Bold represents best performance.                                                                                                                                                                                    
+
+> JRDB dataset SIT dataset Modality Model w/ KD ADE ADE 2ADE 1FDE FDE 2FDE 1Avg. +% ADE ADE 2ADE 1FDE FDE 2FDE 1Avg. +% LED 0.358 0.426 0.447 0.760 0.897 0.934 -0.479 0.507 0.546 1.045 1.057 1.093 -ST 0.324 0.337 0.427 0.614 0.636 0.780 -0.531 0.544 0.699 1.037 1.065 1.310 -0.286 0.275 0.395 0.545 0.526 0.753 0.468 0.483 0.556 0.909 0.937 1.073 MART ✓0.259 0.262 0.366 0.495 0.496 0.684 +7.61 0.441 0.465 0.570 0.832 0.885 1.090 +3.25 0.221 0.240 0.342 0.432 0.467 0.632 0.455 0.457 0.526 0.869 0.884 0.988
+> X
+> HiVT ✓0.220 0.232 0.326 0.438 0.453 0.604 +2.38 0.404 0.427 0.503 0.799 0.833 0.965 +6.37
+> LED 0.340 0.358 0.446 0.715 0.822 0.949 -0.469 0.491 0.548 1.051 1.045 1.085 -ST 0.345 0.362 0.437 0.637 0.663 0.782 -0.541 0.576 0.751 1.046 1.119 1.410 -0.287 0.282 0.366 0.543 0.538 0.682 0.473 0.484 0.574 0.909 0.937 1.119 MART ✓0.266 0.261 0.337 0.519 0.507 0.633 +6.63 0.448 0.465 0.550 0.849 0.883 1.059 +5.19
+> 0.229 0.242 0.364 0.441 0.465 0.659 0.518 0.519 0.531 0.979 0.979 1.006
+> X+P
+> HIVT ✓0.232 0.239 0.308 0.445 0.464 0.560 +4.98 0.414 0.444 0.500 0.789 0.853 0.951 +13.03
+
+improvement averages around 5 ∼10%. X + P for HiVT also shows a similar tendency, showing significant improve-ment on instantaneous prediction. Repeated improvement on X + P again showcases the maximal exploitation of hu-man pose, guided by multi-modal knowledge. Compared to the JRDB dataset, SIT dataset is a smaller dataset with less number of agents and shorter total dura-tion. For such scarce setting, the base model suffered to establish a strong understanding between X and P and re-sulted in inferior performance even with P as additional modality. The strength of KD is particularly evident in this setting, showing the greatest improvement of 13%. consis-tent improvement with KD on X + P confirms the crucial role of text in establishing a firm understanding on the cor-relation between human pose and locomotion intent via KD. Our KD framework’s competence is also manifested on ETH/UCY dataset as shown in Tab. 2. As mentioned in ex-periment section, cropped 2D image feature is used in place of human pose and text describes the nearby obstacles. Since validation is performed on a different scene, use of image features does not inherently guarantee any generaliz-ability. On the other hand, text contains generalizable map context information in unified format such as “There is an obstacle on the right of the person.” This provides hints on reducing the agent motion intent’s degree of freedom. The teacher model learns to leverage these hints for forecasting, especially improving their instantaneous prediction perfor-mance. Upon KD, X student models were able to learn such knowledge and improved between 1 ∼ 4%. Consistent im-provement across all ego, BEV-view datasets demonstrate the generalizability of our multi-modal KD framework. 
+
+## 5.2. Qualitative results 
+
+Figure 3 shows predictions made with both instantaneous and full observations on JRDB dataset. The leftmost two figures visualize predictions before and after KD. Surpris-ingly, the student model outperforms the teacher model after KD on prediction with 2 frame input. This shows that the student not only mimics the teacher model, but generalizes 
+
+Table 4. Ablation on KD components, namely EL and EG out-puts. Models use X + P modalities. Experimented on JRDB.                                                                 
+
+> LLKD LGKD ADE ADE 2ADE 1FDE FDE 2FDE 1Avg. +% HiVT 0.229 0.242 0.364 0.441 0.465 0.659 -
+> ✓0.228 0.244 0.352 0.447 0.472 0.647 +0.26
+> ✓0.228 0.241 0.327 0.445 0.468 0.601 +3.09
+> ✓✓0.232 0.239 0.308 0.445 0.464 0.560 +4.98
+> MART 0.287 0.282 0.366 0.543 0.538 0.682 -
+> ✓0.274 0.272 0.380 0.520 0.514 0.711 +1.49
+> ✓0.275 0.271 0.366 0.529 0.520 0.683 +2.33
+> ✓✓0.266 0.261 0.337 0.519 0.507 0.633 +6.63
+
+itself to the task based on the comprehensive knowledge of the teacher. In the extreme of a single frame input, the stu-dent before KD collides into a nearby agent. After KD, however, the model accurately predicts a collision-free tra-jectory. Notably, the model successfully infers the direction of avoidance, demonstrating a solid understanding of pose orientation after KD. Overall, student model shows distinct improvements across all input settings with KD. More qual-itative results are found in the supplementary materials. 
+
+## 5.3. Ablation studies 
+
+Herein, we delve into deeper questions regarding the dual foundation of our KD framework: 5.1.1, 5.1.2. Further ab-lations are found in the supplementary materials. 
+
+How do we ensure an effective knowledge distillation? 
+
+The common core of various KD frameworks lies in align-ing the latent space across different modalities. Latent spaces sharing a comparable semantic meaning is precisely aligned with latent-specific losses [6, 31, 48]. For example, L2 loss is used to align BEV feature space where teacher and student features share a geometric coordinate, while KL divergence loss is used for distributional latents [6]. In ad-dition to adhering to such philosophy, we attempt to keep our framework generalizable. In that sense, we have chosen the core distillation features by their general context: intra-agent modality fusion Q and inter-agent interaction H.Table 4 studies the effects of each LLKD and LGKD on over-all performance gain. First, LLKD guides the student model 24228 to learn and encode the comprehensive knowledge of QT
+
+on agent’s motion intent with its limited modality. LGKD 
+
+then further reinforces the student model by inducing the model to effectively encode inter-agent interactions on the heterogenous latents acquired from QT . For both HiVT and MART, LLKD is shown to be most important as it aligns the most fundamental latents that represent agents’ motion in-tent. Additional use of LGKD corroborates the distillation by guiding the model to learn incorporating interaction among these intents. As a result, incorporating both LLKD and LGKD 
+
+results in greatest improvement. 
+
+Does language assist in modeling human interactions? 
+
+Human locomotion depends on two major factors: intra-agent motion intent and inter-agent interaction. While recent works attempt to leverage agent-descriptive multi-modality in modeling motion intent [50, 52], no works have explored utilizing explicit interaction cues other than global positional vectors. To the best of our knowledge, we are the first to inves-tigate the impact of incorporating explicit text as supple-mentary guidance in modeling agent interaction. Table 5 demonstrates the improvements with the use of interaction text caption SR on various models. The most significant im-provement is observed with the X model, which operates with least modalities. In this setting where data is scarce for inferring agent motion intent, the interaction text compen-sates for missing information by conveying implicit action intent cues embedded within the behavioral descriptions. Other models also consistently improve with SR, with the performance gain decreasing as the number of modalities increases. For KD, building a X + P + S model with the text-based guidance improved the teacher model by 0.9%, followed by 0.51% gain in its corresponding student. Over-all, we observe the broad impact of interaction text from building a competent teacher to distilling its knowledge. 
+
+What kind of language description is most helpful? 
+
+From previous sections, we discovered that language plays the most important role in constructing a comprehensive teacher model. Then, what kind of text caption helps the most? To answer this question, we use VLM to generate captions based on diverse prompts shown in Tab. 6. We generate text captions for each visible agent in the text annotation-free SIT dataset. Each prompt is selected to leverage different abilities of VLM. Prompt 1 is the same format as JRDB annotation, describing the past behavior. Prompt 2 incorporates the scene context by specifying any surrounding obstacle as text captions for ETH/UCY. Prompt 3 takes a predictive stance on human motion by captioning the VLM’s prediction on future human motion. Evaluation on X + S teacher model shows that incor-porating the scene context yields the best performance. In-deed, hints about the presence of an obstacle offer insight into the agent’s future trajectory direction, whereas descrip-
+
+Table 5. Ablation study on interaction text SR using the HiVT model under various modality protocols. Experimented on JRDB. 
+
+X column indicates the additional modalities used alongside X .                                                                        
+
+> +SR
+> w/ KD XADE ADE 2ADE 1FDE FDE 2FDE 1
+> Avg. +% -0.221 0.240 0.342 0.432 0.467 0.632 +4.57
+> ✓0.218 0.228 0.316 0.432 0.445 0.576
+> +P0.229 0.242 0.364 0.441 0.465 0.659 +3.59
+> ✓0.226 0.237 0.334 0.436 0.458 0.614
+> +SA
+> 0.233 0.238 0.275 0.450 0.458 0.516 +0.98
+> ✓0.224 0.230 0.285 0.432 0.444 0.540
+> +P
+> +SA
+> 0.225 0.231 0.278 0.431 0.442 0.515 +0.90
+> ✓0.220 0.227 0.280 0.423 0.435 0.521
+> ✓+P0.227 0.238 0.317 0.444 0.461 0.580 +0.51
+> ✓✓0.232 0.239 0.308 0.445 0.464 0.560
+
+Table 6. Ablation on VLM prompts for acquiring text captions on SIT dataset. HiVT X + P is distilled from X + S for each.                                                            
+
+> ADE ADE 2ADE 1FDE FDE 2FDE 1
+> Prompt 1 What is the person doing?
+> X+S0.521 0.525 0.533 0.978 0.984 1.005
+> X+P+KD 0.414 0.444 0.500 0.789 0.853 0.951
+> Prompt 2 Is there any obstacle in front of the person?
+> X+S0.506 0.508 0.531 0.950 0.959 0.991
+> X+P+KD 0.418 0.444 0.500 0.795 0.854 0.960 Prompt 3 What will the person do in the future?
+> X+S0.520 0.522 0.530 0.989 0.990 1.003
+> X+P+KD 0.414 0.448 0.535 0.796 0.865 1.032
+
+tive captions primarily focus on the agent’s dynamic or static nature. Comparing between prompt 1 and prompt 3, the X + S teacher model shows comparable performance, showing that VLM’s prediction of agent behavior accu-rately reflects the corresponding past motion. With KD, however, knowledge from prompt 1 resulted in most supe-rior performance due to the straightforward correlation be-tween past pose and text describing the past motion. For prompt 2, map context was unable to be inferred upon KD since there is no distinctive correlation between past pose and map context. While KD with prompt 3 shows nearly comparable result compared to prompt 1, a direct correla-tion between pose and text as in prompt 1 yields greatest improvement upon KD between these latents. 
+
+# 6. Conclusion 
+
+In this work, we present a multi-modal knowledge distil-lation framework for human trajectory forecasting. First, we demonstrate that incorporating additional modalities such as 3D pose and text significantly enhances forecasting performance. However, as expensive modality such as text is not readily available in most applications, we additional perform KD on models with limited modalities. Student models with only trajectory input or pose as sole additional modality is distilled upon a teacher trained with full range of modalities. Student models consistently improve in both instantaneous and full observation metrics on all ego and BEV-view datasets, confirming the generalized competence of our KD framework. 24229 Acknowledgements This work was supported by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (NRF2022R1A2B5B03002636). 
+
+# References 
+
+[1] Sk Arif Ahmed, Debi Prosad Dogra, Samarjit Kar, and Partha Pratim Roy. Trajectory-based surveillance analysis: A survey. IEEE transactions on circuits and systems for video technology , 29(7):1985–1997, 2018. 1 [2] Inhwan Bae, Junoh Lee, and Hae-Gon Jeon. Can language beat numerical regression? language-based multimodal tra-jectory prediction. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 753–766, 2024. 2 [3] Inhwan Bae, Young-Jae Park, and Hae-Gon Jeon. Singu-lartrajectory: Universal trajectory predictor using diffusion model. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17890– 17901, 2024. 3 [4] Jong Wook Bae, Jungho Kim, Junyong Yun, Changwon Kang, Jeongseon Choi, Chanhyeok Kim, Junho Lee, Jung-wook Choi, and Jun Won Choi. Sit dataset: socially in-teractive pedestrian trajectory dataset for social navigation robots. Advances in Neural Information Processing Systems ,36, 2024. 1, 2, 5 [5] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 11621–11631, 2020. 1 [6] Yujeong Chae, Hyeonseong Kim, Changgyoon Oh, Minseok Kim, and Kuk-Jin Yoon. Lidar-based all-weather 3d object detection via prompting and distilling 4d radar. In Computer Vision – ECCV 2024 , pages 368–385, Cham, 2025. Springer Nature Switzerland. 3, 7 [7] Kaibing Chen, Dong Shen, Hanwen Zhong, Huasong Zhong, Kui Xia, Di Xu, Wei Yuan, Yifei Hu, Bin Wen, Tianke Zhang, et al. Evlm: An efficient vision-language model for visual understanding. arXiv preprint arXiv:2407.14177 ,2024. 2 [8] Yuan Chen, Zi-han Ding, Ziqin Wang, Yan Wang, Lijun Zhang, and Si Liu. Asynchronous large language model en-hanced planner for autonomous driving. In European Con-ference on Computer Vision , pages 22–38. Springer, 2025. 2[9] Jie Cheng, Xiaodong Mei, and Ming Liu. Forecast-mae: Self-supervised pre-training for motion forecasting with masked autoencoders. In Proceedings of the IEEE/CVF In-ternational Conference on Computer Vision , pages 8679– 8689, 2023. 1 [10] Pranav Singh Chib and Pravendra Singh. Pedestrian trajec-tory prediction with missing data: Datasets, imputation, and benchmarking. arXiv preprint arXiv:2411.00174 , 2024. 1, 3 [11] Can Cui, Yunsheng Ma, Xu Cao, Wenqian Ye, and Ziran Wang. Receive, reason, and react: Drive as you say, with large language models in autonomous vehicles. IEEE Intel-ligent Transportation Systems Magazine , 2024. 2 [12] Wenliang Dai, Lu Hou, Lifeng Shang, Xin Jiang, Qun Liu, and Pascale Fung. Enabling multimodal generation on clip via vision-language knowledge distillation. arXiv preprint arXiv:2203.06386 , 2022. 3 [13] Jacob Devlin. Bert: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805 , 2018. 3 [14] Yang Gao, Po-Chien Luan, and Alexandre Alahi. Multi-transmotion: Pre-trained model for human motion predic-tion. arXiv preprint arXiv:2411.02673 , 2024. 1 [15] Tianpei Gu, Guangyi Chen, Junlong Li, Chunze Lin, Yong-ming Rao, Jie Zhou, and Jiwen Lu. Stochastic trajectory prediction via motion indeterminacy diffusion. In Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17113–17122, 2022. 1 [16] Xunjiang Gu, Guanyu Song, Igor Gilitschenski, Marco Pavone, and Boris Ivanovic. Producing and leveraging on-line map uncertainty in trajectory prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition , pages 14521–14530, 2024. 1 [17] Je-Seok Ham, Dae Hoe Kim, NamKyo Jung, and Jinyoung Moon. Cipf: Crossing intention prediction network based on feature fusion modules for improving pedestrian safety. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 3665–3674, 2023. 1 [18] Geoffrey Hinton. Distilling the knowledge in a neural net-work. arXiv preprint arXiv:1503.02531 , 2015. 2 [19] Simindokht Jahangard, Zhixi Cai, Shiki Wen, and Hamid Rezatofighi. Jrdb-social: A multifaceted robotic dataset for understanding of context and dynamics of human interac-tions within social groups. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 22087–22097, 2024. 5 [20] Jaewoo Jeong, Daehee Park, and Kuk-Jin Yoon. Multi-agent long-term 3d human pose forecasting via interaction-aware trajectory conditioning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 1617–1628, 2024. 1, 5 [21] Xiaoqi Jiao, Yichun Yin, Lifeng Shang, Xin Jiang, Xiao Chen, Linlin Li, Fang Wang, and Qun Liu. Tinybert: Distill-ing bert for natural language understanding. arXiv preprint arXiv:1909.10351 , 2019. 3 [22] Sanmin Kim, Youngseok Kim, Sihwan Hwang, Hyeonjun Jeong, and Dongsuk Kum. Labeldistill: Label-guided cross-modal knowledge distillation for camera-based 3d object de-tection. In European Conference on Computer Vision , pages 19–37. Springer, 2025. 3 [23] Marvin Klingner, Shubhankar Borse, Varun Ravi Kumar, Behnaz Rezaei, Venkatraman Narayanan, Senthil Yogamani, and Fatih Porikli. X3kd: Knowledge distillation across modalities, tasks and stages for multi-camera 3d object de-tection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 13343– 13353, 2023. 3 24230 [24] Zhiqian Lan, Yuxuan Jiang, Yao Mu, Chen Chen, and Shengbo Eben Li. Sept: Towards efficient scene represen-tation learning for motion prediction. In The Twelfth Inter-national Conference on Learning Representations , 2023. 1 [25] Hugo Laurenc ¸on, Andr´ es Marafioti, Victor Sanh, and L´ eo Tronchon. Building and better understanding vision-language models: insights and future directions. arXiv preprint arXiv:2408.12637 , 2024. 2 [26] Seongju Lee, Junseok Lee, Yeonguk Yu, Taeri Kim, and Kyoobin Lee. Mart: Multiscale relational transformer net-works for multi-agent trajectory prediction. arXiv preprint arXiv:2407.21635 , 2024. 2, 3, 5 [27] Alon Lerner, Yiorgos Chrysanthou, and Dani Lischinski. Crowds by example. In Computer graphics forum , pages 655–664. Wiley Online Library, 2007. 2, 5 [28] Mingcheng Li, Dingkang Yang, Xiao Zhao, Shuaibing Wang, Yan Wang, Kun Yang, Mingyang Sun, Dongliang Kou, Ziyun Qian, and Lihua Zhang. Correlation-decoupled knowledge distillation for multimodal sentiment analy-sis with incomplete modalities. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 12458–12468, 2024. 3 [29] Rongqing Li, Changsheng Li, Dongchun Ren, Guangyi Chen, Ye Yuan, and Guoren Wang. Bcdiff: Bidirectional consistent diffusion for instantaneous trajectory prediction. 
+
+Advances in Neural Information Processing Systems , 36: 14400–14413, 2023. 3 [30] Rongqing Li, Changsheng Li, Yuhang Li, Hanjie Li, Yi Chen, Ye Yuan, and Guoren Wang. Itpnet: Towards instanta-neous trajectory prediction for autonomous driving. In Pro-ceedings of the 30th ACM SIGKDD Conference on Knowl-edge Discovery and Data Mining , pages 1643–1654, 2024. 3[31] Yong Li, Yuanzhi Wang, and Zhen Cui. Decoupled multi-modal distilling for emotion recognition. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 6631–6640, 2023. 3, 7 [32] Haozhe Lin, Chunyu Wei, Li He, Yuchen Guo, Yunqi Zhao, Shanglong Li, and Lu Fang. Gigatraj: Predicting long-term trajectories of hundreds of pedestrians in gigapixel com-plex scenes. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 19331– 19340, 2024. 1 [33] Xiaotong Lin, Tianming Liang, Jianhuang Lai, and Jian-Fang Hu. Progressive pretext task learning for human tra-jectory prediction. arXiv preprint arXiv:2407.11588 , 2024. 1[34] Xun Lin, Shuai Wang, Rizhao Cai, Yizhong Liu, Ying Fu, Wenzhong Tang, Zitong Yu, and Alex Kot. Suppress and rebalance: Towards generalized multi-modal face anti-spoofing. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 211–221, 2024. 2 [35] Haochen Liu, Li Chen, Yu Qiao, Chen Lv, and Hongyang Li. Reasoning multi-agent behavioral topology for interac-tive autonomous driving. arXiv preprint arXiv:2409.18031 ,2024. 1 [36] Mengmeng Liu, Hao Cheng, Lin Chen, Hellward Broszio, Jiangtao Li, Runjiang Zhao, Monika Sester, and Michael Ying Yang. Laformer: Trajectory prediction for autonomous driving with lane-aware scene constraints. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 2039–2049, 2024. 1 [37] Yunsheng Ma, Can Cui, Xu Cao, Wenqian Ye, Peiran Liu, Juanwu Lu, Amr Abdelraouf, Rohit Gupta, Kyungtae Han, Aniket Bera, et al. Lampilot: An open benchmark dataset for autonomous driving with language model programs. In 
+
+Proceedings of the IEEE/CVF Conference on Computer Vi-sion and Pattern Recognition , pages 15141–15151, 2024. 2 [38] Weibo Mao, Chenxin Xu, Qi Zhu, Siheng Chen, and Yanfeng Wang. Leapfrog diffusion model for stochastic trajectory prediction. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 5517–5526, 2023. 6 [39] Roberto Martin-Martin, Mihir Patel, Hamid Rezatofighi, Abhijeet Shenoi, JunYoung Gwak, Eric Frankel, Amir Sadeghian, and Silvio Savarese. Jrdb: A dataset and bench-mark of egocentric robot visual perception of humans in built environments. IEEE transactions on pattern analysis and machine intelligence , 45(6):6748–6765, 2021. 1, 2, 5 [40] Alessio Monti, Angelo Porrello, Simone Calderara, Pasquale Coscia, Lamberto Ballan, and Rita Cucchiara. How many observations are enough? knowledge distillation for trajec-tory forecasting. In Proceedings of the IEEE/CVF Confer-ence on Computer Vision and Pattern Recognition , pages 6553–6562, 2022. 3 [41] Seokha Moon, Hyun Woo, Hongbeen Park, Haeji Jung, Reza Mahjourian, Hyung-gun Chi, Hyerin Lim, Sangpil Kim, and Jinkyu Kim. Visiontrap: Vision-augmented trajectory prediction guided by textual descriptions. arXiv preprint arXiv:2407.12345 , 2024. 2 [42] Achintya Nath, Paritosh Kabra, Ishu Gupta, Pravendra Singh, et al. Ms-tip: Imputation aware pedestrian trajec-tory prediction. In Forty-first International Conference on Machine Learning , 2024. 3 [43] Chenbin Pan, Burhaneddin Yaman, Tommaso Nesti, Abhirup Mallik, Alessandro G Allievi, Senem Velipasalar, and Liu Ren. Vlp: Vision language planning for autonomous driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14760–14769, 2024. 1, 2 [44] Daehee Park, Hobin Ryu, Yunseo Yang, Jegyeong Cho, Ji-won Kim, and Kuk-Jin Yoon. Leveraging future relationship reasoning for vehicle trajectory prediction. arXiv preprint arXiv:2305.14715 , 2023. 1 [45] Daehee Park, Jaeseok Jeong, Sung-Hoon Yoon, Jaewoo Jeong, and Kuk-Jin Yoon. T4p: Test-time training of tra-jectory prediction via masked autoencoder and actor-specific token memory. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15065– 15076, 2024. 1 [46] Armin Danesh Pazho, Ghazal Alinezhad Noghre, Vinit Katariya, and Hamed Tabkhi. Vt-former: An exploratory study on vehicle trajectory prediction for highway surveil-24231 lance through graph isomorphism and transformer. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 5651–5662, 2024. 1 [47] Stefano Pellegrini, Andreas Ess, Konrad Schindler, and Luc Van Gool. You’ll never walk alone: Modeling social behav-ior for multi-target tracking. In 2009 IEEE 12th international conference on computer vision , pages 261–268. IEEE, 2009. 2, 5 [48] Gorjan Radevski, Dusan Grujicic, Matthew Blaschko, Marie-Francine Moens, and Tinne Tuytelaars. Multimodal distillation for egocentric action recognition. In Proceedings of the IEEE/CVF International Conference on Computer Vi-sion , pages 5213–5224, 2023. 3, 7 [49] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervi-sion. In International conference on machine learning , pages 8748–8763. PMLR, 2021. 5 [50] Saeed Saadatnejad, Yang Gao, Kaouther Messaoud, and Alexandre Alahi. Social-transmotion: Promptable human trajectory prediction. arXiv preprint arXiv:2312.16168 ,2023. 1, 2, 5, 8 [51] Tim Salzmann, Boris Ivanovic, Punarjay Chakravarty, and Marco Pavone. Trajectron++: Dynamically-feasible tra-jectory forecasting with heterogeneous data. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part XVIII 16 , pages 683–700. Springer, 2020. 1 [52] Tim Salzmann, Lewis Chiang, Markus Ryll, Dorsa Sadigh, Carolina Parada, and Alex Bewley. Robots that can see: Leveraging human pose for trajectory prediction. IEEE Robotics and Automation Letters , 8(11):7090–7097, 2023. 1, 2, 5, 8 [53] Pei Sun, Henrik Kretzschmar, Xerxes Dotiwalla, Aurelien Chouard, Vijaysai Patnaik, Paul Tsui, James Guo, Yin Zhou, Yuning Chai, Benjamin Caine, et al. Scalability in perception for autonomous driving: Waymo open dataset. In Proceed-ings of the IEEE/CVF conference on computer vision and pattern recognition , pages 2446–2454, 2020. 1 [54] Yu Sun, Wu Liu, Qian Bao, Yili Fu, Tao Mei, and Michael J Black. Putting people in their place: Monocular regression of 3d people in depth. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 13243–13252, 2022. 2, 5 [55] Shuhan Tan, Tushar Nagarajan, and Kristen Grauman. Egodistill: Egocentric head motion distillation for efficient video understanding. Advances in Neural Information Pro-cessing Systems , 36:33485–33498, 2023. 3 [56] Xiaoyu Tian, Junru Gu, Bailin Li, Yicheng Liu, Yang Wang, Zhiyong Zhao, Kun Zhan, Peng Jia, Xianpeng Lang, and Hang Zhao. Drivevlm: The convergence of autonomous driving and large vision-language models. arXiv preprint arXiv:2402.12289 , 2024. 2 [57] Jhih-Ciang Wu Wang, Hong-Han Shuai, and Wen-Huang Cheng. Trajprompt: Aligning color trajectory with vision-language representations. 2 [58] Qi Wang, Liang Zhan, Paul Thompson, and Jiayu Zhou. Multimodal learning with incomplete modalities by knowl-edge distillation. In Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining , pages 1828–1838, 2020. 3 [59] Chenxin Xu, Robby T Tan, Yuhong Tan, Siheng Chen, Yu Guang Wang, Xinchao Wang, and Yanfeng Wang. Eqmo-tion: Equivariant multi-agent motion prediction with invari-ant interaction reasoning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 1410–1420, 2023. 1 [60] Guowei Xu, Jiale Tao, Wen Li, and Lixin Duan. Learning se-mantic latent directions for accurate and controllable human motion prediction. In European Conference on Computer Vision , pages 56–73. Springer, 2025. 1 [61] Haoran Xu, Peixi Peng, Guang Tan, Yuan Li, Xinhai Xu, and Yonghong Tian. Dmr: Decomposed multi-modality rep-resentations for frames and events fusion in visual reinforce-ment learning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 26508– 26518, 2024. 2 [62] Lin Xu, Yilin Zhao, Daquan Zhou, Zhijie Lin, See Kiong Ng, and Jiashi Feng. Pllava: Parameter-free llava extension from images to videos for video dense captioning. arXiv preprint arXiv:2404.16994 , 2024. 2, 5 [63] Pei Xu, Jean-Bernard Hayet, and Ioannis Karamouzas. So-cialvae: Human trajectory prediction using timewise latents. In European Conference on Computer Vision , pages 511– 528. Springer, 2022. 1 [64] Yi Xu and Yun Fu. Adapting to length shift: Flexilength network for trajectory prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15226–15237, 2024. 1, 3 [65] Jianhao Yuan, Shuyang Sun, Daniel Omeiza, Bo Zhao, Paul Newman, Lars Kunze, and Matthew Gadd. Rag-driver: Gen-eralisable driving explanations with retrieval-augmented in-context learning in multi-modal large language model. arXiv preprint arXiv:2402.10828 , 2024. 2 [66] Haichao Zhang, Yi Xu, Hongsheng Lu, Takayuki Shimizu, and Yun Fu. Oostraj: Out-of-sight trajectory prediction with vision-positioning denoising. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14802–14811, 2024. 1 [67] Tianlu Zhang, Hongyuan Guo, Qiang Jiao, Qiang Zhang, and Jungong Han. Efficient rgb-t tracking via cross-modality distillation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 5404– 5413, 2023. 3 [68] Shengchao Zhou, Weizhou Liu, Chen Hu, Shuchang Zhou, and Chao Ma. Unidistill: A universal cross-modality knowl-edge distillation framework for 3d object detection in bird’s-eye view. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 5116–5125, 2023. 2 [69] Zikang Zhou, Luyao Ye, Jianping Wang, Kui Wu, and Ke-jie Lu. Hivt: Hierarchical vector transformer for multi-agent motion prediction. In Proceedings of the IEEE/CVF Con-24232 ference on Computer Vision and Pattern Recognition , pages 8823–8833, 2022. 2, 3, 5 [70] Zikang Zhou, Jianping Wang, Yung-Hui Li, and Yu-Kai Huang. Query-centric trajectory prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition , pages 17863–17873, 2023. 1 24233

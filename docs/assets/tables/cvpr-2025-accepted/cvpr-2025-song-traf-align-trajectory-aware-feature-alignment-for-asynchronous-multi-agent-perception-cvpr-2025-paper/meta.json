@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "tables": [
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper/table-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 1796,
+      "height": 491,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper/table-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 870,
+      "height": 516,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper/table-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 861,
+      "height": 514,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-traf-align-trajectory-aware-feature-alignment-for-asynchronous-multi-agent-perception-cvpr-2025-paper/table-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 856,
+      "height": 346,
+      "label": "Table"
+    }
+  ]
+}

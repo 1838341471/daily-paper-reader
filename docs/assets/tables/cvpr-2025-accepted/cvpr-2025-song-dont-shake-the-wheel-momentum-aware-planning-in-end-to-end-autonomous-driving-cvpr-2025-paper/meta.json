@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "tables": [
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 1803,
+      "height": 441,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 862,
+      "height": 271,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 863,
+      "height": 352,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 1805,
+      "height": 215,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 863,
+      "height": 357,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 1798,
+      "height": 215,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-007.webp",
+      "caption": "",
+      "page": 0,
+      "index": 7,
+      "width": 864,
+      "height": 328,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-song-dont-shake-the-wheel-momentum-aware-planning-in-end-to-end-autonomous-driving-cvpr-2025-paper/table-008.webp",
+      "caption": "",
+      "page": 0,
+      "index": 8,
+      "width": 862,
+      "height": 222,
+      "label": "Table"
+    }
+  ]
+}

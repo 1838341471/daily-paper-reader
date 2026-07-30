@@ -1,0 +1,626 @@
+Title: S4-Driver: Scalable Self-Supervised Driving Multimodal Large Language Model with Spatio-Temporal Visual Representation
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Xie_S4-Driver_Scalable_Self-Supervised_Driving_Multimodal_Large_Language_Model_with_Spatio-Temporal_CVPR_2025_paper.pdf
+
+Published Time: Sun, 18 May 2025 21:15:10 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# S4-Driver: Scalable Self-Supervised Driving Multimodal Large Language Model with Spatio-Temporal Visual Representation 
+
+## Yichen Xie 1,†,∗ Runsheng Xu 2,∗ Tong He 2 Jyh-Jing Hwang 2 Katie Luo 3,†
+
+## Jingwei Ji 2 Hubert Lin 2 Letian Chen 4,† Yiren Lu 2 Zhaoqi Leng 2
+
+## Dragomir Anguelov 2 Mingxing Tan 21 UC Berkeley, 2 Waymo LLC, 3 Cornell University, 4 Georgia Institute of Technology 
+
+## Abstract 
+
+The latest advancements in multi-modal large language models (MLLMs) have spurred a strong renewed interest in end-to-end motion planning approaches for autonomous driving. Many end-to-end approaches rely on human an-notations to learn intermediate perception and prediction tasks, while purely self-supervised approaches—which di-rectly learn from sensor inputs to generate planning tra-jectories without human annotations—often underperform the state of the art. We observe a key gap in the in-put representation space: end-to-end approaches built on MLLMs are often pretrained with reasoning tasks in 2D image space rather than the native 3D space in which au-tonomous vehicles plan. To this end, we propose S4-Driver, a scalable self-supervised motion planning algorithm with spatio-temporal visual representation, based on the popu-lar PaLI [9] multimodal large language model. S4-Driver uses a novel sparse volume strategy to seamlessly transform the strong visual representation of MLLMs from perspective view to 3D space without the need to finetune the vision en-coder. This representation aggregates multi-view and multi-frame visual inputs and enables better prediction of plan-ning trajectories in 3D space. To validate our method, we run experiments on both nuScenes and Waymo Open Mo-tion Dataset (with in-house camera data). Results show that S4-Driver performs favorably against existing super-vised multi-task approaches while requiring no human an-notations. It also demonstrates great scalability when pre-trained on large volumes of unannotated driving logs. 
+
+## 1. Introduction 
+
+The exploration of end-to-end autonomous driving dates back to the 1980s [43], where the motion planning model  
+
+> †
+
+Work done when they were interns at Waymo  
+
+> ∗
+
+Equal contribution w/o pretraining           
+
+> half internal dataset full internal dataset
+> 0.80
+> 0.85
+> 0.90
+> 0.95
+> 1.00
+> 1.05
+> 1.10
+> bADE@5s
+> MotionLM
+> Vanilla PaLI
+> S4-Driver
+> (a) Pretraining data scaling-up of S4-Driver. MLL M
+> Camera Images Multi -task Results
+> MLL M
+> Camera Images Planning Results
+> Muti -Task CoT
+> Pure Planning
+> (b) Multi-task learning framework. MLL M
+> Camera Images Multi -task Results
+> MLL M
+> Camera Images Planning Results
+> Muti -Task CoT
+> Pure Planning (c) Self-supervised planning framework.
+
+Figure 1. S4-Driver scaling up with abundant unlabeled driv-ing logs (1a). Different from past efforts that improve MLLM planning via multi-task learning and CoT reasoning (1b), S4-Driver focuses on self-supervised motion planning (1c) without human annotations. While a vanilla PaLI approach with self-supervised training achieves good performance, the full S4-Driver with spatio-temporal visual representation achieves the best per-formance and scalability (1a). 
+
+directly predicts control signals or future waypoints based on raw sensor inputs. Due to limited robustness, these early attempts struggle in complex urban situations. Recent neu-ral network capability advances have led to renewed interest in this field [25, 28, 57], especially given the strong gen-eralization ability of Multimodal Large Language Models (MLLMs) [10, 42, 51]. However, vanilla application of MLLMs to end-to-end motion planning can hardly exploit their strong visual un-derstanding and reasoning capabilities given the significant difference between motion planning and MLLM pretraining tasks, resulting in inferior planning performance [53, 61]. To narrow this gap, as shown in Fig. 1b, previous methods resort to either multi-task learning , which incorporates di-verse perception and prediction tasks into training and infer-ence, or supervised perception pretraining , which utilizes the pretrained autonomous driving perception models as vi-sual tokenizers. However, fine-grained human annotations This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 1622 serve as the bottleneck for both strategies. In contrast, pure self-supervised approaches, while capable of learning di-rectly from sensor inputs and utilizing the abundant unla-beled driving logs, often under-perform the state of the art. To challenge this status-quo, we aim to boost the per-formance of self-supervised motion planning orthogonal to prior work (Fig. 1c). It only requires raw sensor data and ego-vehicle trajectories for self-supervised model training, without the need of expensive human labels. First of all, we identify the following two main obstacles in this direction: 
+
+• Suboptimal representation format. MLLMs [9, 10] are typically designed for tasks in the 2D image plane. This image space representation limits their 3D reason-ing ability from the combination of multi-view images. 
+
+• Limited data scale. Although it is one of the most widely adopted benchmarks for end-to-end planning, nuScenes [5] only contains fewer than 1k sequences and lacks driving behavior diversities. This limited scales leads to severe over-fitting issues in the finetuning of MLLMs with billion-parameter size. In this paper, we handle the above challenges to bet-ter explore the potential of MLLMs. Firstly, we propose 
+
+S4-Driver , a simple yet effective Scalable Self-Supervised motion planning method with Spatio-temporal visual repre-sentation. Built upon a general multimodal large language model [9, 10] , we directly predict ego-vehicle waypoints from camera images, eliminating the need for intermedi-ate perception and prediction tasks, and thus facilitating the scale-up of model pretraining leveraging massive unanno-tated driving logs (Fig. 1a). To address the obstacle of suboptimal visual format, we propose a novel sparse vol-ume representation that enables aggregating visual informa-tion from multi-view and multi-frame images. Moreover, this spatio-temporal representation is designed to work with frozen features from the perspective-view vision encoder. It boosts 3D spatio-temporal reasoning capabilities of the model on motion planning, and seamlessly preserves world knowledge in the pretrained visual embeddings of MLLMs. Secondly, to rigorously evaluate our method with sufficient training data, we also utilize large-scale WOMD-Planning-ADE benchmark [18] with in-house camera sensor data be-sides the popular nuScenes dataset [5]. WOMD-Planning-ADE is approximately 100 × larger than nuScenes, so it serves as a more comprehensive benchmark to evaluate model performance in a scalable manner. In summary, our contributions include: 
+
+• We advocate for a simple self-supervised end-to-end mo-tion planning with MLLMs, solely relying on ego-vehicle trajectory supervision. This approach simplifies the sys-tem architecture and facilitates data scaling for training. 
+
+• We propose a novel sparse volume representation to ef-fectively aggregate multi-view and multi-frame visual in-formation, enhancing the 3D spatio-temporal reasoning capabilities of the MLLM for motion planning. 
+
+• Our algorithm achieves state-of-the-art performance on both nuScenes and WOMD-Planning-ADE benchmarks. It also demonstrate great scalability with pretraining. 
+
+## 2. Related Works 
+
+Multimodal Large Language Models (MLLMs). 
+
+MLLMs with both language and images modal-ities have garnered significant attention in recent years [1, 2, 30, 45, 51]. Prior research has fo-cused on integrating powerful Large Language Mod-els (LLMs) [12, 64, 64] with advanced image en-coders [19, 45, 63] such as LLaVA [34], PaLI [9, 10], PaliGemma [4], and InstructBLIP [14]. Through in-struction tuning or multi-modal finetuning, these models demonstrate impressive performance in multimodal un-derstanding and reasoning. Current developments are leveraging increasingly larger multimodal datasets to further enhance their capabilities in complex perception and generalization tasks [3, 42, 59]. However, despite their strengths, these models have shown limitations in 3D spatial reasoning [11, 22, 40], posing challenges for their application in autonomous driving. 
+
+End-to-end Autonomous Driving. While the key fi-nal step of autonomous driving is planning, traditional sys-tems are often assembled with multiple modules for per-ception [33, 35, 60] and prediction [41, 54, 65] tasks. To mitigate the information loss and error accumulation across modules, end-to-end driving systems [6, 24, 25, 28, 32, 66] utilize a unified model to predict the ego-vehicle future waypoints or control signals directly from raw sensor in-puts. While prioritizing planning, these systems typi-cally still incorporate perception and prediction, requir-ing explicit supervision for each. Although some prior works [13, 46, 58] have explored pure motion planning without any intermediate tasks, they struggle in complex ur-ban scenarios due to modeling capability limitations. 
+
+MLLMs for Driving. The superior reasoning and generalization abilities of large-scale models are desirable properties for autonomous driving. Some efforts trans-form the driving scenario into large language model tex-tual prompts [8, 38, 47] or directly process camera images with vision-language models [15, 48, 61]. However, their potential is limited to the small scale of existing bench-marks [5], which only allow partial finetuning [23]. Mean-while, closed-loop simulators [16] struggle to provide re-alistic sensor data for end-to-end tasks. Consequently, multi-task joint finetuning [49, 53, 61] or chain-of-though (CoT) [56] inference [37–39] are widely adopted to sim-plify the reasoning despite the extra annotation require-ments brought by perception and prediction modules. Al-ternatively, some work [15, 52] integrates pretrained per-ception models [31] to extract BEV features and sends to 1623 language models as vision tokens. Recently, EMMA [26] leverages powerful Gemini [51] for self-supervised motion planning. Additionally, they develop a mixture of train-ing tasks, including motion planning, 3D object detection, and road graph estimation as well as additional reasoning process for trajectory generation. In contrast, our work fo-cuses on the enhancement of self-supervised motion plan-ning without extra human labels. 
+
+## 3. Enhancing MLLM for Motion Planning 
+
+In this section, we adapt a pretrained MLLM for the end-to-end motion planning task. Without loss of generality, we leverage PaLI [10]. However, these techniques are also compatible with other more powerful MLLMs. We intro-duce a set of design improvements to the MLLM setup and demonstrate correspondingly improved performance on WOMD-Planning-ADE (Fig. 3). 
+
+3.1. Vanilla PaLI as Planner 
+
+End-to-end motion planning models determine the future trajectory OTf of ego-vehicle based on multi-view cam-era images C and high-level behavior command b. The future trajectory consists of the ego-vehicle’s location at each future time step in the BEV coordinate, i.e. OTf =[( xt, y t)] Tf
+
+> t=1
+
+. The high-level behavior command is neces-sary to guide the driving direction, similar to a navigation system. Additionally, as verified in prior works [32, 62], the historical states of ego-vehicle HTh are also critical for a smooth and feasible planning result, where we con-sider the historical locations, velocities, and accelerations as HTh = [ lt, vt, at]−Th
+
+> t=−1
+
+, i.e. 
+
+OTf = P (C, HTh , b ) (1) where P (·) is the planning model. We provide both his-torical ego states and high-level commands to the model as text prompts. Locations, velocities, and accelerations are represented directly as floating numbers with two decimals. The predicted future trajectories are then extracted from the decoded text outputs of the model. Example prompts and targets are provided in the supplementary materials. Without preceding perception and prediction tasks, the vanilla PaLI, fine-tuned in a self-supervised manner, achieves reasonable but not ideal performance in motion planning (Fig. 3). 
+
+3.2. Hierarchical Planning with Meta-Decision 
+
+Directly outputting a future trajectory without any reason-ing is challenging for MLLMs. To address this, we apply a coarse-to-fine approach, inspired by Chain-of-Thought (CoT) [56]. It adopts a hierarchical planning method [27], going from from semantic decision to numeric planning. We prompt our model to provide a high-level estimation of the future acceleration state D first, effectively decompos-ing the motion planning task into two steps: 
+
+D = Ps1(C, HTh , b ), OTf = Ps2(C, HTh , b ; D) (2) We define D to encompass four meta-decisions: keep sta-tionary, keep speed, accelerate and decelerate . Notably, un-like previous CoT applications in VLM-based planning that require human annotation for training, such as the scene analysis in DriveVLM [53], we incorporate these meta-decisions as a “free lunch” to simplify the motion plan-ning process without requiring any additional annotations. The ground-truth decisions are generated by heuristic rules based on the future ego velocity and acceleration (details in the supplementary materials). Fig. 3 shows this simple design brings non-trivial improvements in planning perfor-mance. 
+
+3.3. Scene Representation in 3D Space 
+
+High-quality motion planning requires a robust under-standing of the surrounding 3D scene, including both static and dynamic elements. While traditionally achieved through separate perception and prediction modules, our self-supervised end-to-end framework relies on the MLLM to implicitly learn this understanding without explicit su-pervision. However, despite strong 2D reasoning capabili-ties, MLLMs often struggle with 3D spatial reasoning due to limitations in their perspective view representation and the lack of depth-related tasks in pretraining [7, 36]. 
+
+3.3.1. 3D Visual Representation with Dense Volumes 
+
+To overcome the above limitations, we draw inspiration from previous successful perception tasks [31, 35] and adopt a 3D volume representation. The multi-view feature maps F2D = {f v 
+
+> 2D
+
+}Vv=1 (f v 
+
+> 2D
+
+∈ RH×W ×C ) are extracted by visual encoder of MLLM, where V is the number of views. We construct a 3D feature volume f vol  
+
+> 3D
+
+∈ RX×Y ×Z×C cen-tered at the ego-vehicle based on the multi-view image fea-tures. To avoid introducing complex modules that might disrupt the pretrained MLLM and misalign visual features with the subsequent multimodal encoder-decoder, we em-ploy a lightweight projection method, similar to Simple-BEV [20]. Specifically, for each voxel in the 3D volume, we project its (x, y, z ) coordinates to each perspective view v,obtaining corresponding 2D coordiantes (uv , v v ). We then bilinearly sample the local features from each view at these projected locations. Finally, the voxel’s feature representa-tion is computed as the average of the local semantic fea-tures from all views where the voxel projects within the im-age bounds. This process effectively incorporates 3D spa-tial information while maintaining compatibility with the pretrained MLLM. 
+
+f vol  
+
+> 3D, (x,y,z )
+
+= f sem  
+
+> (x,y,z )
+
++ PosEmb (x, y, z ) (3) 
+
+f sem  
+
+> (x,y,z )
+
+= Avg ({Bilinear (f v 
+
+> 2D
+
+; ( uv , v v )) }v ) (4) 1624 Image 
+
+Encoder 
+
+> go straight right
+> Historical ego -states
+> High -level behavior
+> Multi -frame camera images
+> Text prompt
+> The high -level behavior is: …
+> The past trajectory is: …
+> The past velocity is: …
+> The past acceleration is: …
+> What is my future trajectory?
+
+# … … 
+
+# … …                      
+
+> (𝑥 !,𝑦 !,𝑧 !)
+> (𝑥 ",𝑦 ",𝑧 ")
+> (𝑥 #,𝑦 #,𝑧 #)
+> (𝑝 !,)
+> (𝑝 ",)
+> (𝑝 #,)
+
+# Information 
+
+# Transfer 
+
+Multimodal 
+
+Encoder 
+
+# … … 
+
+# …
+
+… …                 
+
+> (𝑝 !,)(𝑝 ",)(𝑥 !,𝑦 !,𝑧 !)(𝑥 ",𝑦 ",𝑧 ")
+> Intra -modality attention bias
+
+Multimodal 
+
+Decoder  
+
+> keep speed then
+> do decelerating
+> Meta -decision
+> Image features Volume features
+> Reduce
+> dimension
+> MLP &
+> sigmoid
+> nucleus
+> sampling
+> multi -output
+> aggregation
+
+## Visual 
+
+## Representation 
+
+## Text Representation 🔥 🔥 
+
+> tokenize
+
+… … 
+
+> Multi -frame camera images
+> project
+> fetch
+> featur e
+> t
+
+Figure 2. Overview of our proposed S4-Driver algorithm. We enhance the PaLI model for motion planning by incorporating meta-decision, spatio-temporal visual representation, and multi-decoding aggregation. 
+
+Figure 3. A roadmap for enhancing MLLM for planning. The techniques are adopted step-by-step from top to bottom, while shadow items are not adopted in the subsequent steps. We show the performance on WOMD-Planning-ADE (Sec. 4) after includ-ing each module. 
+
+This simple and efficient projection strategy ensures that the 3D volume features f vol  
+
+> 3D
+
+share a similar distribution with the original multi-view features F2D . This similarity facil-itates seamless integration with the subsequent multimodal encoder-decoder of the MLLM. As shown in Fig. 3, this 3D volume representation leads to some improvement in motion planning performance. Alternatively, we find that reducing the Z-axis using a fully connected layer to obtain a BEV representation yields slightly worse performance since this reduction operation may introduce ambiguity to the scene representation. 
+
+3.3.2. Sparse Volume Representation 
+
+While the 3D volume representation effectively captures spatial information, inherently most of the surrounding 3D space is empty. Moreover, for motion planning, detailed in-formation about objects distant from the road, such as build-ings and trees, is less critical. Based on this observation, we propose a sparse volume representation to reduce the number of voxels, enabling higher resolution given mem-ory constraints and improving efficiency. To determine useful volumes in each scene based on their positions and semantics, we define a gate value gvol  
+
+> (x,y,z )
+
+∈
+
+(0 , 1) for each volume at coordinates (x, y, z ). To ob-tain this gate, starting from multi-view image features 
+
+{f v 
+
+> 2D
+
+}Vv=1 , we reduce its dimension through a fully connect (FC) layer as 
+
+f gate,v  
+
+> 2D
+
+= FC (f v 
+
+> 2D
+
+), f gate,v  
+
+> 2D
+
+∈ RH×W ×C′
+
+, C ′  C. (5) Then we construct a reduced-dimension volume feature 
+
+f gate  
+
+> 3D
+
+∈ RX×Y ×Z×C′
+
+from {f gate,v  
+
+> 2D
+
+}Vv=1 same as Eq. 3. A smaller channel number allows for larger volume resolution and is sufficient to indicate whether a volume is related to motion planning . Afterward, the gate is derived from f gate 
+
+> 3D
+
+through a small MLP module as follows. 
+
+gvol  
+
+> (x,y,z )
+
+= sigmoid 
+
+(
+
+MLP (f gate 
+
+> 3D, (x,y,z )
+
+)
+
+)
+
+(6) Thus, we can easily select M volumes ( M  X · Y · Z)with largest gate values with coordinates {(xi, y i, z i)}Mi=1 .As we do not have access to ground-truth occupancy state, we propose learning the gate values implicitly. We 1625 assume that regions with small gate values should be empty or irrelevant to planning. For these vacant space, we assign a learnable feature fvac ∈ RC . We expect the model can learn the gate value via the trade-off between the semantic features and this vacant feature at each 3D position, so we fetch features for selected sparse volumes as 
+
+f sparse  
+
+> 3D, (x,y,z )
+
+= ˆf sparse  
+
+> 3D, (x,y,z )
+
++ PosEmb (x, y, z ) (7) 
+
+ˆf sparse  
+
+> 3D, (x,y,z )
+
+= gvol  
+
+> (x,y,z )
+
+· f sem  
+
+> (x,y,z )
+
++ (1 − gvol 
+
+> (x,y,z )
+
+) · fvac (8) where f sem  
+
+> (x,y,z )
+
+is same as Eq. 4 and (x, y, z ) ∈{(xi, y i, z i)}Mi=1 are selected volumes with large gate val-ues. When the sparse volume features f sparse  
+
+> 3D, (x,y,z )
+
+are fed into the subsequent multimodal encoder, they notably boost the planning performance (Fig. 3) by simultaneously pro-viding explicit 3D spatial cues of surrounding scenes and concentrate on the important regions adaptively. 
+
+3.3.3. Local Feature Aggregation in 3D Space 
+
+Due to the lack of depth information, the lifting process in Eq. 3 or 7 results in duplicate volume features along each camera ray. This spatial ambiguity can be mitigated by 3D local operations like convolutions [20] or deformable atten-tion [31] as demonstrated in previous work. However, in our MLLM framework, it is less economical to insert extra local operations. Instead, we inject some relative position bias into the existing multimodal encoder by tailoring the self-attention as follows. Attn (Q, K, V ) = Softmax 
+
+( QK T
+
+√d − b(D)
+
+)
+
+V (9) Given M sparse volumes with coordinates {(xi, y i, z i)}Mi=1 ,the distance matrix D ∈ RM ×M ×3 is the distance along 
+
+xyz -axes between each pair of sparse volumes, i.e. Dij =(xj − xi, y j − yi, z j − zi). The bias is computed with the function b(∆ x, ∆y, ∆z) = bx(∆ x) + by (∆ y) + 
+
+bz (∆ z), where ∆x, ∆y, ∆z are divided into several bins and mapped to a learnable bias value for each bin through 
+
+bx(·), b y (·), b z (·). We also apply a separate bias between the text tokens with 1D position {pi}.This relative position bias elegantly inserts local induc-tive bias to pretrained global self-attention modules with minimal additional costs. It leads to a notable performance gain in Fig. 3 by facilitating the aggregation of local in-formation in 3D space, enhancing scene understanding and spatial reasoning. 
+
+3.4. Multi-frame Temporal Fusion 
+
+Multi-frame input combination helps to compensate for the lack of depth cues in camera images. We extend our sparse volume representation to aggregate mult-frame temporal in-formation by incorporating T historical frames with an in-terval of 0.5s. Given images from the total T + 1 frames, Eq. 5 is applied to each frame separately to obtain the multi-view image features f gate,v  
+
+> 2D,t
+
+, t = 0 , −1, . . . , −T, v =1, . . . , V . After ego-motion compensation, we construct a gate feature volume f gate  
+
+> 3D,t
+
+based on the current ego-vehicle coordinates and per-frame image features. Multi-frame vol-ume features are concatenated along the channel dimension to generate gate value. 
+
+gvol  
+
+> (x,y,z )
+
+= sigmoid 
+
+(
+
+MLP 
+
+(
+
+Concat 
+
+(
+
+[f gate 
+
+> 3D,t, (x,y,z )
+
+]−Tt=0 
+
+))) 
+
+(10) Similar with Sec. 3.3.2, we select M volumes based on the gate value. Following Eq. 7, the volume features are fetched from each frame image feature map separately as 
+
+f sparse 
+
+> 3D,t, (x,y,z )
+
+, t = 0 , . . . , −T , which are fused with an FC-layer as the sparse volume feature with temporal awareness. 
+
+f sparse  
+
+> 3D, (x,y,z )
+
+= FC 
+
+(
+
+Concat 
+
+([
+
+f sparse 
+
+> 3D,t, (x,y,z )
+
+]−Tt=0 
+
+)) 
+
+(11) In Fig. 3, temporal fusion helps to improve motion planning performance by facilitating the environment understanding. 
+
+3.5. Voting for Planning via Multi-Decoding 
+
+MLLMs are prone to assigning high confidence to the sim-ple future behaviors in motion planning, e.g. , keeping sta-tionary. To relieve this bias, we aggregate multiple outputs and use voting to obtain the final planning output. We resort to nucleus sampling [21] to produce multiple future trajec-tories for the ego-vehicle, denoted as {O kTf }Kk=1 . They are simply averaged to produce a unique planning result as fol-lows: OTt = [( xt, y t)] Tf
+
+> t=1
+
+.
+
+(xt, y t) = 
+
+(
+
+1
+
+K
+
+> K
+
+∑
+
+> k=1
+
+xkt , 1
+
+K
+
+> K
+
+∑
+
+> k=1
+
+ykt
+
+)
+
+(12) This unweighted average mitigates the MLLM’s bias to-wards simple behaviors. Fig. 3 demonstrates the notable performance gain with this simple multi-decoding aggrega-tion approach. 
+
+3.6. Scaling to Large-scale Raw Driving Logs 
+
+The self-supervised training allows our proposed S4-Driver to scale to large-scale driving logs amounts without re-quiring human annotations. To exploit the potential of MLLM-based planners, we pretrain the model on our in-ternal dataset. Results in Fig. 3 demonstrate that S4-Driver achieves notable performance gains in challenging tail be-haviors due to large-scale pretraining. 
+
+## 4. Waymo Open Motion Dataset for Planning 
+
+For the large-scale training and evaluation of planning al-gorithms with large models, we design a WOMD-Planning-ADE benchmark based on WOMD dataset [18], and com-pare with the existing datasets in Tab. 1. 1626 Benchmark Size Data Format Metrics                        
+
+> Sequence Length Frequency Planning horizon Sample-wise Behavior-wise BDD-X [29] 7k 77 h 10 Hz control signal !%
+> nuScenes [5] 1k 5.5 h 2 Hz 3s !%
+> WOMD-Planning-ADE 103k 574 h 10 Hz 5s !!
+
+Table 1. Comparisons between WOMD-Planning-ADE and exist-ing counterparts. WOMD-Planning-ADE has a significantly larger size and more comprehensive behavior-wise metrics. go straight 
+
+> forward
+> go straight
+> left
+> go straight
+> right
+> do left
+> turn
+> do right
+> turn
+> do left
+> U-turn
+
+Figure 4. High-level behavior commands for motion planning.    
+
+> (a) Trajectory (b) Velocity (c) Acceleration (d) Behavior
+
+Figure 5. Statistical distributions of WOMD-Planning-ADE. We show the distributions of ego-vehicle trajectories, velocities, ac-celerations and each behavior scenario sizes in the validation set. 
+
+Overview. It contains 103 k real-world driving scenarios, covering diverse urban and suburban scenes. They are fur-ther divided into 9s samples with 1s history and 8s future. For end-to-end planning evaluation, besides the ego-vehicle trajectories in each sample as groundtruth, we also have the following key items in the dataset: 
+
+(In-house) Camera Data. Most end-to-end planning meth-ods [28, 49, 53, 61] relies on the camera images as model inputs. In our dataset, each frame contains images captured by eight multi-view cameras. 
+
+High-level Behavior Commands. Like navigation systems for humans ( e.g. Google Map), the end-to-end planning system also requires navigation signals to indicate the di-rection to go. We consider six high-level behavior com-mands (Fig. 4), namely go straight forward, go straight left, go straight right, do left turn, do right turn, do left U-turn .They can cover diverse driving situations in real world, e.g. “go straight right” describes the case to leave the high-way. Instead of simply considering the last step position [6, 25], we decide the behavior commands based on long-term fu-ture trajectories, which can handle the low-speed or stop-ping situations. Details of this heuristic rule are included in the supplementary materials. 
+
+Evaluation Metrics. The imbalance of data distribution is inevitable in real driving scenarios. For example, in the WOMD-Planning-ADE benchmark, moving straight and stopping account for more than 70% of all the samples, as reflected by Fig. 5. In this case, we argue that current widely used sample-wise average displacement error and collision rates cannot comprehensively reflect the performance of motion planning algorithms since challenging but less fre-quent behaviors, like turning, are overwhelmed by simple straightforward moving scenarios. To this end, we propose novel behavior-wise metrics similar to the mAP metric in prediction [18]. For example, we denote the behavior-wise average displacement error as bADE defined as follows. 
+
+bADE = 1
+
+|B| 
+
+∑
+
+> b∈B
+
+ADE b (13) where ADE b is the ADE metric for a specific behavior. Concretely, |B| = 7 behaviors are considered – including the six high-level commands (Fig. 4) and an additional stop 
+
+behavior 1. These behavior-wise metrics make up for the shortcomings of previous sample-wise metrics by paying more attention to those scarce but safety-critical behaviors. 
+
+## 5. Experiments 
+
+5.1. Implementation Details 
+
+Model and finetuning. Unless otherwise specified, we con-struct our model from a pretrained PaLI3-5B model [10], which includes a ViT-G (2B) vision encoder [17] and mul-timodal encoder-decoder (3B) [50]. Our default setting freezes the ViT encoder and finetune only the inserted mod-ules and the multimodal encoder-decoder. Finetuning the model on the WOMD-Planning-ADE dataset requires ap-proximately 2.5 days on 128 Google Cloud TPU v4 using a batch size of 256 and a learning rate of 3e-3. 
+
+Datasets. We evaluate S4-Driver on both WOMD-Planning-ADE (Sec. 4) and nuScenes [5] benchmarks. Given the limited size of nuScenes, which is insufficient for training a multimodal large language model, we also attempt to finetune the model on nuScenes using weights pretrained on WOMD-Planning-ADE. 
+
+5.2. Main Results and Comparison 
+
+NuScenes dataset. To widely compare with existing end-to-end planning methods in the community, we evaluate S4-Driver on nuScenes dataset [5]. Tab. 2 show that S4-Driver notably outperforms all the previous algorithms despite its self-supervised training format. Unlike existing works, S4-Driver does not require any perception pretraining or human annotations. This self-supervision nature enables S4-Driver to utilize all the accessible raw trajectory data, whereas these easily collectable raw driving logs offer limited bene-fit to other algorithms without a labeling process. 
+
+WOMD-Planning-ADE benchmark. In Tab. 3, we pri-marily compare S4-Driver with the vanilla PaLI3-5B base-
+
+> 1We do not include “stop” in the high-level behavior commands since navigation system cannot provide it and this may leak future information like traffic lights. Details are explained in supplementary materials.
+
+1627 Methods Human Annotations Extra Data L2(m)
+
+perception prediction data labels 1.0s 2.0s 3.0s Avg 1,2,3s
+
+Multi-task end-to-end approaches 
+
+UniAD [25] ! ! % % 0.42 0.64 0.91 0.66 VAD [28] ! ! % % 0.17 0.34 0.60 0.37 PARA-Drive [57] ! ! % % 0.25 0.46 0.74 0.48 
+
+Multimodal large language model approaches 
+
+GPT-Driver [38] ! ! % % 0.20 0.40 0.70 0.44 DriveVLM [53] ! ! ! ! 0.18 0.34 0.68 0.40 OmniDrive [55] ! ! ! ! 0.14 0.29 0.55 0.33 
+
+Self-supervised approaches 
+
+DriveVLM (w/o CoT) [53] % % ! % 0.19 0.41 0.89 0.49 S4-Driver (ours) % % % % 0.16 0.34 0.63 0.38 S4-Driver ∗ (ours) % % ! % 0.13 0.28 0.51 0.31  
+
+> Table 2. NuScenes benchmark results. Most previous works require human annotations as additional supervision. S4-Driver ∗is pretrained on WOMD-Planning-ADE, while many prior MLLM-based methods also utilize extra data and labels due to the limited scale of nuScenes.
+
+Methods Sample-wise Metrics Behavior-wise Metrics 
+
+ADE@1s ADE@3s ADE@5s bADE@1s bADE@3s bADE@5s Vanilla PaLI 0.034 0.277 0.798 0.051 0.392 1.069 S4-Driver (ours) 0.031 0.247 0.693 0.049 0.350 0.928 S4-Driver* (ours) 0.029 0.233 0.655 0.044 0.313 0.830 
+
+Models that utilize high-quality objects, tracks, and roadgraph as inputs rather than raw camera images. 
+
+MotionLM [46] 0.045 0.266 0.697 0.066 0.388 0.978 
+
+> Table 3. WOMD-Planning-ADE benchmark results. “*” denotes methods pretrained on the internal dataset.
+
+line (Sec. 3.1) and modular algorithm MotionLM [46]. Compared with vanilla PaLI3-5B, a notable gap is wit-nessed for both sample-wise and behavior-wise metrics. For reference, we also adapt a latest motion prediction al-gorithms MotionLM [46] (enhanced internally reproduced version) for planning task by only predicting the future tra-jectories of ego-vehicle and injecting the high-level com-mand to the model. Because it utilizes auto-labelled high-quality objects, tracklets, and roadgraph signals as model inputs [44], a direct comparison with our end-to-end ap-proaches is not equitable. However, as shown in Tab. 3, S4-Driver still achieves favorable performance compared to MotionLM, particularly in behavior-wise metrics even if S4-Driver uses only raw camera images as inputs. 
+
+5.3. Analysis 
+
+Qualitative results. Fig. 6 visualizes planning results in diverse scenarios. Our proposed S4-Driver can determine the future ego-behavior based on the traffic lights and road lane. It can also complete challenging behaviors and deal with different lighting conditions. We will include more visualizations in supplementary materials. 
+
+Meta-decision reliability. Fig. 7 demonstrates the accu-racy of meta-decision prediction (Sec. 3.2) on WOMD-Planning-ADE validation set. Across all behaviors, the model provides reliable meta-decision estimations. With-out any human annotations, this preliminary prediction can simplify the derivation of numeric motion planning. 
+
+Distribution of sparse volumes. We visualize the distri-bution of self-supervised learned sparse volumes along x-axis and y-axis over WOMD-Planning-ADE validation set in Fig. 8. From back to front, the sparse volumes concen-trate on the close front region. From left to right, the sparse volumes cover all the regions, since there are turning sce-narios, but most volumes focus on the middle region. These distributions are consistent with human driving experiences. 
+
+5.4. Ablation Studies 
+
+This section presents experiments conducted on the WOMD planning benchmark to clarify the roles of specific modules within our S4-Driver algorithm. More ablation studies are available in the supplementary material. 
+
+MLLM inputs. In Tab. 5, we analyze the roles of cam-era images and historical ego-states separately using the 1628 (a) The ego-vehicle decelerates to wait for the red lights. 
+
+> (b) The ego-vehicle conducts a U-turn at the intersection.
+> (c) The ego-vehicle keeps the lane under bad lighting condition.
+
+Figure 6. Qualitative results of motion planning. We show the 
+
+front left, front, front right cameras for each case. 
+
+Figure 7. Meta-decision predic-tion accuracy for each behavior. 
+
+Figure 8. Distribution of sparse volumes along x- and y-axes. 
+
+vanilla PaLI model. Consistent with [32, 62], the impor-tance of ego-states is acknowledged. Meanwhile, differ-ent from their observations on nuScenes benchmark, cam-era inputs also make great differences on WOMD-Planning-ADE. We assume that WOMD-Planning-ADE covers more diverse driving scenarios including many severe changes of speed and directions, which attaches importance to the sen-sor data. This also showcases the advantages of WOMD-Planning-ADE for comprehensive evaluation. Tab. 5 also shows that random initialized model cannot converge with-out MLLM pretraining. Despite different domains, S4-Driver can profit from the strong reasoning ability from large-scale MLLM pretraining on general tasks. 
+
+MLLM capability. In addition to the PaLI3-5B [10] used in other parts, we also tailor PaLI2-3B [9] for motion plan-ning with the same techniques. PaLI2-3B is weaker in pa-rameter numbers (3B vs . 5B), architecture, pretraining man-ner, and input resolution (224 vs . 448). As in Tab. 4, S4-Driver based on PaLI2-3B demonstrates much inferior per-formance compared to that based on PaLI3-5B. We con-duct experiments on two different training data scales on WOMD-Planning-ADE, i.e. 20k (nuScenes scale) vs . 400k (full WOMD-Planning-ADE). The gap is particularly large given enough training data. It also justifies the necessity to conduct experiments on large-scale dataset, which can fully unleash the potential of powerful MLLMs. 
+
+Sparse volume resolution. Tab. 6 shows the results with              
+
+> MLLM WOMD-Planning-ADE Subset (20k) Full WOMD-Planning-ADE (400k) ADE@5s bADE@5s ADE@5s bADE@5s PaLI2-3B [9] 1.241 1.846 1.035 1.522 PaLI3-5B [10] 1.075 1.495 0.693 0.928
+
+Table 4. Ablation studies on planning performance scalabity of our methods w.r.t. model and data sizes. We experiment with two MLLMs on two different training data sizes. 
+
+Method ADE@5s bADE@5s 
+
+vanilla PaLI 0.798 1.069 
+
+w/o historical states 2.009 2.250 
+
+w/o camera images 1.081 1.448 
+
+w/o MLLM pretraining fail to converge 
+
+Table 5. Ablation studies on MLLM inputs. 
+
+Resolution ADE@5s bADE@5s 
+
+2m × 2m × 2m 0.798 1.201 
+
+1m × 1m × 2m 0.750 1.005 
+
+1m × 1m × 1m 0.765 1.051 
+
+Table 6. Ablation studies on sparse volume resolutions. 
+
+different resolution for sparse volumes with same number of sparse volumes ( M = 6000 ). In line with Fig. 3, low resolution leads to relatively worse performance since it limits the precision of 3D spatial reasoning. Interestingly, higher resolution along z-axis does not definitely improve the model performance since the motion planning mainly works on the xy -plane and too low sparsity ratio tends to make the optimization unstable. 
+
+## 6. Conclusion and Future Work 
+
+This paper introduces S4-Driver, a scalable self-supervised motion planning framework for autonomous driving that utilizes Multimodal Large Language Models (MLLMs). To enhance 3D reasoning in MLLMs, we propose anovel sparse volume representation, which enables im-proved spatio-temporal reasoning through the aggregation of multi-view and multi-frame image inputs. Additionally, we design behavior-wise metrics for comprehensive eval-uation on the large-scale WOMD-Planning-ADE bench-mark. S4-Driver achieves state-of-the-art performance on both nuScenes and WOMD-Planning-ADE benchmarks, without requiring any human annotations. This demon-strates the potential of self-supervised learning for end-to-end autonomous driving. Future work will involve apply-ing our methods to other powerful MLLM architectures. Our contributions are orthogonal to previous works, such as those that explore multi-task learning or CoT reason-ing [49, 55]. Combining our large-scale self-supervised learning approach with supervised finetuning on targeted small-scale labeled data may further enhance the final per-formance and interpretability of the system. 1629 References 
+
+[1] Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ah-mad, Ilge Akkaya, Florencia Leoni Aleman, Diogo Almeida, Janko Altenschmidt, Sam Altman, Shyamal Anadkat, et al. Gpt-4 technical report. arXiv preprint arXiv:2303.08774 ,2023. 2 [2] Jean-Baptiste Alayrac, Jeff Donahue, Pauline Luc, Antoine Miech, Iain Barr, Yana Hasson, Karel Lenc, Arthur Men-sch, Katherine Millican, Malcolm Reynolds, et al. Flamingo: a visual language model for few-shot learning. Advances in neural information processing systems , 35:23716–23736, 2022. 2 [3] Jinze Bai, Shuai Bai, Shusheng Yang, Shijie Wang, Sinan Tan, Peng Wang, Junyang Lin, Chang Zhou, and Jingren Zhou. Qwen-vl: A versatile vision-language model for un-derstanding, localization, text reading, and beyond. arXiv preprint arXiv:2308.12966 , 1(2):3, 2023. 2 [4] Lucas Beyer, Andreas Steiner, Andr´ e Susano Pinto, Alexan-der Kolesnikov, Xiao Wang, Daniel Salz, Maxim Neumann, Ibrahim Alabdulmohsin, Michael Tschannen, Emanuele Bugliarello, et al. Paligemma: A versatile 3b vlm for trans-fer. arXiv preprint arXiv:2407.07726 , 2024. 2 [5] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 11621–11631, 2020. 2, 6 [6] Sergio Casas, Abbas Sadat, and Raquel Urtasun. Mp3: A unified model to map, perceive, predict and plan. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14403–14412, 2021. 2, 6 [7] Boyuan Chen, Zhuo Xu, Sean Kirmani, Brain Ichter, Dorsa Sadigh, Leonidas Guibas, and Fei Xia. Spatialvlm: Endow-ing vision-language models with spatial reasoning capabili-ties. In Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition , pages 14455–14465, 2024. 3 [8] Long Chen, Oleg Sinavski, Jan H¨ unermann, Alice Karnsund, Andrew James Willmott, Danny Birch, Daniel Maund, and Jamie Shotton. Driving with llms: Fusing object-level vec-tor modality for explainable autonomous driving. In 2024 IEEE International Conference on Robotics and Automation (ICRA) , pages 14093–14100. IEEE, 2024. 2 [9] Xi Chen, Xiao Wang, Soravit Changpinyo, AJ Piergiovanni, Piotr Padlewski, Daniel Salz, Sebastian Goodman, Adam Grycner, Basil Mustafa, Lucas Beyer, et al. Pali: A jointly-scaled multilingual language-image model. In The Eleventh International Conference on Learning Representations . 1, 2, 8[10] Xi Chen, Xiao Wang, Lucas Beyer, Alexander Kolesnikov, Jialin Wu, Paul Voigtlaender, Basil Mustafa, Sebastian Goodman, Ibrahim Alabdulmohsin, Piotr Padlewski, et al. Pali-3 vision language models: Smaller, faster, stronger. 
+
+arXiv preprint arXiv:2310.09199 , 2023. 1, 2, 3, 6, 8 [11] An-Chieh Cheng, Hongxu Yin, Yang Fu, Qiushan Guo, Rui-han Yang, Jan Kautz, Xiaolong Wang, and Sifei Liu. Spatial-rgpt: Grounded spatial reasoning in vision language model. 
+
+arXiv preprint arXiv:2406.01584 , 2024. 2 [12] Hyung Won Chung, Le Hou, Shayne Longpre, Barret Zoph, Yi Tay, William Fedus, Yunxuan Li, Xuezhi Wang, Mostafa Dehghani, Siddhartha Brahma, et al. Scaling instruction-finetuned language models. Journal of Machine Learning Research , 25(70):1–53, 2024. 2 [13] Felipe Codevilla, Matthias M¨ uller, Antonio L´ opez, Vladlen Koltun, and Alexey Dosovitskiy. End-to-end driving via conditional imitation learning. In 2018 IEEE international conference on robotics and automation (ICRA) , pages 4693– 4700. IEEE, 2018. 2 [14] Wenliang Dai, Junnan Li, Dongxu Li, Anthony Meng Huat Tiong, Junqi Zhao, Weisheng Wang, Boyang Li, Pascale Fung, and Steven Hoi. Instructblip: Towards general-purpose vision-language models with instruction tuning, 2023. 2 [15] Xinpeng Ding, Jianhua Han, Hang Xu, Xiaodan Liang, Wei Zhang, and Xiaomeng Li. Holistic autonomous driving un-derstanding by bird’s-eye-view injected multi-modal large models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 13668– 13677, 2024. 2 [16] Alexey Dosovitskiy, German Ros, Felipe Codevilla, Anto-nio Lopez, and Vladlen Koltun. Carla: An open urban driv-ing simulator. In Conference on robot learning , pages 1–16. PMLR, 2017. 2 [17] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Syl-vain Gelly, et al. An image is worth 16x16 words: Trans-formers for image recognition at scale. arXiv preprint arXiv:2010.11929 , 2020. 6 [18] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R Qi, Yin Zhou, et al. Large scale interactive motion forecasting for autonomous driving: The waymo open mo-tion dataset. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9710–9719, 2021. 2, 5, 6 [19] Yuxin Fang, Wen Wang, Binhui Xie, Quan Sun, Ledell Wu, Xinggang Wang, Tiejun Huang, Xinlong Wang, and Yue Cao. Eva: Exploring the limits of masked visual representa-tion learning at scale. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 19358–19369, 2023. 2 [20] Adam W Harley, Zhaoyuan Fang, Jie Li, Rares Ambrus, and Katerina Fragkiadaki. Simple-bev: What really mat-ters for multi-sensor bev perception? In 2023 IEEE Inter-national Conference on Robotics and Automation (ICRA) ,pages 2759–2765. IEEE, 2023. 3, 5 [21] Ari Holtzman, Jan Buys, Li Du, Maxwell Forbes, and Yejin Choi. The curious case of neural text degeneration. arXiv preprint arXiv:1904.09751 , 2019. 5, 1 [22] Yining Hong, Haoyu Zhen, Peihao Chen, Shuhong Zheng, Yilun Du, Zhenfang Chen, and Chuang Gan. 3d-llm: In-jecting the 3d world into large language models. Advances 1630 in Neural Information Processing Systems , 36:20482–20494, 2023. 2 [23] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu Chen. Lora: Low-rank adaptation of large language models. arXiv preprint arXiv:2106.09685 , 2021. 2 [24] Shengchao Hu, Li Chen, Penghao Wu, Hongyang Li, Junchi Yan, and Dacheng Tao. St-p3: End-to-end vision-based au-tonomous driving via spatial-temporal feature learning. In 
+
+European Conference on Computer Vision , pages 533–549. Springer, 2022. 2 [25] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17853–17862, 2023. 1, 2, 6, 7[26] Jyh-Jing Hwang, Runsheng Xu, Hubert Lin, Wei-Chih Hung, Jingwei Ji, Kristy Choi, Di Huang, Tong He, Paul Covington, Benjamin Sapp, Yin Zhou, James Guo, Dragomir Anguelov, and Mingxing Tan. Emma: End-to-end multimodal model for autonomous driving, 2024. 3 [27] Maximilian Igl, Daewoo Kim, Alex Kuefler, Paul Mougin, Punit Shah, Kyriacos Shiarlis, Dragomir Anguelov, Mark Palatucci, Brandyn White, and Shimon Whiteson. Sym-phony: Learning realistic and diverse agents for autonomous driving simulation. In 2022 International Conference on Robotics and Automation (ICRA) , pages 2445–2451. IEEE, 2022. 3 [28] Bo Jiang, Shaoyu Chen, Qing Xu, Bencheng Liao, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. Vad: Vectorized scene representa-tion for efficient autonomous driving. In Proceedings of the IEEE/CVF International Conference on Computer Vision ,pages 8340–8350, 2023. 1, 2, 6, 7 [29] Jinkyu Kim, Anna Rohrbach, Trevor Darrell, John Canny, and Zeynep Akata. Textual explanations for self-driving ve-hicles. In Proceedings of the European conference on com-puter vision (ECCV) , pages 563–578, 2018. 6 [30] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. In In-ternational conference on machine learning , pages 19730– 19742. PMLR, 2023. 2 [31] Zhiqi Li, Wenhai Wang, Hongyang Li, Enze Xie, Chong-hao Sima, Tong Lu, Yu Qiao, and Jifeng Dai. Bevformer: Learning bird’s-eye-view representation from multi-camera images via spatiotemporal transformers. In European con-ference on computer vision , pages 1–18. Springer, 2022. 2, 3, 5 [32] Zhiqi Li, Zhiding Yu, Shiyi Lan, Jiahan Li, Jan Kautz, Tong Lu, and Jose M Alvarez. Is ego status all you need for open-loop end-to-end autonomous driving? In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14864–14873, 2024. 2, 3, 8 [33] Bencheng Liao, Shaoyu Chen, Xinggang Wang, Tianheng Cheng, Qian Zhang, Wenyu Liu, and Chang Huang. Maptr: Structured modeling and learning for online vectorized hd map construction. In The Eleventh International Conference on Learning Representations . 2 [34] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. Advances in neural information processing systems , 36, 2024. 2 [35] Zhijian Liu, Haotian Tang, Alexander Amini, Xinyu Yang, Huizi Mao, Daniela L Rus, and Song Han. Bevfusion: Multi-task multi-sensor fusion with unified bird’s-eye view repre-sentation. In 2023 IEEE international conference on robotics and automation (ICRA) , pages 2774–2781. IEEE, 2023. 2, 3 [36] Xianzheng Ma, Yash Bhalgat, Brandon Smart, Shuai Chen, Xinghui Li, Jian Ding, Jindong Gu, Dave Zhenyu Chen, Songyou Peng, Jia-Wang Bian, et al. When llms step into the 3d world: A survey and meta-analysis of 3d tasks via multi-modal large language models. arXiv preprint arXiv:2405.10255 , 2024. 3 [37] Yingzi Ma, Yulong Cao, Jiachen Sun, Marco Pavone, and Chaowei Xiao. Dolphins: Multimodal language model for driving. arXiv preprint arXiv:2312.00438 , 2023. 2 [38] Jiageng Mao, Yuxi Qian, Junjie Ye, Hang Zhao, and Yue Wang. Gpt-driver: Learning to drive with gpt. arXiv preprint arXiv:2310.01415 , 2023. 2, 7 [39] Jiageng Mao, Junjie Ye, Yuxi Qian, Marco Pavone, and Yue Wang. A language agent for autonomous driving. arXiv preprint arXiv:2311.10813 , 2023. 2 [40] Brandon McKinzie, Zhe Gan, Jean-Philippe Fauconnier, Sam Dodge, Bowen Zhang, Philipp Dufter, Dhruti Shah, Xi-anzhi Du, Futang Peng, Floris Weers, et al. Mm1: Methods, analysis & insights from multimodal llm pre-training. arXiv preprint arXiv:2403.09611 , 2024. 2 [41] Nigamaa Nayakanti, Rami Al-Rfou, Aurick Zhou, Kratarth Goel, Khaled S Refaat, and Benjamin Sapp. Wayformer: Motion forecasting via simple & efficient attention networks. In 2023 IEEE International Conference on Robotics and Au-tomation (ICRA) , pages 2980–2987. IEEE, 2023. 2 [42] OpenAI. Gpt-4v(ision) system card, 2023. 1, 2 [43] Dean A Pomerleau. Alvinn: An autonomous land vehicle in a neural network. Advances in neural information processing systems , 1, 1988. 1 [44] C. Qi, Yin Zhou, Mahyar Najibi, Pei Sun, Khoa T. Vo, Boyang Deng, and Dragomir Anguelov. Offboard 3d ob-ject detection from point cloud sequences. 2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 6130–6140, 2021. 7 [45] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervi-sion. In International conference on machine learning , pages 8748–8763. PMLR, 2021. 2 [46] Ari Seff, Brian Cera, Dian Chen, Mason Ng, Aurick Zhou, Nigamaa Nayakanti, Khaled S Refaat, Rami Al-Rfou, and Benjamin Sapp. Motionlm: Multi-agent motion forecast-ing as language modeling. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 8579– 8590, 2023. 2, 7, 4 1631 [47] Hao Sha, Yao Mu, Yuxuan Jiang, Li Chen, Chenfeng Xu, Ping Luo, Shengbo Eben Li, Masayoshi Tomizuka, Wei Zhan, and Mingyu Ding. Languagempc: Large language models as decision makers for autonomous driving. arXiv preprint arXiv:2310.03026 , 2023. 2 [48] Hao Shao, Yuxuan Hu, Letian Wang, Guanglu Song, Steven L Waslander, Yu Liu, and Hongsheng Li. Lmdrive: Closed-loop end-to-end driving with large language models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15120–15130, 2024. 2[49] Chonghao Sima, Katrin Renz, Kashyap Chitta, Li Chen, Hanxue Zhang, Chengen Xie, Jens Beißwenger, Ping Luo, Andreas Geiger, and Hongyang Li. Drivelm: Driving with graph visual question answering. In First Vision and Lan-guage for Autonomous Driving and Robotics Workshop . 2, 6, 8, 4 [50] Yi Tay, Mostafa Dehghani, Vinh Q Tran, Xavier Garcia, Ja-son Wei, Xuezhi Wang, Hyung Won Chung, Siamak Shak-eri, Dara Bahri, Tal Schuster, et al. Ul2: Unifying language learning paradigms. arXiv preprint arXiv:2205.05131 , 2022. 6[51] Gemini Team, Rohan Anil, Sebastian Borgeaud, Jean-Baptiste Alayrac, Jiahui Yu, Radu Soricut, Johan Schalkwyk, Andrew M Dai, Anja Hauth, Katie Millican, et al. Gemini: a family of highly capable multimodal models. arXiv preprint arXiv:2312.11805 , 2023. 1, 2, 3 [52] Thomas Tian, Boyi Li, Xinshuo Weng, Yuxiao Chen, Ed-ward Schmerling, Yue Wang, Boris Ivanovic, and Marco Pavone. Tokenize the world into object-level knowledge to address long-tail events in autonomous driving. In Workshop on Language and Robot Learning: Language as an Inter-face . 2 [53] Xiaoyu Tian, Junru Gu, Bailin Li, Yicheng Liu, Chenxu Hu, Yang Wang, Kun Zhan, Peng Jia, Xianpeng Lang, and Hang Zhao. Drivevlm: The convergence of autonomous driving and large vision-language models. arXiv preprint arXiv:2402.12289 , 2024. 1, 2, 3, 6, 7 [54] Balakrishnan Varadarajan, Ahmed Hefny, Avikalp Srivas-tava, Khaled S Refaat, Nigamaa Nayakanti, Andre Cornman, Kan Chen, Bertrand Douillard, Chi Pang Lam, Dragomir Anguelov, et al. Multipath++: Efficient information fu-sion and trajectory aggregation for behavior prediction. In 
+
+2022 International Conference on Robotics and Automation (ICRA) , pages 7814–7821. IEEE, 2022. 2 [55] Shihao Wang, Zhiding Yu, Xiaohui Jiang, Shiyi Lan, Min Shi, Nadine Chang, Jan Kautz, Ying Li, and Jose M Alvarez. Omnidrive: A holistic llm-agent framework for autonomous driving with 3d perception, reasoning and planning. arXiv preprint arXiv:2405.01533 , 2024. 7, 8 [56] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou, et al. Chain-of-thought prompting elicits reasoning in large lan-guage models. Advances in neural information processing systems , 35:24824–24837, 2022. 2, 3 [57] Xinshuo Weng, Boris Ivanovic, Yan Wang, Yue Wang, and Marco Pavone. Para-drive: Parallelized architecture for real-time autonomous driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 15449–15458, 2024. 1, 7 [58] Penghao Wu, Xiaosong Jia, Li Chen, Junchi Yan, Hongyang Li, and Yu Qiao. Trajectory-guided control prediction for end-to-end autonomous driving: A simple yet strong base-line. Advances in Neural Information Processing Systems ,35:6119–6132, 2022. 2 [59] xAI. Grok-1.5 vision preview, 2024. 2 [60] Yichen Xie, Chenfeng Xu, Marie-Julie Rakotosaona, Patrick Rim, Federico Tombari, Kurt Keutzer, Masayoshi Tomizuka, and Wei Zhan. Sparsefusion: Fusing multi-modal sparse rep-resentations for multi-sensor 3d object detection. In Proceed-ings of the IEEE/CVF International Conference on Com-puter Vision , pages 17591–17602, 2023. 2 [61] Zhenhua Xu, Yujia Zhang, Enze Xie, Zhen Zhao, Yong Guo, Kwan-Yee K Wong, Zhenguo Li, and Hengshuang Zhao. Drivegpt4: Interpretable end-to-end autonomous driving via large language model. IEEE Robotics and Automation Let-ters , 2024. 1, 2, 6 [62] Jiang-Tian Zhai, Ze Feng, Jihao Du, Yongqiang Mao, Jiang-Jiang Liu, Zichang Tan, Yifu Zhang, Xiaoqing Ye, and Jing-dong Wang. Rethinking the open-loop evaluation of end-to-end autonomous driving in nuscenes. arXiv preprint arXiv:2305.10430 , 2023. 3, 8 [63] Xiaohua Zhai, Basil Mustafa, Alexander Kolesnikov, and Lucas Beyer. Sigmoid loss for language image pre-training. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 11975–11986, 2023. 2 [64] Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao Zhuang, Zi Lin, Zhuohan Li, Dacheng Li, Eric. P Xing, Hao Zhang, Joseph E. Gonza-lez, and Ion Stoica. Judging llm-as-a-judge with mt-bench and chatbot arena, 2023. 2 [65] Wenzhao Zheng, Weiliang Chen, Yuanhui Huang, Borui Zhang, Yueqi Duan, and Jiwen Lu. Occworld: Learning a 3d occupancy world model for autonomous driving. arXiv preprint arXiv:2311.16038 , 2023. 2 [66] Wenzhao Zheng, Ruiqi Song, Xianda Guo, and Long Chen. Genad: Generative end-to-end autonomous driving. arXiv preprint arXiv:2402.11502 , 2024. 2 1632

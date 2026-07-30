@@ -1,0 +1,844 @@
+Title: Causal Composition Diffusion Model for Closed-loop Traffic Generation
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Lin_Causal_Composition_Diffusion_Model_for_Closed-loop_Traffic_Generation_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 13:41:14 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# Causal Composition Diffusion Model for Closed-loop Traffic Generation 
+
+## Haohong Lin 1*, Xin Huang 2 , Tung Phan 2 , David Hayden 2 ,Huan Zhang 3 , Ding Zhao 1 , Siddhartha Srinivasa 2 , Eric Wolff 2 , Hongge Chen 21 CMU, 2 Cruise LLC, 3 UIUC 
+
+haohongl@cmu.edu , hongge.chen@getcruise.com 
+
+## Abstract 
+
+Simulation is critical for safety evaluation in autonomous driving, particularly in capturing complex interactive behav-iors. However, generating realistic and controllable traffic scenarios in long-tail situations remains a significant chal-lenge. Existing generative models suffer from the conflicting objective between user-defined controllability and realism constraints, which is amplified in safety-critical contexts. In this work, we introduce the Causal Compositional Diff usion Model ( CCDiff ), a structure-guided diffusion framework to address these challenges. We first formulate the learning of controllable and realistic closed-loop simulation as a constrained optimization problem. Then, CCDiff maximizes controllability while adhering to realism by automatically identifying and injecting causal structures directly into the diffusion process, providing structured guidance to enhance both realism and controllability. Through rigorous evalua-tions on benchmark datasets and in a closed-loop simulator, CCDiff demonstrates substantial gains over state-of-the-art approaches in generating realistic and user-preferred trajec-tories. Our results show CCDiff’s effectiveness in extracting and leveraging causal structures, showing improved closed-loop performance based on key metrics such as collision rate, off-road rate, FDE, and comfort. For more details, welcome to check our project website. 
+
+## 1. Introduction 
+
+Reliable closed-loop traffic simulation is essential for assess-ing autonomous vehicle (AV) safety in diverse and complex scenarios [ 1–5]. Simulations must be both realistic , captur-ing the intricacies of real-world driving, and controllable ,allowing customization aligned with user preferences. How-ever, balancing realism with controllability remains a signifi-cant challenge. Previous works often prioritize one aspect, optimizing either realism or user-specified objectives [ 3, 5 ]. How to jointly achieve both objectives under safety-critical conditions remains fruitful yet unresolved. * This work was done when Haohong was an intern at Cruise LLC.                
+
+> Safety -critical ✅Safety -critical ❌
+> Realistic  ✅ Realistic  ❌
+> Model: STRIVE Model: CTG
+> Model: TrafficSim Model: CCDiff
+> 13 713 7
+> 13 713 7
+> 5
+> 5
+> 55
+> 5
+> 7
+> Spatial Reasoning #
+> Ours  Distance -based
+
+Figure 1. Comparison of safety-critical scenario generation meth-ods, featuring CCDiff alongside existing methods (STRIVE, CTG, and TrafficSim). The illustrated scenario involves Car 13 execut-ing an unprotected left turn, prompting Car 7 to change lanes and interfere with Car 5. Unlike other methods, CCDiff successfully achieves both realism and controllability in generating this safety-critical scenario. In the right column, CCDiff ’s spatial reasoning method is compared to a distance-based baseline approach. CCDiff 
+
+accurately captures the causal relationships between key agents, identifying crucial interactions with greater precision and spatial alignment than distance-based reasoning. Traffic agent simulation often resorts to either (i) data-driven approaches that generate the most probable trajec-tories based on scene context or (ii) rule-based approaches that maximize alignment with a user’s control. However, both approaches face key limitations for effective scenario generation. Data-driven scenario generation faces two primary chal-lenges. First, the rarity of collision and near-miss events in public datasets limits the ability of data-driven methods to generate safety-critical scenarios. As shown in prior stud-ies [ 2, 6], even a small domain mismatch, such as changes in road structure or the behavior of surrounding vehicles, can cause significant regressions. Second, closed-loop simula-tion requires that generated trajectories continuously inter-act with the simulated environment, so current predictions This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 27542 influence future predictions. This feedback loop often cre-ates compounding errors, leading to distributional shifts that challenge the generation of both controllable and realistic behaviors over long horizons. On the other hand, rule-based approaches to simulation [ 7,8] offer precise user control, but often fail to capture the nuanced, adaptive behaviors of real-world driving, especially in unpredictable scenarios. Their rigidity can make generated behaviors feel scripted and unrealistic, particularly in closed-loop simulations where each action influences future states. This lack of adaptability often leads to compounding errors and a drift from realistic behavior distributions, limiting their effectiveness in complex, long-horizon interactions. Recent advances in deep generative models have enabled scalable traffic behavior simulation [ 9, 10 ], facilitating re-alistic scenario generation from massive offline datasets. Notably, prior works compose explicit rules into scenario generation, such as causal graphs (CG), signal temporal logic (STL), or large language models (LLM), which act as structured constraints to improve the controllability [ 3, 4, 11 –13 ]. However, interactive driving scenarios cannot be fully encapsulated by explicit rules alone. Rule-based models struggle to generalize effectively in many safety-critical cor-ner cases, where certain rules may need to be adapted. Our key insight in driving scenarios is that interactions between agents follow an inherent causal structure: each agent’s actions depend primarily on the states of a subset of nearby agents. Following this observation, we frame the problem as a Constrained Factored Markov Decision Process (MDP), shaped by these causal dependencies to mirror real-world interactions. Unlike previous approaches that manage conflicts between controllability and realism through reweighting, we directly utilize the causal structure by selectively masking agents with conflicting behaviors. This structure enables our model to uphold both realism and controllability constraints simultaneously, even in safety-critical situations. To implement this approach, we intro-duce the Causal Composition Diff usion model ( CCDiff )—a structure-enhanced diffusion model that combines structure-aware classifier-free guidance with compositional classifier-based guidance. By integrating these elements, our model achieves a balanced, flexible generation of realistic and con-trollable driving scenarios, as demonstrated in Figure 1. Our contributions can be summarized as follows: • We formulate the learning of controllable and realistic closed-loop simulation as a constrained optimization problem, which aims to maximize the user’s control pref-erences while satisfying realism constraints. • We propose CCDiff , a principled algorithm to solve the constrained optimization problem by identifying the causal structure and injecting it as a structured guidance to the diffusion model. • We systematically evaluate the performance of CCDiff 
+
+with state-of-the-art in closed-loop scenario generation on the nuScenes dataset [ 14 ], showing benefits in the controllability and realism in generating safety-critical driving scenarios. 
+
+## 2. Related Work Causal reasoning for behavior models Causal reasoning has seen extensive applications in trajectory modeling, with previous studies leveraging causal structures to enhance the robustness and generalizability of open-loop behavior predic-tion models. These efforts have included causal representa-tion learning [ 15 ], backdoor adjustment [ 16 ], counterfactual analysis [ 17 ], and realistic causal interventions [ 11 , 18 ]. De-spite these advances, applying a causal approach to broader trajectory prediction tasks [ 19 ] often demands substantial human annotation efforts [ 20 ]. To address the challenges of automating spatiotemporal reasoning in traffic scenarios, state-of-the-art methods [ 21 – 24 ] employ factorized attention mechanisms. However, while previous work applies causal structured reasoning primarily in open-loop settings, the effi-cacy of causal behavior modeling in closed-loop scenarios for autonomous driving remains under-explored. 
+
+Generative models for traffic simulation Prior arts bal-ance the trade-off between realism and controllability in safety-critical scenario generation by incorporating vari-ous constraints, such as inference-time sampling strate-gies [ 10 ], retrieval-augmented generation [ 5], low-rank fine-tuning [ 25 ], and language-conditioned generation [ 13 ]. In closed-loop simulation methods, compositional constraints in the training loss are often integrated into the simulation pipeline. For instance, TrafficSim [ 26 ] achieves a balance between realism and common sense using a time-adaptive multi-task loss design; SimNet [ 27 ] factorizes trajectory se-quences using Markov processes; STRIVE [ 28 ] imposes structured priors to constrain samples, avoiding unrealis-tic outcomes; and BITS [ 29 ] optimizes closed-loop perfor-mance via bi-level imitation. Yet these prior methods strug-gle to resolve conflicts between controllability and realism 
+
+objectives when these are at odds during inference. 
+
+Diffusion model for sequential decision making Diffu-sion models [ 30 – 32 ] have shown strong controllability in density estimation and generation tasks. Scenario Diffu-sion [ 33 ] adopts latent diffusion, utilizing multi-source con-ditioning to generate realistic scenarios. In closed-loop traf-fic simulation, several prior works incorporate compositional classifier-based guidance to steer the diffusion model’s sam-pling process [ 34 , 35 ], including signal temporal logic (STL) guidance, language-based guidance [ 4 ], adversarial guid-ance [36–38], and game-theoretic guidance [39]. Appendix Table 4 systematically compares the key features among the prior works and our proposed ap-27543 proach. While related works often focus on generating rule-compliant normal scenarios or enhancing safety-critical scenarios purely through classifier guidance, a fundamental challenge of achieving a balance between controllability and 
+
+realism under safety-critical conditions remains unresolved. 
+
+## 3. Problem Formulation 3.1. Constrained Factored Markov Decision Process 
+
+We formulate the closed-loop traffic simulation as an MDP problem, then utilize diffusion model for sequential mod-eling to learn a controllable simulation policy ⇡ . Since we would like to exploit the causal structure between the state, action, and reward space, we define the Constrained Factored MDP as follows: 
+
+Definition 1 (Constrained Factored MDP) . A Constrained Factored Markov Decision Process (CFMDP) is a Markov Decision Process where the state space S and reward function R are factorized to exploit the structure of the problem. A CFMDP is defined by the tuple: M F = S, A, P, R, C, s 0
+
+ .The factored state space, denoted as S = S (1) ⇥ S (2) ⇥
+
+· · · ⇥ S (N ) , represents the motion trajectory space at the current step for each agent i . The factored action space, 
+
+A = A (1) ⇥ A (2) ⇥ · · · ⇥ A (N ) , consists of interventions on the subsequent driving behaviors for each agent in the scenario. The joint transition dynamics P (s t |s t 1 , a t 1 ) = 
+
+Q Ni=1 p i (s (i) 
+
+> t
+
+|s t 1 , a (i) 
+
+> t 1
+
+) , are defined over the state s 2 S
+
+and action a 2 A pairs. In our case, P is the determin-istic vehicle dynamics for each agent in our setting. The reward objective R(s, a) = P d r 
+
+> j=1
+
+R (j) (s (I j ) , a) include collision, off-road events, over-speed, or other objectives, where each subset I j specifies the state factors impacting the 
+
+j -th reward. For a learned policy ⇡ , the constraint function 
+
+C(s, a) = D ⇡   (·| s t )k⇡(·| s t )  indicates the realism level of generated trajectories with respect to the dataset policies 
+
+⇡   , where a lower constraint value implies greater realism. The initial state s 0 lies in the factored state space S.We then formulate the closed-loop scenario generation problem as a constrained optimization problem that aims to find an intervention policy ⇡ that maximizes the controlla-bility R(⌧ ) while maintaining an acceptable deviation in the realism C(⌧ ):
+
+max  
+
+> ⇡
+
+E ⌧ ⇠(P, ⇡)
+
+⇥R(⌧ )⇤, s.t. E ⌧ ⇠(P, ⇡) [C(⌧ )]  ,
+
+where the cumulative reward, R(⌧ ) , represents the to-tal reward accumulated from individual reward factors along the trajectory ⌧ : R(⌧ ) = P d r 
+
+> j=1
+
+R (j) (⌧ (I j ) ) =
+
+E
+
+hP Tt=1 
+
+P d r 
+
+> j=1
+
+R (j) (s (I j ) 
+
+> t
+
+, a (I j ) 
+
+> t
+
+)
+
+i
+
+. The cumulative cost 
+
+C(⌧ ) quantifies the realism constraints, measuring how closely the generated trajectory ⌧ resembles the ground-truth trajectory ⌧ ⇤ . Following the approach in [ 3, 29 ], we use the Total Variation (TV) distance between the estimated inter-vention policy ⇡(a t |s t ) and the dataset policy ⇡   (a t |s t ) :
+
+C(⌧ ) , P Tt=1 D ⇡   (a t |s t ) k ⇡(a t |s t ) .
+
+To further incorporate the structure in this multi-agent decision-making problem [ 40 ], we define the Decision Causal Graph (DCG) below. 
+
+Definition 2 (Decision Causal Graph) . For every timestep 
+
+t , we define a causal graph G 2 R N ⇥N , where G ij = 0 
+
+if and only if the future action of agent j is conditionally independent with the i -th agent’s history: a (j) 
+
+> t
+
+?? s (i) 
+
+> t
+
+|s ( i) 
+
+> t
+
+.And G ij = 1 means there exists a causal edge s (i) 
+
+> t
+
+! a (j) 
+
+> t
+
+.Following the definition above, we can also define a set of policy ⇡(a (1)  
+
+> t
+
+, · · · , a (N ) 
+
+> t
+
+|s t ) = Q Ni=1 ⇡ (i) (a (i) 
+
+> t
+
+|PA Gt (i)) ,where PA Gt (i) 2 {s (1) , s (2) , · · · , s (N ) } is the causal parents to the i -th agents in graph G when making decisions. A diagram of Factored DCG is illustrated in Figure 2(a). 
+
+3.2. Diffusion Model for Sequence Modeling 
+
+We then solve the traffic simulation inspired by the recent advancement in diffusion-guided sequential data genera-tion [ 3, 41 , 42 ]. Denote ⌧ (k) , {(s t (k), a t (k)) }Tt=1 repre-sent the joint state-action trajectory at the k -th diffusion step, 
+
+k 2 {0, 1, · · · , K } , where ⌧ (0) denotes the original clean trajectory. The forward diffusion process, acting on ⌧ (0) ,gradually corrupts it with Gaussian noise:                           
+
+> q(⌧(1 : K)|⌧(0)) ,
+> KY
+> k=1
+> q(⌧(k)|⌧(k 1)) ,q(⌧(k)|⌧(k 1)) ,N
+> ⇣
+> ⌧(k); p1  k⌧(k 1) , kI
+> ⌘
+> ,
+
+where   1 , . . . ,   K are pre-defined variance schedules at each diffusion step. Over the forward process, the trajec-tory is transformed into a standard Gaussian distribution: 
+
+q(⌧ (K)) ⇡ N (0, I) . For scenario generation, the reverse diffusion process iteratively denoises from noise to recover the original trajectories. Given a context c (e.g., map fea-tures), the reverse process is:                                   
+
+> p ,(⌧(0 : K)|c) = p(⌧(K))
+> KY
+> k=1
+> p✓(⌧(k 1) |⌧(k),c),p ,(⌧(k 1) |⌧(k),c) = N ⌧(k 1); ⇡ ,(⌧(k), k, c), 2
+> kI ,
+
+where p(⌧ (K)) = N (0, I) is the Gaussian prior, and ⇡  ,
+
+is the scene encoder parameterized by  , , which will be covered in later sections. 
+
+## 4. Methodology 4.1. Realism Constrained Score Matching 
+
+We denote a factored optimality of time-step t , a set of binary random variables as O t = {O (j) 
+
+> t
+
+}d r 
+
+> j=1
+
+[ 41 , 43 ]. The 27544 Ego Agents                        
+
+> 1-hop Entities
+> 2-hop Entities
+> 3+ hop Entities
+> Controllability ✅
+> Safety -critical ✅
+> Realism ✅
+> Causal
+> Reasoner
+> Ego Agents
+> 1-hop Entities
+> 2-hop Entities
+> 3+ hop Entities
+> Initial Conditions
+> (Scenario Layout)
+> Importance
+> Ranking
+> Scene
+> Encoder
+> Diffusion
+> Model
+> #Top -k Guidance
+> 4239…
+> Histories !
+> Maps "
+> Factored DCG !
+> Predicted Action
+> Generated Scenarios
+> (Future Trajectories)
+> "!
+> (#)"!
+> (%)"!
+> (&)
+> #!
+> (#)#!
+> (%)#!
+> (&)
+> $!
+> (#)$!
+> ('!)
+> #!
+> (()
+> "!
+> (()
+> $!
+> (%)
+> ……
+> ……
+> ……
+> Motions hist.
+> Intervention
+> actions
+> Reward obj.
+> Causal Composition
+> #!,#(!,";')
+> Closed -loop Update
+
+∇ log % !
+
+∇ log % "
+
+∇ log % #
+
+∇ log &(!)
+
+∇ log % &  
+
+> Gradient of Reward
+> Objective ( Controllability )
+> Gradient of Agents’
+> Policies ( Realism )
+> Reverse Sampling
+> Trajectories Current Sample
+
+∇ log % '
+
+∑ ∇ log % ( 
+
+> (
+
+. 
+
+> (a) Pipeline Overview of Causal Composition Diffusion Model (b) Gradient Conflicting Issues
+
+Figure 2. (a) : Overview of Causal Composition Diffusion Model. The scene encoder encodes the history and then uses causal reasoning for a structured scene encoding and causal ranking. Finally, we exert guidance only to the top-K agents and eliminate the non-causal agents that would not contribute to the guidance objective to maintain better realism. (b) : Summing up the score functions over all the agents achieves sub-optimal performance due to the conflict between the gradients of realism and controllability objectives. joint optimality in all reward objectives can be written as 
+
+p(O (j)
+
+t = 1 |⌧ t ) / exp  R (j) (⌧ (j)
+
+t )  . We slightly exploit the notations ⌧ , {(s t , a t )}Tt=1 as the trajectories of state action pairs, where s t 2 R N ⇥d s is the state trajectories for all N agents. Given the CFMDP in Definition 1, with known transition (vehicle) dynamics, we can factorize the objective of the optimal closed-loop scenario generation as follows: 
+
+max P (O t = 1 , ⌧ t |⌧ t 1 ) , max P (O t = 1 |⌧ t )P (⌧ t |⌧ t 1 ) ,
+
+max  
+
+> ⇡
+
+P (O t = 1 |s t , a t )⇡(a t |s t )P (s t |s t 1 , a t 1 ) ,
+
+max  
+
+> ⇡
+> dr
+
+Y
+
+> j=1
+
+exp  R (j) (s (I j ) 
+
+> t
+
+, ⇡(s t ))  | {z }
+
+> Controllability
+> N
+
+Y
+
+> i=1
+
+⇡ (i)  a (i) 
+
+> t
+
+|s t
+
+ | {z }
+
+> Realism
+
+,
+
+(1) where the first term corresponds to controllability , i.e. the likelihood of optimality specified by some user-specified reward objective, and the second term corresponds to the 
+
+realism , the likelihood of generated behaviors. We denote 
+
+r log P , r log P (O t = 1 , ⌧ t |⌧ t 1 ) The score function of the maximum likelihood objective in equation (1) can be written as [30, 41]: 
+
+r log P = 
+
+> dr
+
+X
+
+> j=1
+
+r ⌧ R (j) (s (I j ) 
+
+> t
+
+, ⇡(s t )) + 
+
+> N
+
+X
+
+> i=1
+
+r ⌧ log ⇡ (i)  a (i) 
+
+> t
+
+|s t
+
+ 
+
+(2) Unlike the normal scenarios where optimizing the imitation basically adheres with the rule compliance reward, safety-critical guidance R (j) can suffer from gradient conflict [ 44 –47]. Namely, for some i 2 [1 , N ], j 2 [1 , d r ], if 
+
+⌦r ⌧ log ⇡ (i)  a (i)
+
+t |s t
+
+ , r ⌧ R (j) (⌧ (I j ) )↵ < 0,
+
+using a weighted sum of all the objectives as classifier-based guidance would achieve sub-optimal performance, as illus-trated in Figure 2(b). In order to resolve this gradient con-flicting issues, we need to prioritize to control the agents index i 2 [N ] that could maximize the reward while main-taining a high likelihood of the learned policies, i.e., a lower realism gap between the learned policies and behavior poli-cies ⇡   : D(⇡   kb⇡) . We denote the flag of controllable agents as ⇢ 2 [0 , 1] N , the target simulation policies: 
+
+⇡ (i) (a (i) 
+
+> t
+
+|s t ) = 
+
+(
+
+⇡ (i) 
+
+> ⇢,
+
+(a (i) 
+
+> t
+
+|s t ), ⇢ i = 1 
+
+⇡ (i) 
+
+>  
+
+(a (i) 
+
+> t
+
+|s t ), ⇢ i = 0 
+
+We can use the Lagrangian multiplier [ 48 ] and structured projected gradient descent [ 49 ] to solve the constrained opti-mization with the following maximum likelihood estimation problems: 
+
+max     
+
+> ⇡2⇧,⇢2{0,1}N
+> G2{0,1}N⇥N
+> dr
+
+Y
+
+> j=1
+
+exp  R (j) (⌧ I j 
+
+> t
+
+; ⇢)  Y   
+
+> i2[N],⇢i=1
+
+⇡ (i)  a (i) 
+
+> t
+
+|PA Gt (i) 
+
+s.t. |G|  C sparsity , X
+
+> i
+
+⇢ i  N c .
+
+(3) We can then control the realism level by changing the con-straint level of N c , C sparsity 2 Z + .
+
+4.2. Proposed Method: CCDiff 
+
+We hereby introduce CCDiff to optimize the simulation pol-icy ⇡ of equation (3) in a scalable and efficient way by de-composing the constrained optimization problem into several small components. We illustrate the pipeline in Figure 2(a). To promote realism , CCDiff first encodes the motion histo-ries of different agents based on the spatial attention, then discovers the decision causal graph G based on the factor-ized attention masks and kinematic factors. CCDiff then utilizes causal interactive patterns in G to extract the impor-tance rank ⇢ . Finally, CCDiff optimizes its controllability by masking out those unimportant agents based on ⇢ to guide the diffusion reverse sampling process in a structured way. We zoom into the details below. 
+
+Causal Composition Scene Encoder Inspired by [ 50 , 51 ], the goal of causal composition scene encoder is to generate 27545 1 2 3 4                      
+
+> Noisy History
+> !(#)
+> Temporal Tokenizer %(⋅)
+> Spatial Attention '
+> !,#,$
+> Action Decoder ((⋅)
+> !(#!"#
+> (%))
+> !(##'(!)*
+> (%))
+> !(#!"#
+> (+))
+> !(##'(!)*
+> (+))
+> !(#!"#
+> (,))
+> !(##'(!)*
+> (,))
+> !(#!"#
+> (-))
+> !(##'(!)*
+> (-))
+> ℎ
+> !ℎ#ℎ$
+> TTC Mask *
+> Ranking
+> #
+> Map
+> Token.
+> !
+> DCG !:
+> "→$
+> 4321
+> Actor mask %
+> Attention "
+> Future Action
+> ,(#)
+
+Figure 3. Detailed model structure of CCDiff , which incorporates temporal tokenizer, spatial attention, and action decoding. The decision causal graph helps to extract the spatial patterns to identify the most relevant actions, then use the ranking outputs to mask the output of the action. ￿ means trainable modules, and ` means non-trainable parts during training. the most likely action under a parsimonious decision causal graph G with Lagrangian multiplier   sparsity :
+
+max   
+
+> G2[0 ,1] N⇥N
+
+Y 
+
+> i2[N]
+
+⇡ (i) (a (i) 
+
+> t
+
+|PA Gt (i)) +   sparsity · | G|
+
+We parameterize our model ⇡  , (a t |s t , c, k ; G) for scenario generation with a transformer-based structures for temporal attention   , spatial attention modules , as well as some deci-sion causal graph G . The model output a t is conditioned on the agents’ history s t , map context c , and diffusion sample step k . Similar to the scene transformer structure in [ 4 , 22 ], we first embed the history of ego and surrounding agents with temporal attention layer:   ego (s (i) 
+
+> t
+
+),   others (s ( i)!(i) 
+
+> t
+
+)] ,here s (i) 
+
+> t
+
+is the history of the i -th agents, and s ( i)!(i) 
+
+> t
+
+are the relative history of all the other agents than i . To facilitate the relational reasoning, we incorporate both the absolute and relative features in   others (·) , including the position, ve-locity, distance, and time-to-collision (TTC). Then we can aggregate all the temporal information into the following spatial cross-attention layer:  
+
+> q
+
+h (i) 
+
+> t
+
+=   ego (s (i) 
+
+> t
+
+), 
+
+> k
+
+h (ij ) 
+
+> t
+
+= v h (ij ) 
+
+> t
+
+= [   ego (s (j) 
+
+> t
+
+),   others (s (i)!(j))  
+
+> t
+
+)]] .
+
+In order to further discover useful spatial parent-to-child relationships, we design a two-step causal reasoning to iden-tify the DCG in the spatial-temporal interaction of the traffic agents. First, we set a hard constraint over the neighbor-hood perception field by trimming down the unnecessary causal connection between agents’ states and corresponding actions at time-step t . Second, we apply the first tunable hard constraint as a memory mask to the attention weights: 
+
+G ij (⌧ t ) = M ij (⌧ t ) · softmax   ( q W q h (i) 
+
+> t
+
+) T ( k W k h (ij ) 
+
+> t
+
+)
+
+pd k
+
+ ,
+
+(4) where the memory mask M is extracted with relative TTC features f TTC (·) with the surrounding agents given the thresh-old C ttc of causal graph G:
+
+M ij (⌧ t ) = 
+
+(
+
+1, f TTC (  others (s (j)!(i) 
+
+> t
+
+))  C ttc 
+
+0, otherwise In practice, we can tune the threshold of C ttc here to control the sparsity of the final causal graph. We then aggregate the map information c into the decoder. The output layer aggregate the state of causal parental agents PA Gt (i) to get the action: a (i) 
+
+> t
+
+(k) =   (PA Gt (i)) , c, k  .
+
+Causal Ranking We then use the identified DCG to rank the agents’ importance to the safety-critical objectives 
+
+R (j) (⌧ ):
+
+⇢ i = arg max  
+
+> i2[N]
+
+⌦r ⌧ log ⇡ (i)  a (i) 
+
+> t
+
+|s t
+
+ , r ⌧ R (j) (⌧ (I j ) )↵
+
+To automate the ranking process, we resort to the estimated causal graph G above. The causal composition scene encoder gives us G and a policy network ⇡  , (a t |s t ; G) .Then we design a graph-based community detector on the DCG G , then sort the time of occurrences in any cliques for all the nodes from 1 to N [ 15 , 17 , 18 ]. After sorting, we have the ranked id sequence {⇢ i (⌧ )} Ni=1 , then we can pick the top N c key agents {⇢ i (⌧ )}N c 
+
+> i=1
+
+at the scene, which represent the most densely interactive with the other agents. This ranking process empirically helps identify the most interactive and influential agents for the safety-critical objective. We further discuss in the appendix with more details about the specific design of relational features   and the community detection algorithms we used. 
+
+Causal Composition Guidance For the diffusion guid-ance process, similar to the inpainting technique [ 41 ], we aim to trim down the controllable space by reducing the number of controllable agents with cause-and-effect ranking. With the causal reasoner and importance ranker modules, we sorted out the key agents {⇢ k (⌧ )}Kk=1 . We then apply both classifier-based and classifier guidance. In CCDiff , we derive a special form of classifier-free guid-ance [ 32 ] as a combination of unconditional scene encoding and causal interventional encoding. At timestep t , for the top-
+
+N c controllable agents i 2 {⇢ N c (⌧ t )}N c 
+
+> i=1
+
+, the classifier-free guidance is: 
+
+(1  w)r a log ⇡  , i(a (i) 
+
+> t
+
+|s (i) 
+
+> t
+
+)+ wr a log ⇡  , (a (i) 
+
+> t
+
+|PA Gt (i)) ,
+
+where w is the guidance scale. For agent i , ⇡  , (a (i) 
+
+> t
+
+|s (i) 
+
+> t
+
+) is the unconditional distribution that only considered the ego 27546 histories  (s ego ) , and ⇡  , (a (i) 
+
+> t
+
+|PA Gt (i)) is the intervened encoded results given some parental agents in causal graph 
+
+G . This formulation implies that the guided distribution corresponds to a geometric mixture: 
+
+⇡(a (i) 
+
+> t
+
+) / ⇡(a (i) 
+
+> t
+
+|PA I N 
+
+> t
+
+(i)) 1 w
+
+| {z }
+
+> Original
+
+· ⇡(a (i) 
+
+> t
+
+|PA Gt (i)) w
+
+| {z }
+
+> Intervened
+
+.
+
+Thus, classifier-free guidance in diffusion models can be viewed as a do-intervention [ 52 ] by specifying the causal parents of i -th agents in DCG during the generative pro-cess. The guidance scale w 2 [1 , 2) acts analogously to the strength of intervention, extrapolating the original and intervened distributions. With the causal ranking, we mask out the agents with conflicted gradients as a reweighted classifier-based guidance:  
+
+> dr
+
+X
+
+> j=1
+
+r a (Ij ) R (j) (⌧ ) ⇡ 
+
+> dr
+
+X
+
+> j=1
+
+⇢ j (⌧ )   r a [R (j) (⌧ )] (5) In practice, we use the distance-based guidance objective over the trajectories, including the map collision guidance and the agent collision guidance [ 3]. We also use the same classifier function for all the baseline methods, see detailed description in the appendix C.3. 
+
+Training and Inference We train the model with us-ing the classical DDPM [ 31 ] diffusion with classifier-free guidance [ 32 ]. Specifically, the loss we solve is 
+
+min  , G k⇡  , (⌧ (k), c, k ; G(⌧ ))   a(0) k 
+
+> 2
+
+. We introduce counterfactual conditions by randomly dropping the DCG 
+
+G of the scene transformer by replacing the decision causal graph G as a diagonal matrix, so all agents’ actions are only conditioned on the ego history. At inference time, we combine both classifier-based and classifier-free guidance to facilitate better controllability, see algorithm 1. 
+
+Algorithm 1 CCDiff for Scenario Generation 
+
+Require: Dropout p uncond , threshold C ⇢ , C ttc 
+
+Require: Guidance loss {J i } Ni=1 , trajectories ⌧ , map c.
+
+while k = K, . . . , 1 do . Inference Sampling 
+
+⇡ uncond , ↵ attn ⇡  , (⌧ (k), c, k ; ?)
+
+G(⌧ ) M (⌧ ) · ↵ attn . Causal masking 
+
+⇢(⌧ ) ranking (G) . Importance ranking 
+
+b⇡ (1   !)⇡  , (⌧ (k), c, k ; G) + !⇡ uncond 
+
+a(0) ⇠ b⇡(·| ⌧ (k), c; G)
+
+a(k 1) a(k 1)+ P d r 
+
+> i=1
+
+⇢ i (⌧ )·rR(s, a(k   1)) 
+
+⌧ (k   1) f dyn 
+
+ s, a(k   1)   . Vehicle dynamics 
+
+end while return Generated trajectory ⌧ (0) .
+
+## 5. Experiment 
+
+In the following parts of the experiments, we aim to answer the following three research questions ( RQ s): RQ1 : Un-der different sizes of total controllable agents, how are the realism and controllability of the safety-critical scenarios generated by CCDiff compared to the baselines? RQ2 : With a longer generation horizon and lower frequency, how are the realism and controllability of the safety-critical scenarios generated by CCDiff compared to the baselines? RQ3 : How much does the causal reasoning module in CCDiff contribute to the overall performance? The remaining parts of the experiment section first in-troduce our experiment settings, then compare our methods with baselines in the controllability and realism to answer the research questions. Finally, we conduct ablation studies to show the effect of individual modules in CCDiff .
+
+5.1. Experiment Settings Datasets We use the nuScenes dataset [ 14 ] and traffic be-havior simulation (tbsim) [ 29 ] for model training and eval-uation. We train all models on scenes from the train split and evaluate on 100 scenes randomly sampled from the val-idation split. During evaluation phase, we initialize all the models with the same set of initial layouts and initial history trajectories of 3 seconds, the model is responsible of gen-erating the future 10 seconds of trajectories for the driving agents in a closed-loop manner. 
+
+Baselines We implement the following baselines in the above platform settings. To systematically illustrate the effectiveness of CCDiff , we include the following SOTAs for comparison: SimNet [ 27 ], TrafficSim [ 26 ], BITS [29 ], 
+
+Strive [ 28 ], and CTG [ 3]. We compare all the baselines with CCDiff in the publicly available nuScenes dataset [ 14 ]and baseline implementations 1 . For a fair comparison with all the baselines, we use the rasterized map used in the previous works and encode them with ResNet-18 for the map conditioning c for all the methods. 
+
+Metrics We compare the performance of CCDiff and all the baselines with the following categories of metrics: • Controllability Score (CS) : we use the scenario-wise col-lision rate (SCR) used in [ 13 , 26 ] as the controllability metrics. Among all the testing scenarios, we calculate the proportion of the scenarios where at least one colli-sion event occurred between different agents. We then standardize SCR among all the methods to get the CS , a higher-the-better score between 0 and 1. • Realism Score (RS) : How to quantify realism is an open problem in evaluating traffic scenarios. In order to get a more interpretable and direct way to quantify realism, we adopt three widely-used quantitative metrics to eval-uate the realism of the scenarios: (i) scenario off-road rate (ORR) used in [ 5 , 13 ], (ii) final displacement er-ror (FDE, m ) and (iii) comfort distance (CFD), which is used in in [ 3 , 29 ] to quantify the realism of the similarity in the smoothness of agents’ trajectories in the generated 1 https://github.com/NVlabs/CTG 27547 Realism Score ( ↑)
+
+> Controllability Score ( ↑)
+> Realism Score ( ↑)
+> Controllability Score ( ↑)
+
+(a) Multi -agent Generation ( ! = 2, 3, 4, 5, 10 , Full) (b) Long -horizon Generation (* = 10 , 20 , 30 , 40 , 50 )         
+
+> SimNet TrafficSim STRIVE BITS CTG CCDiff (Ours )Pareto frontier
+> IGD (↓)GD ( ↓)Method
+> 0.1339 0.1085 CTG
+> 0.0917 0.0617 Ours
+> IGD (↓)GD ( ↓)Method
+> 0.2456 0.0802 CTG
+> 0.1546 0.0079 Ours
+
+Figure 4. Plot of the controllability v.s. realism in the multi-agent and long-horizon generation settings. CCDiff outperforms baselines in both the Generational Distance (GD) and Inverted Generational Distance (IGD), with better proximity to the Pareto frontier, and better coverage of the optimal solution along the frontier in this multi-objective optimization. Our method is more realistic and controllable compared to other approaches consistently in both multi-agent scenario generation and long-horizon scenario generation. scenarios. We standardize all the metrics among all the methods respectively and average them to get the RS , a higher-the-better score between 0 and 1. • Multi-objective optimization metrics : with the RS and 
+
+CS , we further quantify the optimality of the solution based on generational distance ( GD ) and inverted gen-erational distance ( IGD ), the average minimum distance between the methods and Pareto frontier [44, 53]. 
+
+5.2. Multi-agent Scenario Generation (RQ1) 
+
+To address RQ1 , we train our model on the training split of the nuScenes dataset and vary the number of controllable agents from 2 agents to the full sets of agents for all baselines at inference time by running a closed-loop generation at 2 Hz (0.5 s ). We then evaluate the CS and RS of generated scenarios under different numbers of controllable agents and report the comparison between CCDiff with SOTAs in Table 1 and Figure 4(a). From the table, we can see that CCDiff outperforms Sim-Net, TrafficSim, and BITS in both controllability and realism for almost all the cases, whereas TrafficSim only outperforms 
+
+CCDiff in one controllability score. STRIVE shows some good controllability in generating safety-critical scenarios, yet its realism score is the poorest among all. The closest competitor, CTG, shows comparable performance in realism, yet CCDiff outperforms CTG in the controllability metrics, especially when the size of controllable agents goes larger as we gradually scale up the number of controllable agents from 2 to 5 and eventually to the full size of agents at the scene. From Figure 4(a), we can also see that CCDiff enjoys significantly better realism and controllability score on the most upper right side, Pareto front More detailed results for the SCR, ORR, FDE, and CFD are illustrated in the ap-pendix Table 5. The consistent benefits of CCDiff in RS and CS compared to other baselines confirm that composing causal structure in the diffusion model facilitates the algo-rithm to generate reasonable safety-critical scenarios. We also show qualitative studies for long-horizon generation in the Appendix Figure 28. Table 1. Comparison in Controllability ( CS ) and Realism ( RS )among all the baselines in K -agent scenario generation. Red means CCDiff outperforms the baseline in the corresponding met-rics, green means the baseline is better. CCDiff has best or 
+
+second best performance in 10 out of 12 metrics.                                                                                      
+
+> Method Metric K=2 34510 Full SimNet CS ( ")0.00 0.04 0.07 0.19 0.41 0.59 RS ( ")0.93 0.88 0.86 0.84 0.73 0.61 TrafficSim CS ( ")0.26 0.19 0.48 0.37 0.37 0.59 RS ( ")0.72 0.64 0.57 0.55 0.53 0.50 STRIVE CS ( ")0.67 0.67 0.81 0.81 0.93 0.85
+> RS ( ")0.49 0.38 0.29 0.22 0.19 0.13 BITS CS ( ")0.26 0.26 0.22 0.30 0.22 0.37 RS ( ")0.81 0.76 0.72 0.70 0.69 0.65 CTG CS ( ")0.44 0.41 0.56 0.41 0.48 0.56 RS ( ")0.91 0.89 0.85 0.84 0.82 0.77
+> Ours CS ( ")0.33 0.48 0.44 0.56 0.67 0.74
+> RS ( ")0.97 0.94 0.91 0.88 0.80 0.76
+
+5.3. Long-horizon Closed-loop Generation (RQ2) 
+
+To address RQ2 , we evaluate CCDiff ’s performance in long-horizon safety-critical scenario generation by changing the 27548 Table 2. Comparison in RS and CS in long-horizon scenario gener-ation of 5 controllable agents over T seconds. Red means CCDiff 
+
+outperforms the baseline in the corresponding metrics, green means the baseline is better, and yellow means a tie. CCDiff has 
+
+best and second best performance in 10 out of 12 metrics. 
+
+Method Metric T =1 s 2s 3s 4s 5s
+
+SimNet CS ( ") 0.15 0.22 0.22 0.22 0.33 RS ( ") 0.86 0.78 0.67 0.60 0.50 
+
+TrafficSim CS ( ") 0.81 0.81 1.00 0.89 0.81 
+
+RS ( ") 0.66 0.46 0.40 0.26 0.28 STRIVE CS ( ") 0.67 0.37 0.37 0.30 0.26 RS ( ") 0.49 0.36 0.17 0.12 0.22 BITS CS ( ") 0.22 0.11 0.48 0.30 0.37 RS ( ") 0.70 0.58 0.47 0.39 0.35 CTG CS ( ") 0.37 0.48 0.67 0.78 0.67 RS ( ") 0.81 0.68 0.59 0.53 0.53 
+
+CCDiff CS ( ") 0.33 0.48 0.67 0.89 0.78 
+
+RS ( ") 0.81 0.74 0.63 0.54 0.49 simulation frequency in T seconds. We test the generation re-sults with T 2 {0.5s , 1s , 2s , 3s , 4s , 5s } , which corresponds to a closed-loop simulation frequency between 0.2 Hz to 2 Hz .We demonstrate the comparison of realism and controllabil-ity results in Table 2 and Figure 4(b). CCDiff consistently outperform BITS and STRIVE in both CS and RS as the planning horizon enlarges. TrafficSim outperforms all the other baselines with the best controllability, while its realism in long-horizon generation is second-worst and only better than BITS. SimNet marginally outperforms CCDiff in real-ism, yet its controllability is the worst among all. CCDiff out-performs CTG with a comparable realism score and higher controllability at longer horizons. Figure 4(b) confirms our approach has the best proximity to the multi-objective Pareto frontier and has best coverage in the realistic zone. We also show qualitative studies for long-horizon generation in Appendix Figure 11-29. 
+
+5.4. Ablation study (RQ3) 
+
+To answer RQ3 , we evaluate our methods with different ablation variants related to the causal composition, including (i) CCDiff w/o encoder, which removes sparsity constraints 
+
+  sparsity of the causal composition scene encoder, (ii) CCDiff 
+
+w/o factored guide, which replaces the factorized guidance with the whole state space guidance, (iii) CCDiff w/ human and (iv) CCDiff w/ distance which replace the causal ranking algorithms with distance-based ranking and human ranking. We demonstrate the quantitative results in Table 6. The non-causal guidance variants and non-causal encoder variants show a performance drop in the collision rate (controllabil-Table 3. Ablation study on CCDiff’s variants. Evaluation of Con-trollability (CO, OR) and Realism (FDE and CFD) over different agent scales. For each metric we highlight the best and the second best results.                                                                                                                          
+
+> Enc. Guide Rank Metrics K=1 2345SCR ( ")0.32 0.43 0.44 0.43 0.42
+> XXORR ( #)0.53 1.10 0.98 0.91 0.91
+> FDE ( #)2.18 4.00 5.41 5.87 5.79
+> CFD ( #)1.09 1.00 1.14 1.22 1.22
+> SCR ( ")0.31 0.38 0.45 0.40 0.40
+> XXORR ( #)0.33 0.81 0.76 1.00 1.06 FDE ( #)2.21 4.33 5.28 6.13 6.82 CFD ( #)1.51 1.81 1.60 1.84 1.94
+> SCR ( ")0.32 0.33 0.34 0.36 0.37
+> XXDist ORR ( #)0.63 1.38 1.50 1.59 1.49
+> FDE ( #)2.80 4.15 5.15 5.79 5.96 CFD ( #)1.24 1.79 2.44 2.03 2.34 SCR ( ")0.28 0.34 0.35 0.33 0.31
+> XXHuman ORR ( #)0.67 1.66 1.65 1.73 1.93 FDE ( #)3.13 5.80 6.74 7.40 7.84 CFD ( #)1.31 2.21 2.51 2.83 3.14 SCR ( ")0.29 0.40 0.44 0.43 0.46
+> XXXORR ( #)0.37 0.61 0.72 0.99 1.02
+> FDE ( #)2.16 4.17 5.22 5.99 6.59 CFD ( #)1.70 1.88 1.92 1.93 2.25
+
+ity), yet the w/o encoder variants outperform in kinematic comfort. Among all the ablation variants, different rank-ing strategies result in the largest performance drop for the multi-agent controllable generation settings. Compared to our causal ranking, human ranking and distance-based rank-ing strategy suffers from a performance drop with 5 to 10% in the collision rate and, more than 0.5% in the off-road rate, 1m for FDE, and also larger CFD. This signifies the impor-tance of applying the proper guidance to the correct agents at the traffic scene when doing safety-critical generation. 
+
+## 6. Conclusion 
+
+In this paper, we propose CCDiff , a causal composition diffu-sion model that aims to improve the controllability and real-ism in closed-loop safety-critical scenario generation for au-tonomous driving. Based on the formulation of constrained factored MDP, CCDiff promotes realism by first identifying the underlying causal structure between agents, then incor-porating it in the scene encoder and ranking the importance of agents based on causal knowledge. CCDiff uses both interventional classifier-free guidance and masked classifier guidance to improve controllability in safety-critical scenario generation. In multi-agent generation and long-horizon gen-eration settings, CCDiff outperforms SOTA methods over nuScenes data in closed-loop evaluation. One limitation of the current work is that the design of the causal reasoning pipeline relies on hyperparameter tuning and it is hard to directly evaluate. It would be interesting to construct a traffic reasoning benchmark and incorporate a foundation model to further scale up the traffic reasoning and generation process. 27549 Acknowledgment 
+
+We acknowledge Paul Vernaza for his insightful and valuable discussion with the authors. 
+
+## References 
+
+[1] Shuo Feng, Haowei Sun, Xintao Yan, Haojie Zhu, Zhengxia Zou, Shengyin Shen, and Henry X Liu. Dense reinforcement learning for safety validation of autonomous vehicles. Nature , 615(7953):620–627, 2023. 1 [2] Wenhao Ding, Chejian Xu, Mansur Arief, Haohong Lin, Bo Li, and Ding Zhao. A survey on safety-critical driving scenario generation—a methodological per-spective. IEEE Transactions on Intelligent Transporta-tion Systems , 2023. 1 [3] Ziyuan Zhong, Davis Rempe, Danfei Xu, Yuxiao Chen, Sushant Veer, Tong Che, Baishakhi Ray, and Marco Pavone. Guided conditional diffusion for controllable traffic simulation. In 2023 IEEE International Con-ference on Robotics and Automation (ICRA) , pages 3560–3566. IEEE, 2023. 1, 2, 3, 6, 7 [4] Ziyuan Zhong, Davis Rempe, Yuxiao Chen, Boris Ivanovic, Yulong Cao, Danfei Xu, Marco Pavone, and Baishakhi Ray. Language-guided traffic simulation via scene-level diffusion. In Conference on Robot Learn-ing , pages 144–177. PMLR, 2023. 2, 5, 1 [5] Wenhao Ding, Yulong Cao, Ding Zhao, Chaowei Xiao, and Marco Pavone. Realgen: Retrieval augmented gen-eration for controllable traffic scenarios. arXiv preprint arXiv:2312.13303 , 2023. 1, 2, 6, 7 [6] Xuemin Hu, Shen Li, Tingyu Huang, Bo Tang, Roux-ing Huai, and Long Chen. How simulation helps au-tonomous driving: A survey of sim2real, digital twins, and parallel intelligence. IEEE Transactions on Intelli-gent Vehicles , 2023. 1 [7] Alexey Dosovitskiy, German Ros, Felipe Codevilla, Antonio Lopez, and Vladlen Koltun. Carla: An open urban driving simulator. In Conference on robot learn-ing , pages 1–16. PMLR, 2017. 2 [8] Pablo Alvarez Lopez, Michael Behrisch, Laura Bieker-Walz, Jakob Erdmann, Yun-Pang Flötteröd, Robert Hilbrich, Leonhard Lücken, Johannes Rummel, Peter Wagner, and Evamarie Wießner. Microscopic traffic simulation using sumo. In 2018 21st international con-ference on intelligent transportation systems (ITSC) ,pages 2575–2582. IEEE, 2018. 2 [9] Jingkang Wang, Ava Pun, James Tu, Sivabalan Mani-vasagam, Abbas Sadat, Sergio Casas, Mengye Ren, and Raquel Urtasun. Advsim: Generating safety-critical scenarios for self-driving vehicles. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 9909–9918, 2021. 2 [10] Shuhan Tan, Kelvin Wong, Shenlong Wang, Sivabalan Manivasagam, Mengye Ren, and Raquel Urtasun. Sce-negen: Learning to generate realistic traffic scenes. In 
+
+Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition , pages 892–901, 2021. 2, 1 [11] Wenhao Ding, Haohong Lin, Bo Li, and Ding Zhao. Causalaf: Causal autoregressive flow for safety-critical driving scenario generation. In Conference on robot learning , pages 812–823. PMLR, 2023. 2, 1 [12] Jay Patrikar, Sushant Veer, Apoorva Sharma, Marco Pavone, and Sebastian Scherer. Rulefuser: Inject-ing rules in evidential networks for robust out-of-distribution trajectory prediction. arXiv preprint arXiv:2405.11139 , 2024. [13] Shuhan Tan, Boris Ivanovic, Xinshuo Weng, Marco Pavone, and Philipp Kraehenbuehl. Language con-ditioned traffic generation. In Conference on Robot Learning , pages 2714–2752. PMLR, 2023. 2, 6, 1, 7 [14] H Caesar, V Bankiti, AH Lang, S Vora, VE Liong, Q Xu, A Krishnan, Y Pan, G Baldan, and O Beijbom. nuscenes: A multimodal dataset for autonomous driv-ing. arxiv. 2019. 2, 6 [15] Yuejiang Liu, Riccardo Cadei, Jonas Schweizer, Sher-win Bahmani, and Alexandre Alahi. Towards robust and adaptive motion forecasting: A causal represen-tation perspective. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recogni-tion , pages 17081–17092, 2022. 2, 5 [16] Chunjiang Ge, Shiji Song, and Gao Huang. Causal intervention for human trajectory prediction with cross attention mechanism. In Proceedings of the AAAI Con-ference on Artificial Intelligence , volume 37, pages 658–666, 2023. 2 [17] Guangyi Chen, Junlong Li, Jiwen Lu, and Jie Zhou. Human trajectory prediction via counterfactual anal-ysis. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9824–9833, 2021. 2, 5 [18] Mozhgan Pourkeshavarz, Junrui Zhang, and Amir Ra-souli. Cadet: a causal disentanglement approach for robust trajectory prediction in autonomous driving. In 
+
+Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition , pages 14874– 14884, 2024. 2, 5 [19] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R Qi, Yin Zhou, et al. Large scale interactive motion forecasting for autonomous driving: The waymo open motion dataset. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9710–9719, 2021. 2 27550 [20] Rebecca Roelofs, Liting Sun, Ben Caine, Khaled S Refaat, Ben Sapp, Scott Ettinger, and Wei Chai. Causalagents: A robustness benchmark for motion forecasting using causal relationships. arXiv preprint arXiv:2207.03586 , 2022. 2 [21] Jiquan Ngiam, Benjamin Caine, Vijay Vasudevan, Zhengdong Zhang, Hao-Tien Lewis Chiang, Jeffrey Ling, Rebecca Roelofs, Alex Bewley, Chenxi Liu, Ashish Venugopal, et al. Scene transformer: A unified architecture for predicting multiple agent trajectories. 
+
+arXiv preprint arXiv:2106.08417 , 2021. 2 [22] Zikang Zhou, Luyao Ye, Jianping Wang, Kui Wu, and Kejie Lu. Hivt: Hierarchical vector transformer for multi-agent motion prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 8823–8833, 2022. 5 [23] Zikang Zhou, Jianping Wang, Yung-Hui Li, and Yu-Kai Huang. Query-centric trajectory prediction. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17863–17873, 2023. [24] Nigamaa Nayakanti, Rami Al-Rfou, Aurick Zhou, Kratarth Goel, Khaled S Refaat, and Benjamin Sapp. Wayformer: Motion forecasting via simple & efficient attention networks. In 2023 IEEE International Con-ference on Robotics and Automation (ICRA) , pages 2980–2987. IEEE, 2023. 2 [25] Robert Dyro, Matthew Foutter, Ruolin Li, Luigi Di Lillo, Edward Schmerling, Xilin Zhou, and Marco Pavone. Realistic extreme behavior generation for im-proved av testing. arXiv preprint arXiv:2409.10669 ,2024. 2 [26] Simon Suo, Sebastian Regalado, Sergio Casas, and Raquel Urtasun. Trafficsim: Learning to simulate re-alistic multi-agent behaviors. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition , pages 10400–10409, 2021. 2, 6, 1, 7[27] Luca Bergamini, Yawei Ye, Oliver Scheel, Long Chen, Chih Hu, Luca Del Pero, B ła˙ zej Osi´ nski, Hugo Grim-mett, and Peter Ondruska. Simnet: Learning reactive self-driving simulations from real-world observations. In 2021 IEEE International Conference on Robotics and Automation (ICRA) , pages 5119–5125. IEEE, 2021. 2, 6, 1 [28] Davis Rempe, Jonah Philion, Leonidas J Guibas, Sanja Fidler, and Or Litany. Generating useful accident-prone driving scenarios via a learned traffic prior. In Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17305–17315, 2022. 2, 6, 1 [29] Danfei Xu, Yuxiao Chen, Boris Ivanovic, and Marco Pavone. Bits: Bi-level imitation for traffic simulation. In 2023 IEEE International Conference on Robotics and Automation (ICRA) , pages 2929–2936. IEEE, 2023. 2, 3, 6, 1, 7 [30] Yang Song and Stefano Ermon. Generative modeling by estimating gradients of the data distribution. Ad-vances in neural information processing systems , 32, 2019. 2, 4 [31] Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in neural information processing systems , 33:6840–6851, 2020. 6[32] Jonathan Ho and Tim Salimans. Classifier-free diffu-sion guidance. arXiv preprint arXiv:2207.12598 , 2022. 2, 5, 6 [33] Ethan Pronovost, Meghana Reddy Ganesina, Noureldin Hendy, Zeyu Wang, Andres Morales, Kai Wang, and Nick Roy. Scenario diffusion: Controllable driving scenario generation with diffusion. Advances in Neu-ral Information Processing Systems , 36:68873–68894, 2023. 2 [34] Chiyu Jiang, Andre Cornman, Cheolho Park, Benjamin Sapp, Yin Zhou, Dragomir Anguelov, et al. Motion-diffuser: Controllable multi-agent motion prediction using diffusion. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition ,pages 9644–9653, 2023. 2 [35] Chiyu Max Jiang, Yijing Bai, Andre Cornman, Christo-pher Davis, Xiukun Huang, Hong Jeon, Sakshum Kul-shrestha, John Wheatley Lambert, Shuangyu Li, Xu-anyu Zhou, et al. Scenediffuser: Efficient and control-lable driving simulation initialization and rollout. In 
+
+The Thirty-eighth Annual Conference on Neural Infor-mation Processing Systems . 2 [36] Chejian Xu, Ding Zhao, Alberto Sangiovanni-Vincentelli, and Bo Li. Diffscene: Diffusion-based safety-critical scenario generation for autonomous ve-hicles. In The Second Workshop on New Frontiers in Adversarial Machine Learning , 2023. 2 [37] Wei-Jer Chang, Francesco Pittaluga, Masayoshi Tomizuka, Wei Zhan, and Manmohan Chandraker. Controllable safety-critical closed-loop traffic sim-ulation via guided diffusion. arXiv preprint arXiv:2401.00391 , 2023. [38] Yuting Xie, Xianda Guo, Cong Wang, Kunhua Liu, and Long Chen. Advdiffuser: Generating adversarial safety-critical driving scenarios via guided diffusion. 
+
+arXiv preprint arXiv:2410.08453 , 2024. 2 [39] Zhiyu Huang, Zixu Zhang, Ameya Vaidya, Yuxiao Chen, Chen Lv, and Jaime Fernández Fisac. Versatile scene-consistent traffic scenario generation as optimiza-tion with diffusion. arXiv preprint arXiv:2404.02524 ,2024. 2 27551 [40] St John Grimbly, Jonathan Shock, and Arnu Pretorius. Causal multi-agent reinforcement learning: Review and open problems. arXiv preprint arXiv:2111.06721 ,2021. 3 [41] Michael Janner, Yilun Du, Joshua B Tenenbaum, and Sergey Levine. Planning with diffusion for flexible behavior synthesis. arXiv preprint arXiv:2205.09991 ,2022. 3, 4, 5 [42] Anurag Ajay, Yilun Du, Abhi Gupta, Joshua Tenen-baum, Tommi Jaakkola, and Pulkit Agrawal. Is condi-tional generative modeling all you need for decision-making? arXiv preprint arXiv:2211.15657 , 2022. 3 [43] Sergey Levine. Reinforcement learning and control as probabilistic inference: Tutorial and review. arXiv preprint arXiv:1805.00909 , 2018. 3 [44] Tianhe Yu, Saurabh Kumar, Abhishek Gupta, Sergey Levine, Karol Hausman, and Chelsea Finn. Gradient surgery for multi-task learning. Advances in Neural Information Processing Systems , 33:5824–5836, 2020. 4, 7 [45] Anh-Dung Dinh, Daochang Liu, and Chang Xu. Pixe-lasparam: A gradient view on diffusion sampling with guidance. In International Conference on Machine Learning , pages 8120–8137. PMLR, 2023. [46] Yihang Yao, Zuxin Liu, Zhepeng Cen, Peide Huang, Tingnan Zhang, Wenhao Yu, and Ding Zhao. Gradient shaping for multi-constraint safe reinforcement learn-ing. In 6th Annual Learning for Dynamics & Control Conference , pages 25–39. PMLR, 2024. [47] Qianli Ma, Xuefei Ning, Dongrui Liu, Li Niu, and Linfeng Zhang. Decouple-then-merge: Towards bet-ter training for diffusion models. arXiv preprint arXiv:2410.06664 , 2024. 4 [48] Joshua Achiam, David Held, Aviv Tamar, and Pieter Abbeel. Constrained policy optimization. In Interna-tional Conference on Machine Learning , pages 22–31. PMLR, 2017. 4 [49] Sohail Bahmani, Petros T Boufounos, and Bhiksha Raj. Learning model-based sparsity via projected gradient descent. IEEE Transactions on Information Theory ,62(4):2092–2099, 2016. 4 [50] Philippe Brouillard, Sébastien Lachapelle, Alexandre Lacoste, Simon Lacoste-Julien, and Alexandre Drouin. Differentiable causal discovery from interventional data. Advances in Neural Information Processing Sys-tems , 33:21865–21877, 2020. 4 [51] Nino Scherrer, Olexa Bilaniuk, Yashas Annadani, Anirudh Goyal, Patrick Schwab, Bernhard Schölkopf, Michael C Mozer, Yoshua Bengio, Stefan Bauer, and Nan Rosemary Ke. Learning neural causal models with active interventions. arXiv preprint arXiv:2109.02429 ,2021. 4 [52] Judea Pearl. Causality . Cambridge university press, 2009. 6 [53] Carlos A Coello Coello. Evolutionary algorithms for solving multi-objective problems . Springer, 2007. 7 27552

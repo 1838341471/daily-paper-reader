@@ -1,0 +1,337 @@
+Title: Sim-to-Real Causal Transfer: A Metric Learning Approach to Causally-Aware Interaction Representations
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Rahimi_Sim-to-Real_Causal_Transfer_A_Metric_Learning_Approach_to_Causally-Aware_Interaction_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 01:17:26 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# Sim-to-Real Causal Transfer: A Metric Learning Approach to Causally-Aware Interaction Representations 
+
+# Ahmad Rahimi* 1 Po-Chien Luan* 1 Yuejiang Liu* 2 Frano Rajic 3 Alexandre Alahi 11 ´Ecole Polytechnique F´ ed´ erale de Lausanne (EPFL), 2 Stanford University, 3 ETH Zurich   
+
+> {ahmad.rahimi, po-chien.luan, alexandre.alahi }@epfl.ch
+
+# Abstract 
+
+Modeling spatial-temporal interactions among neighbor-ing agents is at the heart of multi-agent problems such as motion forecasting and crowd navigation. Despite notable progress, it remains unclear to which extent modern repre-sentations can capture the causal relationships behind agent interactions. In this work, we take an in-depth look at the causal awareness of these representations, from computa-tional formalism to real-world practice. First, we revisit the notion of non-causal robustness studied in the recent CausalAgents benchmark [ 56 ]. We show that existing repre-sentations are already partially resilient to perturbations of non-causal agents, and yet modeling indirect causal effects involving mediator agents remains challenging. To address this challenge, we introduce a metric learning approach that regularizes latent representations with causal annota-tions. Our controlled experiments show that this approach not only leads to higher degrees of causal awareness but also yields stronger out-of-distribution robustness. To fur-ther operationalize it in practice, we propose a sim-to-real causal transfer method via cross-domain multi-task learn-ing. Experiments on trajectory prediction datasets show that our method can significantly boost generalization, even in the absence of real-world causal annotations, where we acquire higher prediction accuracy by only using 25% of real-world data. We hope our work provides a new per-spective on the challenges and potential pathways toward causally-aware representations of multi-agent interactions. Our code is available at https://github.com/vita-epfl/CausalSim2Real .
+
+# 1. Introduction 
+
+Modeling multi-agent interactions with deep neural networks has made great strides in the past few years [ 2 , 11 , 23 , 24 ,31 , 46 , 61 , 68 , 69 ]. Yet, existing representations still face tremendous challenges in handling changing environments: they often suffer from substantial accuracy drops under mild what if ?  
+
+> Figure 1. Illustration of causal relations in multi-agent inter-actions. The behavior of the ego agent is causally influenced by some neighboring agents. Our research explores the depth of causal understanding within trajectory prediction models, introduces novel causal regularizers to refine this understanding, and details a sim-to-real approach that effectively transfers this causal knowledge to practical real-world scenarios.
+
+environmental changes [ 4, 39 ] and require a large number of examples for adaptation to new contexts [ 33 , 51 ]. These challenges are arguably rooted in the nature of the learning approach that seeks statistical correlations in the training data, regardless of their stability and reusability across dis-tributions [ 4 , 7]. One promising approach is to develop 
+
+causally-aware representations —latent features that capture the invariant causal dependencies in agent interactions. However, discovering causal knowledge from observa-tional data is often exceptionally difficult [ 63 , 64 ]. Most prior works resort to additional information, such as struc-tural knowledge [ 9, 45 ] and domain labels [ 4, 28 , 40 ]. While these attempts have been shown effective in certain out-of-distribution scenarios, they still fall short of explicitly ac-counting for causal relationships between interactive agents. More recently, CausalAgents [ 56 ] made an effort to collect annotations of agent relations (causal or non-causal) in the Waymo dataset [ 20 ], providing a new benchmark focused on the robustness issue under non-causal agent perturbations. Nevertheless, the reason behind the robustness issue remains unclear, as does the potential use of the collected annotations for representation learning. The goal of this work is to provide an in-depth analysis of the challenges and opportunities of learning causally-aware representations in the multi-agent context. To this end, we first take an in-depth look at the recent CausalAgents bench-mark [ 56 ]. We find that its labeling procedure and evaluation protocol present subtle yet critical caveats, thereby resulting This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 17271 in a highly biased measure of robustness. To mitigate these issues, we construct a diagnostic dataset through counterfac-tual simulations and revisit a collection of recent multi-agent forecasting models. Interestingly, we find that most recent models are already partially resilient to perturbations of non-causal agents but still struggle to capture indirect causal effects that involve mediator agents. To further enhance the causal robustness of the learned representations, we propose a regularization approach that seeks to preserve the causal effect of each individual neigh-bor in an embedding space. Specifically, we devise two variants that exploit annotations with different levels of gran-ularity: (i) a contrastive-based regularizer using binary an-notations of causal/non-causal agents; (ii) a ranking-based regularizer using continuous annotations of causal effects. Through controlled experiments, we show that both regu-larizers can enhance causal awareness to notable degrees. More crucially, we find that finer-grained annotations are particularly important for generalization out of the training distribution, such as higher agent density or unseen context. Finally, we introduce a sim-to-real causal transfer frame-work, aiming at extending the strengths of causal regular-ization from simulation to real-world contexts. We achieve this through cross-domain multi-task learning, i.e ., jointly train the representation on the causal task in simulation and the forecasting task in the real world. Through experiments on the ETH-UCY dataset [ 36 , 52 ] paired with an ORCA simulator [ 65 ], we find that the causal transfer framework enables stronger generalization in challenging settings such as low-data regimes. Despite a large gap between simulator and real-world data, our approach outperforms the AutoBots baseline with only 25% of the real data when combined with our causal regularizers. Furthermore, with just 50% of the real data, it surpasses all other models in prediction accuracy. This is achieved even in the absence of real-world causal annotations, underscoring the robustness of our framework in limited-data scenarios. We also test the causal transfer approach on the NBA dataset [ 70 , 71 ], demonstrating its effectiveness in different real-world settings. As one of the first steps towards causal modeling in multi-agent systems, we hope our work sheds new light on the challenges and opportunities of learning causally-aware representations in practice. 
+
+# 2. Related Work 
+
+The social causality studied in this work lies at the intersec-tion of three areas: multi-agent interactions, robust represen-tations, and causal learning. In this section, we provide a brief overview of the existing literature in each area and then discuss their relevance to our work. 
+
+Multi-Agent Interactions. The study of multi-agent inter-actions has a long history. Early efforts were focused on hand-crafted rules, such as social forces [ 25 , 48 ] and recip-rocal collision avoidance [ 1, 65 ]. Despite remarkable results in sparse scenarios [ 21 , 44 , 72 ], these models often lack social awareness in more densely populated and complex environments [57]. As an alternative, recent years have wit-nessed a paradigm shift toward learning-based approaches, particularly the use of carefully designed neural networks to learn representations of multi-agent interactions [ 32 ]. Exam-ples include pooling operators [ 2, 14 , 24 ], attention mecha-nisms [ 18 , 30 , 60 , 68 ], spatio-temporal graphs [ 31 , 37 , 61 ], among others [ 8 , 13 , 55 ]. Nevertheless, the robustness of these models remains a grand challenge [ 6, 56 , 58 ]. Our work presents a solution to enhance robustness by effectively exploiting causal annotations of varying granularity. 
+
+Robust Representations. The robustness of machine learn-ing models, especially under distribution shifts, has been a long-standing concern for safety-critical applications [ 54 ]. Existing efforts have explored two main avenues to address this challenge. One line of work seeks to identify features that are invariant across distributions. Unfortunately, this approach often relies on strong assumptions about the un-derlying shifts [ 26 , 39 ] or on access to multiple training domains [ 3, 34 ], which may not be practical in real-world set-tings. Another approach aims to develop models that can ef-ficiently adapt to new distributions by updating only a small number of weight parameters, such as sub-modules [ 33 ], certain layers [ 35 ], or a small subset of neurons [ 10 ]. More recently, there has been a growing interest in exploring the potential of causal learning to address the robustness chal-lenges [ 15 , 16 , 50 , 67 ]. To the best of our knowledge, our work makes the first attempt in the multi-agent context, show-casing the benefits of incorporating causal relationships for stronger out-of-distribution generalization in crowded sce-narios. 
+
+Causal Learning. Empowering machine learning with causal reasoning has gained a growing interest in recent years [ 62 , 63 ]. One line of work seeks to discover high-level causal variables from low-level observations, e.g ., disentan-gled [ 12 , 27 , 42 ] or structured latent representations [ 43 , 64 ]. Unfortunately, existing methods remain largely limited to simple and static datasets [ 41 ]. Another thread of work attempts to draw causal insights into dynamic decision-making [ 29 ]. In particular, recent works have proposed a couple of methods to incorporate causal invariance and struc-ture into the design and training of forecasting models in the multi-agent context [ 4, 7, 9, 28 , 40 , 45 ]. However, these efforts have mainly focused on using causal implications to enhance robustness rather than explicitly examining causal relations between interactive agents. Closely related to ours, another recent study introduces a motion forecasting bench-mark with annotations of causal relationships [ 56 ]. Our work addresses this benchmark’s limitations and introduces a sim-to-real approach to enhance the causal awareness of the learned representations. 17272 3. Preliminaries 
+
+In this section, we seek to formalize the robustness challenge in multi-agent representation learning through the lens of so-cial causality. We will first revisit the design of the CausalA-gents [ 56 ] benchmark, drawing attention to its caveats in labeling and evaluation. Subsequently, we will introduce a diagnostic dataset, aiming to facilitate more rigorous de-velopment and evaluation of causally-aware representations through counterfactual simulations. 
+
+## 3.1. Social Interaction and Social Causality Social Interaction. Consider a motion forecasting problem where an ego agent is surrounded by a set of neighboring agents in a scene. Let s it = ( x it , y it ) denote the state of agent 
+
+i at time t and s t = {s 0 
+
+> t
+
+, s 1 
+
+> t
+
+, · · · , s Kt } denote the joint state of all the agents in the scene. Without loss of generality, we index the ego agent as 0 and the rest of neighboring agents as A = {1, 2, · · · , K }. Given a sequence of history observations x = ( s 1 , · · · , s t ) , the task is to predict the future trajectory of the ego agent y = ( s 0 
+
+> t+1
+
+, · · · , s 0 
+
+> T
+
+) until time T . Modern forecasting models are largely composed of encoder-decoder neural networks, where the encoder f (·)
+
+first extracts a compact representation z of the input with respect to the ego agent and the decoder g(·) subsequently rolls out a sequence of its future trajectory ˆy:
+
+z = f (x) = f (s 1: t ),
+
+ˆy = ˆ s 0 
+
+> t+1: T
+
+= g(z). (1) 
+
+Social Causality. Despite remarkable progress on accuracy measures [ 2, 61 ], recent neural representations of social inter-actions still suffer from a significant robustness concern. For instance, recent works have shown that trajectories predicted by existing models often output colliding trajectories [ 39 ], vulnerable to adversarial perturbations [ 5 , 58 ] and deteri-orate under distribution shifts of spurious feature such as agent density [ 40 ]. One particular notion of robustness that has recently gained much attention is related to the causal relationships between interactive agents [ 56 ]. Ideally, neu-ral representations of social interactions should capture the influence of neighboring agents, namely how the future tra-jectory of the ego agent will vary between a pair of scenes: an original scene x⊋ and a perturbed scene xR where some neighboring agents R are removed, i.e ., only the ego agent and A\R remain. We define the causal effect of the removed agents R as, 
+
+E R = →y ⊋ ↑ y R → 2 , (2) where y ⊋ ↓ y is the future trajectory in the original scene, 
+
+y R is the future trajectory in the perturbed scene after re-moving agents in R from scene, and →·→2 is the average point-wise Euclidean distance between two trajectories. 
+
+## 3.2. Caveats of CausalAgents Benchmark 
+
+While the mathematical definition of the causal effect is straightforward in the multi-agent context, measuring Eq. (2) in practice can be highly difficult. In general, it is impossible to observe a subset of agents replaying their behaviors in the same environment twice in the real world – an issue known as the impossibility of counterfactuals [ 53 ]. To mitigate the data collection difficulty, a recent benchmark CausalAgents [ 56 ]proposes another simplified labeling strategy: instead of collecting paired counterfactual scenes, it queries human labelers to divide neighboring agents into two categories: causal agents that directly influence the driving behavior of the ego agent from camera viewpoints; and non-causal agents that do not. This labeling approach is accompanied by an evaluation protocol through agent removal, assuming that robust forecasting models should be insensitive to scene-level perturbations that remove non-causal agents. Formally, the CausalAgents benchmark evaluates the robustness of a learned representation through the following measure, 
+
+! = →ˆy R ↑ y R →2 ↑ → ˆy ⊋ ↑ y ⊋ →2 , (3) where R includes all or some non-causal agents in the scene. 
+
+Caveats. In spite of the precious efforts in gathering causal annotations, the CausalAgents benchmark [ 56 ] is subject to two limitations that require attention: 1. Annotation : The human labeling process overlooks indi-rect causal effects. As illustrated in Fig. 2, a neighboring agent may have a considerable causal influence on the behavior of the ego agent via mediators. The complexity of these causal chains poses a significant challenge for hu-man annotations. Yet, these indirect effects are common in scenarios with high agent density, presenting a signifi-cant modeling challenge, which we will demonstrate in Sec. 5. 2. Evaluation : The evaluation protocol of the CausalAgents benchmark may inaccurately portray robustness due to oversimplification in handling agent interactions, as il-lustrated in Fig. 3. This figure shows that the impact of non-causal agents grows when they are removed collec-tively rather than individually. While agents are marked individually as non-causal, the robustness test removes them in groups, which can exaggerate the model’s per-ceived robustness. Simultaneous removal of multiple non-causal agents might expose causal effects that are not detected when these agents are considered separately. For a detailed scenario illustrating this effect, please refer to Appendix C. 
+
+## 3.3. Diagnostic Dataset through Counterfactuals 
+
+To address the identified issues, we have developed a new diagnostic dataset using the ORCA [ 65 ] simulation system, which enables the creation of counterfactual scenarios by 17273 indirect ego direct Figure 2. Illustration of indirect causal effects. The elderly pedes-trian indirectly affects the trajectory of the ego agent by influencing the path of the green pedestrian. In the elderly pedestrian’s absence, the green pedestrian would proceed straight, allowing the ego agent to continue at its current speed without needing to slow down.   
+
+> Figure 3. Joint effect of removing all non-causal agents in the scene, simulated in ORCA. The ego agent often changes its behav-ior when more than 2 non-causal neighbors are removed.
+
+removing sets of agents. ORCA models social interactions like collision avoidance and leader-follower behavior by taking initial positions, speeds, and final goals of agents. We constructed our dataset by initializing the positions and goals of 8 ↔ K + 1 ↔ 18 agents within a structured layout typical of an open area. Additionally, we generated two out-of-distribution (OOD) datasets, named Density OOD and Context OOD, to test model robustness. The Density OOD dataset varies the density of agents and adds more non-causal ones, while the Context OOD dataset alters the initial layout to resemble a narrow street with pedestrians moving from one end to the other. Both the datasets and the code used for their generation are available to support further research. For more detailed information on the data collected, see Appendix B. 
+
+Counterfactual Pairs. Leveraging the capability to simulate counterfactual scenarios, we annotate the ground-truth causal effects by comparing ego trajectories in paired scenes before and after agent removals, as defined in Eq. (2). Given the exponential growth of simulation scenarios with the number of agents, we adopt the approach of Causal Agents [ 56 ]and concentrate on evaluating causal effects at the level of individual agents, denoted as i.e . |R| = 1 . For simplicity, moving forward, we will use E i to refer to E {i} .
+
+Fine-grained Category. In addition to real-valued causal effects, we also seek to annotate the category of each agent. From simulations, we extract the per-step causal relation between a neighboring agent i and the ego agent. If agent 
+
+i is visible to the ego at time step t , it directly influences the ego, indicated by it = 1 ; otherwise it = 0 . We then convert the causal effect over the whole sequence E i into three agent categories: • Non-causal agent : little influence on the behavior of the ego agent, i.e ., E < ω ↗ 0.• Direct causal agent : significant influence on the behavior of the ego agent E > ε ↘ 0; moreover, the influence is direct for at least one time step ∏  
+
+> ω=1: T
+
+(1 ↑ i 
+
+> ω
+
+) = 0 .• Indirect causal agent : significant influence on the behavior of the ego agent E > ε ↘ 0; however, the influence is never direct over the entire sequence ∏  
+
+> ω=1: T
+
+(1 ↑ i 
+
+> ω
+
+) = 1 .The collected diagnostic dataset with different levels of causal annotations allows us to rigorously probe the causal robustness of existing representations and to develop more causally-aware representations, which we will describe in the next sections. 
+
+# 4. Method 
+
+In this section, we will introduce a simple yet effective ap-proach to promote causal awareness of the learned repre-sentations. We will first describe a general regularization method, which encapsulates two specific instances exploit-ing causal annotations of different granularity. We will then introduce a sim-to-real transfer framework that extends the regularization method to practical settings, even in the ab-sence of real-world annotations. 
+
+## 4.1. Causally-Aware Regularization 
+
+Recall that the causal effect E i of an agent i is tied to the dif-ference of the potential outcomes between the factual scene and the counterfactual one where the agent i is removed. In this light, a causally-aware representation should also cap-ture such relations, i.e ., feature vectors of paired scenes are separated by a certain distance d i depending on E i .We start by defining p ⊋ as the low-dimensional feature vector of the factual scene where no agents are removed. This serves as our baseline scenario against which all coun-terfactual instances are compared. p ⊋ is extracted from the latent representation z ⊋ = f (x⊋ ) projected through a non-linear head h . Similarly, p i = h(z i ) = h(f (x i )) the feature vector for the counterfactual scene x i created by removing agent i . We then measure the distance between x⊋ and xi
+
+as 
+
+d i = 1 ↑ sim (p ⊋ , p i ) = 1 ↑ p → 
+
+> ⊋
+
+p i
+
+→p ⊋ →→ p i → , (4) where sim (p ⊋ , p i ) denotes the cosine similarity between the feature vectors of the factual and counterfactual scenes, effectively measuring the impact of agent i ’s removal on the embedding space. The desired representation is thus 17274 encoder          
+
+> ℒ𝑐𝑜𝑛𝑡𝑟𝑎𝑠𝑡
+> 𝑑 𝑖 ≪𝑑 𝑗 ≈𝑑 𝑘
+> ℒ𝑟𝑎𝑛𝑘𝑖𝑛𝑔
+> 𝑑 𝑖 <𝑑 𝑗 <𝑑 𝑘
+> 𝑥
+> 𝑥 ∅
+> 𝑥 𝑖
+> 𝑥 𝑗
+> 𝑥 𝑘
+> 𝑝 ∅𝑝 𝑖
+> 𝑝 𝑗
+> 𝑝 𝑘
+> history observation
+> ground -truth future
+> non -causal agent
+> causal agent
+
+Figure 4. Overview of our method. We seek to build an encoder that captures the causal effect of each agent by regularizing the distance of paired embeddings between the factual and counterfactual scenes. We formulate this objective into a contrastive task given binary annotations or a ranking task given real-value annotations. expected to preserve the following property, 
+
+E i < E j =≃ d i < d j , ⇐i, j ⇒ A, (5) where i and j are the indices of two agents in the set of neigh-boring agents A . We next describe two specific tasks that seek to enforce this property Eq. (5), while taking into ac-count the concrete forms of causal annotations with different granularity, as illustrated in Fig. 4. 
+
+Causal Contrastive Regularization. As discussed in Sec. 3.3, one simple form of causal annotations is binary la-bels, indicating whether or not a neighboring agent causally influences the behavior of the ego agent. Intuitively, the embedding of a counterfactual scenario where a non-causal agent is removed should closely resemble the embedding of the factual scenario, reflecting minimal change from the ego agent’s perspective. In contrast, removing a causal agent should significantly alter the representation, indicating a higher impact. We formulate this intuition into a causal contrastive learning objective, 
+
+L contrast = ↑ log exp( d + /ϑ )exp( d + /ϑ ) + ∑ 
+
+> k
+
+exp( d k /ϑ ) E k >ε
+
+,
+
+(6) where the positive (distant) example is sampled from counter-factuals with respect to causal agents, the negative (nearby) examples are sampled from counterfactual scenarios with respect to non-causal agents, and ϑ is a temperature hyper-parameter controlling the difficulty of the contrastive task. 
+
+Causal Ranking Regularization. One downside of causal contrastive learning described above is that it inherently ig-nores the detailed effect of causal agents. It tends to push the embeddings of counterfactuals equally far apart across all causal agents, regardless of the variation of causal effects, which violates the desired property stated in Eq. (5). To ad-dress this limitation, we further consider another variant of causal regularization using real-valued causal annotations to provide more dedicated supervision on the relative distance in the embedding space. Concretely, we first sort all agents in a scene based on their causal effect and then sample two agents with different causal effects for comparison. This al-lows us to formulate a ranking problem in a pairwise manner through a margin ranking loss, 
+
+L ranking = max(0 , d i ↑ d j + m), (7) where d i and d j are the embedding distances with respect to two agents of different causal effects E i < E j , and m is a small margin hyperparameter controlling the difficulty of the ranking task. 
+
+## 4.2. Sim-to-real Causal Transfer 
+
+The causal regularization method described above relies upon the premise that annotations of causal effects are readily available. However, as elaborated in Sec. 3.3, procuring such causal annotations in real-world scenarios can be difficult. To bridge this gap, we extend our causal regularization approach to a sim-to-real transfer learning framework. Our key idea is that, despite the gap between simulation environments and the real world, certain causal mechanisms ( e.g ., collision avoidance and group coordination) tend to remain stable. As such, in the absence of real-world causal annotations, we can use the annotations gathered from simulations as a viable alternative. This leads to cross-domain training on two tasks jointly: the main prediction task L real pred in real-world scenarios which usually is a reconstruction loss, and our auxiliary causal task L syn causal in the simulation counterpart, 
+
+L = L real pred + ϖL syn causal , (8) where ϖ is a hyperparameter controlling the emphasis on the causal regularizer. Despite its simplicity, we will show in Sec. 5.3 that the sim-to-real causal transfer framework effectively translates the causal knowledge absorbed from simulations to real-world datasets, even without any real-world causal annotations. 17275 ADE → FDE → ACE-NC → ACE-DC → ACE-IC →                                          
+
+> D-LSTM [32] 0.329 0.677 0.027 0.532 0.614 S-LSTM [2] 0.314 0.627 0.031 0.463 0.523 TRAJECTRON ++ [61] 0.312 0.630 0.024 0.479 0.568 STGCNN [49] 0.307 0.564 0.049 0.330 0.354 MULTI -T RANSMOTION [18] 0.237 0.466 0.031 0.723 0.724 AUTO BOTS [22] 0.255 0.497 0.045 0.595 0.616 Table 1. Performance of modern representations on the created diagnostic dataset. The prediction errors and causal errors are generally considerable across all evaluated models. However, the errors associated with ACE-NC are rather marginal, suggesting that recent models are already partially robust to non-causal perturbations of individual agents.
+
+# 5. Experiments 
+
+In this section, we will present a set of experiments to answer the following four questions: 1. How well do recent representations capture the causal relations between interactive agents? 2. Is our proposed method effective for addressing the limi-tations of recent representations? 3. Do finer-grained annotations provide any benefits for learning causally-aware representations? 4. Finally, does greater causal awareness offer any practical advantages in challenging scenarios? Throughout our experiments, the multi-agent forecasting task is defined as predicting the future trajectory of the ego agent for 12 time steps, given the history observations of all agents in a scene in the past 8 time steps. Given that our simulator operates deterministically without random varia-tions in agent trajectories, we train our forecasting models to output a single future trajectory for the ego agent, rather than generating multiple potential trajectories in multimodal settings. We evaluate forecasting models on three metrics: • Average Displacement Error (ADE): the average Eu-clidean distance between the predicted output and the ground truth trajectories – a widely used metric to measure the prediction accuracy of a forecasting model. • Final Displacement Error (FDE): the Euclidean distance between the predicted output and the ground truth at the last time step – another common metric measuring predic-tion accuracy. • Average Causal Error (ACE): the average difference be-tween the estimated causal effect and the ground truth causal effect – a metric inspired by Roelofs et al. [56] to measure the causal awareness of a learned representation, 
+
+ACE := 1
+
+K
+
+> K
+
+∑
+
+> i=1
+
+| ˆE i ↑E i | = 1
+
+K
+
+> K
+
+∑
+
+> i=1
+
+|→ˆy ⊋ ↑ ˆy i →2 ↑E i |. (9) Alongside the aggregated ACE, we also measure causal awareness on each category separately, i.e ., ACE-NC, ACE-DC, ACE-IC for non-causal, direct causal, and indirect causal agents, respectively. Note that ACE can only be         
+
+> (a) Direct Causal Agents (b) Indirect Causal Agents Figure 5. Comparison between estimated causal effects ˆEand the ground truth E.We uniformly sample the ground-truth causal effect, collect the estimate from AutoBots [ 22 ], and regress a slope between the estimated value and the ground truth. The positioning of most data points below the ideal diagonal line suggests a system-atic underestimation of causal effects.
+
+evaluated in the presence of causal annotations E i , e.g ., the diagnostic dataset through controlled simulations (Sec. 3.3). 
+
+## 5.1. Robustness of Recent Representations Setup. We start our experiments with the evaluation of a col-lection of recent models on the diagnostic dataset described in Sec. 3. We explicitly examine the errors of causal effect estimation for each agent category. We summarize the results in Tab. 1 and visualize the detailed estimation in Fig. 5. 
+
+Takeaway 1: recent representations are already partially robust to non-causal agent removal. As shown in Tab. 1, the values of ACE-NC are generally quite minimal compared to the results on other metrics. Across all evaluated models, the errors made upon non-causal agents are 10x smaller than that for causal agents (ACE-DC/IC). In line with our analysis in Sec. 3, this result provides a counterargument to the robustness issue benchmarked in Roelofs et al. [56] ,suggesting the importance of studying the robustness under causal perturbations as opposed to non-causal ones. 
+
+Takeaway 2: recent representations underestimate causal effects, particularly indirect ones. As shown in Fig. 5, the estimate of causal effect often deviates from the ground 17276 Figure 6. Quantitaive results of our causal regularization method in comparison to the Autobots baseline [ 22 ] and the non-causal      
+
+> data augmentation [ 56 ]. Models trained by our ranking-based method yield enhanced performance both in terms of both causal effect
+> estimation (left) and prediction accuracy (right). Results are averaged over five random seeds.
+> (a) ID (b) OOD-Context (c) OOD-Density
+> Figure 7. Qualitative results of our method on in-distribution (ID) and out-of-distribution (OOD) test sets. Models regularized by our
+> ranking-based method show a more robust understanding of agent interactions in high-density and novel scene contexts.
+
+truth value. In particular, the learned representation tends 
+
+to severely underestimate the influence of indirect causal 
+
+agents. This result underscores the limitation of existing 
+
+interaction representations in reasoning about a chain of 
+
+causal relations transmitting across multiple agents. 
+
+## 5.2. Effectiveness of Causal Regularization 
+
+We next evaluate the efficacy of our causal regularization 
+
+method on Autobots, the strongest baselines in Tab. 1. As 
+
+a baseline comparison, we incorporate the data augmenta-
+
+tion strategy from [ 56 ], which augments training scenar-
+
+ios by selectively removing non-causal agents. This ap-
+
+proach assumes that the removal of non-causal agents should 
+
+not alter the ego agent’s trajectory, thereby using the same 
+
+ground truth trajectory to reinforce model predictions against 
+
+changes under non-causal perturbations. We assess the per-
+
+formance in two key areas: in-distribution causal awareness 
+
+and out-of-distribution generalization. 
+
+5.2.1. In-distribution Causal Awareness 
+
+Setup. We first examine the efficacy of our method by 
+
+measuring the ACE on the in-distribution test set. Since 
+
+the error of the baseline model varies substantially across 
+
+different ranges of causal effects (Sec. 5.1 ), we split the test 
+
+set into four quantile segments. The result is summarized 
+
+in Fig. 6.
+
+Takeaway: our method boosts causal awareness 
+
+thanks to fine-grained annotations. As shown in Fig. 6,
+
+both the contrastive and ranking variants of our causal reg-
+
+ularization approach result in lower causal errors than the 
+
+vanilla baseline. In particular, the causal ranking method 
+
+demonstrates substantial advantages over the other counter-
+
+parts across all quantities of causal effects, confirming the 
+
+promise of incorporating fine-grained annotations in learning 
+
+causally-aware representations. 
+
+5.2.2. Out-of-Distribution Generalization 
+
+Setup. We further examine the efficacy of our method by 
+
+measuring the prediction accuracy on out-of-distribution test 
+
+sets. We consider two common types of distribution shifts in 
+
+the multi-agent setting: higher density and unseen context, 
+
+as detailed in Appendix B. We summarize the results of 
+
+different methods on the OOD test sets in Fig. 6 and visualize 
+
+the difference of prediction output in Fig. 7.
+
+Takeaway: causally-aware representations lead to 
+
+stronger out-of-distribution generalization. As shown 17277 Figure 8. Results of causal transfer from ORCA simulations to the ETH-UCY dataset. We consider three settings where the model has access to the same simulation data but varying amounts of real-world data. Our ranking-based causal transfer results in lower prediction errors and higher learning efficiency than the other counterparts, i.e ., AutoBots baseline [ 22 ], the vanilla sim-to-real transfer [ 38 ] and the non-causal data augmentation [56]. Details are summarized in Appendices A and B. in Fig. 6, the prediction error from our causal ranking method is generally lower than that of the other methods on the OOD sets. In fact, the overall patterns between the two parts of Fig. 6 are highly similar, indicating a substantial correlation between causal awareness and out-of-distribution robustness. This practical benefit is also visually evident in the qualita-tive visualization in Fig. 7. 
+
+## 5.3. Effectiveness of Causal Transfer Setup. Finally, we evaluate the proposed causal transfer approach on the ETH-UCY dataset [ 36 , 52 ] and NBA re-bound dataset [ 70 , 71 ] paired with our diagnostic dataset. To assess the potential of the transfer method in challenging settings such as low-data regimes, we train Autobots [ 22 ]on different fractions of the real-world data. The results are summarized in Fig. 8 and Tab. 2. 
+
+Takeaway: causal transfer improves performance in the real world despite domain gaps. As shown in Fig. 8, our causal transfer approach consistently improves the perfor-mance of the learned representation on ETH-UCY, even with a substantial simulator-to-real-world gap. In particular, it en-ables the model to learn faster, e.g ., even with half data in the real-world, our ranking-based method can still outperform other counterparts. In contrast, the vanilla sim-to-real tech-nique [ 38 ] which combines synthetic and real data, struggles with effective transfer, especially in low-data regimes. We hypothesize this is due to disparities in non-causal interac-tion styles, such as speed and curvature, between simulation and reality. We report ORCA simulator and other baselines’ prediction accuracy on ETH-UCY in Appendix A. We fur-ther examine the causal transfer approach on NBA rebound, a more large-scale and interactive dataset. Table 2 shows that our ranking-based method outperforms the baseline and demonstrates that the proposed causal transfer can work not only for pedestrians but also for basketball players. ADE ⇑ FDE ⇑
+
+Baseline 0.562 1.271 Vanilla 0.567 1.287 Augment 0.569 1.292 Contrast (ours) 0.550 1.248 Ranking (ours) 0.544 1.235  
+
+> Table 2. Results of causal transfer from ORCA simulations to the NBA rebound dataset. We outperform the AutoBots baseline by integrating our causal regularizers, showing effectiveness of our approach. The numbers are in meters.
+
+# 6. Conclusions Summary. In this paper, we presented a thorough analy-sis and an effective approach for learning causally-aware representations of multi-agent interactions. We revisited the notion of non-causal robustness in the recent benchmark [ 56 ]and showed that the main weaknesses of recent representa-tions are not overestimations of the effect of non-causal agents but rather underestimation of the effects of indirect causal agents. To boost causal awareness of the learned rep-resentations, we introduced a regularization approach that encapsulates a contrastive and a ranking variant leveraging annotations of different granularity. We showed that our approach enables recent models to learn faster, generalize better, as well as transfer stronger to practical problems, even without real-world annotations. 
+
+Discussions. As one of the first steps towards causally-aware representations in the multi-agent context, our work raises two primary questions for further exploration. On the technical front, while our proposed regularization method consistently boosts causal awareness in various settings, su-pervision alone is likely insufficient to fully solve causal reasoning in complex scenes, as evidenced by the causal errors in Fig. 6. Incorporating structural inductive biases might be a promising direction to address high-order reason-ing challenges in the presence of indirect causal effects. 17278 7. Acknowledgement 
+
+The authors would like to thank Yang Gao and Kaouther Messaoud for their valuable feedback. This work was supported by Honda R&D Co., Ltd and Hasler Foundation under the responsible AI program. 
+
+# References 
+
+[1] Alexandre Alahi, Vignesh Ramanathan, and Li Fei-Fei. Socially-Aware Large-Scale Crowd Forecasting. In 2014 IEEE Conference on Computer Vision and Pattern Recogni-tion , pages 2211–2218, 2014. 2 [2] Alexandre Alahi, Kratarth Goel, Vignesh Ramanathan, Alexandre Robicquet, Li Fei-Fei, and Silvio Savarese. So-cial LSTM: Human Trajectory Prediction in Crowded Spaces. In 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR) , pages 961–971, 2016. 1, 2, 3, 6, 13 [3] Martin Arjovsky, L ´eon Bottou, Ishaan Gulrajani, and David Lopez-Paz. Invariant Risk Minimization. arXiv:1907.02893 [cs, stat] , 2020. 2 [4] Shayan Shirahmad Gale Bagi, Zahra Gharaee, Oliver Schulte, and Mark Crowley. Generative Causal Representation Learn-ing for Out-of-Distribution Motion Forecasting, 2023. 1, 2 [5] Yulong Cao, Chaowei Xiao, Anima Anandkumar, Danfei Xu, and Marco Pavone. AdvDO: Realistic Adversarial Attacks for Trajectory Prediction. In Computer Vision – ECCV 2022 ,pages 36–52, Cham, 2022. Springer Nature Switzerland. 3 [6] Yulong Cao, Danfei Xu, Xinshuo Weng, Zhuoqing Mao, An-ima Anandkumar, Chaowei Xiao, and Marco Pavone. Robust Trajectory Prediction against Adversarial Attacks. In Pro-ceedings of The 6th Conference on Robot Learning , pages 128–137. PMLR, 2023. 2 [7] Luca Castri, Sariah Mghames, Marc Hanheide, and Nicola Bellotto. Causal Discovery of Dynamic Models for Predicting Human Spatial Interactions. In Social Robotics , pages 154– 164, Cham, 2022. Springer Nature Switzerland. 1, 2 [8] Yuning Chai, Benjamin Sapp, Mayank Bansal, and Dragomir Anguelov. MultiPath: Multiple Probabilistic Anchor Trajec-tory Hypotheses for Behavior Prediction. In Conference on Robot Learning , pages 86–99. PMLR, 2020. 2 [9] Guangyi Chen, Junlong Li, Jiwen Lu, and Jie Zhou. Hu-man Trajectory Prediction via Counterfactual Analysis. In 
+
+Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9824–9833, 2021. 1, 2, 13 [10] Guanzheng Chen, Fangyu Liu, Zaiqiao Meng, and Shangsong Liang. Revisiting Parameter-Efficient Tuning: Are We Re-ally There Yet? In Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing , pages 2612–2626, 2022. 2 [11] Guangyi Chen, Zhenhao Chen, Shunxing Fan, and Kun Zhang. Unsupervised Sampling Promoting for Stochastic Human Trajectory Prediction. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 17874–17884, 2023. 1 [12] Xi Chen, Yan Duan, Rein Houthooft, John Schulman, Ilya Sutskever, and Pieter Abbeel. InfoGAN: Interpretable Rep-resentation Learning by Information Maximizing Generative Adversarial Nets. In Advances in Neural Information Process-ing Systems 29 , pages 2172–2180. Curran Associates, Inc., 2016. 2 [13] Chiho Choi, Srikanth Malla, Abhishek Patil, and Joon Hee Choi. DROGON: A Trajectory Prediction Model based on Intention-Conditioned Behavior Reasoning. In Proceedings of the 2020 Conference on Robot Learning , pages 49–63. PMLR, 2021. 2 [14] Nachiket Deo and Mohan M. Trivedi. Convolutional Social Pooling for Vehicle Trajectory Prediction. In 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW) , pages 1549–15498, 2018. 2 [15] Andrea Dittadi, Frederik Tr ¨auble, Francesco Locatello, Manuel Wuthrich, Vaibhav Agrawal, Ole Winther, Stefan Bauer, and Bernhard Sch ¨olkopf. On the Transfer of Disentan-gled Representations in Realistic Settings. In International Conference on Learning Representations , 2020. 2 [16] Andrea Dittadi, Samuele S. Papa, Michele De Vita, Bernhard Sch ¨olkopf, Ole Winther, and Francesco Locatello. Generaliza-tion and Robustness Implications in Object-Centric Learning. In Proceedings of the 39th International Conference on Ma-chine Learning , pages 5221–5285. PMLR, 2022. 2 [17] Chen et al. Human trajectory prediction via counterfactual analysis. In ICCV , 2021. 13 [18] Gao et al. Multi-transmotion: Pre-trained model for human motion prediction. In CoRL , 2024. 2, 6, 13 [19] Martin et al. Jrdb: A dataset and benchmark of egocen-tric robot visual perception of humans in built environments. 
+
+TPAMI , 2021. 13 [20] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R. Qi, Yin Zhou, Zoey Yang, Aur ´elien Chouard, Pei Sun, Jiquan Ngiam, Vijay Vasudevan, Alexander Mc-Cauley, Jonathon Shlens, and Dragomir Anguelov. Large Scale Interactive Motion Forecasting for Autonomous Driv-ing: The Waymo Open Motion Dataset. In Proceedings of the IEEE/CVF International Conference on Computer Vision ,pages 9710–9719, 2021. 1 [21] Gonzalo Ferrer, Anais Garrell, and Alberto Sanfeliu. Robot companion: A social-force based approach with human awareness-navigation in crowded environments. In 2013 IEEE/RSJ International Conference on Intelligent Robots and Systems , pages 1688–1694, 2013. 2 [22] Roger Girgis, Florian Golemo, Felipe Codevilla, Martin Weiss, Jim Aldon D’Souza, Samira Ebrahimi Kahou, Fe-lix Heide, and Christopher Pal. Latent Variable Sequential Set Transformers for Joint Multi-Agent Motion Prediction. In 
+
+International Conference on Learning Representations , 2021. 6, 7, 8, 12, 13 [23] Junru Gu, Qiao Sun, and Hang Zhao. DenseTNT: Waymo Open Dataset Motion Prediction Challenge 1st Place Solution. 
+
+arXiv:2106.14160 [cs] , 2021. 1 [24] A. Gupta, J. Johnson, L. Fei-Fei, S. Savarese, and A. Alahi. Social GAN: Socially Acceptable Trajectories with Genera-tive Adversarial Networks. In 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 2255–2264, 2018. 1, 2 17279 [25] Dirk Helbing and Peter Molnar. Social Force Model for Pedestrian Dynamics. Physics Review E , 1998. 2 [26] Dan Hendrycks*, Norman Mu*, Ekin Dogus Cubuk, Barret Zoph, Justin Gilmer, and Balaji Lakshminarayanan. AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty. In International Conference on Learning Representations , 2020. 2 [27] Irina Higgins, Loic Matthey, Arka Pal, Christopher Burgess, Xavier Glorot, Matthew Botvinick, Shakir Mohamed, and Alexander Lerchner. Beta-VAE: Learning Basic Visual Con-cepts with a Constrained Variational Framework. In Interna-tional Conference on Learning Representations , 2017. 2 [28] Yeping Hu, Xiaogang Jia, Masayoshi Tomizuka, and Wei Zhan. Causal-based Time Series Domain Generalization for Vehicle Intention Prediction. In 2022 International Confer-ence on Robotics and Automation (ICRA) , pages 7806–7813, 2022. 1, 2 [29] Biwei Huang, Fan Feng, Chaochao Lu, Sara Magliacane, and Kun Zhang. AdaRL: What, Where, and How to Adapt in Transfer Reinforcement Learning. In International Confer-ence on Learning Representations , 2022. 2 [30] Yingfan Huang, Huikun Bi, Zhaoxin Li, Tianlu Mao, and Zhaoqi Wang. STGAT: Modeling Spatial-Temporal Interac-tions for Human Trajectory Prediction. In Proceedings of the IEEE/CVF International Conference on Computer Vision ,pages 6272–6281, 2019. 2 [31] Vineet Kosaraju, Amir Sadeghian, Roberto Mart ´ın-Mart ´ın, Ian Reid, Hamid Rezatofighi, and Silvio Savarese. Social-BiGAT: Multimodal Trajectory Forecasting using Bicycle-GAN and Graph Attention Networks. Advances in Neural Information Processing Systems , 32:137–146, 2019. 1, 2 [32] Parth Kothari, Sven Kreiss, and Alexandre Alahi. Human Trajectory Forecasting in Crowds: A Deep Learning Per-spective. IEEE Transactions on Intelligent Transportation Systems , pages 1–15, 2021. 2, 6, 13 [33] Parth Kothari, Danya Li, Yuejiang Liu, and Alexandre Alahi. Motion Style Transfer: Modular Low-Rank Adaptation for Deep Motion Forecasting. In Conference on Robot Learning (CoRL) , 2022. 1, 2 [34] David Krueger, Ethan Caballero, Joern-Henrik Jacobsen, Amy Zhang, Jonathan Binas, Dinghuai Zhang, Remi Le Priol, and Aaron Courville. Out-of-Distribution Generalization via Risk Extrapolation (REx). In Proceedings of the 38th Inter-national Conference on Machine Learning , pages 5815–5826. PMLR, 2021. 2 [35] Yoonho Lee, Annie S. Chen, Fahim Tajwar, Ananya Ku-mar, Huaxiu Yao, Percy Liang, and Chelsea Finn. Surgical Fine-Tuning Improves Adaptation to Distribution Shifts. In 
+
+International Conference on Learning Representations , 2023. 2[36] Alon Lerner, Yiorgos Chrysanthou, and Dani Lischinski. Crowds by Example. Computer Graphics Forum , 26:655– 664, 2007. 2, 8 [37] Jiachen Li, Fan Yang, Masayoshi Tomizuka, and Chiho Choi. EvolveGraph: Multi-Agent Trajectory Prediction with Dy-namic Relational Reasoning. In Advances in Neural Informa-tion Processing Systems , pages 19783–19794. Curran Asso-ciates, Inc., 2020. 2 [38] Junwei Liang, Lu Jiang, and Alexander Hauptmann. SimAug: Learning Robust Representations from Simulation for Tra-jectory Prediction. In Computer Vision – ECCV 2020 , pages 275–292, Cham, 2020. Springer International Publishing. 8, 12, 14 [39] Yuejiang Liu, Qi Yan, and Alexandre Alahi. Social NCE: Contrastive Learning of Socially-Aware Motion Representa-tions. In IEEE/CVF International Conference on Computer Vision (ICCV) , pages 15118–15129, 2021. 1, 2, 3 [40] Yuejiang Liu, Riccardo Cadei, Jonas Schweizer, Sherwin Bahmani, and Alexandre Alahi. Towards Robust and Adaptive Motion Forecasting: A Causal Representation Perspective. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 17081–17092, 2022. 1, 2, 3 [41] Yuejiang Liu, Alexandre Alahi, Chris Russell, Max Horn, Do-minik Zietlow, Bernhard Sch ¨olkopf, and Francesco Locatello. Causal Triplet: An Open Challenge for Intervention-centric Causal Representation Learning. In Conference on Causal Learning and Reasoning (CLeaR) , 2023. 2 [42] Francesco Locatello, Stefan Bauer, Mario Lucic, Gunnar Raetsch, Sylvain Gelly, Bernhard Sch ¨olkopf, and Olivier Bachem. Challenging Common Assumptions in the Unsu-pervised Learning of Disentangled Representations. In Pro-ceedings of the 36th International Conference on Machine Learning , pages 4114–4124. PMLR, 2019. 2 [43] Francesco Locatello, Dirk Weissenborn, Thomas Unterthiner, Aravindh Mahendran, Georg Heigold, Jakob Uszkoreit, Alexey Dosovitskiy, and Thomas Kipf. Object-Centric Learn-ing with Slot Attention. In Advances in Neural Information Processing Systems , pages 11525–11538. Curran Associates, Inc., 2020. 2 [44] Matthias Luber, Johannes A. Stork, Gian Diego Tipaldi, and Kai O Arras. People tracking with human motion predictions from social forces. In 2010 IEEE International Conference on Robotics and Automation , pages 464–469, 2010. 2 [45] Osama Makansi, Julius Von K ¨ugelgen, Francesco Locatello, Peter Vincent Gehler, Dominik Janzing, Thomas Brox, and Bernhard Sch ¨olkopf. You Mostly Walk Alone: Analyzing Feature Attribution in Trajectory Prediction. In International Conference on Learning Representations , 2021. 1, 2 [46] Karttikeya Mangalam, Yang An, Harshayu Girase, and Jiten-dra Malik. From Goals, Waypoints & Paths to Long Term Hu-man Trajectory Forecasting. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 15233– 15242, 2021. 1 [47] Daniel McDuff, Yale Song, Jiyoung Lee, Vibhav Vineet, Sai Vemprala, Nicholas Alexander Gyde, Hadi Salman, Shuang Ma, Kwanghoon Sohn, and Ashish Kapoor. CausalCity: Com-plex Simulations with Agency for Causal Discovery and Rea-soning. In Proceedings of the First Conference on Causal Learning and Reasoning , pages 559–575. PMLR, 2022. 16 [48] Ramin Mehran, Alexis Oyama, and Mubarak Shah. Abnormal crowd behavior detection using social force model. In 2009 IEEE Conference on Computer Vision and Pattern Recogni-tion , pages 935–942, 2009. 2 [49] A. Mohamed, K. Qian, M. Elhoseiny, and C. Claudel. Social-STGCNN: A Social Spatio-Temporal Graph Convolutional 17280 Neural Network for Human Trajectory Prediction. In 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 14412–14420, 2020. 6 [50] Milton Llera Montero, Casimir JH Ludwig, Rui Ponte Costa, Gaurav Malhotra, and Jeffrey Bowers. The role of Disentan-glement in Generalisation. In International Conference on Learning Representations , 2022. 2 [51] Hee-Seung Moon and Jiwon Seo. Fast User Adaptation for Human Motion Prediction in Physical Human–Robot Inter-action. IEEE Robotics and Automation Letters , 7:120–127, 2022. 1 [52] Stefano Pellegrini, Andreas Ess, and Luc Van Gool. Im-proving Data Association by Joint Modeling of Pedestrian Trajectories and Groupings. In Computer Vision – ECCV 2010 , pages 452–465, Berlin, Heidelberg, 2010. Springer. 2, 8[53] Jonas Peters, Dominik Janzing, and Bernhard Sch ¨olkopf. Ele-ments of Causal Inference: Foundations and Learning Algo-rithms . MIT Press, Cambridge, MA, USA, 2017. 3 [54] Benjamin Recht, Rebecca Roelofs, Ludwig Schmidt, and Vaishaal Shankar. Do ImageNet Classifiers Generalize to Im-ageNet? In Proceedings of the 36th International Conference on Machine Learning , pages 5389–5400. PMLR, 2019. 2 [55] Nicholas Rhinehart, Rowan Mcallister, Kris Kitani, and Sergey Levine. PRECOG: PREdiction Conditioned on Goals in Visual Multi-Agent Settings. In 2019 IEEE/CVF Interna-tional Conference on Computer Vision (ICCV) , pages 2821– 2830, 2019. 2 [56] Rebecca Roelofs, Liting Sun, Ben Caine, Khaled S. Refaat, Ben Sapp, Scott Ettinger, and Wei Chai. CausalAgents: A Robustness Benchmark for Motion Forecasting using Causal Relationships. arXiv:2207.03586 , 2022. 1, 2, 3, 4, 6, 7, 8, 12, 14, 16 [57] Andrey Rudenko, Luigi Palmieri, Michael Herman, Kris M Kitani, Dariu M Gavrila, and Kai O Arras. Human motion trajectory prediction: A survey. The International Journal of Robotics Research , 39:895–935, 2020. 2 [58] Saeed Saadatnejad, Mohammadhossein Bahari, Pedram Khorsandi, Mohammad Saneian, Seyed-Mohsen Moosavi-Dezfooli, and Alexandre Alahi. Are socially-aware trajectory prediction models really socially-aware? Transportation Re-search Part C: Emerging Technologies , 141:103705, 2022. 2, 3[59] Saeed Saadatnejad, Yang Gao, Kaouther Messaoud, and Alexandre Alahi. Social-transmotion: Promptable human trajectory prediction. In International Conference on Learn-ing Representations (ICLR) , 2024. 13 [60] Amir Sadeghian, Vineet Kosaraju, Ali Sadeghian, Noriaki Hirose, Hamid Rezatofighi, and Silvio Savarese. SoPhie: An Attentive GAN for Predicting Paths Compliant to Social and Physical Constraints. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 1349–1358, 2019. 2 [61] Tim Salzmann, Boris Ivanovic, Punarjay Chakravarty, and Marco Pavone. Trajectron++: Dynamically-Feasible Tra-jectory Forecasting with Heterogeneous Data. In Computer Vision – ECCV 2020 , pages 683–700, Cham, 2020. Springer International Publishing. 1, 2, 3, 6, 13 [62] Bernhard Sch ¨olkopf. Causality for Machine Learning. 
+
+arXiv:1911.10500 [cs, stat] , 2019. 2 [63] Bernhard Sch ¨olkopf and Julius von K ¨ugelgen. From Statisti-cal to Causal Learning. arXiv:2204.00607 [cs, stat] , 2022. 1, 2[64] Bernhard Sch ¨olkopf, Francesco Locatello, Stefan Bauer, Nan Rosemary Ke, Nal Kalchbrenner, Anirudh Goyal, and Yoshua Bengio. Toward Causal Representation Learning. 
+
+Proceedings of the IEEE , 109:612–634, 2021. 1, 2 [65] Jur van den Berg, Ming Lin, and Dinesh Manocha. Recipro-cal Velocity Obstacles for real-time multi-agent navigation. In 2008 IEEE International Conference on Robotics and Au-tomation , pages 1928–1935, 2008. 2, 3, 13 [66] Jur van den Berg, Stephen J. Guy, Ming Lin, and Dinesh Manocha. Reciprocal n-body collision avoidance. In Robotics Research , pages 3–19, Berlin, Heidelberg, 2011. Springer Berlin Heidelberg. 14 [67] Sjoerd van Steenkiste, Francesco Locatello, J ¨urgen Schmidhu-ber, and Olivier Bachem. Are Disentangled Representations Helpful for Abstract Visual Reasoning? In Advances in Neu-ral Information Processing Systems . Curran Associates, Inc., 2019. 2 [68] Anirudh Vemula, Katharina Muelling, and Jean Oh. Social Attention: Modeling Attention in Human Crowds. In 2018 IEEE International Conference on Robotics and Automation (ICRA) , pages 1–7, Brisbane, Australia, 2018. IEEE Press. 1, 2[69] Chenfeng Xu, Tian Li, Chen Tang, Lingfeng Sun, Kurt Keutzer, Masayoshi Tomizuka, Alireza Fathi, and Wei Zhan. PreTraM: Self-supervised Pre-training via Connecting Tra-jectory and Map. In Computer Vision – ECCV 2022 , pages 34–50, Cham, 2022. Springer Nature Switzerland. 1 [70] Pei Xu, Jean-Bernard Hayet, and Ioannis Karamouzas. So-cialvae: Human trajectory prediction using timewise latents. In European Conference on Computer Vision , pages 511–528. Springer, 2022. 2, 8 [71] Yisong Yue, Patrick Lucey, Peter Carr, Alina Bialkowski, and Iain Matthews. Learning fine-grained spatial models for dynamic sports play prediction. In 2014 IEEE international conference on data mining , pages 670–679. IEEE, 2014. 2, 8 [72] Francesco Zanlungo, Tetsushi Ikeda, and Takayuki Kanda. Social force model with explicit collision prediction. EPL (Europhysics Letters) , 93:68005, 2011. 2 17281

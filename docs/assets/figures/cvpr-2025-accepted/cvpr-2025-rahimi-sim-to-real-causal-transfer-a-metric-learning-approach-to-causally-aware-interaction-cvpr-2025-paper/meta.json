@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "figures": [
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 874,
+      "height": 154,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 583,
+      "height": 230,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 485,
+      "height": 344,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 1440,
+      "height": 473,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 852,
+      "height": 421,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 1770,
+      "height": 493,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-007.webp",
+      "caption": "",
+      "page": 0,
+      "index": 7,
+      "width": 1631,
+      "height": 467,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-rahimi-sim-to-real-causal-transfer-a-metric-learning-approach-to-causally-aware-interaction-cvpr-2025-paper/fig-008.webp",
+      "caption": "",
+      "page": 0,
+      "index": 8,
+      "width": 1608,
+      "height": 471,
+      "label": "Figure"
+    }
+  ]
+}

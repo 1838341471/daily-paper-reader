@@ -1,0 +1,310 @@
+Title: VisionPAD: A Vision-Centric Pre-training Paradigm for Autonomous Driving
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Zhang_VisionPAD_A_Vision-Centric_Pre-training_Paradigm_for_Autonomous_Driving_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 01:15:44 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# VisionPAD: A Vision-Centric Pre-training Paradigm for Autonomous Driving 
+
+# Haiming Zhang 1,2†, Wending Zhou 1,2†, Yiyao Zhu 3†, Xu Yan 4✉
+
+# Jiantao Gao 4, Dongfeng Bai 4, Yingjie Cai 4, Bingbing Liu 4, Shuguang Cui 2,1, Zhen Li 2,1✉
+
+> 1
+
+# FNii, Shenzhen 2SSE, CUHK-Shenzhen 
+
+> 3
+
+# HKUST 4Huawei Noah’s Ark Lab 
+
+# Abstract 
+
+This paper introduces VisionPAD, a novel self-supervised pre-training paradigm designed for vision-centric algo-rithms in autonomous driving. In contrast to previous ap-proaches that employ neural rendering with explicit depth supervision, VisionPAD utilizes more efficient 3D Gaus-sian Splatting to reconstruct multi-view representations us-ing only images as supervision. Specifically, we intro-duce a self-supervised method for voxel velocity estimation. By warping voxels to adjacent frames and supervising the rendered outputs, the model effectively learns motion cues in the sequential data. Furthermore, we adopt a multi-frame photometric consistency approach to enhance geo-metric perception. It projects adjacent frames to the current frame based on rendered depths and relative poses, boost-ing the 3D geometric representation through pure image supervision. Extensive experiments on autonomous driv-ing datasets demonstrate that VisionPAD significantly im-proves performance in 3D object detection, occupancy pre-diction and map segmentation, surpassing state-of-the-art pre-training strategies by a considerable margin. 
+
+# 1. Introduction 
+
+Recent advancements in vision-centric autonomous driving, leveraging multi-view images as input [19, 21, 35, 37, 50], have been observed in the community due to benefits in cost efficiency, scalability, and the extensive semantic rich-ness offered by visual inputs. Current methodologies ex-hibit exceptional capability in deriving Bird’s-Eye-View (BEV) [12, 19, 21] and occupancy features [35, 37], achiev-ing notable performance across various downstream appli-cations. Nevertheless, these models largely depend on pre-cise 3D annotations, which poses a significant bottleneck due to the challenges involved in collecting annotations, in-cluding occupancy [40], 3D bounding boxes [2], and etc .  
+
+> †Work done during an internship at Huawei Noah’s Ark Lab.
+> ✉Corresponding authors. (a) UniPAD: volume rendering with explicit depth supervision
+> Vision-centric
+> Algorithm
+> Volume
+> Rendering
+> Images
+> sup.
+> sup.
+> 3D-GS
+> (adjacent frame)
+> (b) VisionPAD: 3D-GS with sorely vision-centric supervision
+> Render Target Depths
+> Render Target Images
+> Vision-centric
+> Algorithm
+> Self-supervised Vel. Estimation
+> Photometric
+> Consistency
+> sup.
+> re-pro.
+> Render Images
+> Render Depths LiDAR
+> sup.
+> Target Images
+> 3D-GS
+> sup.
+> Source Images Render
+> Source Images
+
+Figure 1. Comparison with existing methods. (a) UniPAD em-ploys volume rendering to reconstruct the multi-view depth maps and images of the current frame, using explicit depth maps for su-pervision. (b) In contrast, our proposed VisionPAD leverages only multi-frame, multi-view images for supervision, effectively learn-ing motion and geometric representations through voxel velocity estimation and photometric consistency loss. re-pro. and sup. de-note the re-projection and supervision, respectively. 
+
+The high cost of data labeling has made pre-training a crucial strategy for scaling downstream applications in au-tonomous driving. Some of the previous approaches relied on supervised pre-training for tasks like 3D object detec-tion [32, 39] and occupancy prediction [37, 42]. However, these methods require large labeled datasets, which are of-ten unavailable. Alternatively, other ones utilize contrastive learning [33] and Masked Autoencoders (MAE) [29] for self-supervised pre-training. However, their reliance on coarse supervision makes it challenging to effectively cap-ture semantics, 3D geometry, and temporal dynamics si-multaneously [43]. Recently, UniPAD [46] introduced a pre-training paradigm by reconstructing multi-view depth maps and images from voxel features (see Fig. 1(a)). This This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 17165 approach uses differentiable volumetric rendering to recon-struct a complete geometric representation. Building on this, ViDAR [47] incorporates next-frame prediction with a transformer and renders corresponding depth maps super-vised by future LiDAR frames. However, both techniques still rely heavily on explicit depth supervision from LiDAR data to learn 3D geometry. Relying solely on image super-vision yields unsatisfactory results, limiting their applica-bility in camera-based autonomous driving systems. In this paper, we propose VisionPAD , a self-supervised pre-training framework for vision-centric data (see Fig. 1(b)). Unlike prior methods that utilize volume rendering for image reconstruction, we leverage a more ef-ficient anchor-based 3D Gaussian Splatting (3D-GS) [16]. This allows us to reconstruct higher-resolution images with the same computational budget, capturing finer-grained color details without ray-sampling [11]. Furthermore, to learn motion cues solely from images, we propose a self-supervised voxel velocity estimation method. We predict per-voxel velocity using an auxiliary head and approximate voxel flow to adjacent frames using timestamps. Subse-quently, we warp the current frame’s voxels to adjacent frames and supervise the 3D-GS reconstruction with cor-responding images. This velocity prediction enables the model to decouple dynamic and static voxels, facilitating motion perception in downstream tasks. Moreover, we adopt multi-frame photometric consistency loss for 3D geo-metric pre-training, which is a technique in self-supervised depth estimation [10], where the algorithm projects adja-cent frames to the current frame based on rendered depths and relative poses. Extensive experiments on the competitive nuScenes dataset [2], across three downstream tasks, demonstrate the superiority of our proposed method for camera-based pre-training. Specifically, when pre-trained solely on multi-frame image supervision, our method outperforms state-of-the-art pre-training approaches by +2.5 mAP on 3D object detection, +4.5 mIoU on semantic occupancy prediction and +4.1 IoU on map segmentation. The contributions of this paper are threefold: • To the best of our knowledge, we present the first vision-centric pre-training paradigm that leverages a 3D-GS de-coder for image reconstruction to improve performance on vision-centric algorithms. • We introduce a self-supervised voxel velocity estimation method to distinguish between static and dynamic voxel and incorporate motion information into the pre-trained model. We further adopt the photometric consistency loss to learn 3D geometric through cross-frame relative poses. • Our method achieves significant improvements over pre-vious state-of-the-art pre-training approaches on three downstream tasks. 
+
+# 2. Related Works 
+
+Pre-training in Autonomous Driving. Pre-training has been extensively explored in autonomous driving to im-prove scalability and adaptability across diverse driving en-vironments. Existing approaches can be broadly catego-rized into supervised, contrastive, masked signal modeling, and rendering-based methods. Supervised approaches [32, 37, 39, 42] leverage annotated driving data to learn struc-tured representations tailored for specific tasks. Contrastive approaches [20, 30, 33, 48] utilize positive and negative pairwise data to learn discriminative, view-invariant rep-resentations robust to variations within the driving scene. Masked signal modeling approaches [1, 15, 17, 28, 29] re-construct occluded or masked sensory signals, fostering a holistic understanding of scene semantics. Recent advances in rendering-based pre-training have presented novel strategies for autonomous driving percep-tion by incorporating visual features into unified volumetric representations for rendering. A key distinction of these rendering-based methods compared to prior work is the uti-lization of neural rendering [27], which effectively enforces the encoding of rich geometric and appearance cues within the learned volumetric features. UniPAD [46] introduces a mask generator for partial input occlusion and a modal-specific encoder to extract multimodal features in voxel space, followed by volume-based neural rendering for RGB and depth prediction. ViDAR [47] predicts future point clouds based on historical surrounding images observations. MIM4D [54] takes masked multi-frame, multi-view images as input and reconstructs the target RGB and depth using volume rendering. BEVWorld [49] encodes image and Li-DAR data into BEV tokens and utilizes NeRF rendering for reconstruction, incorporating a latent BEV sequence diffu-sion model to predict future BEV tokens conditioned on corresponding actions. However, the above approaches re-tain a strong reliance on explicit depth supervision, inher-ently limiting their applicability in camera-only scenarios. 
+
+3D Gaussian Splatting in Autonomous Driving. Re-cently, 3D Gaussian Splatting [16] (3D-GS)-based methods have gained significant traction. 3D-GS allows for scene representation using 3D Gaussian primitives, enabling real-time rendering with minimal memory footprint via rasteri-zation. Several approaches have been proposed for recon-structing driving scenes using this technique. PVG [5] in-troduced Periodic Vibration Gaussians for large-scale dy-namic driving scene reconstruction. DrivingGaussian [52] hierarchically models complex driving scenes using sequen-tial multi-sensor data. Furthermore, [44] proposed Street-Gaussians, incorporating a tracked pose optimization strat-egy and a 4D spherical harmonics appearance model to ad-dress the dynamics of moving vehicles. HUGS [51] intro-duces a novel pipeline leveraging 3D Gaussian Splatting for holistic urban scene understanding. This approach entails 17166 Voxel Features  
+
+> Warped Features
+> Image Backbone
+> Multi-view Features
+> w/ Historical Frames 2D-to-3D
+
+Volume Construction & V elocity Estimation  
+
+> Vel. Guided
+> Voxel Warp
+> 3D Gaussians
+> Render Target Images
+> Anchor MLPs
+> Render Target Depths
+> Filtering
+> Splatting
+> Sup.
+> Re-project
+> Re-projected
+> Source Images
+> Sup.
+> Sup.
+> Sec. 3.3 Source Images
+
+3D Gaussia n Splatti ng Dec od er 
+
+> Sec. 3.5
+
+Photometric Consistency 
+
+> Target Images
+> Sec. 3.2
+> Sec. 3.4
+> Offset
+> Rotation Scale Opacity SH-Coe.
+> Render Source Images
+
+Figure 2. Overall pipeline of VisionPAD. Taking a vision-centric perception model as the backbone, VisionPAD leverages multi-frame, multi-view images as input, generating explicit voxel representations. After that, a 3D Gaussian Splatting (3DGS) Decoder reconstructs multi-view images from the voxel features. After that, velocity-guided voxel warp is applied to warp current frame voxel features to adjacent frames, enabling self-supervised reconstruction via the 3D-GS Decoder using adjacent frame images as supervision. Finally, a photometric consistency loss, informed by relative poses for re-projection, enforces 3D geometric constraints. 
+
+the joint optimization of geometry, appearance, semantics, and motion using a combination of static and dynamic 3D Gaussians. Recent works [9, 14] and [3] utilize the 3D-GS for occucupany and BEV perception, respectively. Nev-ertheless, the application of 3D-GS in pre-training for au-tonomous driving remains unexplored. 
+
+# 3. Proposed Method 
+
+This section details the proposed VisionPAD , outlining its core components and key innovations. 
+
+3.1. Overview 
+
+The overall framework of VisionPAD is illustrated in Fig. 2, encompassing four key modules. First, VisionPAD takes historical multi-frame, multi-view images and leverages a vision-centric perception network backbone with explicit representations, i.e ., occupancy (Sec. 3.2). Second, anovel 3D Gaussian Splatting Decoder reconstructs multi-view images in the current frame from voxel representa-tions (Sec. 3.3). Third, a voxel velocity estimation strat-egy is proposed to predict voxel velocities, enabling the warping of current-frame voxel features to target frames. This facilitates the reconstruction of multi-view adjacent frame images and depth maps through the 3D-GS decoder. (Sec. 3.4). Finally, leveraging the target depth maps in the current, VisionPAD incorporates 3D geometric constraints through photometric consistency loss (Sec. 3.5). The final pre-training losses are illustrated in Sec. 3.6. 
+
+3.2. Volume Construction 
+
+Given M historical multi-view images I = {Ii}Mi=1 as in-put to a representative vision-centric framework, Vision-PAD employs a shared image backbone to extract 2D im-age features, resulting in a 2D feature representation FI ∈
+
+RN ×H×W ×C , where N , H and W denote the number of views, height and width of the images, respectively. Then, a view transformation [12, 21] lifts these 2D features into the 3D ego-centric coordinate system, generating volumet-ric features. Finally, a projection layer comprising several convolutional layers further refines the volumetric represen-tation, which is denoted as V ∈ RX×Y ×Z×C .
+
+3.3. 3D Gaussian Splatting Decoder 
+
+Preliminaries. 3D Gaussian Splatting (3D-GS) [16] rep-resents a 3D scene as a set of Gaussian primitives {gk =(μk, Σk, α k, c k)}Kk=1 , where each Gaussian gk is defined by its 3D position μk ∈ R3, a covariance Σk, an opac-ity αk ∈ [0 , 1] , and spherical harmonics (SH) coefficients 
+
+ck ∈ Rk. To facilitate efficient optimization via gradient descent, the covariance matrix Σ is generally parameterized as a product of a scaling matrix S ∈ R3+ and a rotation ma-trix R ∈ R4:
+
+Σ = RSS T RT . (1) Projecting 3D Gaussians onto the 2D image plane involves a view transformation W and the Jacobian J of the affine approximation of the projective transformation. The result-ing 2D covariance matrix Σ′ is then given by: 
+
+Σ′ = JWΣW T JT . (2) To render an image from a given viewpoint, the feature of each pixel p is calculated by blending K ordered Gaussians, where an alpha-blend rendering procedure [27] is applied: 
+
+C(p) = X
+
+> i∈K
+
+ciαii−1Y
+
+> j=1
+
+(1 − αi), (3) where K represents the set of Gaussians intersected by the ray corresponding to pixel p, and the density αi is computed as the product of a 2D Gaussian with covariance Σ′ and a per-point opacity αk.To further enhance geometric representation, we incor-porate multi-view depth map reconstruction, following the 17167 Voxel Feature      
+
+> Voxel Velocity Voxel Flow
+> 3D -GS
+> Decoder
+> Multi -view Images ν∙Δt
+> Warped Feature
+> Voxel Warp Velocity Head
+> Gradients Figure 3. Self-supervise velocity estimation. Current voxel fea-tures are warped to the adjacent frame. Subsequently, multi-view images are rendered using the 3DGS Decoder and supervised by images captured in that frame.
+
+methodology presented in [6]: 
+
+D(p) = X
+
+> i∈K
+
+diαii−1Y
+
+> j=1
+
+(1 − αj ), (4) where di is the distance from the i-th Gaussian to the cam-era. Unlike volume rendering [27], 3D-GS enables efficient rendering via splat-based rasterization, projecting 3D Gaus-sians onto the target 2D view and rendering image patches using local 2D Gaussians. We observe that when pre-trained solely with RGB su-pervision, NeRF can only sample a limited number of rays per iteration, hindering its ability to learn detailed scene ge-ometry. In contrast, 3D-GS, with its efficient splat-based rasterization, exhibits a computational cost that is less sen-sitive to image resolution, enabling the rendering of higher-resolution images, and facilitating representation learning. 
+
+Primitives Prediction. Leveraging the anchor-based 3D Gaussian Splatting introduced as in [4], we transform voxel features into a set of 3D Gaussians, as shown in Fig. 2. Each voxel center serves as an anchor point from which the attributes of multiple Gaussian primitives are predicted. Specifically, we employ MLPs to regress the parameters of each Gaussian on the anchor ( i.e ., anchor MLPs), includ-ing its offset from the voxel center, spherical harmonic co-efficients, opacity, scale, and rotation. This representation facilitates efficient multi-view image synthesis via differ-entiable rendering, utilizing known camera intrinsics and extrinsic through Eqn. 3. Finally, the 3D-GS decoder gen-erates multi-view images C ∈ RN ×H×W ×3 which are su-pervised by multi-view images in the current frame, where 
+
+N is the number of views, and H and W are the height and width of the images, respectively. 
+
+Gaussian Filtering. To reduce computational overhead during pre-training, we filter low-confidence Gaussians based on their predicted opacity. Specifically, the opacity is predicted using a tanh activation function, and Gaussians with predicted opacities less than 0 are discarded. 
+
+3.4. Self-supervised Voxel Velocity Estimation 
+
+In this paper, we introduce a self-supervised approach for estimating per-voxel velocities, leveraging the inherent tem-poral consistency of objects within a scene. This motion information enriches the representation and facilitates un-derstanding of the dynamic scene. 
+
+Velocity Guided Voxel Warping. As depicted in Fig. 3, an auxiliary velocity head, appended to the voxel features, re-gresses per-voxel velocity vectors in the world coordinates. After that, we approximate the per voxel flow by scaling the predicted velocities by the inter-frame time interval, en-abling the transformation of voxel features from the cur-rent frame to an adjacent frame. Subsequently, we warp the voxel features to their estimated positions in the adja-cent frame. The above process can be easily implemented through GridSample operator. 
+
+Adjacent Frame Rendering. After obtaining the warped voxel features for the adjacent frame, we employ the 3D-GS decoder (Sec. 3.3) to render multi-view images. These rendered images are then compared against the correspond-ing ground truth images of the adjacent frame using a su-pervised loss. It should be noted that, during backpropaga-tion, only the parameters of the velocity head are updated. This targeted optimization strategy encourages the network to prioritize learning discriminative motion features, lead-ing to improved performance. 
+
+3.5. Photometric Consistency 
+
+Photometric consistency is proposed for self-supervised depth estimation [10]. It leverages the predicted depth maps of a target frame It to re-project source frames It′ into the source view: 
+
+It′→t = It′ ⟨proj( Dt, Tt→t′ , K)⟩ , (5) where ⟨·⟩ denotes the differentiable grid sampling operator, 
+
+Dt represents the predicted depth map for the target frame, 
+
+Tt→t′ is the relative pose transforming points from frame t
+
+to t′, and K represents the camera intrinsics. proj( ·) com-putes the 2D pixel coordinates in the source frame It′ corre-sponding to the projected depth values Dt. The photometric consistency loss is then computed as: 
+
+Lpc = α(1 −SSIM( It, It′→t))+(1 −α)∥It −It′→t∥1, (6) where It and It′→t are the target frame and re-projected images, respectively. α is a weighting hyperparameter bal-ancing the SSIM and L1 terms. To enhance the geometric representation, we incorporate photometric consistency during pre-training by utilizing the rendered depth map from the current frame as Dt in Eqn. 5. This depth map, generated via the 3D Gaussian Splatting decoder (Sec. 3.3), can be expressed as: 
+
+Dt = 3DGS( Vt, Kt, Tt), (7) 17168 Methods Venue Pre-train Modal CS CBGS NDS (%) ↑ mAP (%) ↑
+
+BEVFormer-S [21] ECCV’22 - ✓ 44.8 37.5 SpatialDETR [8] ECCV’22 - 42.5 35.1 PETR [24] ECCV’22 - ✓ 44.2 37.0 Ego3RT [26] ECCV’22 - 45.0 37.5 3DPPE [34] ICCV’23 - ✓ 45.8 39.1 BEVFormerV2 [45] CVPR’23 - 46.7 39.6 CMT-C [41] ICCV’23 - ✓ 46.0 40.6 FCOS3D ICCVW’21 - 38.4 31.1 UVTR [18] NeurIPS’22 - 45.0 37.2 UVTR+UniPAD † [46] CVPR’24 C 44.8 ↓0.2 38.5 ↑1.3
+
+UVTR+VisionPAD (Ours) - C 46.7 ↑1.7 41.0 ↑3.8
+
+UVTR [18] NeurIPS’22 - ✓ 48.8 39.2 UVTR+UniPAD † [46] CVPR’24 C ✓ 48.6 ↓0.2 40.5 ↑0.7
+
+UVTR+UniPAD CVPR’24 C+L ✓ 50.2 ↑1.4 42.8 ↑3.6
+
+UVTR+VisionPAD (Ours) - C ✓ 49.7 ↑0.9 41.2 ↑2.0
+
+UVTR+VisionPAD (Ours) - C+L ✓ 50.4 ↑1.6 43.1 ↑3.9      
+
+> Table 1. 3D object detection performance on the nuScenes val set. Our approach achieves superior performance among existing vision-centric methods. “CS” denotes camera sweeps (two historical frames) input. “CBGS” refers to the class-balanced grouping and sampling [53]. †indicates our implementation. Pre-train Modal denotes the supervision modalities used during the pre-training stage.
+
+where Vt, Kt and Tt are volume features, camera intrinsics and extrinsics, respectively. 
+
+3.6. Pre-training Loss 
+
+Our pre-training strategy employs three loss terms. First, we apply an L1 reconstruction loss Limg to the multi-view images rendered from the current frame’s voxel features via the 3D-GS decoder, comparing them against the corre-sponding ground truth images. Second, the self-supervised velocity estimation is supervised by an L1 loss Lvel applied to multi-view images rendered from the warped voxel fea-tures. This loss encourages accurate velocity prediction by ensuring consistent reconstructions after motion compensa-tion. Finally, we incorporate photometric consistency loss 
+
+Lpc , further refining the model’s understanding of scene ge-ometry. This combination of losses can be formulated as: 
+
+L = ω1Limg + ω2Lvel + ω3Lpc , (8) where ω1, ω2 and ω3 are 0.5, 1, 1, respectively. 
+
+# 4. Experiments 
+
+4.1. Experimental Settings 
+
+Dataset and Metrics. We evaluate our approach on the nuScenes dataset [2], a large-scale autonomous driving benchmark comprising 700 training, 150 validation, and 150 testing scenes. Each scene provides synchronized six-camera surround-view images and LiDAR point clouds, capturing rich 3D information in diverse urban environ-ments. The dataset features comprehensive annotations for tasks such as 3D object detection and 3D map segmenta-tion. The annotations of semantic occupancy prediction are provided by [36]. We employ the standard nuScenes Detection Score (NDS) and mean Average Precision (mAP) for evaluating the 3D object detection task. Semantic occupancy predic-tion and map segmentation performance are assessed us-ing mean Intersection-over-Union (mIoU) and Intersection-over-Union (IoU), respectively. 
+
+Implementation Details. Our implementation is based on MMDetection3D [7]. Following the same configuration as UniPAD [46], we use a ConvNeXt-small [25] as the default image encoder with an input resolution of 1600 × 900 pix-els. The constructed volume has shape 180 ×180 ×5 within a valid perception range of [-54m, 54m] for the X and Y
+
+axis, and [-5m, 3m] for the Z axis. The channel number is set to 256 for volume features. Data augmentation dur-ing pre-training includes random scaling and rotation, along with partial input masking (size=32, ratio=0.3 for images). The pre-training decoder consists of a 2-layer MLP and a 3D Convolution-BatchNorm-ReLU refine network for the velocity head, another 2-layer MLP with ReLU as an activa-tion layer between them for predicting Gaussian primitives. The model is pre-trained for 12 epochs using the AdamW optimizer, with initial learning rates set to 2 × 10 −4, total batch size is 4. Fine-tuning follows the official downstream model configurations without modification. 
+
+4.2. Main Results 
+
+We evaluate the effectiveness of VisionPAD on three chal-lenging downstream perception tasks: 3D object detection, 17169 Methods Venue Backbone Image Size Pre-train by Det. mIoU (%) ↑
+
+BEVFormer [21] ECCV’22 R101 900 × 1600 ✓ 39.3 TPVFormer [13] CVPR’23 R50 900 × 1600 ✓ 34.2 FB-Occ (16f) [22] CVPRW’23 R50 384 × 704 ✓ 39.1 RenderOcc [31] ICRA’24 Swin-B 512 × 1408 ✓ 24.5 SparseOcc (16f) [23] ECCV’24 R50 256 × 704 - 30.6 OPUS (8f) [38] NeurIPS’24 R50 256 × 704 - 36.2 UVTR † [18] NeurIPS’22 ConvNeXt-S 900 × 1600 - 30.1 UVTR+UniPAD † [46] CVPR’24 ConvNeXt-S 900 × 1600 - 31.0 ↑0.9
+
+UVTR+VisionPAD (Ours) - ConvNeXt-S 900 × 1600 - 35.4 ↑5.4
+
+BEVDet-Occ (8f) [12] ArXiv’22 R50 384 × 704 ✓ 39.3 
+
+BEVDet-Occ (8f)+VisionPAD (Ours) - R50 384 × 704 ✓ 42.0 ↑2.7      
+
+> Table 2. Semantic Occupancy prediction performance on Occ3D val set. “8f” and “16f” indicate models incorporating temporal information from 8 and 16 frames, respectively. Results are largely sourced from OPUS [38], with those marked †indicating our own implementation. “Pre-train by Det.” refers to methods initializing with weights pre-trained for 3D object detection.
+
+Methods Backbone Lanes (%) ↑
+
+UVTR [18] ConvNeXt-S 15.0 UVTR+UniPAD [46] ConvNeXt-S 16.3 ↑1.3
+
+UVTR+Ours ConvNeXt-S 20.4 ↑5.4  
+
+> Table 3. Map segmentation performance. All reported results utilize the map decoder from UniAD [11], with BEV segmentation lane Intersection over Union (IoU) as the evaluation metric.
+
+semantic occupancy prediction, and map segmentation. The visualization of 3D object detection can be found in Fig. 5. 
+
+3D Object Detection. As shown in Tab. 1, we benchmark VisionPAD against state-of-the-art vision-centric 3D object detection methods on the nuScenes validation set. Using UVTR [18] as our baseline, we report the performance achieved with UniPAD pre-training. Despite being trained exclusively on image data, VisionPAD demonstrates signifi-cant improvements over the baseline, achieving gains of 1.7 NDS and 3.8 mAP without multi-frame as input. Remark-ably, without test-time augmentation, model ensembling or LiDAR supervision, VisionPAD attains 49.7 NDS and 41.2 
+
+mAP, surpassing existing state-of-the-art approaches with historical frames. In contrast, under the same supervisory signals, Uni-PAD pre-training offers only marginal improvements over the baseline, even exhibiting a slight decrease in NDS from 45.0 to 44.8. While incorporating LiDAR-projected depth maps as additional supervision does improve the perfor-mance, this highlights the limitations of relying solely on geometric supervision derived from RGB images, which hinders generalization. VisionPAD, with its strong ex-plicit depth supervision, consistently outperforms UniPAD, demonstrating the effectiveness of our proposed approach. 
+
+Semantic Occupancy Prediction. As demonstrated in Tab. 2, our image-modality-only pre-training method sur-  
+
+> Figure 4. Data efficiency with limited data. We evaluate Vi-sionPAD’s data efficiency by reducing the proportion of available annotations used during downstream fine-tuning for 3D object de-tection. Results highlight the effectiveness of our pre-training.
+
+passes certain 3D detection supervised pre-training ap-proaches, achieving 35.4%, compared to 34.2% for TPV-Former [13]. Furthermore, its performance is comparable even to methods leveraging long temporal clues. Under the same settings, our pre-training technique significantly im-proves mIoU performance, from 30.1% in UVTR to 35.4%. Notably, without depth supervision during pre-training, UniPAD achieves only a marginal 1% mIoU improvement. Even with a stronger baseline ( i.e ., BEVDet [12]) using seven historical frames as input, pre-training with Vision-PAD still yields a notable improvement in performance, 17170 Figure 5. Qualitative comparison of 3D object detection between VisionPAD (top) and UniPAD (bottom) on nuScenes val set. Each predicted object instance is illustrated by a unique colored 3D bounding box. VisionPAD demonstrably mitigates both false positive and false negative detections (highlighted within red circles). 
+
+from 39.3% to 42.0% . These results highlight the effec-tiveness of VisionPAD for dense occupancy prediction. 
+
+Map Segmentation. Tab. 3 presents the performance gains of our method and UniPAD [46] on the map segmentation task. We utilize UVTR [18] as our baseline and employ the map decoder from UniAD [11] for map segmentation pre-diction. The results demonstrate that UniPAD offers only a limited improvement over UVTR (+1.3%), while Vision-PAD substantially boosts performance by 5.4%. 
+
+4.3. Comprehensive Analysis 
+
+To reduce training time, we adopt a lighter backbone model following UniPAD [46] for data efficiency and abla-tion study experiments. Specifically, we increase the voxel size of the volume feature from 0.6 to 0.8, while keeping the z-axis resolution unchanged, resulting in a volume feature with 128 × 128 × 5 shape. The channel dimension of inter-mediate features is also reduced from 256 to 128. For the ablation study, we use 50% data for pre-training and 25% for fine-tuning. 
+
+Data Efficiency. A crucial benefit of pre-training is its ca-pacity to enhance data efficiency in downstream tasks with limited labeled data. To further validate the benefits of our pre-training approach when pre-training data is abundant but downstream data is scarce, we conduct experiments us-ing varying proportions of the nuScenes training set (10%, 25%, 50%, and 100%) to fine-tune a model pre-trained on the full nuScenes training dataset within the same epoches. Fig. 4 illustrates the data efficiency benefits of Vision-PAD. When using only image supervision for pre-training, VisionPAD, trained and fine-tuned on the complete dataset, outperforms UniPAD by +5.3 NDS and +4.5 mAP. This ad-vantage becomes even more pronounced with decreasing amounts of fine-tuning data. For example, when fine-tuning 17171 Methods Vol. Rend. 3DGS Dec. Gaus. Filter V.V. Est. P.C. NDS mAP UVTR (baseline) [18] 22.8 19.4 UniPAD [46] ✓ 22.3 ↓0.5 18.3 ↓1.1
+
+Model A ✓ 22.8 ↑0.0 18.2 ↓1.2
+
+Model B ✓ ✓ 23.4 ↑0.6 18.9 ↓0.5
+
+Model C ✓ ✓ ✓ 23.6 ↑0.8 20.1 ↑0.7
+
+Model D ✓ ✓ ✓ 26.0 ↑3.2 24.5 ↑5.1
+
+VisionPAD (Ours) ✓ ✓ ✓ ✓ 27.3 ↑4.5 26.5 ↑7.1    
+
+> Table 4. Ablation studies. We report the NDS and mAP metrics in the nuScenes val set for the 3D object detection task. “Dec.”, “V.V. Est” and “P.C.” denote decoder, voxel velocity estimation and photometric consistency, respectively.
+
+on 50% and 25% of the data, the mAP improvement in-creases to approximately +6 mAP. These results underscore the effectiveness of VisionPAD in leveraging purely visual supervision for substantial performance gains, particularly in data-scarce regimes. 
+
+Ablation Study. Tab. 4 presents an ablation study to dis-sect the contributions of each component in our proposed model. The upper section establishes the performance base-line with UVTR [18] and the results obtained using Uni-PAD [46]. We observe that image-only pre-training with UniPAD leads to a performance decrease in both NDS and mAP during fine-tuning. This suggests an inability to fully exploit the information contained within multi-view image supervision. The lower section details the impact of our proposed modifications. Model A replaces UniPAD’s volume ren-dering with our 3DGS decoder. The 3DGS decoder, leveraging full-image rendering and higher-resolution su-pervision, exhibits superior fine-tuning performance com-pared to volume rendering. Model B introduces filter-ing of low-confidence Gaussians, which effectively im-proves pre-training performance. Using only single-frame surround-view images for supervised pre-training, this model achieves a +0.6 NDS gain during fine-tuning. Model C incorporates voxel velocity estimation (V. V. Est.), re-sulting in a +1.2 mAP improvement in downstream fine-tuning. The inclusion of a photometric consistency loss (P.C.) in Model D significantly boosts pre-training perfor-mance, yielding gains of +2.4 NDS and +4.4 mAP com-pared to Model C. Finally, our complete model, Vision-PAD , incorporating the photometric consistency loss with voxel velocity estimation, achieves substantial improve-ments over the baseline, with gains of +4.5 NDS and +7.1 mAP . This demonstrates the effectiveness of our proposed components. Additionally, we found that using 2/3/4 anchors per voxel does not improve performance, with NDS dropping by 0.1/0.5/0.4. 
+
+Visualization of Rendering. As shown in Fig. 6, em-ploying solely multi-view images for self-supervised pre-Input images Render images Render depths Input images Render images Render depths   
+
+> Figure 6. Rendering results. Leveraging multi-view images as supervision, VisionPAD demonstrates compelling depth and im-age reconstruction after pre-training.
+
+training, VisionPAD exhibits promising depth and image reconstruction capabilities. 
+
+# 5. Conclusion 
+
+This paper introduces VisionPAD, a novel self-supervised pre-training framework for vision-centric autonomous driv-ing. Leveraging Gaussian Splatting, self-supervised voxel velocity estimation, and photometric consistency approach, VisionPAD eliminates the reliance on explicit depth super-vision. Our results demonstrate improved performance and reduced computational overhead compared to existing neu-ral rendering-based methods requiring depth supervision. This work establishes a new paradigm for efficient and scal-able self-supervised vision-centric pre-training. 17172 Acknowledgements 
+
+This work was supported by Shenzhen General Pro-gram No. JCYJ20220530143600001, by the Basic Re-search Project No. HZQB-KCZYZ-2021067 of Hetao Shenzhen HK S&T Cooperation Zone, by NSFC with Grant No. 62293482, by Shenzhen-Hong Kong Joint Funding No. SGDX20211123112401002, by the Shen-zhen Outstanding Talents Training Fund 202002, by Guangdong Research Project No. 2017ZT07X152 and No. 2019CX01X104, by the Guangdong Provincial Key Laboratory of Future Networks of Intelligence (Grant No. 2022B1212010001), by the Guangdong Provin-cial Key Laboratory of Big Data Computing, CHUK-Shenzhen, by the NSFC 61931024&12326610, by the Key Area R&D Program of Guangdong Province with grant No. 2018B030338001, by the Shenzhen Key Labora-tory of Big Data and Artificial Intelligence (Grant No. ZDSYS201707251409055), by Tencent & Huawei Open Fund, and by China Association for Science and Technol-ogy Youth Care Program. 
+
+# References 
+
+[1] Alexandre Boulch, Corentin Sautier, Bj¨ orn Michele, Gilles Puy, and Renaud Marlet. ALSO: automotive lidar self-supervision by occupancy estimation. In CVPR , 2023. 2 [2] Holger Caesar, Varun Bankiti, Alex H. Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In CVPR , 2020. 1, 2, 5[3] Florian Chabot, Nicolas Granger, and Guillaume Lapouge. Gaussianbev: 3d gaussian representation meets percep-tion models for bev segmentation. arXiv preprint arXiv: 2407.14108 , 2024. 3 [4] David Charatan, Sizhe Lester Li, Andrea Tagliasacchi, and Vincent Sitzmann. pixelsplat: 3d gaussian splats from image pairs for scalable generalizable 3d reconstruction. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 19457–19467, 2024. 4 [5] Yurui Chen, Chun Gu, Junzhe Jiang, Xiatian Zhu, and Li Zhang. Periodic vibration gaussian: Dynamic urban scene reconstruction and real-time rendering. arXiv preprint arXiv:2311.18561 , 2023. 2 [6] Kai Cheng, Xiaoxiao Long, Kaizhi Yang, Yao Yao, Wei Yin, Yuexin Ma, Wenping Wang, and Xuejin Chen. Gaussianpro: 3d gaussian splatting with progressive propagation. In Forty-first International Conference on Machine Learning , 2024. 4 [7] MMDetection3D Contributors. MMDetection3D: Open-MMLab next-generation platform for general 3D object detection. https://github.com/open- mmlab/ mmdetection3d , 2020. 5 [8] Simon Doll, Richard Schulz, Lukas Schneider, Viviane Ben-zin, Markus Enzweiler, and Hendrik P. A. Lensch. Spa-tialdetr: Robust scalable transformer-based 3d object de-tection from multi-view camera images with global cross-sensor attention. In ECCV , 2022. 5 [9] Wanshui Gan, Fang Liu, Hongbin Xu, Ningkai Mo, and Naoto Yokoya. Gaussianocc: Fully self-supervised and effi-cient 3d occupancy estimation with gaussian splatting. arXiv preprint arXiv: 2408.11447 , 2024. 3 [10] Cl´ ement Godard, Oisin Mac Aodha, Michael Firman, and Gabriel J Brostow. Digging into self-supervised monocular depth estimation. In Proceedings of the IEEE/CVF inter-national conference on computer vision , pages 3828–3838, 2019. 2, 4 [11] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, Lewei Lu, Xiaosong Jia, Qiang Liu, Jifeng Dai, Yu Qiao, and Hongyang Li. Planning-oriented autonomous driv-ing. In CVPR , 2023. 2, 6, 7 [12] Junjie Huang, Guan Huang, Zheng Zhu, and Dalong Du. Bevdet: High-performance multi-camera 3d object detection in bird-eye-view. CoRR , abs/2112.11790, 2021. 1, 3, 6 [13] Yuanhui Huang, Wenzhao Zheng, Yunpeng Zhang, Jie Zhou, and Jiwen Lu. Tri-perspective view for vision-based 3d semantic occupancy prediction. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 9223–9232, 2023. 6 [14] Yuanhui Huang, Wenzhao Zheng, Yunpeng Zhang, Jie Zhou, and Jiwen Lu. Gaussianformer: Scene as gaussians for vision-based 3d semantic occupancy prediction. arXiv preprint arXiv:2405.17429 , 2024. 3 [15] Muhammad Zubair Irshad, Sergey Zakharov, Vitor Guizilini, Adrien Gaidon, Zsolt Kira, and Rares Ambrus. Nerf-mae: Masked autoencoders for self-supervised 3d representation learning for neural radiance fields. In European Conference on Computer Vision , pages 434–453. Springer, 2024. 2 [16] Bernhard Kerbl, Georgios Kopanas, Thomas Leimk¨ uhler, and George Drettakis. 3d gaussian splatting for real-time radiance field rendering. ACM Trans. Graph. , 42(4):139–1, 2023. 2, 3 [17] Georg Krispel, David Schinagl, Christian Fruhwirth-Reisinger, Horst Possegger, and Horst Bischof. Maeli: Masked autoencoder for large-scale lidar point clouds. In 
+
+Proceedings of the IEEE/CVF Winter Conference on Appli-cations of Computer Vision , pages 3383–3392, 2024. 2 [18] Yanwei Li, Yilun Chen, Xiaojuan Qi, Zeming Li, Jian Sun, and Jiaya Jia. Unifying voxel-based representation with transformer for 3d object detection. In NeurIPS , 2022. 5, 6, 7, 8 [19] Yinhao Li, Zheng Ge, Guanyi Yu, Jinrong Yang, Zengran Wang, Yukang Shi, Jianjian Sun, and Zeming Li. Bevdepth: Acquisition of reliable depth for multi-view 3d object detec-tion. In AAAI , 2023. 1 [20] Zhenyu Li, Zehui Chen, Ang Li, Liangji Fang, Qinhong Jiang, Xianming Liu, Junjun Jiang, Bolei Zhou, and Hang Zhao. Simipu: Simple 2d image and 3d point cloud un-supervised pre-training for spatial-aware visual representa-tions. In Proceedings of the AAAI Conference on Artificial Intelligence , pages 1500–1508, 2022. 2 [21] Zhiqi Li, Wenhai Wang, Hongyang Li, Enze Xie, Chong-hao Sima, Tong Lu, Yu Qiao, and Jifeng Dai. Bevformer: 17173 Learning bird’s-eye-view representation from multi-camera images via spatiotemporal transformers. In ECCV , 2022. 1, 3, 5, 6 [22] Zhiqi Li, Zhiding Yu, David Austin, Mingsheng Fang, Shiyi Lan, Jan Kautz, and Jose M Alvarez. Fb-occ: 3d occupancy prediction based on forward-backward view transformation. 
+
+CVPRW , 2023. 6 [23] Haisong Liu, Yang Chen, Haiguang Wang, Zetong Yang, Tianyu Li, Jia Zeng, Li Chen, Hongyang Li, and Limin Wang. Fully sparse 3d occupancy prediction. In ECCV ,2024. 6 [24] Yingfei Liu, Tiancai Wang, Xiangyu Zhang, and Jian Sun. PETR: position embedding transformation for multi-view 3d object detection. In ECCV , 2022. 5 [25] Zhuang Liu, Hanzi Mao, Chao-Yuan Wu, Christoph Feicht-enhofer, Trevor Darrell, and Saining Xie. A convnet for the 2020s. In CVPR , 2022. 5 [26] Jiachen Lu, Zheyuan Zhou, Xiatian Zhu, Hang Xu, and Li Zhang. Learning ego 3d representation as ray tracing. In 
+
+ECCV , 2022. 5 [27] Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, and Ren Ng. Nerf: Representing scenes as neural radiance fields for view syn-thesis. In ECCV , 2020. 2, 3, 4 [28] Chen Min, Dawei Zhao, Liang Xiao, Yiming Nie, and Bin Dai. Voxel-mae: Masked autoencoders for pre-training large-scale point clouds. CoRR , abs/2206.09900, 2022. 2 [29] Chen Min, Liang Xiao, Dawei Zhao, Yiming Nie, and Bin Dai. Occupancy-mae: Self-supervised pre-training large-scale lidar point clouds with masked occupancy autoen-coders. IEEE Transactions on Intelligent Vehicles , 2023. 1, 2[30] Lucas Nunes, Rodrigo Marcuzzi, Xieyuanli Chen, Jens Behley, and Cyrill Stachniss. Segcontrast: 3d point cloud feature representation learning through self-supervised seg-ment discrimination. IEEE Robotics and Automation Letters ,7(2):2116–2123, 2022. 2 [31] Mingjie Pan, Jiaming Liu, Renrui Zhang, Peixiang Huang, Xiaoqi Li, Hongwei Xie, Bing Wang, Li Liu, and Shang-hang Zhang. Renderocc: Vision-centric 3d occupancy pre-diction with 2d rendering supervision. In 2024 IEEE Inter-national Conference on Robotics and Automation (ICRA) ,pages 12404–12411. IEEE, 2024. 6 [32] Dennis Park, Rares Ambrus, Vitor Guizilini, Jie Li, and Adrien Gaidon. Is pseudo-lidar needed for monocular 3d object detection? In Proceedings of the IEEE/CVF Inter-national Conference on Computer Vision , pages 3142–3152, 2021. 1, 2 [33] Corentin Sautier, Gilles Puy, Alexandre Boulch, Renaud Marlet, and Vincent Lepetit. BEVContrast: Self-supervision in bev space for automotive lidar point clouds. In Interna-tional Conference on 3D Vision (3DV) , 2024. 1, 2 [34] Changyong Shu, JIajun Deng, Fisher Yu, and Yifan Liu. 3dppe: 3d point positional encoding for multi-camera 3d ob-ject detection transformers. In ICCV , 2023. 5 [35] Pin Tang, Zhongdao Wang, Guoqing Wang, Jilai Zheng, Xi-angxuan Ren, Bailan Feng, and Chao Ma. Sparseocc: Re-thinking sparse latent representation for vision-based seman-tic occupancy prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 15035–15044, 2024. 1 [36] Xiaoyu Tian, Tao Jiang, Longfei Yun, Yucheng Mao, Huitong Yang, Yue Wang, Yilun Wang, and Hang Zhao. Occ3d: A large-scale 3d occupancy prediction benchmark for autonomous driving. Advances in Neural Information Processing Systems , 36, 2024. 5 [37] Wenwen Tong, Chonghao Sima, Tai Wang, Li Chen, Silei Wu, Hanming Deng, Yi Gu, Lewei Lu, Ping Luo, Dahua Lin, et al. Scene as occupancy. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 8406– 8415, 2023. 1, 2 [38] Jiabao Wang, Zhaojiang Liu, Qiang Meng, Liujiang Yan, Ke Wang, Jie Yang, Wei Liu, Qibin Hou, and Mingming Cheng. Opus: occupancy prediction using a sparse set. In Advances in Neural Information Processing Systems , 2024. 6 [39] Tai Wang, Xinge Zhu, Jiangmiao Pang, and Dahua Lin. Fcos3d: Fully convolutional one-stage monocular 3d object detection. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 913–922, 2021. 1, 2 [40] Xiaofeng Wang, Zheng Zhu, Wenbo Xu, Yunpeng Zhang, Yi Wei, Xu Chi, Yun Ye, Dalong Du, Jiwen Lu, and Xin-gang Wang. Openoccupancy: A large scale benchmark for surrounding semantic occupancy perception. In Proceedings of the IEEE/CVF International Conference on Computer Vi-sion , pages 17850–17859, 2023. 1 [41] Junjie Yan, Yingfei Liu, Jianjian Sun, Fan Jia, Shuailin Li, Tiancai Wang, and Xiangyu Zhang. Cross modal transformer via coordinates encoding for 3d object dectection. In ICCV ,2023. 5 [42] Xiangchao Yan, Runjian Chen, Bo Zhang, Jiakang Yuan, Xinyu Cai, Botian Shi, Wenqi Shao, Junchi Yan, Ping Luo, and Yu Qiao. Spot: Scalable 3d pre-training via occu-pancy prediction for autonomous driving. arXiv preprint arXiv:2309.10527 , 2023. 1, 2 [43] Xu Yan, Haiming Zhang, Yingjie Cai, Jingming Guo, We-ichao Qiu, Bin Gao, Kaiqiang Zhou, Yue Zhao, Huan Jin, Jiantao Gao, Zhen Li, Lihui Jiang, Wei Zhang, Hongbo Zhang, Dengxin Dai, and Bingbing Liu. Forging vision foundation models for autonomous driving: Challenges, methodologies, and opportunities. arXiv preprint arXiv: 2401.08045 , 2024. 1 [44] Yunzhi Yan, Haotong Lin, Chenxu Zhou, Weijie Wang, Haiyang Sun, Kun Zhan, Xianpeng Lang, Xiaowei Zhou, and Sida Peng. Street gaussians for modeling dynamic ur-ban scenes. arXiv preprint arXiv:2401.01339 , 2024. 2 [45] Chenyu Yang, Yuntao Chen, Hao Tian, Chenxin Tao, Xizhou Zhu, Zhaoxiang Zhang, Gao Huang, Hongyang Li, Yu Qiao, Lewei Lu, Jie Zhou, and Jifeng Dai. Bevformer v2: Adapting modern image backbones to bird’s-eye-view recognition via perspective supervision. In CVPR , 2023. 5 [46] Honghui Yang, Sha Zhang, Di Huang, Xiaoyang Wu, Haoyi Zhu, Tong He, Shixiang Tang, Hengshuang Zhao, Qibo Qiu, Binbin Lin, et al. Unipad: A universal pre-training paradigm for autonomous driving. In Proceedings of the IEEE/CVF 17174 Conference on Computer Vision and Pattern Recognition ,pages 15238–15250, 2024. 1, 2, 5, 6, 7, 8 [47] Zetong Yang, Li Chen, Yanan Sun, and Hongyang Li. Visual point cloud forecasting enables scalable autonomous driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2024. 2 [48] Jiakang Yuan, Bo Zhang, Xiangchao Yan, Botian Shi, Tao Chen, Yikang Li, and Yu Qiao. Ad-pt: Autonomous driving pre-training with large-scale point cloud dataset. Advances in Neural Information Processing Systems , 36, 2024. 2 [49] Zhang Yumeng, Gong Shi, Xiong Kaixin, Ye Xiaoqing, Tan Xiao, Wang Fan, Huang Jizhou, Wu Hua, and Wang Haifeng. Bevworld: A multimodal world model for au-tonomous driving via unified bev latent space. arXiv preprint arXiv:2407.05679 , 2024. 2 [50] Haiming Zhang, Xu Yan, Dongfeng Bai, Jiantao Gao, Pan Wang, Bingbing Liu, Shuguang Cui, and Zhen Li. Radocc: Learning cross-modality occupancy knowledge through ren-dering assisted distillation. AAAI Conference on Artificial Intelligence , 2023. 1 [51] Hongyu Zhou, Jiahao Shao, Lu Xu, Dongfeng Bai, Weichao Qiu, Bingbing Liu, Yue Wang, Andreas Geiger, and Yiyi Liao. Hugs: Holistic urban 3d scene understanding via gaus-sian splatting. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 21336– 21345, 2024. 2 [52] Xiaoyu Zhou, Zhiwei Lin, Xiaojun Shan, Yongtao Wang, Deqing Sun, and Ming-Hsuan Yang. Drivinggaussian: Composite gaussian splatting for surrounding dynamic au-tonomous driving scenes. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 21634–21643, 2024. 2 [53] Benjin Zhu, Zhengkai Jiang, Xiangxin Zhou, Zeming Li, and Gang Yu. Class-balanced grouping and sampling for point cloud 3d object detection. arXiv preprint arXiv:1908.09492 ,2019. 5 [54] Jialv Zou, Bencheng Liao, Qian Zhang, Wenyu Liu, and Xinggang Wang. Mim4d: Masked modeling with multi-view video for autonomous driving representation learning. arXiv preprint arXiv:2403.08760 , 2024. 2 17175

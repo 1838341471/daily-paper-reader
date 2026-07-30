@@ -1,0 +1,439 @@
+Title: Scenario Dreamer: Vectorized Latent Diffusion for Generating Driving Simulation Environments
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Rowe_Scenario_Dreamer_Vectorized_Latent_Diffusion_for_Generating_Driving_Simulation_Environments_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 01:16:22 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# Scenario Dreamer: Vectorized Latent Diffusion for Generating Driving Simulation Environments 
+
+## Luke Rowe 1,2,6, Roger Girgis 1,3,6, Anthony Gosselin 1,3,Liam Paull 1,2,5, Christopher Pal 1,2,3,5, Felix Heide 4,61Mila, 2Universit´ e de Montr´ eal, 3Polytechnique Montr´ eal, 
+
+> 4
+
+## Princeton University, 5CIFAR AI Chair, 6Torc Robotics 
+
+https://princeton-computational-imaging.github.io/scenario-dreamer 
+
+## Abstract 
+
+We introduce Scenario Dreamer, a fully data-driven gen-erative simulator for autonomous vehicle planning that generates both the initial traffic scene—comprising a lane graph and agent bounding boxes—and closed-loop agent behaviours. Existing methods for generating driving simu-lation environments encode the initial traffic scene as a ras-terized image and, as such, require parameter-heavy net-works that perform unnecessary computation due to many empty pixels in the rasterized scene. Moreover, we find that existing methods that employ rule-based agent behaviours lack diversity and realism. Scenario Dreamer instead em-ploys a novel vectorized latent diffusion model for ini-tial scene generation that directly operates on the vector-ized scene elements and an autoregressive Transformer for data-driven agent behaviour simulation. Scenario Dreamer additionally supports scene extrapolation via diffusion in-painting, enabling the generation of unbounded simulation environments. Extensive experiments show that Scenario Dreamer outperforms existing generative simulators in re-alism and efficiency: the vectorized scene-generation base model achieves superior generation quality with around 2× fewer parameters, 6× lower generation latency, and 10× fewer GPU training hours compared to the strongest base-line. We confirm its practical utility by showing that re-inforcement learning planning agents are more challenged in Scenario Dreamer environments than traditional non-generative simulation environments, especially on long and adversarial driving environments. 
+
+## 1. Introduction 
+
+Simulators are invaluable tools for the safe and scalable de-velopment of autonomous vehicles (AVs) [6, 38, 54, 75]. They reduce costs and accelerate development, while offer-ing a safe way to evaluate the performance of autonomous vehicle systems under diverse, rare, and potentially dan-gerous real-world conditions. Despite significant advance-ments in enhancing the speed and realism of autononous driving simulators [19, 30, 31], current simulators remain constrained by their reliance on prerecorded driving logs. Specifically, current data-driven simulators either replay or modify existing driving logs, limiting scalability due to the finite size and diversity of the available data. For instance, public driving simulators like GPUDrive [31] and Waymax [19], which are based on the Waymo Open Motion Dataset [13], cover only 1,750 km of unique roadway—a fraction of the nearly 22,000 km of roadway that an average human drives annually [15]. Simulations are also bounded by the length of the driving logs, which are typically less than 30 seconds. Given the billions of miles of diverse driving ex-perience needed to validate the safety of autonomous vehi-cles in simulation, existing simulation environments derived from traffic logs have struggled to enable scalable training and evaluation of autonomous vehicles. To address the limitations of current driving simula-tors, recent work has shown that diffusion generative mod-els can be used to synthesize driving environments in an abstract representation comprising bird’s eye view (BEV) agent bounding boxes and a lane graph [10, 56]. However, these methods are either not fully data-driven as the agent behaviours are governed by unrealistic rule-based models [10], or can only generate short driving scenarios with non-reactive agents [56]. Prior methods also encode driving scenes as rasterized BEV images, which require costly and unnecessary computation due to many empty pixels in the rasterized scenes [10, 56]. While existing generative sim-ulators from sensor data have been proposed [74], these methods fail to meet the strict latency demands of simu-lators due to their reliance on large video diffusion models. We propose Scenario Dreamer, a fully data-driven gen-erative simulator for autonomous driving planning. Sce-nario Dreamer decomposes environment generation into This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 17207 initial scene generation , which generates the initial scene in an abstract representation comprising BEV agent bounding boxes and a lane graph, and behaviour simulation , which controls agent behaviours over time. A core component of Scenario Dreamer is our proposed vectorized latent diffu-sion model for initial scene generation that operates directly on the vectorized scene elements. Compared to a rasterized encoding, the proposed model offers several practical ad-vantages, including higher fidelity generations with reduced generation latency and higher quality scene extrapolations even at dense and complicated road geometries. It addi-tionally enables learning the lane graph connectivity explic-itly by modeling pairwise relationships between road ele-ments, thus eliminating the need for post-processing heuris-tics used by Chitta et al. [10]. For closed-loop behaviour simulation, we utilize a return-conditioned autoregressive Transformer [53] for controllable agent behaviours that is adapted to support longer simulation rollouts. Both models are trained from real-world driving data. Unlike prior work, Scenario Dreamer supports flexible test-time control over the generation of challenging and safety-critical scenarios. Specifically, we can explicitly control scene density with Scenario Dreamer by specify-ing the number of lanes and agents within a given field of view (FOV). Moreover, we can simulate adversarial agent behaviours with Scenario Dreamer via exponential tilting of the behaviour model [35, 53]. We integrate Scenario Dreamer with GPUDrive [31] to enable training Scenario Dreamer compatible reinforcement learning (RL) agents and evaluate RL agents in Scenario Dreamer environments. We show that Scenario Dreamer provides more challeng-ing environments for RL planning agents than existing non-generative environments. Scenario Dreamer unlocks the ability to synthesize a limitless quantity of unbounded and interactive safety-critical environments, which we hope stimulates future autonomous driving planning research. 
+
+Contributions : (1) We introduce Scenario Dreamer, a fully data-driven generative simulator for autonomous driv-ing planning. At the core of Scenario Dreamer is a novel vectorized latent diffusion model for initial scene genera-tion that offers practical advantages over prior methods that utilize a rasterized scene encoding. (2) We show that Sce-nario Dreamer environments challenge RL planners, espe-cially on long and adversarial driving environments. 
+
+## 2. Related Work 
+
+Simulators for Autonomous Driving Traditional hand-crafted driving simulators require costly manual effort to create environments [5, 12, 36]. Consequently, they are difficult to scale to larger environments and suffer from a significant sim-to-real gap. To address these issues, re-cent works have proposed data-driven driving simulators that are based on real driving data [6]. These simula-tors either reconstruct driving environments from sensor inputs using neural rendering techniques [9, 42, 47, 61, 68, 71, 72, 75, 80, 81, 83], or they utilize post-perception outputs to represent driving scenes in an abstract repre-sentation comprising agent bounding boxes and HD maps [19, 30, 31, 34, 37, 65, 82]. Scenario Dreamer adopts the abstract environment representation due to its lower com-putational demands and memory footprint, while offering sufficient complexity to evaluate AV planners. 
+
+Generative Simulation Environments While open-source data-driven simulators reduce the sim-to-real gap compared to handcrafted simulators, they are fundamen-tally limited by the scarcity of public driving data and the short durations of prerecorded driving logs. To overcome these constraints, recent works have proposed using diffu-sion generative models to generate driving simulation envi-ronments from sensor inputs [17, 23, 74] or post-perception data [10, 56]. A similar line of work uses diffusion mod-els as generative interactive environments in other contexts, such as for video games [2, 4, 63] and robotics [66, 73, 76]. SLEDGE employs a customized latent diffusion model to generate bounding boxes and lane graphs but relies on rule-based agent behaviours [32, 62], limiting realism [10]. DriveSceneGen uses a diffusion model for initial scene gen-eration and a motion prediction model for agent behaviours but produces only short, non-reactive scenarios of up to 20 seconds [56]. Scenario Dreamer addresses these shortcom-ings by introducing a latent diffusion model for initial scene generation and a Transformer-based driving policy [53] for closed-loop behaviour simulation, making it a fully data-driven, closed-loop, generative driving simulator capable of generating arbitrarily long simulations. 
+
+Initial Scene Generation and Behaviour Simulation 
+
+A large body of work focuses specifically on the task of initial scene generation, targeting either the generation of initial agent bounding boxes [43, 59], lane graphs [45], or both [10, 56]. SceneControl [43] utilizes a vectorized dif-fusion model for initial agent generation but does so in data space. Both SLEDGE and DriveSceneGen employ diffu-sion models to generate the initial scene by processing it as a rasterized image, leading to unnecessary computation. In contrast, Scenario Dreamer generates the initial scene with vectorized processing [7, 8, 16, 18, 22, 27, 28, 40, 41, 46, 52, 70, 84], which enhances the speed and performance of the scene generations and extrapolations. Recent works have proposed various methods for simu-lating closed-loop agent behaviours conditioned on initial agent states and HD maps [11, 26, 57, 58, 69, 77, 85]. These approaches rely on large Transformer-based mod-els [24, 49, 67] or diffusion models [20, 25, 29, 78, 79], which are computationally expensive, especially consider-ing that behaviour models run autoregressively in the loop during simulation. Scenario Dreamer utilizes a lightweight 17208 (a) Model Overview (b) Inference Time Sampling              
+
+> Figure 1. Scenario Dreamer vectorized latent diffusion model for initial scene generation. Left : We embed each vectorized scene element into a latent representation with an autoencoder parameterized with factorized attention blocks, which additionally fuses the lane connectivity A. The latent Transformer diffusion model ϵθis trained to sample from the autoencoder’s latent distribution. Right : Scenario Dreamer samples novel driving scenes by initializing No+Nlnoise tokens which are iteratively denoised with ϵθover Tsteps and decoded into vectorized scene elements. The ego vehicle is denoted in red, with other agents colored in blue and pedestrians in purple.
+
+return-conditioned behaviour model [53] for closed-loop behaviour simulation. The return conditioning allows for flexible test-time control over agent behaviours, which can be used to generate adversarial driving behaviours. Re-searchers have also explored methods that attempt to gen-erate both initial agent states and behaviours conditioned on the map and ego state, either by using separate modules for each task [3, 14] or by coupling them in an end-to-end trainable system [29, 44, 50, 60]. Scenario Dreamer keeps initial scene generation and behaviour simulation decoupled by design, allowing for these components to be invoked at different frequencies as needed. 
+
+## 3. Scenario Dreamer 
+
+We approach the task of generative driving simulation by decomposing it into initial scene generation and behaviour simulation . Below, we detail our proposed initial scene gen-erator and agent behaviour model, both trained from real-world driving data. We then describe our generative sim-ulation framework that supports closed-loop evaluation of AV planning agents. 
+
+3.1. Problem Setting 
+
+Initial Scene Generation Initial scene generation involves generating the initial BEV object bounding box states and the underlying map structure within a fixed field of view (FOV). Following [10], we generate a 64 m×64 m FOV cen-tered and rotated to the ego agent. We denote by F the 
+
+64 m×64 m region being generated and denote by FP and 
+
+FN the 32 m × 64 m regions that are ahead of and behind the ego agent, respectively. The initial scene generator is tasked with sampling from the distribution p(IF ) of ini-tial scenes, where an initial scene IF = {O , M} com-prises a set of objects O and the map structure M within the FOV F . We define O = {oi}No 
+
+> i=1
+
+as a set of No ob-jects that includes the traffic participants ( e.g., ego agent, vehicles, pedestrians, cyclists) and static objects ( e.g., traf-fic cones), where oi is an 8-dimensional vector containing the 2-dimensional position, speed, cosine and sine of the heading, length, width, and object class of bounding box 
+
+i. We generate a map representation M similar to [10], where M = {L , A} contains a set L = {li}Nl 
+
+> i=1
+
+of Nl cen-terlines where each li is a 20 × 2 sequence of centerline positions, and A ∈ { 0, 1}Nl×Nl×4 defines the associated centerline connectivity as a stack of four adjacency matrices describing the successor, predecessor, left, and right neigh-bor connections. The initial scene generator must also sup-port sampling from the conditional distribution p(IFP |I FN )
+
+as this enables sampling arbitrarily long scenes by stitching together new generated regions FP conditioned on existing regions FN (see Figure 3). 
+
+Behaviour Simulation Given an initial scene configura-tion prescribed by the initial scene generator, the task of be-haviour simulation involves modeling the behaviour of the dynamic objects in the scene over time. Concretely, given the set of initial object bounding box states S0 := O and the lane structure M, the behaviour model employs a multi-agent driving policy π(At|St, M) and a forward transition model P(St+1 |St, At), where At is set of the actions of all dynamic objects at timestep t.
+
+3.2. Vectorized Latent Diffusion Model 
+
+The initial scene generator aims to sample from p(IF ).To achieve this, we propose learning an approximation, 
+
+˜p(IF ) ≈ p(IF ), based on real driving data with a diffu-sion model, given the strong capability of diffusion models 17209 Figure 2. Vectorized environments generated by Scenario Dreamer with the proposed vectorized latent diffusion model trained on the Waymo dataset (top row) and nuPlan dataset (bottom row). 
+
+to capture highly complex distributions [1, 51]. We employ a two-stage training process: first, we learn a compact la-tent representation of the No objects, {hO 
+
+> i
+
+}No
+
+> i=1
+
+, and the Nl
+
+centerlines, {hL 
+
+> i
+
+}Nl
+
+> i=1
+
+, through a low-β variational autoen-coder [21]; next, we train a diffusion model to sample from the latent distribution p(H) := p({hO 
+
+> i
+
+}No
+
+> i=1
+
+, {hL 
+
+> i
+
+}Nl
+
+> i=1
+
+). The architecture is illustrated in Figure 1, and detailed below. 
+
+3.2.1 Autoencoder 
+
+The autoencoder consists of a Transformer-based [64] en-coder Eϕ and decoder Dγ that operate directly on the vector-ized scene elements – in contrast, prior work [10] encodes the driving scene as a rasterized image. 
+
+Encoder The encoder first embeds the No + Nl vec-tor elements with a per-vector MLP and additionally em-beds the one-hot representation of the lane connectivity type cij with an MLP for all centerline segment pairs i
+
+and j. Eϕ then applies a sequence of NE factorized atten-tion blocks over the No + Nl embedded scene elements, where each factorized attention block comprises a lane-to-lane, lane-to-object, and object-to-object multi-head atten-tion layer [18, 39, 46]. Lane-to-lane attention captures spa-tial relations between centerline segments, where the em-bedded lane connectivities are additionally fused into the attention keys and values. Lane-to-object attention incor-porates map context into object embeddings, while object-to-object attention captures spatial relationships among ob-jects. Following the NE factorized attention blocks, the en-coder maps each object and lane embedding to latent dimen-sions Ko and Kl respectively, with both mean and variance parameterized as in a VAE [33]. Importantly, we design Eϕ
+
+such that lane latents do not depend on the object features (i.e., no object-to-lane attention), to allow lane-conditioned object generation at inference. 
+
+Decoder The decoder Dγ samples from the latent distribution parameterized by the encoder 
+
+{{ hO 
+
+> i
+
+}No
+
+> i=1
+
+, {hL 
+
+> i
+
+}Nl
+
+> i=1
+
+} ∼ Eϕ and processes the em-bedded lane and object latents through a sequence of ND
+
+factorized attention blocks. Following these blocks, the decoder reconstructs the continuous lane and object vector inputs, supervised by an ℓ2 loss. For lane connectivity pre-diction, each pair of lane embeddings is concatenated and passed through an MLP to predict a categorical distribution over the connectivity type, trained with a cross-entropy loss. The Scenario Dreamer autoencoder is trained with the standard Evidence Lower Bound (ELBO) objective with low-β regularization, as detailed in the Appendix. 
+
+3.2.2 Latent Diffusion Sampling 
+
+We train a latent diffusion model to sample from the autoen-coder’s latent distribution p(H) factorized as 
+
+p(H) = X
+
+> No,N l
+
+p({hO 
+
+> i
+
+}No
+
+> i=1
+
+, {hL 
+
+> i
+
+}Nl
+
+> i=1
+
+|No, N l)p(No, N l).
+
+p(No, N l) is approximated with training set statistics, and thus we approximate p(H) as p(H) ≈ pθ (H) =P 
+
+> No,N l
+
+pθ ({{ hO 
+
+> i
+
+}No
+
+> i=1
+
+, {hL 
+
+> i
+
+}Nl
+
+> i=1
+
+}| No, N l)p(No, N l).Here, the conditional distribution pθ (·| No, N l) is param-eterized with a diffusion model with weights θ, which samples No object latents and Nl lane latents. Unlike image-based models, pθ must accommodate variable latent sizes, so we design a customized transformer architecture with AdaLN-Zero conditioning [48]. This architecture, similar to the autoencoder, is composed of a sequence of NDM factorized attention blocks (illustrated in Figure 1) that include sequential object-to-lane, lane-to-lane, lane-to-object, and object-to-object attention layers. This factorized processing approach allows each layer to model the layer-specific interactions while allowing for different hidden dimensions for object and lane tokens. Notably, 17210 lane tokens require a larger hidden dimension due to the high level of spatial reasoning and detail required for realistic lane generation, while object tokens are effectively represented with a smaller dimension, making the diffusion model more efficient overall. We employ the standard DDPM objective to train pθ , where pθ is parameterized as a noise-prediction network ϵθ that learns to predict the noise of noised lane and object latents at varying noise levels: 
+
+Ldm = EHt,ϵt∼N (0 ,1) ,t 
+
+h
+
+∥ ϵt − ϵθ (Ht, t ) ∥22
+
+i
+
+,
+
+where Ht denotes a stacked tensor of No object latents and 
+
+Nl lane latents that is noised over t forward diffusion steps with noise vector ϵt := ( ϵL, ϵO ) containing both the object and lane noise vectors. We refer readers to the Appendix for more details. 
+
+Permutation Ambiguity Unlike images, which have a natural grid-like structure, set-structured data in Scenario Dreamer poses unique challenges for diffusion models. Specifically, a phenomenon called permutation ambiguity 
+
+[7] arises: the vector elements that are sufficiently noised during training lose enough underlying structure that the model cannot reliably infer the permutation of the ground-truth signal toward which it should regress. In image-based transformer diffusion methods, such as DiT, this issue is re-solved by applying a positional encoding to each grid patch. To similarly address permutation ambiguity in our model, we introduce sinusoidal positional encodings to the latent tokens prior to the factorized attention blocks. Our positional encoding scheme involves defining an or-dering of the tokens (per token type) during training, allow-ing the model to better infer a noised token’s likely rela-tive spatial position and thus the ground-truth signal toward which it should regress. To achieve this, we propose a recur-sive ordering procedure (see Appendix): tokens are ordered by minimum x-value, and if x-values differ by less than ϵ
+
+meters, they are subsequently ordered by minimum y-value, then maximum x-value, and finally maximum y-value. No-tably, the initial ordering by x-value facilitates inpainting, as tokens in IFN form a contiguous subsequence of ordered tokens that precede those in IFP .
+
+3.2.3 Scene Generation 
+
+The Scenario Dreamer latent diffusion model supports mul-tiple modes of scene generation within a single trained model: initial scene generation to sample 64m ×64m scenes from p(IF ); lane-conditioned object generation to sample object bounding boxes O conditioned on a known map M;and scene inpainting to sample from p(IFP |I FN ). We de-scribe each generation mode in detail in the following. 
+
+Initial Scene Generation. Scenario Dreamer generates novel initial driving scenes IF by first sampling (No, N l) ∼ 
+
+> Figure 3. Illustrative example of Scenario Dreamer’s inpainting capabilities, where the initial tile is outlined in solid lines and the inpainted tile in dashed. The model generates consistent lane ge-ometries at the scene boundaries, even at complex intersections.
+
+p(No, N l) from the joint distribution found in the train-ing data, with dataset-dependent limits on No and Nl to ensure realistic scene density. Alternatively, users may directly specify (No, N l), which enables control over the scene density. After setting (No, N l), we sample latents 
+
+{hO 
+
+> i
+
+}No
+
+> i=1
+
+, {hL 
+
+> i
+
+}Nl 
+
+> i=1
+
+from the diffusion model over T = 100 
+
+diffusion steps and decode the latents into vectorized scene elements using the autoencoder decoder. 
+
+Lane-conditioned Object Generation involves encod-ing the vectorized elements of a given map M using Eϕ,then sampling No ∼ p(No|Nl) object latents from the dif-fusion model, which are diffused while conditioning on the encoded map latents at each denoising timestep. The result-ing object latents can be decoded into object bounding box configurations with Dγ .
+
+Scene Inpainting. Following [10], we frame conditional sampling from P (IFP |I FN ) as an inpainting task. Unlike grid-structured images, where boundaries between regions such as IFP and IFN are naturally defined (e.g., along 
+
+x = 0 ), lane vectors in our setting can cross this bound-ary without restriction. To address this, we preprocess our dataset into two scene types: partitioned scenes, which are artificially split at x = 0 , and non-partitioned scenes, where lane vectors may span across x = 0 . The autoencoder is trained to reconstruct both scene types, while the diffusion model generates both by using a conditioning label to distin-guish between them. To further enhance inpainting quality, during training the diffusion model conditions on the en-coded latents of IFN for partitioned scenes, thus training it explicitly to inpaint. This significantly improves inpainting performance, as the model can learn to utilize the relevant scene context from IFN to ensure that the lane geometries remain spatially consistent across the x = 0 boundary. Scenario Dreamer requires specifying the num-ber of new lane and object vectors to occupy the new 32x64 region IFP , effectively sampling from 17211 p(N FP 
+
+> o
+
+, N FP 
+
+> l
+
+|I FN ). Although approximate sampling from 
+
+p(N FP 
+
+> o
+
+, N FP 
+
+> l
+
+|N FN 
+
+> o
+
+, N FN 
+
+> l
+
+) is possible through training statistics, p(N FP 
+
+> l
+
+|I FN ) is highly geometry-dependent. To account for this, we train a classifier, fϕ(N FP 
+
+> l
+
+|M FN ),alongside Eϕ to predict the number of lanes in IFP based on the context IFN , trained only on partitioned scenes. Specifically, a learnable query vector cross-attends with the lane tokens in IFN within each factorized attention block of Eϕ, outputting a categorical distribution over 
+
+N FP 
+
+> o
+
+trained with a cross-entropy loss. At inference, we first sample N FP 
+
+> l
+
+∼ fϕ, followed by sampling 
+
+N FP 
+
+> o
+
+∼ p(N FP 
+
+> o
+
+|N FN 
+
+> o
+
+, N FN 
+
+> l
+
++ N FP 
+
+> l
+
+). With (N FP 
+
+> o
+
+, N FP 
+
+> l
+
+)
+
+sampled, we encode the latents for IFN , and we generate 
+
+N FP 
+
+> o
+
+and N FP 
+
+> l
+
+new tokens initialized to Gaussian noise. Standard diffusion inpainting [10] is then applied, where noised tokens in IFN are set to their encoded latents at each denoising step. The resulting latents are decoded to produce the new scene elements in IFP .
+
+3.3. Behaviour Simulation 
+
+Starting with an initial scene I generated by the latent diffusion model, we extend CtRL-Sim [53], an autore-gressive Transformer-based behaviour model, to control multiple agent types (e.g., vehicles, pedestrians, and cy-clists). To support multiple agents types, we use the k-disks tokenization scheme Philion et al. [49]. CtRL-Sim is a return-conditioned multi-agent policy designed for be-haviour simulation. We adapt the CtRL-Sim architecture, which parameterizes the joint distribution over future re-turns Gt and actions At, decomposed as pθ (At, Gt|St) = 
+
+πθ (At|St, Gt)pθ (Gt|St). A key advantage of this decompo-sition is its return-conditioning, which enables exponential tilting [35] of the learned return model at inference to gener-ate good or adversarial driving behaviours. In the Scenario Dreamer framework, we aim to create adversarial scenar-ios that specifically challenge the autonomous vehicle (AV) planner. To this end, we design a reward function that pe-nalizes collisions with the ego vehicle, and model the dis-counted return Gt = Pt+Ht=t rt based on the cumulative re-wards over a horizon H = 2 s, which we found offers im-proved controllability over modeling the full return. 
+
+3.4. Simulation Framework 
+
+With Scenario Dreamer in hand, we describe our proposed simulation framework’s unique properties. First, Scenario Dreamer supports the evaluation of AV planners within its generative simulation environments over arbitrarily long simulation lengths. We define a route for the AV plan-ner to follow, and simulate the other agents using CtRL-Sim. We follow the Waymo dataset filtering scheme em-ployed in Nocturne [65] and GPUDrive [31] to ensure that the scenarios are valid for simulation ( i.e, absence of traf-fic lights, which lack annotated traffic light states). To en-sure that Scenario Dreamer-generated scenarios are valid for simulation, Scenario Dreamer conditions on a binary in-dicator during training that indicates whether the training scene passes the Nocturne filtering scheme. At inference, we utilize classifier guidance to sample from simulation-compatible scenes. The simulation framework is described in more detail in the Appendix. 
+
+## 4. Experiments 
+
+Datasets The Scenario Dreamer latent diffusion model is separately trained on both the Waymo Open Motion Dataset [13] and the nuPlan dataset [30]. For Waymo, our model captures vehicles, pedestrians, and cyclists, and we process the lane centerlines and their connectivity, excluding other map elements. For nuPlan, we model vehicles, pedestri-ans and static objects, and we process the lane centerlines, lane connectivity, and traffic light states. For both datasets, we use a 64 m ×64 m FOV centered on the ego vehicle and centerlines are processed using the compression algorithm from Chitta et al. [10], detailed in the Appendix. 
+
+Metrics To evaluate the quality of initial scene gener-ations, we assess our methods on both lane graph genera-tion and initial agent bounding box generation tasks. For lane graph generation, we report Urban Planning metrics, following prior works [10, 45, 56]. These metrics mea-sure the distributional realism of the generated lane graph connectivity by computing Frechet distances on node fea-tures for nodes with degree ̸ = 2 , referred to as key points .The following features are computed: Connectivity com-putes the degrees of all key points across the lane graphs; 
+
+Density computes the number of key points in each lane graph; Reach computes the number of available paths from each keypoint to others; and Convenience computes the Di-jsktra path lengths for all valid paths between key points. As in Chitta et al. [10], the Urban Planning metrics are scaled by suitable powers of 10 for readability. Frechet Distance (FD) measures the perceptual quality of the gen-erated spatial lane positions by computing Frechet distances between the penultimate layer lane embeddings of a sepa-rately trained Scenario Dreamer autoencoder model. We additionally measure the longest Route Length by travers-ing the generated lane graph from the origin, and Endpoint Distance , which measures the average distance between the endpoint of lane i and starting point of lane j for all pre-dicted successor edges (i, j ) in the generated lane graphs. All lane graph generation metrics are computed on 50 k real lane graphs and 50 k ground-truth test lane graphs. For initial agent generation, we focus on the distribu-tional realism of vehicles, reporting Jensen-Shannon Diver-gence ( JSD ) metrics as in Lu et al. [43], including: Nearest Dist. between each vehicle and its neighbours, Lateral Dev. 
+
+from the closest centerlines, Angular Dev. from the closest centerline, Length and Width of the vehicles, and Speed of 17212 Per-Scene Num. Perceptual Quality ↓ Urban Planning ↓ Route Length ↑ Endpoint Dist. ↓                                                                                     
+
+> Dataset Method Gen. Time (s) ↓Parameters GPUh FD Conn. Dens. Reach Conve. (m) (m) nuPlan SLEDGE (DiT-L) [10] 0.48 539 M96 1.89 2.34 2.43 0.70 2.44 35 .34 ±8.63 0.47 ±0.32
+> SLEDGE (DiT-XL) [10] 0.67 769 M960 1.44 1.67 1.74 0.51 1.68 35 .83 ±8.35 0.42 ±0.29
+> Scenario Dreamer (B) 0.09 377 M96 1.05 0.28 0.45 0.07 0.14 37 .04 ±10.21 0.32 ±0.80
+> Scenario Dreamer (L) 0.16 679 M256 0.67 0.18 0.43 0.03 0.33 36 .87 ±10.37 0.25 ±0.71
+> Waymo DriveSceneGen (GT Raster) ∗[56] ---40 .59 4.53 1.18 0.64 5.58 41 .61 ±18.61 0.01 ±0.00
+> Scenario Dreamer (B) 0.08 376 M96 1.61 0.17 1.05 0.56 3.81 38 .23 ±12.78 0.32 ±0.90
+> Scenario Dreamer (L) 0.16 678 M256 1.38 0.03 0.95 0.28 2.05 38 .92 ±13.56 0.21 ±0.75
+
+Table 1. Assessment of lane graph generation evaluated on the Waymo Open Motion and nuPlan test datasets. For each metric and dataset, the best method is bolded . ∗ denotes privileged version of the method.                                                                
+
+> Distributional JSD ↓Collision Rate ↓
+> Dataset Method Near. Dist. Lat. Dev. Ang. Dev. Len. Wid. Speed (%) nuPlan SLEDGE (DiT-L) [10] 0.53 0.63 3.60 11 .84 10 .16 0.46 22 .3
+> SLEDGE (DiT-XL) [10] 0.49 0.49 3.26 11.16 10.29 0.47 21.2 Scenario Dreamer (B) 0.12 0.15 0.17 0.22 0.14 0.07 11 .9
+> Scenario Dreamer (L) 0.09 0.11 0.18 0.25 0.17 0.06 9.3
+> Waymo DriveSceneGen (GT Raster) ∗[56] 0.63 1.01 2.43 58 .86 54 .51 18 .70 0.2
+> Scenario Dreamer (B) 0.07 0.07 0.07 0.40 0.25 0.36 5.4
+> Scenario Dreamer (L) 0.06 0.05 0.07 0.42 0.25 0.38 4.8
+
+Table 2. Assessment of initial agent bounding box generation evaluated on the Waymo Open Motion and nuPlan test datasets. ∗ denotes privileged version of the method. 
+
+the vehicles. The JSD metrics are computed over 50 k real and generated scenes and scaled by suitable powers of 10. We also report the Collision Rate of the agent bounding boxes. Behaviour simulation metrics are similar to that of the agent generation, with details in the Appendix. 
+
+Methods under Comparison We evaluate Scenario Dreamer against competitive diffusion-based methods for initial scene generation on both the nuPlan and Waymo datasets. For nuPlan, we compare with the SLEDGE DiT-L and DiT-XL models [10], retraining them following their open-source code. SLEDGE encodes driving scenes into a latent space using an image rasterization scheme, which is then modeled by a latent diffusion process and decoded in a vectorized format. On the Waymo dataset, we bench-mark against DriveSceneGen [56]. However, in our exper-iments, the DriveSceneGen diffusion model did not con-verge, so we instead use a privileged version that provides an upper bound on DriveSceneGen’s performance by ras-terizing 50 k ground-truth training scenes following their rasterization pipeline and decoding them with DriveSce-neGen’s vectorization post-processing. Notably, Scenario Dreamer is the only model that fully processes scene ele-ments in a vectorized manner. For behaviour simulation, we compare CtRL-Sim against the rule-based IDM [62] and a data-driven baseline Trajeglish [49], with quantitative and qualitative results reported in the Appendix. The Scenario Dreamer latent diffusion model is available in two sizes: the base model (B) with 377M parameters, trained over 24 hours on 4 A100 GPUs, and the large model (L) with 679M parameters, trained over 32 hours on 8 A100 GPUs. Addi-tional model details are provided in the Appendix. 
+
+Results Table 1 reports the lane graph generation re-sults on the nuPlan and Waymo datasets, along with per-scene generation times, parameter counts, and diffusion model GPU training hours (GPUh) for each method. On the nuPlan dataset, Scenario Dreamer outperforms SLEDGE across all lane graph generation metrics. Notably, the smaller Scenario Dreamer base model surpasses SLEDGE’s largest DiT-XL model on every metric, with approximately 
+
+2× fewer parameters, 7× lower inference latency, and 10 ×
+
+fewer GPU training hours. We note that our reproduction of the SLEDGE DiT-XL model underperformed the results re-ported in Chitta et al. [10]. Nevertheless, Scenario Dreamer (L) still outperforms the published results in Chitta et al. [10] across all metrics. These results highlight the effec-tiveness of the vectorized design for lane graph generation. The vectorized processing enhances efficiency by focus-ing parameters directly on the relevant vectorized scene ele-ments rather than processing empty pixels and is not sensi-tive to the specific rasterization scheme that is employed. With vectorized processing, each latent corresponds to a scene element, allowing the model to effectively capture and learn the interactions between scene elements. Prac-tically, this results in Scenario Dreamer’s latent diffusion model being substantially more efficient than SLEDGE, as the vectorized latent representation requires far fewer Transformer layers to model effectively. Concretely, the largest SLEDGE diffusion model requires 28 Transformer layers for processing, whereas Scenario Dreamer’s largest latent diffusion model requires only 6 lane to lane attention 17213 Per-Scene Perceptual Quality ↓ Urban Planning ↓ Route Length ↑ Endpoint Dist. ↓                                        
+
+> Method Gen. Time (s) FD Conn. Dens. Reach Conve. (m) (m) Scenario Dreamer (Non-factorized) 0.20 1.21 0.51 0.67 0.16 0.55 36 .71 ±9.95 0.37 ±0.76
+> Scenario Dreamer (No lane ordering) 0.09 1.36 0.60 0.07 0.21 0.71 36 .70 ±9.94 0.35 ±0.74
+> Scenario Dreamer (Heuristic topology) 0.09 1.05 0.28 0.44 0.12 0.60 37 .13 ±9.85 0.30 ±0.23
+> Scenario Dreamer 0.09 1.05 0.28 0.45 0.07 0.14 37 .04 ±10.21 0.32 ±0.80
+
+Table 3. Ablation experiments validating the design choices of Scenario Dreamer (B) for lane graph generation on the nuPlan dataset.                               
+
+> Other Agent Beh. Test Env. Avg. Route Len. (m) Coll. (%) Offroad (%) Succ. (%) Log Replay Waymo Test 55 29 .3±0.6 6.9±0.8 63 .8±0.8
+> CtRL-Sim (Pos. Tilt) Waymo Test 55 35 .7±0.7 4.9±0.9 59 .4±0.4
+> CtRL-Sim (Pos. Tilt) SD (55m) 55 33 .8±1.2 6.4±0.7 59 .8±1.7
+> CtRL-Sim (Pos. Tilt) SD (100m) 100 52 .8±1.4 9.1±1.6 38 .2±1.9
+> CtRL-Sim (Neg. Tilt) SD (100m) 100 59 .0±1.3 9.0±0.8 32 .1±1.3
+
+Table 4. RL Planner Results. PPO agents are trained in GPU-Drive on 100 Waymo scenes and evaluated on 250 scenes (Waymo test scenes or 55m/100m-route Scenario Dreamer (SD) scenes). mean ±std reported over 5 seeds. 
+
+layers. On the Waymo dataset, Scenario Dreamer outper-forms the privileged version of the DriveSceneGen model on the Urban Planning and perceptual metrics. This advan-tage is attributed to substantial errors introduced by vector-izing a rasterized scene as a postprocessing step as done by DriveSceneGen, underscoring the importance of directly processing vectorized elements within the model itself. Table 2 presents the results on agent generation on the nuPlan and Waymo datasets. Consistent with the lane graph generation results, the Scenario Dreamer model achieves more realistic agent configurations, as reflected by lower JSD metrics and fewer collisions compared to related meth-ods. In the Appendix, we visualize a random sample of Sce-nario Dreamer, SLEDGE, and privileged DriveSceneGen generated scenes, where Scenario Dreamer scenes exhibit visually more realistic lane graph and agent configurations. We attribute these improvements to the model’s vectorized scene processing approach. Table 3 reports ablation experiments examining the im-pact of key architectural design choices. First, when we replace the learned lane connectivity prediction task with heuristic labels based on lane endpoint distances and rel-ative orientations ( Heuristic topology ), Scenario Dreamer shows degraded performance on the Reach and Connectiv-ity Urban Planning metrics, which best reflect the realism of lane graph connectivity. This result indicates that learn-ing lane connectivity directly outperforms post-processing heuristics. Additionally, removing the proposed lane order-ing ( No lane ordering ) introduces permutation ambiguity, which reduces the generation quality. Finally, we trained a non-factorized Scenario Dreamer diffusion model ( Non-factorized ) with a comparable parameter count and ob-served that factorized processing not only enhances perfor-mance but also reduces inference latency by approximately 
+
+2×, underscoring the effectiveness of the factorized design. Table 4 summarizes the performance of a PPO [55] planner trained in GPUDrive [31] on 100 Waymo train-ing scenes, reformatted to be compatible with Scenario Dreamer simulation environments. We evaluate this plan-ner in both generative Scenario Dreamer environments with 55m (SD (55m)) and 100m ( SD (100m)) routes and in non-generative Waymo test environments (Waymo Test) . For consistency, the Waymo maps are processed to retain only centerlines, ignoring other map elements. We measure col-lision rate ( Coll. ) with other agents, offroad rate ( Offroad )based on a lateral deviation of more than 2.5m from the route, and success rate ( Succ. ) determined by whether the planner completes the route. The results indicate that re-placing non-reactive log replay agent behaviors with reac-tive CtRL-Sim behaviors has only a marginal impact on the RL policy’s performance (Row 1 vs. Row 2), underscor-ing the realism of CtRL-Sim. Moreover, evaluating the RL agents on Scenario Dreamer-generated environments with 55m routes—matching the average route length of the Waymo test scenes—yields comparable planner perfor-mance (Row 2 vs. Row 3), further affirming the fidelity of Scenario Dreamer. We show that increasing the route length to 100m notably degrades policy performance (Row 3 vs. Row 4), and negative tilting of CtRL-Sim further exacer-bates this effect (Row 4 vs. Row 5), highlighting how longer and more adversarial scenarios challenge the RL planner. 
+
+## 5. Conclusion 
+
+We present Scenario Dreamer, a fully data-driven genera-tive simulator for autonomous driving planners. At its core, Scenario Dreamer is comprised of an initial scene gener-ator and a return-conditioned multi-agent Transformer be-haviour model. A key novelty of this work is the vector-ized latent diffusion model, enabling efficient and effective scene generation compared to rasterized scene encoding ap-proaches. We hope that the Scenario Dreamer framework can be the foundation of future research on fully data-driven generative simulators for autonomous driving research and development. 
+
+Limitations We observed qualitatively that the traffic light signaling of lanes did not always provide valid traffic logic. Furthermore, Scenario Dreamer currently only gen-erates centerline maps. In the future, we plan to generate other road element types (e.g., road edges, crosswalks). 17214 6. Acknowledgements 
+
+Felix Heide was supported by an NSF CAREER Award (2047359), a Packard Foundation Fellowship, a Sloan Re-search Fellowship, a Sony Young Faculty Award, a Project X Innovation Award, and an Amazon Science Research Award. C. Pal thanks the IVADO, the NSERC Discovery Grants and the CIFAR AI Chairs programs for their sup-port. 
+
+## References 
+
+[1] Josh Abramson, Jonas Adler, Jack Dunger, Richard Evans, Tim Green, Alexander Pritzel, Olaf Ronneberger, Lind-say Willmore, Andrew J. Ballard, Joshua Bambrick, Se-bastian W. Bodenstein, David A. Evans, Chia-Chun Hung, Michael O’Neill, David Reiman, Kathryn Tunyasuvu-nakool, Zachary Wu, Akvil˙ e ˇZemgulyt˙ e, Eirini Arvaniti, Charles Beattie, Ottavia Bertolli, Alex Bridgland, Alexey Cherepanov, Miles Congreve, Alexander I. Cowen-Rivers, Andrew Cowie, Michael Figurnov, Fabian B. Fuchs, Han-nah Gladman, Rishub Jain, Yousuf A. Khan, Caroline M. R. Low, Kuba Perlin, Anna Potapenko, Pascal Savy, Sukhdeep Singh, Adrian Stecula, Ashok Thillaisundaram, Catherine Tong, Sergei Yakneen, Ellen D. Zhong, Michal Zielinski, Augustin ˇ Z´ ıdek, Victor Bapst, Pushmeet Kohli, Max Jader-berg, Demis Hassabis, and John M. Jumper. Accurate struc-ture prediction of biomolecular interactions with alphafold 3. 
+
+Nature , 2024. 4 [2] Eloi Alonso, Adam Jelley, Vincent Micheli, Anssi Kan-ervisto, Amos J. Storkey, Tim Pearce, and Franc ¸ois Fleuret. Diffusion for world modeling: Visual details matter in atari. 
+
+NeurIPS , 2024. 2 [3] Luca Bergamini, Yawei Ye, Oliver Scheel, Long Chen, Chih Hu, Luca Del Pero, Blazej Osinski, Hugo Grimmett, and Pe-ter Ondruska. Simnet: Learning reactive self-driving simu-lations from real-world observations. In ICRA , 2021. 3 [4] Jake Bruce, Michael D. Dennis, Ashley Edwards, Jack Parker-Holder, Yuge Shi, Edward Hughes, Matthew Lai, Aditi Mavalankar, Richie Steigerwald, Chris Apps, Yusuf Aytar, Sarah Bechtle, Feryal M. P. Behbahani, Stephanie C. Y. Chan, Nicolas Heess, Lucy Gonzalez, Simon Osin-dero, Sherjil Ozair, Scott E. Reed, Jingwei Zhang, Konrad Zolna, Jeff Clune, Nando de Freitas, Satinder Singh, and Tim Rockt¨ aschel. Genie: Generative interactive environments. In 
+
+ICML , 2024. 2 [5] Panpan Cai, Yiyuan Lee, Yuanfu Luo, and David Hsu. SUM-MIT: A simulator for urban driving in massive mixed traffic. In ICRA , 2020. 2 [6] Di Chen, Meixin Zhu, Hao Yang, Xuesong Wang, and Yin-hai Wang. Data-driven traffic simulation: A comprehensive review. IEEE Trans. Intell. Veh. , 2024. 1, 2 [7] Jiacheng Chen, Ruizhi Deng, and Yasutaka Furukawa. Poly-diffuse: Polygonal shape reconstruction via guided set diffu-sion models. In NeurIPS , 2023. 2, 5 [8] Shaoyu Chen, Bo Jiang, Hao Gao, Bencheng Liao, Qing Xu, Qian Zhang, Chang Huang, Wenyu Liu, and Xinggang Wang. Vadv2: End-to-end vectorized autonomous driving via probabilistic planning. arXiv , 2024. 2 [9] Yurui Chen, Junge Zhang, Ziyang Xie, Wenye Li, Feihu Zhang, Jiachen Lu, and Li Zhang. S-nerf++: Autonomous driving simulation via neural reconstruction and generation. 
+
+IEEE TPAMI , 2025. 2 [10] Kashyap Chitta, Daniel Dauner, and Andreas Geiger. SLEDGE: synthesizing driving environments with genera-tive models and rule-based traffic. In ECCV , 2024. 1, 2, 3, 4, 5, 6, 7 [11] Daphne Cornelisse and Eugene Vinitsky. Human-compatible driving agents through data-regularized self-play reinforce-ment learning. Reinforcement Learning Journal , 1, 2024. 2 [12] Alexey Dosovitskiy, Germ´ an Ros, Felipe Codevilla, Anto-nio M. L´ opez, and Vladlen Koltun. CARLA: an open urban driving simulator. In CoRL , 2017. 2 [13] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R. Qi, Yin Zhou, Zoey Yang, Aurelien Chouard, Pei Sun, Jiquan Ngiam, Vijay Vasudevan, Alexander McCauley, Jonathon Shlens, and Dragomir Anguelov. Large scale in-teractive motion forecasting for autonomous driving : The waymo open motion dataset. In ICCV , 2021. 1, 6 [14] Lan Feng, Quanyi Li, Zhenghao Peng, Shuhan Tan, and Bolei Zhou. Trafficgen: Learning to generate diverse and realistic traffic scenarios. In ICRA , 2023. 3 [15] FHWA. Average annual miles per driver by age group. 
+
+https : / / www . fhwa . dot . gov / ohim / onh00 / bar8.htm , 2022. Accessed: 2024-09-17. 1 [16] Jiyang Gao, Chen Sun, Hang Zhao, Yi Shen, Dragomir Anguelov, Congcong Li, and Cordelia Schmid. Vectornet: Encoding HD maps and agent dynamics from vectorized rep-resentation. In CVPR , 2020. 2 [17] Shenyuan Gao, Jiazhi Yang, Li Chen, Kashyap Chitta, Yi-hang Qiu, Andreas Geiger, Jun Zhang, and Hongyang Li. Vista: A generalizable driving world model with high fidelity and versatile controllability. In NeurIPS , 2024. 2 [18] Roger Girgis, Florian Golemo, Felipe Codevilla, Martin Weiss, Jim Aldon D’Souza, Samira Ebrahimi Kahou, Felix Heide, and Christopher Joseph Pal. Latent variable sequen-tial set transformers for joint multi-agent motion prediction. In ICLR , 2022. 2, 4 [19] Cole Gulino, Justin Fu, Wenjie Luo, George Tucker, Eli Bronstein, Yiren Lu, Jean Harb, Xinlei Pan, Yan Wang, Xiangyu Chen, John D. Co-Reyes, Rishabh Agarwal, Re-becca Roelofs, Yao Lu, Nico Montali, Paul Mougin, Zoey Yang, Brandyn White, Aleksandra Faust, Rowan McAllister, Dragomir Anguelov, and Benjamin Sapp. Waymax: An ac-celerated, data-driven simulator for large-scale autonomous driving research. In NeurIPS , 2023. 1, 2 [20] Zhiming Guo, Xing Gao, Jianlan Zhou, Xinyu Cai, and Bo-tian Shi. Scenedm: Scene-level multi-agent trajectory gen-eration with consistent diffusion models. arXiv , 2023. 2 [21] Irina Higgins, Loic Matthey, Arka Pal, Christopher Burgess, Xavier Glorot, Matthew Botvinick, Shakir Mohamed, and Alexander Lerchner. beta-VAE: Learning basic visual con-cepts with a constrained variational framework. In ICLR ,2017. 4 17215 [22] Emiel Hoogeboom, Victor Garcia Satorras, Cl´ ement Vignac, and Max Welling. Equivariant diffusion for molecule gener-ation in 3d. In ICML , 2022. 2 [23] Anthony Hu, Lloyd Russell, Hudson Yeo, Zak Murez, George Fedoseev, Alex Kendall, Jamie Shotton, and Gian-luca Corrado. GAIA-1: A generative world model for au-tonomous driving. arXiv , 2023. 2 [24] Yihan Hu, Siqi Chai, Zhening Yang, Jingyu Qian, Kun Li, Wenxin Shao, Haichao Zhang, Wei Xu, and Qiang Liu. Solv-ing motion planning tasks with a scalable generative model. In ECCV , 2024. 2 [25] Zhiyu Huang, Zixu Zhang, Ameya Vaidya, Yuxiao Chen, Chen Lv, and Jaime Fern´ andez Fisac. Versatile behavior dif-fusion for generalized traffic agent simulation. arXiv , 2024. 2[26] Maximilian Igl, Daewoo Kim, Alex Kuefler, Paul Mougin, Punit Shah, Kyriacos Shiarlis, Dragomir Anguelov, Mark Palatucci, Brandyn White, and Shimon Whiteson. Sym-phony: Learning realistic and diverse agents for autonomous driving simulation. In ICRA , 2022. 2 [27] Bo Jiang, Shaoyu Chen, Qing Xu, Bencheng Liao, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. VAD: vectorized scene representation for efficient autonomous driving. In ICCV , 2023. 2 [28] Chiyu “Max” Jiang, Andre Cornman, Cheolho Park, Ben-jamin Sapp, Yin Zhou, and Dragomir Anguelov. Motion-diffuser: Controllable multi-agent motion prediction using diffusion. In CVPR , 2023. 2 [29] Chiyu Max Jiang, Yijing Bai, Andre Cornman, Christopher Davis, Xiukun Huang, Hong Jeon, Sakshum Kulshrestha, John Wheatley Lambert, Shuangyu Li, Xuanyu Zhou, Car-los Fuertes, Chang Yuan, Mingxing Tan, Yin Zhou, and Dragomir Anguelov. Scenediffuser: Efficient and con-trollable driving simulation initialization and rollout. In 
+
+NeurIPS , 2024. 2, 3 [30] Napat Karnchanachari, Dimitris Geromichalos, Kok Seang Tan, Nanxiang Li, Christopher Eriksen, Shakiba Yaghoubi, Noushin Mehdipour, Gianmarco Bernasconi, Whye Kit Fong, Yiluan Guo, and Holger Caesar. Towards learning-based planning: The nuplan benchmark for real-world au-tonomous driving. In ICRA , 2024. 1, 2, 6 [31] Saman Kazemkhani, Aarav Pandya, Daphne Cornelisse, Brennan Shacklett, and Eugene Vinitsky. GPUDrive: Data-driven, multi-agent driving simulation at 1 million FPS. In 
+
+ICLR , 2025. 1, 2, 6, 8 [32] Arne Kesting, Martin Treiber, and Dirk Helbing. General lane-changing model mobil for car-following models. Trans-portation Research Record , 1999(1):86–94, 2007. 2 [33] Diederik P. Kingma and Max Welling. Auto-encoding vari-ational bayes. In ICLR , 2014. 4 [34] Jonathan Wilder Lavington, Ke Zhang, Vasileios Li-outas, Matthew Niedoba, Yunpeng Liu, Dylan Green, Saeid Naderiparizi, Xiaoxuan Liang, Setareh Dabiri, Adam ´Scibior, Berend Zwartsenberg, and Frank Wood. Torch-driveenv: A reinforcement learning benchmark for au-tonomous driving with reactive, realistic, and diverse non-playable characters. arXiv , 2024. 2 [35] Kuang-Huei Lee, Ofir Nachum, Mengjiao Yang, Lisa Lee, Daniel Freeman, Sergio Guadarrama, Ian Fischer, Winnie Xu, Eric Jang, Henryk Michalewski, and Igor Mordatch. Multi-game decision transformers. In NeurIPS , 2022. 2, 6 [36] Edouard Leurent. An environment for autonomous driving decision-making. https://github.com/eleurent/ highway-env , 2018. 2 [37] Quanyi Li, Zhenghao Peng, Lan Feng, Qihang Zhang, Zhenghai Xue, and Bolei Zhou. Metadrive: Composing diverse driving scenarios for generalizable reinforcement learning. IEEE TPAMI , 2023. 2 [38] Yueyuan Li, Wei Yuan, Songan Zhang, Weihao Yan, Qiyuan Shen, Chunxiang Wang, and Ming Yang. Choose your sim-ulator wisely: A review on open-source simulators for au-tonomous driving. IEEE Trans. Intell. Veh. , 2024. 1 [39] Ming Liang, Bin Yang, Rui Hu, Yun Chen, Renjie Liao, Song Feng, and Raquel Urtasun. Learning lane graph representa-tions for motion forecasting. In ECCV , 2020. 4 [40] Bencheng Liao, Shaoyu Chen, Xinggang Wang, Tianheng Cheng, Qian Zhang, Wenyu Liu, and Chang Huang. Maptr: Structured modeling and learning for online vectorized HD map construction. In ICLR , 2023. 2 [41] Bencheng Liao, Shaoyu Chen, Yunchi Zhang, Bo Jiang, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. Maptrv2: An end-to-end framework for online vectorized HD map construction. Int. J. Comput. Vis. , 2025. 2 [42] William Ljungbergh, Adam Tonderski, Joakim Johnan-der, Holger Caesar, Kalle ˚Astr¨ om, Michael Felsberg, and Christoffer Petersson. Neuroncap: Photorealistic closed-loop safety testing for autonomous driving. ECCV , 2024. 2[43] Jack Lu, Kelvin Wong, Chris Zhang, Simon Suo, and Raquel Urtasun. Scenecontrol: Diffusion for controllable traffic scene generation. In ICRA , 2024. 2, 6 [44] Reza Mahjourian, Rongbing Mu, Valerii Likhosherstov, Paul Mougin, Xiukun Huang, Jo˜ ao V. Messias, and Shimon Whiteson. Unigen: Unified modeling of initial agent states and trajectories for generating autonomous driving scenar-ios. In ICRA , 2024. 3 [45] Lu Mi, Hang Zhao, Charlie Nash, Xiaohan Jin, Jiyang Gao, Chen Sun, Cordelia Schmid, Nir Shavit, Yuning Chai, and Dragomir Anguelov. Hdmapgen: A hierarchical graph gen-erative model of high definition maps. In CVPR , 2021. 2, 6[46] Jiquan Ngiam, Vijay Vasudevan, Benjamin Caine, Zheng-dong Zhang, Hao-Tien Lewis Chiang, Jeffrey Ling, Re-becca Roelofs, Alex Bewley, Chenxi Liu, Ashish Venugopal, David J. Weiss, Ben Sapp, Zhifeng Chen, and Jonathon Shlens. Scene transformer: A unified architecture for pre-dicting future trajectories of multiple agents. In ICLR , 2022. 2, 4 [47] Julian Ost, Fahim Mannan, Nils Thuerey, Julian Knodt, and Felix Heide. Neural scene graphs for dynamic scenes. In 
+
+CVPR , 2021. 2 [48] William Peebles and Saining Xie. Scalable diffusion models with transformers. In ICCV . IEEE, 2023. 4 17216 [49] Jonah Philion, Xue Bin Peng, and Sanja Fidler. Trajeglish: Traffic modeling as next-token prediction. In ICLR , 2024. 2, 6, 7 [50] Ethan Pronovost, Meghana Reddy Ganesina, Noureldin Hendy, Zeyu Wang, Andres Morales, Kai Wang, and Nick Roy. Scenario diffusion: Controllable driving scenario gen-eration with diffusion. In NeurIPS , 2023. 3 [51] Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, and Mark Chen. Hierarchical text-conditional image gener-ation with CLIP latents. arXiv , 2022. 4 [52] Luke Rowe, Martin Ethier, Eli-Henry Dykhne, and Krzysztof Czarnecki. FJMP: factorized joint multi-agent motion prediction over learned directed acyclic interaction graphs. In CVPR , 2023. 2 [53] Luke Rowe, Roger Girgis, Anthony Gosselin, Bruno Carrez, Florian Golemo, Felix Heide, Liam Paull, and Christopher Pal. CtRL-sim: Reactive and controllable driving agents with offline reinforcement learning. In CoRL , 2024. 2, 3, 6[54] John M Scanlon, Kristofer D Kusano, Tom Daniel, Christo-pher Alderson, Alexander Ogle, and Trent Victor. Waymo simulated driving behavior in reconstructed fatal crashes within an autonomous vehicle operating domain. Accident Analysis & Prevention , 2021. 1 [55] John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Rad-ford, and Oleg Klimov. Proximal policy optimization algo-rithms. arXiv , 2017. 8 [56] Shuo Sun, Zekai Gu, Tianchen Sun, Jiawei Sun, Chen-gran Yuan, Yuhang Han, Dongen Li, and Marcelo H. Ang. Drivescenegen: Generating diverse and realistic driving sce-narios from scratch. IEEE RA-L , 2024. 1, 2, 6, 7 [57] Simon Suo, Sebastian Regalado, Sergio Casas, and Raquel Urtasun. Trafficsim: Learning to simulate realistic multi-agent behaviors. In CVPR , 2021. 2 [58] Simon Suo, Kelvin Wong, Justin Xu, James Tu, Alexander Cui, Sergio Casas, and Raquel Urtasun. Mixsim: A hier-archical framework for mixed reality traffic simulation. In 
+
+CVPR , 2023. 2 [59] Shuhan Tan, Kelvin Wong, Shenlong Wang, Sivabalan Mani-vasagam, Mengye Ren, and Raquel Urtasun. Scenegen: Learning to generate realistic traffic scenes. In CVPR , 2021. 2[60] Shuhan Tan, Boris Ivanovic, Xinshuo Weng, Marco Pavone, and Philipp Kraehenbuehl. Language conditioned traffic generation. In CoRL , 2023. 3 [61] Adam Tonderski, Carl Lindstr¨ om, Georg Hess, William Ljungbergh, Lennart Svensson, and Christoffer Petersson. Neurad: Neural rendering for autonomous driving. In CVPR ,2024. 2 [62] Martin Treiber, Ansgar Hennecke, and Dirk Helbing. Con-gested traffic states in empirical observations and micro-scopic simulations. Physical review E , 62(2):1805, 2000. 2, 7[63] Dani Valevski, Yaniv Leviathan, Moab Arar, and Shlomi Fruchter. Diffusion models are real-time game engines. In 
+
+ICLR , 2025. 2 [64] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszko-reit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. Attention is all you need. In NeurIPS , 2017. 4 [65] Eugene Vinitsky, Nathan Lichtl´ e, Xiaomeng Yang, Brandon Amos, and Jakob Foerster. Nocturne: a scalable driving benchmark for bringing multi-agent learning one step closer to the real world. In NeurIPS , 2022. 2, 6 [66] Jialong Wu, Shaofeng Yin, Ningya Feng, Xu He, Dong Li, Jianye Hao, and Mingsheng Long. ivideogpt: Interactive videogpts are scalable world models. In NeurIPS , 2024. 2 [67] Wei Wu, Xiaoxin Feng, Ziyan Gao, and Yuheng Kan. SMART: scalable multi-agent real-time motion generation via next-token prediction. In NeurIPS , 2024. 2 [68] Ziyang Xie, Junge Zhang, Wenye Li, Feihu Zhang, and Li Zhang. S-nerf: Neural radiance fields for street views. In 
+
+ICLR , 2023. 2 [69] Danfei Xu, Yuxiao Chen, Boris Ivanovic, and Marco Pavone. BITS: bi-level imitation for traffic simulation. In ICRA ,2023. 2 [70] Minkai Xu, Alexander S. Powers, Ron O. Dror, Stefano Er-mon, and Jure Leskovec. Geometric latent diffusion models for 3d molecule generation. In ICML , 2023. 2 [71] Yunzhi Yan, Haotong Lin, Chenxu Zhou, Weijie Wang, Haiyang Sun, Kun Zhan, Xianpeng Lang, Xiaowei Zhou, and Sida Peng. Street gaussians for modeling dynamic ur-ban scenes. In ECCV , 2024. 2 [72] Jiawei Yang, Boris Ivanovic, Or Litany, Xinshuo Weng, Se-ung Wook Kim, Boyi Li, Tong Che, Danfei Xu, Sanja Fidler, Marco Pavone, and Yue Wang. Emernerf: Emergent spatial-temporal scene decomposition via self-supervision. ICLR ,2024. 2 [73] Sherry Yang, Yilun Du, Seyed Kamyar Seyed Ghasemipour, Jonathan Tompson, Leslie Pack Kaelbling, Dale Schuur-mans, and Pieter Abbeel. Learning interactive real-world simulators. In ICLR , 2024. 2 [74] Xuemeng Yang, Licheng Wen, Yukai Ma, Jianbiao Mei, Xin Li, Tiantian Wei, Wenjie Lei, Daocheng Fu, Pinlong Cai, Min Dou, Botian Shi, Liang He, Yong Liu, and Yu Qiao. Drivearena: A closed-loop generative simulation platform for autonomous driving. arXiv , 2024. 1, 2 [75] Ze Yang, Yun Chen, Jingkang Wang, Sivabalan Mani-vasagam, Wei-Chiu Ma, Anqi Joyce Yang, and Raquel Ur-tasun. Unisim: A neural closed-loop sensor simulator. In 
+
+CVPR , 2023. 1, 2 [76] Youwei Yu, Junhong Xu, and Lantao Liu. Adaptive diffusion terrain generator for autonomous uneven terrain navigation. In CoRL , 2024. 2 [77] Zhejun Zhang, Alexander Liniger, Dengxin Dai, Fisher Yu, and Luc Van Gool. Trafficbots: Towards world models for autonomous driving simulation and motion prediction. In 
+
+ICRA , 2023. 2 [78] Ziyuan Zhong, Davis Rempe, Yuxiao Chen, Boris Ivanovic, Yulong Cao, Danfei Xu, Marco Pavone, and Baishakhi Ray. Language-guided traffic simulation via scene-level diffusion. In CoRL , 2023. 2 [79] Ziyuan Zhong, Davis Rempe, Danfei Xu, Yuxiao Chen, Sushant Veer, Tong Che, Baishakhi Ray, and Marco Pavone. 17217 Guided conditional diffusion for controllable traffic simula-tion. In ICRA , 2023. 2 [80] Hongyu Zhou, Longzhong Lin, Jiabao Wang, Yichong Lu, Dongfeng Bai, Bingbing Liu, Yue Wang, Andreas Geiger, and Yiyi Liao. HUGSIM: A real-time, photo-realistic and closed-loop simulator for autonomous driving. arXiv , 2024. 2[81] Hongyu Zhou, Jiahao Shao, Lu Xu, Dongfeng Bai, We-ichao Qiu, Bingbing Liu, Yue Wang, Andreas Geiger, and Yiyi Liao. HUGS: holistic urban 3d scene understanding via gaussian splatting. In CVPR , 2024. 2 [82] Ming Zhou, Jun Luo, Julian Villella, Yaodong Yang, David Rusu, Jiayu Miao, Weinan Zhang, Montgomery Alban, Iman Fadakar, Zheng Chen, Aurora Chongxi Huang, Ying Wen, Kimia Hassanzadeh, Daniel Graves, Dong Chen, Zheng-bang Zhu, Nhat Nguyen, Mohamed Elsayed, Kun Shao, Sanjeevan Ahilan, Baokuan Zhang, Jiannan Wu, Zhengang Fu, Kasra Rezaee, Peyman Yadmellat, Mohsen Rohani, Nicolas Perez Nieves, Yihan Ni, Seyedershad Banijamali, Alexander Cowen Rivers, Zheng Tian, Daniel Palenicek, Haitham bou Ammar, Hongbo Zhang, Wulong Liu, Jianye Hao, and Jun Wang. Smarts: Scalable multi-agent reinforce-ment learning training school for autonomous driving, 2020. 2[83] Xiaoyu Zhou, Zhiwei Lin, Xiaojun Shan, Yongtao Wang, Deqing Sun, and Ming-Hsuan Yang. Drivinggaussian: Composite gaussian splatting for surrounding dynamic au-tonomous driving scenes. In CVPR , 2024. 2 [84] Zikang Zhou, Luyao Ye, Jianping Wang, Kui Wu, and Kejie Lu. Hivt: Hierarchical vector transformer for multi-agent motion prediction. In CVPR , 2022. 2 [85] Zikang Zhou, Haibo Hu, Xinhong Chen, Jianping Wang, Nan Guan, Kui Wu, Yung-Hui Li, Yu-Kai Huang, and Chun Jason Xue. Behaviorgpt: Smart agent simulation for autonomous driving with next-patch prediction. In NeurIPS ,2024. 2 17218

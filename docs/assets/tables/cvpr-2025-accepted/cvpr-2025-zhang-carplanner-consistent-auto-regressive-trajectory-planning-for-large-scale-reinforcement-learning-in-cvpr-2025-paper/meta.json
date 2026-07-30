@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "tables": [
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper/table-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 880,
+      "height": 449,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper/table-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 882,
+      "height": 314,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper/table-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 1779,
+      "height": 379,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-carplanner-consistent-auto-regressive-trajectory-planning-for-large-scale-reinforcement-learning-in-cvpr-2025-paper/table-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 1775,
+      "height": 543,
+      "label": "Table"
+    }
+  ]
+}

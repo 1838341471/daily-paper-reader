@@ -1,0 +1,368 @@
+Title: ReconDreamer: Crafting World Models for Driving Scene Reconstruction via Online Restoration
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Ni_ReconDreamer_Crafting_World_Models_for_Driving_Scene_Reconstruction_via_Online_CVPR_2025_paper.pdf
+
+Published Time: Sun, 18 May 2025 21:14:18 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# ReconDreamer: Crafting World Models for Driving Scene Reconstruction via Online Restoration 
+
+## Chaojun Ni * 1, 2 , Guosheng Zhao * 2, 3, 4 , Xiaofeng Wang * 2, 3, 4 , Zheng Zhu *† 2 ,Wenkang Qin 2 , Guan Huang 2 , Chen Liu 5 , Yuyin Chen 5 , Yida Wang 5 , Xueyang Zhang 5 ,Yifei Zhan 5 , Kun Zhan 5 , Peng Jia 5 , Xianpeng Lang 5 , Xingang Wang 3 , Wenjun Mei †1 1Peking University, China 2GigaAI, China 
+
+> 3
+
+## Institute of Automation, Chinese Academy of Sciences, China 
+
+> 4
+
+## School of Artificial Intelligence, University of Chinese Academy of Sciences, China 
+
+> 5
+
+## Li Auto Inc., China ReconDreamer with
+
+> Street Gaussians
+
+Lane Shift @ 3m Lane Shift @ 6mLane Shift @ 1.5mOriginal View
+
+> Street Gaussians
+> DriveDreamer4D
+> with S3Gaussian
+
+Novel Trajectory 
+
+Original Trajectory 
+
+Figure 1. Dynamic driving scene reconstruction methods, such as DriveDreamer4D [70] and Street Gaussians [60], encounter significant challenges when performing larger maneuvers (e.g., multilane shifts). In contrast, the proposed ReconDreamer significantly improves rendering quality via incrementally integrating world model knowledge. 
+
+## Abstract 
+
+Closed-loop simulation is crucial for end-to-end au-tonomous driving. Existing sensor simulation methods (e.g.,  
+
+> *These authors contributed equally to this work.
+> †Corresponding authors. zhengzhu@ieee.org, mei@pku.edu.cn.
+> ‡Project Page: https://recondreamer.github.io
+
+NeRF and 3DGS) reconstruct driving scenes based on con-ditions that closely mirror training data distributions. How-ever, these methods struggle with rendering novel trajec-tory, such as lane changes. Recent works have demon-strated that integrating world model knowledge alleviates these issues. Despite their efficiency, these approaches still encounter difficulties in the accurate representation of This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 1559 more complex maneuvers, with multi-lane shifts being a notable example. Therefore, we introduce ReconDreamer, which enhances driving scene reconstruction through in-cremental integration of world model knowledge. Specif-ically, DriveRestorer is proposed to mitigate artifacts via online restoration. This is complemented by a progressive data update strategy designed to ensure high-quality ren-dering for more complex maneuvers. To the best of our knowledge, ReconDreamer is the first method to effectively render in large maneuvers. Experimental results demon-strate that ReconDreamer outperforms Street Gaussians in the NTA-IoU, NTL-IoU, and FID, with relative improve-ments by 24.87%, 6.72%, and 29.97%. Furthermore, Re-conDreamer surpasses DriveDreamer4D with PVG during large maneuver rendering, as verified by a relative improve-ment of 195.87% in the NTA-IoU metric and a user study. 
+
+## 1. Introduction 
+
+End-to-end planning [24, 25, 29], which directly translates sensor data into control commands, is one of the most cru-cial tasks in autonomous driving. However, current open-loop evaluation methods fall short in providing an accu-rate assessment of end-to-end planning algorithms, under-scoring the need for more robust evaluation frameworks [34, 36, 69]. A promising approach to address this issue involves using closed-loop evaluations conducted in real-world scenarios, which require retrieving sensor data from novel trajectory views. This demands the driving scene rep-resentation capable of reconstructing the intricate and dy-namic nature of driving environments. Closed-loop simulation predominantly hinges on scene reconstruction approaches like Neural Radiance Fields (NeRF) [17, 41, 61, 63] and 3D Gaussian Splatting (3DGS) [9, 11, 12, 26, 27, 30, 60, 72]. Despite their contributions, these techniques are fundamentally restricted by the density and diversity of training data, often limiting their render-ing capabilities to scenarios that closely mimic the original training data. Consequently, they underperform in complex, high-variation driving maneuvers. Current developments in autonomous driving world models [15, 23, 51, 53, 54, 71] have introduced the capability to generate diverse videos aligned with specific driving commands, renewing the po-tential for more robust closed-loop simulation. The recent DriveDreamer4D [70] has further evidenced that leveraging pretrained world models as data machines can substantially improve the quality of dynamic driving scene reconstruc-tion. However, while this training-free integration of world model knowledge is efficient, its current design still encoun-ters challenges in executing larger maneuvers. In this paper, we introduce ReconDreamer , which en-hances driving scene reconstruction via incrementally in-tegrating knowledge from autonomous driving world mod-els. Unlike [70] which leverages pretrained world models to directly expand novel trajectory views, ReconDreamer 
+
+trains the world model to progressively mitigate ghosting artifacts in complex maneuver renderings. Specifically, we generate a video restoration dataset by sampling rendering outputs at various training stages. Based on the dataset, we propose the DriveRestorer , which is fine-tuned upon the world model to mitigate ghosting artifacts via online restoration. During the training, the masking strategy is introduced to emphasize restoration of challenging areas (e.g., sky and distant regions). Furthermore, we propose the Progressive Data Update Strategy (PDUS) to gradu-ally restore artifacts, which ensures high-quality render-ing for larger maneuvers. The proposed PDUS, by incre-mentally integrating world model knowledge, reduces the complexity of video restoration, making ReconDreamer the first approach capable of handling large viewpoint shifts in rendering (e.g., across multiple lanes, spanning up to 6 meters). As illustrated in Fig. 1, experimental results confirm that ReconDreamer substantially improves Street Gaussians [60] during novel trajectory rendering, achiev-ing a relative improvement in the average NTA-IoU, NTL-IoU, and FID by 24.87%, 6.72%, and 29.97%. Addition-ally, ReconDreamer strengthens spatiotemporal coherence in larger maneuvers, outperforming DriveDreamer4D [70] with a win rate 96.88% in the user study, and a relative im-provement of 195.87% in the NTA-IoU metric. The primary contributions of this work are as follows: (1) We present ReconDreamer , which enhances dynamic driving scene reconstruction via incremental integration of world model knowledge. Notably, to our knowledge, Re-conDreamer is the first method to effectively render in large maneuvers (e.g., spanning up to 6 meters). (2) The DriveRe-storer is proposed to mitigate ghosting artifacts via online restoration. Besides, we introduce the progressive data up-date strategy to maintain high-quality rendering for larger maneuvers. (3) We perform comprehensive experiments to validate that ReconDreamer can enhance rendering quality during large maneuvers, as well as the spatiotemporal co-herence of driving scene elements. 
+
+## 2. Related Work 
+
+2.1. Driving Scene Reconstruction Methods 
+
+NeRF and 3DGS have become prominent techniques in scene reconstruction. NeRF models [2, 3, 41, 42] use multi-layer perceptron (MLP) networks to represent continuous volumetric scenes, achieving exceptional rendering quality. Recently, 3DGS [30, 66] introduced a novel approach by defining anisotropic Gaussians in 3D space and employing adaptive density control, which allows for high-quality ren-derings even from sparse point cloud data. Various stud-ies have adapted NeRF [10, 17, 28, 39, 45, 49, 61, 63] and 1560 Online Restoration   
+
+> Weighted Data Sample
+
+Progressive Data 
+
+Update Strategy                   
+
+> Lane Shift @1.5m
+> Restored Video
+> Original Trajectory
+> GT Video
+> Lane Shift @3m
+> Restored Video
+> DriveRestorer
+> Novel Trajectory
+> Rendered Video
+> Enc
+> Video
+> Decoder
+> 3D Box Sequence
+> Enc
+> HDMap Sequence
+> Enc
+> Novel Trajectory
+> Restored Video
+> Noisy Images
+
+Dynamic Scene Reconstruction 
+
+> Data
+> Sample
+> Probability
+> Original
+> Trajectory
+> View
+> Novel
+> Trajectory
+> View
+
+Progressive Trajectory Sample  
+
+> Projection
+> Dataset Update
+> Render
+
+Figure 2. The overall framework of ReconDreamer . During the training of the dynamic driving scene reconstruction, we begin by rendering novel trajectory views. These rendered videos are subsequently processed by the DriveRestorer to restore their quality. Then these restored videos, together with the original video, are employed to optimize the reconstruction model. This iterative process continues until the reconstruction model converges (The training of DriveRestorer is omitted in this figure, and more details are in Sec. 3.2). 
+
+3DGS [8, 9, 26, 37, 60, 67, 73] for driving scene reconstruc-tions. To accommodate the dynamic nature of driving envi-ronments, some methods incorporate time as an additional parameter to capture temporal variations in dynamic scenes [1, 13, 35, 38, 44, 47], while others treat the scene as a com-bination of moving objects overlaid on a static background [32, 43, 50, 55, 58, 63]. Despite these advances, NeRF and 3DGS-based methods still encounter challenges related to data density. Their effectiveness in rendering relies heavily on sensor trajectory aligning closely with the training distri-bution. To tackle these challenges, methods like SGD [67], GGS [19], and MagicDrive3D [14] utilize generative mod-els to expand the diversity of training perspectives. How-ever, these methods primarily focus on sparse image data or static backgrounds, making them inadequate for capturing the complexities of dynamic driving environments. 
+
+2.2. World Models 
+
+World models predict possible future world states as a function of imagined action sequences proposed by the actor [33, 74]. Based on world models, recent methods [4, 5, 16, 18, 20–22, 31, 40, 52, 53, 56, 59, 65, 68] have ad-vanced the simulation of environments by generating videos that are guided by free-text actions. Leading this develop-ment is Sora [6], which employs cutting-edge generative methods to create complex visual sequences that adhere to the physical laws governing the environment. This capabil-ity not only enhances the fidelity of generated video con-tent but also holds significant potential for applications in real-world driving scenarios. In autonomous driving, world models [15, 23, 51, 54, 62, 71] utilize predictive techniques to interpret driving environments. These methods gener-ate realistic driving scenarios while extracting driving poli-cies from video data, renewing the potential for more ro-bust closed-loop simulations. The recent DriveDreamer4D [70] has further evidenced that leveraging pretrained world models as data machines improves dynamic driving scene reconstruction. Nonetheless, it still encounters challenges in executing larger maneuvers (e.g., multi-lane shifts). 
+
+## 3. Method 
+
+3.1. Overall Framework of ReconDreamer 
+
+To address sparse data in traditional scene reconstruction methods [8, 26, 60], recent approaches [19, 67, 70] use generative priors to increase data density. However, a gap 1561 DriveRestorer                
+
+> Original Trajectory GT Vide oUnder -Trained Gaussian Splatting
+> Original Trajectory Degrade dVide o
+> Gaussian Splatting Training Stage
+> Mask Sequence
+> Supervision
+> Training for
+> DriveRestorer
+> Restoration Dataset Construction
+
+Figure 3. The restoration dataset construction for training 
+
+DriveRestorer . Initially, we train an under-trained Gaussian Splat-ting model utilizing the ground truth (GT) videos from the original trajectory. During Gaussian Splatting training, degraded videos of the original trajectory are rendered and paired with their GT videos to form the restoration dataset. A mask is then applied to the de-graded videos to train DriveRestorer, supervised by the GT videos. 
+
+remains between the generated data and the real data. In contrast, the proposed ReconDreamer expands the training data through an online restoration process. Notably, Recon-Dreamer progressively restores rendered data, effectively reducing the gap between generated and original data. The overall framework of ReconDreamer is illustrated in Fig. 2. Specifically, we first train the scene reconstruction method 
+
+G using the original data Vori . The trained methods then render novel trajectory videos ˆVnovel :
+
+ˆVnovel = G(Tnovel ), (1) where Tnovel is the novel trajectory. Notably, ˆVnovel exhibits ghost artifacts due to data sparsity. Therefore, the DriveRe-storer is introduced to restore the artifacts. The restoration resembles the diffusion denoising process [71], where struc-ture conditions (3D boxes, and HDMaps) are employed to ensure spatiotemporal coherence of traffic elements. Note that the conditions are processed via projection transfor-mation to align with Tnovel (see Sec. 3.2 for more details). Consequently, the restored renderings Vnovel have a smaller gap with the original video Vori , making them more suit-able as training samples for scene reconstruction. Addition-ally, to further enhance the training of G and enable it to render large maneuvers (e.g., multi-lane shifts), we propose the PDUS, which progressively updates the training dataset for scene reconstruction. Specifically, the novel trajectory is gradually expanded to generate large maneuver videos. These videos are then restored by DriveRestorer and used to update the training dataset (see Sec. 3.3 for more details). Original Trajectory Degraded Video Frame Original Trajectory GT Video Frame 
+
+Figure 4. Restoration data pairs for DriveRestorer training. 
+
+The updated dataset is then employed to optimize the recon-struction model. This iterative process continues until the reconstruction model converges. 
+
+3.2. Training and Inference of DriveRestorer 
+
+Traditional reconstruction methods often produce artifacts in novel trajectory views. Therefore, we introduce DriveRe-storer to restore these degraded renderings. In the next, we discuss the training and inference details of DriveRestorer .
+
+Training. The major challenge of training DriveRestorer 
+
+lies in the absence of rendering restoration datasets. There-fore, we propose a novel method for constructing restora-tion pairs. As illustrated in Fig. 3, we leverage under-trained reconstruction models [8, 26, 60, 64] to render videos ˆVori =
+
+G(Tori ) along the original trajectory, naturally producing ghosting artifacts due to model underfitting. The degraded frames are paired with their ground truth video Vori to form a rendering restoration dataset. To further enhance dataset diversity, we sample rendered videos from different training stages. Consequently, the constructed rendering restoration pairs are represented as { ˆV k
+
+> ori
+
+, V ori }, where ˆV k 
+
+> ori
+
+denotes the degraded video frame sampled at training stage k. Fig. 4 provides a visualization of these data pairs. Based on the constructed dataset, we train DriveRestorer to restore ar-tifacts in the rendered videos. The DriveRestorer is fine-tuned upon the world model [71]. Specifically, we introduce degraded video frames ˆVori as a control condition to pro-vide appearance priors. To further emphasize the restora-tion of challenging regions, we apply masks to the degraded video frames ˆVori during training. Since video quality de-grades in distant areas (further from the camera center) and at the sky-scene boundary, our masks M focus primarily on these problematic regions (see the supplement for more de-tails). During the training of DriveRestorer , we first feed the masked video frame ˆVmask = ˆVori ⊙ M into the encoder E
+
+to obtain the low-dimensional latent feature z = E( ˆVmask ).1562 Method Lane Shift @ 3m Lane Shift @ 6m Lane Change Average NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓                                                             
+
+> PVG [8] 0.242 49.99 134.74 0.118 48.32 212.19 0.256 50.70 105.29 0.205 49.67 150.74 S3Gaussian [26] 0.059 48.24 234.54 0.014 47.69 311.59 0.175 49.05 124.90 0.083 48.33 223.68 Deformable-GS [64] 0.142 50.63 161.20 0.069 48.86 260.83 0.240 51.62 92.34 0.150 50.37 171.46 Street Gaussians [60] 0.498 53.19 130.75 0.374 49.27 213.04 0.496 56.03 86.46 0.456 52.83 143.42
+> ReconDreamer with 0.539 54.58 93.56 0.467 52.58 149.19 0.554 56.63 73.91 0.517 54.60 105.55
+> Street Gaussians
+
+Table 1. Comparison of NTA-IoU, NTL-IoU, and FID scores for different novel trajectory views with various methods [8, 26, 60, 64]. 
+
+The fine-tuning process of the world model is optimized us-ing the diffusion loss: 
+
+LR = Ez,ϵ ∼N (0 ,1) ,t 
+
+h
+
+∥ϵt − ϵθ (zt, t, c)∥22
+
+i
+
+, (2) where ϵt denotes the random noise at time step t, ϵθ is the parameterized denoising network, zt refers to the noisy latent at time step t, and c represents the control condi-tions, including the degraded video ˆVmask , 3D boxes, and HDMaps. The integration of video, 3D boxes, and HDMaps is similar to that of [71]. 
+
+Inference. After training DriveRestorer , we freeze its pa-rameters to restore novel trajectory renderings: 
+
+Vnovel = R( ˆVnovel , P(s, T k
+
+> novel
+
+)) , (3) where R is the DriveRestorer , s is the structure conditions (3D boxes and HDMaps), P(·) denotes the projection trans-formation that aligns structure conditions with T k
+
+> novel
+
+. Note that T k 
+
+> novel
+
+is progressively expanded at different training stage k, which enhances driving scene reconstruction un-der large maneuver conditions (refer to Sec. 3.3 for more details). As shown in Fig. 5, the trained DriveRestorer can mitigate ghost artifacts in novel trajectory renderings. 
+
+Algorithm 1 Progressive Data Update Strategy 
+
+Input: Reconstruction model G, DriveRestorer R, Train-ing step T , Update step S, Stride ∆y, Original trajectory 
+
+Tori , Novel trajectory video dataset Dnovel 
+
+Output: Updated novel trajectory video dataset Dnovel 
+
+k ← 0
+
+for t in Range(0, T , S) do 
+
+k ← k + 1 
+
+w ← k/ Pkj=1 j
+
+T k
+
+> novel
+
+.y = Tori .y + k∆y
+
+ˆVnovel ← G (T k
+
+> novel
+
+)
+
+Vnovel ← R ( ˆVnovel )
+
+Dnovel ← (1 − w) · Dnovel ∪ w · Vnovel 
+
+end for 
+
+3.3. Progressive Data Update Strategy 
+
+Based on DriveRestorer ’s capability to restore novel trajec-tory videos, we propose the Progressive Data Update Strat-egy (PDUS) to enhance driving scene reconstruction under Novel Trajectory Degraded Video Frame Novel Trajectory Restored Video Frame 
+
+Figure 5. Examples of degraded video frame rendered under new trajectories and their restored frame by DriveRestorer .
+
+large maneuver conditions. The PDUS first constructs a mixed dataset D = 0 .5Dori ∪ 0.5Dnovel , where Dori is the original trajectory video dataset and Dnovel refers to the re-stored novel trajectory video dataset, which can be updated throughout the training process. The update strategy, de-tailed in Algo. 1, uses an update distance of y = k∆y me-ters at k-th update step to progressively update the novel trajectory Tnovel . Then the reconstruction model G renders novel trajectory video ˆVnovel , which are then processed by 
+
+DriveRestorer to obtain the restored novel trajectory video 
+
+Vnovel . To ensure that newly generated data provides ad-ditional priors for the reconstruction model, the updated dataset Dnovel can be obtained as follows: 
+
+Dnovel = (1 − w) · Dnovel ∪ w · Vnovel , (4) where w = kPkj=1 j is the sampling probability for Vnovel .For Gaussian Splatting-based driving scene reconstruc-tion methods, we use original trajectory dataset Dori to train the Gaussian parameters ϕ:
+
+Lori (ϕ) = λ1LRGB ori + λ2LDepth ori + λ3LSSIM ori , (5) where LRGB ori , LDepth ori , LSSIM ori are reconstruction losses typi-cally used in the Gaussian Splatting optimization [60], and 
+
+λ1, λ 2, λ 3 are loss weights. Additionally, for the generated novel trajectory data Dnovel , we adopt the depth-free train-1563 Method Lane Shift @ 3m Lane Shift @ 6m Lane Change Average NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓                                                                                                            
+
+> PVG [8] 0.242 49.99 134.74 0.118 48.32 212.19 0.256 50.70 105.29 0.205 49.67 150.74 DriveDreamer4D with PVG [70] 0.340 51.32 129.05 0.121 49.28 210.37 0.438 53.06 71.52 0.300 51.22 136.98
+> ReconDreamer 0.474 52.06 124.12 0.358 50.14 177.58 0.464 53.21 74.32 0.432 51.80 125.34
+> with PVG S3Gaussian[26] 0.059 48.24 234.54 0.014 47.69 311.59 0.175 49.05 124.90 0.083 48.33 223.68 DriveDreamer4D with S 3Gaussian [70] 0.263 51.07 173.49 0.031 48.04 303.95 0.495 53.42 66.93 0.263 50.84 181.46
+> ReconDreamer 0.267 50.26 110.41 0.177 50.54 152.89 0.413 51.62 123.61 0.286 50.80 128.97
+> with S 3Gaussian Deformable-GS [64] 0.142 50.63 161.20 0.069 48.86 260.83 0.240 51.62 92.34 0.150 50.37 171.46 DriveDreamer4D with Deformable-GS [70] 0.181 50.72 169.79 0.078 48.90 259.19 0.335 52.93 77.32 0.198 50.85 168.77
+> ReconDreamer 0.416 52.26 106.99 0.294 50.54 143.88 0.443 53.78 76.24 0.384 52.19 109.04
+> with Deformable-GS
+
+Table 2. Comparison of NTA-IoU, NTL-IoU, and FID scores for different novel trajectory views with DriveDreamer4D [70]. 
+
+Method Lane Shift @ 6m NTA-IoU ↑ NTL-IoU ↑ FID ↓
+
+Street Gaussians [60] 0.132 46.57 247.73 
+
+ReconDreame r 0.246 47.08 197.52 
+
+Table 3. Comparison of large maneuver on the nuScenes [7]. 
+
+Method No Shift Lane 2m Lane 3m Vert. 1m UniSim [63] - 74.7 97.5 -NeuRAD [50] 25.0 72.3 93.9 76.3 Street Gaussians [60] 14.6 66.3 80.7 78.4 
+
+ReconDreamer 16.1 65.4 74.9 67.7 
+
+Table 4. FID scores for ego vehicle pose shifts in PandaSet [57]. 
+
+ing strategy from [70] to train ReconDreamer :
+
+Lnovel (ϕ) = λ1LRGB novel + λ3LSSIM novel . (6) The overall loss function for mixed training is: 
+
+L(ϕ) = Lori + Lnovel . (7) 
+
+## 4. Experiments 
+
+In this section, we present our detailed experimental setup. Then, both quantitative and qualitative results demonstrate that the ReconDreamer can effectively render large maneu-vers. Finally, we explore stride settings in the progressive data update strategy and evaluate DriveRestorer backbones. 
+
+4.1. Experiment Setup 
+
+Dataset. We conduct experiments in eight diverse and com-plex scenes from the Waymo [48] dataset that feature many vehicles and multiple lanes. Similarly, for NuScenes [7], eight scenes rich in dynamic objects and complex lane           
+
+> ReconDreamer Win Rate Street Gaussians[60] DriveDreamer4D with PVG[70] Lane Shift @ 3m 97.92% 96.88% Lane Shift @ 6m 100.00% 100.00% Lane Change 93.75% 93.75%
+> Average 97.22% 96.88%
+
+Table 5. Comparing win rates in rendering new trajectories. 
+
+structures are selected to test large maneuver capabili-ties. For PandaSet [57], we adopt the ten scenes used in Unisim [63] and NeuRAD [25] for a fair comparison. 
+
+Implementation Details. To showcase ReconDreamer ’s ability in rendering large maneuvers, we compare it with state-of-the-art methods, including Deformable-GS [64], S3Gaussian [26], PVG [8], Street Gaussians [60], and DreamerDriver4D [70]. We train the model using 40-frame segments from the front-facing camera for 50,000 itera-tions. Then, we evaluate it on three new trajectories: 3m and 6m lateral shifts and lane change to a parallel lane. 
+
+Metrics. Following DriveDreamer4D [70], we use Novel Trajectory Agent IoU (NTA-IoU), Novel Trajectory Lane IoU (NTL-IoU), FID as evaluation metrics. Additionally, we conduct a user study to assess the quality of the rendered video. Further details are in the supplementary material. 
+
+4.2. Main Results 
+
+Comparison with Scene Recosntruction Baselines. In Tab. 1, we compare ReconDreamer with different dynamic driving scene reconstruction methods [8, 26, 60, 64] on the Waymo [48] dataset. The results show that Street Gaus-sians [60] outperforms traditional methods in novel tra-jectory renderings. Therefore, we investigate how much 
+
+ReconDreamer can improve performance based on [60]. Specifically, ReconDreamer with Street Gaussians outper-forms Street Gaussians [60] across all metrics for novel tra-jectory renderings. The average scores (NTA-IoU, NTL-IoU, FID) are relatively improved by 13.38%, 3.35%, and 1564 Preatrained Model Lane Shift @ 3m Lane Shift @ 6m Lane Change Average NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓ NTA-IoU ↑ NTL-IoU ↑ FID ↓                                                
+
+> Stable Diffusion [46] 0.504 54.51 112.25 0.389 52.13 178.16 0.509 56.42 80.90 0.467 54.35 123.77 Stable Video Diffusion[4] 0.500 53.33 120.46 0.435 49.67 199.40 0.527 56.05 89.89 0.487 53.02 136.58 DriveDreamer-2[71] 0.525 54.42 100.32 0.456 52.17 152.23 0.551 56.67 92.30 0.511 54.42 114.95 DriveDreamer-2+Mask 0.539 54.52 93.56 0.467 52.56 149.19 0.544 56.67 73.91 0.517 54.58 105.55
+
+Table 6. Comparison of NTA-IoU, NTL-IoU, and FID scores for DriveRestorer with different backbones.                                                                                    
+
+> Stride Lane Shift @ 3m Lane Shift @ 6m Lane Change Average NTA-IoU ↑NTL-IoU ↑FID ↓NTA-IoU ↑NTL-IoU ↑FID ↓NTA-IoU ↑NTL-IoU ↑FID ↓NTA-IoU ↑NTL-IoU ↑FID ↓
+> 0.5m 0.533 54.10 120.23 0.452 51.82 162.34 0.521 56.78 77.34 0.502 54.23 119.97 1.0m 0.536 54.13 114.23 0.459 51.93 162.46 0.523 56.89 79.27 0.506 54.32 118.65 1.5m 0.539 54.52 93.56 0.467 52.56 149.19 0.554 56.67 73.91 0.517 54.58 105.55
+> 3.0m 0.521 54.26 97.54 0.451 52.16 150.43 0.523 57.10 72.09 0.498 54.51 106.69 6.0m 0.518 54.55 104.72 0.447 52.24 168.22 0.513 56.40 84.34 0.493 54.40 119.09
+
+Table 7. Comparison of NTA-IoU, NTL-IoU, and FID scores for different stride settings in progressive data update strategy. 
+
+26.40%. Notably, ReconDreamer with Street Gaussians ef-fectively renders large maneuvers (e.g., Lane Shift @ 6m), surpassing Street Gaussians [60] by 24.87%, 6.72%, and 29.97% on the NTA-IoU, NTL-IoU, and FID metrics. To showcase ReconDreamer ’s strong generalization, we conduct experiments on NuScenes [7] and PandaSet [57] datasets. As shown in Tab. 3, ReconDreamer outperforms Street Gaussians [60] in all metrics on the NuScenes [7], with a significant improvement of 86.36% in NTA-IoU. Ad-ditionally, as shown in Tab. 4, we report the FID comparison under both the original and the novel trajectory on the Pan-daSet [57], demonstrating that ReconDreamer achieves the best performance with novel trajectory. 
+
+Comparison with DriveDreamer4D. We compare Recon-Dreamer with DriveDreamer4D [70], both using world model priors to improve scene reconstruction. Specifically, we implement both approaches on PVG [8], Deformable-GS [64], and S 3Gaussian [26]. The results in Tab. 2 show that these methods struggle with rendering foreground ve-hicles and lane lines on new trajectories. While Drive-Dreamer4D [70] improves over baseline algorithms, its per-formance is limited in large maneuvers. In contrast, Re-conDreamer , using world model priors via online restora-tion, outperforms the training-free approach. Compared to DriveDreamer4D with PVG [8], S 3Gaussian [26], and Deformable-GS [64], ReconDreamer boosts average NTA-IoU scores by 44.00%, 8.75%, and 93.94%, respectively. Notably, in large maneuvers (6m lane shift), ReconDreamer 
+
+improves NTA-IoU by 195.87%, 470.97%, and 276.92%. 
+
+User Study. Additionally, a user study evaluates the render-ing quality of various methods on novel trajectory, focusing on ghost artifacts. We compare ReconDreamer with Drive-Dreamer4D [70], and Street Gaussians [60]. As shown in Tab. 5, ReconDreamer outperforms the other two methods, with win rates of 97.22% and 96.88%. 
+
+Qualitative Results. As illustrated in Fig. 6, we present view renderings under new trajectories involving signifi-cant viewpoint shifts alongside their corresponding ground truth video from the original trajectories. The baseline ren-derings exhibit ghosting artifacts and missing or distorted background elements like trees. For example, in Street Gaussians [60], irregular white artifacts and severe distor-tion of foreground vehicles and speckles become promi-nent as the camera moves. However, our method signifi-cantly improves rendering quality. ReconDreamer ensures spatiotemporal consistency in the background, aligning the novel and original trajectories. In addition, the foreground vehicles stay clear and accurately reflect viewpoint changes. 
+
+4.3. Ablation Study 
+
+DriveRestorer Backbone. As shown in Tab. 6, we compare 
+
+DriveRestorer with different backbones and fine-tuning strategies, both using Street Gaussians [60] for reconstruc-tion. The DriveRestorer based on Stable Diffusion [46] improves NTA-IoU, NTL-IoU, and FID by 2.41%, 2.88%, and 13.71%, but image-based models struggle with spa-tiotemporal inconsistency. The video-based Stable Video Diffusion [4] offers better spatial continuity but encoun-ters difficulties with fine-tuning, color discrepancies, and lane-line restoration. DriveDreamer-2 [71], built on Sta-ble Video Diffusion [4], improves NTA-IoU by 9.42% and NTL-IoU by 0.13% over Stable Diffusion [46], and 4.93% and 2.64% over Stable Video Diffusion [4]. Finally, incor-porating masks in DriveDreamer-2 [71] fine-tuning boosts performance, with visual comparisons in the supplement. 
+
+Progressive Data Update Strategy. To analyze the influ-ence of different stride settings ( ∆y = 0.5, 1, 1.5, 3, and 6) in the PDUS, we conduct experiments on ReconDreamer with Street Gaussians. As shown in Tab. 7, the model achieves optimal performance when the stride is set to 1.5. Smaller stride values (0.5 and 1.0) lead to a 2.90% and 2.13% de-crease in NTA-IoU and a 0.64% and 0.48% reduction in NTL-IoU. Meanwhile, larger stride values cause ghosting in novel trajectory rendering, with a stride of 6 disabling the 1565 DriveDream4D     
+
+> with PVG
+> DriveDreamer4D
+> with S 3Gaussian
+> DriveDreamer4D
+> with Deformable -GS Street Gaussian s
+> ReconDriver  with
+> Street  Ga ussians
+> Lane Shift @ 3m
+> Original Trajectory
+> Lane Shift @ 6m
+> Ground  Truth Figure 6. Qualitative comparisons of novel trajectory renderings for lane shift @ 3m and lane shift @ 6m. The yellow box contains the ground truth video frames of the original trajectories, while the pink boxes display the rendered video frames after the lane shift.
+
+PDUS and resulting in the worst NTA-IoU and NTL-IoU. 
+
+## 5. Discussion and Conclusion 
+
+Closed-loop simulation is crucial for autonomous driving, requiring accurate scene reconstruction for realistic simula-tions. Methods like NeRF and 3DGS struggle with novel trajectory renderings. DriveDreamer4D alleviates the chal-lenge by using a pre-trained world model but still strug-gles with larger maneuvers. To overcome these limitations, we propose ReconDreamer , which crafts world models for driving scene reconstruction via online restoration. With the introduction of DriveRestorer to reduce ghosting arti-facts and a progressive data update strategy, ReconDreamer 
+
+is the first method capable of rendering large maneuvers, spanning up to 6 meters. Experiments show ReconDreamer 
+
+surpasses Street Gaussians in NTA-IoU, NTL-IoU, and FID with improvements of 24.87%, 6.72%, and 29.97%, respec-tively. It also outperforms DriveDreamer4D with PVG in large maneuver rendering, with a comprehensive user study and 195.87% improvement in NTA-IoU. 1566 References 
+
+[1] Benjamin Attal, Jia-Bin Huang, Christian Richardt, Michael Zollhoefer, Johannes Kopf, Matthew O’Toole, and Changil Kim. Hyperreel: High-fidelity 6-dof video with ray-conditioned sampling. In CVPR , 2023. 3 [2] Jonathan T Barron, Ben Mildenhall, Dor Verbin, Pratul P Srinivasan, and Peter Hedman. Mip-nerf 360: Unbounded anti-aliased neural radiance fields. In CVPR , 2022. 2 [3] Jonathan T Barron, Ben Mildenhall, Dor Verbin, Pratul P Srinivasan, and Peter Hedman. Zip-nerf: Anti-aliased grid-based neural radiance fields. In ICCV , 2023. 2 [4] Andreas Blattmann, Tim Dockhorn, Sumith Kulal, Daniel Mendelevitch, Maciej Kilian, Dominik Lorenz, Yam Levi, Zion English, Vikram Voleti, Adam Letts, et al. Stable video diffusion: Scaling latent video diffusion models to large datasets. arXiv preprint arXiv:2311.15127 , 2023. 3, 7 [5] Andreas Blattmann, Robin Rombach, Huan Ling, Tim Dock-horn, Seung Wook Kim, Sanja Fidler, and Karsten Kreis. Align your latents: High-resolution video synthesis with la-tent diffusion models. In CVPR , 2023. 3 [6] Tim Brooks, Bill Peebles, Connor Holmes, Will DePue, Yufei Guo, Li Jing, David Schnurr, Joe Taylor, Troy Luh-man, Eric Luhman, Clarence Ng, Ricky Wang, and Aditya Ramesh. Video generation models as world simulators. 2024. 3 [7] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In CVPR , 2020. 6, 7[8] Yurui Chen, Chun Gu, Junzhe Jiang, Xiatian Zhu, and Li Zhang. Periodic vibration gaussian: Dynamic urban scene reconstruction and real-time rendering. arXiv preprint arXiv:2311.18561 , 2023. 3, 4, 5, 6, 7 [9] Ziyu Chen, Jiawei Yang, Jiahui Huang, Riccardo de Lutio, Janick Martinez Esturo, Boris Ivanovic, Or Litany, Zan Go-jcic, Sanja Fidler, Marco Pavone, Li Song, and Yue Wang. Omnire: Omni urban scene reconstruction. arXiv preprint arXiv:2408.16760 , 2024. 2, 3 [10] Kai Cheng, Xiaoxiao Long, Wei Yin, Jin Wang, Zhiqiang Wu, Yuexin Ma, Kaixuan Wang, Xiaozhi Chen, and Xuejin Chen. Uc-nerf: Neural radiance field for under-calibrated multi-view cameras in autonomous driving. arXiv preprint arXiv:2311.16945 , 2023. 2 [11] Xiaobiao Du, Yida Wang, and Xin Yu. Mvgs: Multi-view-regulated gaussian splatting for novel view synthesis. arXiv preprint arXiv:2410.02103 , 2024. 2 [12] Tobias Fischer, Jonas Kulhanek, Samuel Rota Bulo, Lorenzo Porzi, Marc Pollefeys, and Peter Kontschieder. Dy-namic 3d gaussian fields for urban areas. arXiv preprint arXiv:2406.03175 , 2024. 2 [13] Sara Fridovich-Keil, Giacomo Meanti, Frederik Rahbæk Warburg, Benjamin Recht, and Angjoo Kanazawa. K-planes: Explicit radiance fields in space, time, and appearance. In 
+
+CVPR , 2023. 3 [14] Ruiyuan Gao, Kai Chen, Zhihao Li, Lanqing Hong, Zhenguo Li, and Qiang Xu. Magicdrive3d: Controllable 3d genera-tion for any-view rendering in street scenes. arXiv preprint arXiv:2405.14475 , 2024. 3 [15] Shenyuan Gao, Jiazhi Yang, Li Chen, Kashyap Chitta, Yihang Qiu, Andreas Geiger, Jun Zhang, and Hongyang Li. Vista: A generalizable driving world model with high fidelity and versatile controllability. arXiv preprint arXiv:2405.17398 , 2024. 2, 3 [16] Rohit Girdhar, Mannat Singh, Andrew Brown, Quentin Du-val, Samaneh Azadi, Sai Saketh Rambhatla, Akbar Shah, Xi Yin, Devi Parikh, and Ishan Misra. Emu video: Factoriz-ing text-to-video generation by explicit image conditioning. 
+
+arXiv preprint arXiv:2311.10709 , 2023. 3 [17] Jianfei Guo, Nianchen Deng, Xinyang Li, Yeqi Bai, Bo-tian Shi, Chiyu Wang, Chenjing Ding, Dongliang Wang, and Yikang Li. Streetsurf: Extending multi-view im-plicit surface reconstruction to street views. arXiv preprint arXiv:2306.04988 , 2023. 2 [18] Agrim Gupta, Lijun Yu, Kihyuk Sohn, Xiuye Gu, Meera Hahn, Li Fei-Fei, Irfan Essa, Lu Jiang, and Jos´ e Lezama. Photorealistic video generation with diffusion models. arXiv preprint arXiv:2312.06662 , 2023. 3 [19] Huasong Han, Kaixuan Zhou, Xiaoxiao Long, Yusen Wang, and Chunxia Xiao. Ggs: Generalizable gaussian splatting for lane switching in autonomous driving. arXiv preprint arXiv:2409.02382 , 2024. 3 [20] Jonathan Ho, William Chan, Chitwan Saharia, Jay Whang, Ruiqi Gao, Alexey Gritsenko, Diederik P Kingma, Ben Poole, Mohammad Norouzi, David J Fleet, et al. Imagen video: High definition video generation with diffusion mod-els. arXiv preprint arXiv:2210.02303 , 2022. 3 [21] Jonathan Ho, Tim Salimans, Alexey Gritsenko, William Chan, Mohammad Norouzi, and David J Fleet. Video dif-fusion models. NeurIPS , 2022. [22] Wenyi Hong, Ming Ding, Wendi Zheng, Xinghan Liu, and Jie Tang. Cogvideo: Large-scale pretraining for text-to-video generation via transformers. arXiv preprint arXiv:2205.15868 , 2022. 3 [23] Anthony Hu, Lloyd Russell, Hudson Yeo, Zak Murez, George Fedoseev, Alex Kendall, Jamie Shotton, and Gian-luca Corrado. Gaia-1: A generative world model for au-tonomous driving. arXiv preprint arXiv:2309.17080 , 2023. 2, 3 [24] Shengchao Hu, Li Chen, Penghao Wu, Hongyang Li, Junchi Yan, and Dacheng Tao. St-p3: End-to-end vision-based au-tonomous driving via spatial-temporal feature learning. In 
+
+ECCV , 2022. 2 [25] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In 
+
+CVPR , 2023. 2, 6 [26] Nan Huang, Xiaobao Wei, Wenzhao Zheng, Pengju An, Ming Lu, Wei Zhan, Masayoshi Tomizuka, Kurt Keutzer, and Shanghang Zhang. s3gaussian: Self-supervised street gaussians for autonomous driving. arXiv preprint arXiv:2405.20323 , 2024. 2, 3, 4, 5, 6, 7 [27] Sungwon Hwang, Min-Jung Kim, Taewoong Kang, Jayeon Kang, and Jaegul Choo. Vegs: View extrapolation of urban 1567 scenes in 3d gaussian splatting using learned priors. In Euro-pean Conference on Computer Vision , pages 1–18. Springer, 2024. 2 [28] Muhammad Zubair Irshad, Sergey Zakharov, Katherine Liu, Vitor Guizilini, Thomas Kollar, Adrien Gaidon, Zsolt Kira, and Rares Ambrus. Neo 360: Neural fields for sparse view synthesis of outdoor scenes. In ICCV , 2023. 2 [29] Bo Jiang, Shaoyu Chen, Qing Xu, Bencheng Liao, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. Vad: Vectorized scene representation for efficient autonomous driving. In ICCV , 2023. 2 [30] Bernhard Kerbl, Georgios Kopanas, Thomas Leimk¨ uhler, and George Drettakis. 3d gaussian splatting for real-time radiance field rendering. ACM ToG , 2023. 2 [31] Dan Kondratyuk, Lijun Yu, Xiuye Gu, Jos´ e Lezama, Jonathan Huang, Rachel Hornung, Hartwig Adam, Hassan Akbari, Yair Alon, Vighnesh Birodkar, et al. Videopoet: A large language model for zero-shot video generation. arXiv preprint arXiv:2312.14125 , 2023. 3 [32] Abhijit Kundu, Kyle Genova, Xiaoqi Yin, Alireza Fathi, Car-oline Pantofaru, Leonidas J Guibas, Andrea Tagliasacchi, Frank Dellaert, and Thomas Funkhouser. Panoptic neural fields: A semantic object-aware neural scene representation. In CVPR , pages 12871–12881, 2022. 3 [33] Yann LeCun and Courant. A path towards autonomous ma-chine intelligence version 0.9.2, 2022-06-27. 2022. 3 [34] Hao Li, Ming Yuan, Yan Zhang, Chenming Wu, Chen Zhao, Chunyu Song, Haocheng Feng, Errui Ding, Dingwen Zhang, and Jingdong Wang. Xld: A cross-lane dataset for benchmarking novel driving view synthesis. arXiv preprint arXiv:2406.18360 , 2024. 2 [35] Zhengqi Li, Simon Niklaus, Noah Snavely, and Oliver Wang. Neural scene flow fields for space-time view synthesis of dy-namic scenes. In CVPR , 2021. 3 [36] Zhiqi Li, Zhiding Yu, Shiyi Lan, Jiahan Li, Jan Kautz, Tong Lu, and Jose M Alvarez. Is ego status all you need for open-loop end-to-end autonomous driving? In CVPR , 2024. 2 [37] Zhuopeng Li, Yilin Zhang, Chenming Wu, Jianke Zhu, and Liangjun Zhang. Ho-gaussian: Hybrid optimization of 3d gaussian splatting for urban scenes. arXiv preprint arXiv:2403.20032 , 2024. 3 [38] Haotong Lin, Sida Peng, Zhen Xu, Yunzhi Yan, Qing Shuai, Hujun Bao, and Xiaowei Zhou. Efficient neural radiance fields for interactive free-viewpoint video. In SIGGRAPH Asia , 2022. 3 [39] Fan Lu, Yan Xu, Guang Chen, Hongsheng Li, Kwan-Yee Lin, and Changjun Jiang. Urban radiance field representation with deformable neural mesh primitives. In ICCV , 2023. 2 [40] Xin Ma, Yaohui Wang, Gengyun Jia, Xinyuan Chen, Zi-wei Liu, Yuan-Fang Li, Cunjian Chen, and Yu Qiao. Latte: Latent diffusion transformer for video generation. arXiv preprint arXiv:2401.03048 , 2024. 3 [41] Ben Mildenhall, Pratul P Srinivasan, Matthew Tancik, Jonathan T Barron, Ravi Ramamoorthi, and Ren Ng. Nerf: Representing scenes as neural radiance fields for view syn-thesis. Communications of the ACM , 2021. 2 [42] Thomas M¨ uller, Alex Evans, Christoph Schied, and Alexan-der Keller. Instant neural graphics primitives with a multires-olution hash encoding. ACM ToG , 2022. 2 [43] Julian Ost, Fahim Mannan, Nils Thuerey, Julian Knodt, and Felix Heide. Neural scene graphs for dynamic scenes. In 
+
+CVPR , pages 2856–2865, 2021. 3 [44] Keunhong Park, Utkarsh Sinha, Peter Hedman, Jonathan T Barron, Sofien Bouaziz, Dan B Goldman, Ricardo Martin-Brualla, and Steven M Seitz. Hypernerf: A higher-dimensional representation for topologically varying neural radiance fields. arXiv preprint arXiv:2106.13228 , 2021. 3 [45] Konstantinos Rematas, Andrew Liu, Pratul P Srini-vasan, Jonathan T Barron, Andrea Tagliasacchi, Thomas Funkhouser, and Vittorio Ferrari. Urban radiance fields. In 
+
+CVPR , 2022. 2 [46] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj¨ orn Ommer. High-resolution image syn-thesis with latent diffusion models. In CVPR , 2022. 7 [47] Liangchen Song, Anpei Chen, Zhong Li, Zhang Chen, Lele Chen, Junsong Yuan, Yi Xu, and Andreas Geiger. Nerf-player: A streamable dynamic scene representation with de-composed neural radiance fields. IEEE Transactions on Vi-sualization and Computer Graphics , 2023. 3 [48] Pei Sun, Henrik Kretzschmar, Xerxes Dotiwalla, Aurelien Chouard, Vijaysai Patnaik, Paul Tsui, James Guo, Yin Zhou, Yuning Chai, Benjamin Caine, Vijay Vasudevan, Wei Han, Jiquan Ngiam, Hang Zhao, Aleksei Timofeev, Scott Et-tinger, Maxim Krivokon, Amy Gao, Aditya Joshi, Yu Zhang, Jonathon Shlens, Zhifeng Chen, and Dragomir Anguelov. Scalability in perception for autonomous driving: Waymo open dataset. In CVPR , 2020. 6 [49] Matthew Tancik, Vincent Casser, Xinchen Yan, Sabeek Prad-han, Ben Mildenhall, Pratul P Srinivasan, Jonathan T Barron, and Henrik Kretzschmar. Block-nerf: Scalable large scene neural view synthesis. In CVPR , 2022. 2 [50] Adam Tonderski, Carl Lindstr¨ om, Georg Hess, William Ljungbergh, Lennart Svensson, and Christoffer Petersson. Neurad: Neural rendering for autonomous driving. In CVPR ,2024. 3, 6 [51] Xiaofeng Wang, Zheng Zhu, Guan Huang, Xinze Chen, Jia-gang Zhu, and Jiwen Lu. Drivedreamer: Towards real-world-driven world models for autonomous driving. arXiv preprint arXiv:2309.09777 , 2023. 2, 3 [52] Xiaofeng Wang, Kang Zhao, Feng Liu, Jiayu Wang, Gu-osheng Zhao, Xiaoyi Bao, Zheng Zhu, Yingya Zhang, and Xingang Wang. Egovid-5m: A large-scale video-action dataset for egocentric video generation. arXiv preprint arXiv:2411.08380 , 2024. 3 [53] Xiaofeng Wang, Zheng Zhu, Guan Huang, Boyuan Wang, Xinze Chen, and Jiwen Lu. Worlddreamer: Towards general world models for video generation via predicting masked to-kens. arXiv preprint arXiv:2401.09985 , 2024. 2, 3 [54] Yuqi Wang, Jiawei He, Lue Fan, Hongxin Li, Yuntao Chen, and Zhaoxiang Zhang. Driving into the future: Multiview visual forecasting and planning with world model for au-tonomous driving. In CVPR , 2024. 2, 3 [55] Zirui Wu, Tianyu Liu, Liyi Luo, Zhide Zhong, Jianteng Chen, Hongmin Xiao, Chao Hou, Haozhe Lou, Yuantao 1568 Chen, Runyi Yang, et al. Mars: An instance-aware, mod-ular and realistic simulator for autonomous driving. In ICAI ,2023. 3 [56] Jiannan Xiang, Guangyi Liu, Yi Gu, Qiyue Gao, Yuting Ning, Yuheng Zha, Zeyu Feng, Tianhua Tao, Shibo Hao, Yemin Shi, et al. Pandora: Towards general world model with natural language actions and video states. arXiv preprint arXiv:2406.09455 , 2024. 3 [57] Pengchuan Xiao, Zhenlei Shao, Steven Hao, Zishuo Zhang, Xiaolin Chai, Judy Jiao, Zesong Li, Jian Wu, Kai Sun, Kun Jiang, et al. Pandaset: Advanced sensor suite dataset for autonomous driving. In ITSC , 2021. 6, 7 [58] Ziyang Xie, Junge Zhang, Wenye Li, Feihu Zhang, and Li Zhang. S-nerf: Neural radiance fields for street views. arXiv preprint arXiv:2303.00749 , 2023. 3 [59] Wilson Yan, Yunzhi Zhang, Pieter Abbeel, and Aravind Srinivas. Videogpt: Video generation using vq-vae and trans-formers. arXiv preprint arXiv:2104.10157 , 2021. 3 [60] Yunzhi Yan, Haotong Lin, Chenxu Zhou, Weijie Wang, Haiyang Sun, Kun Zhan, Xianpeng Lang, Xiaowei Zhou, and Sida Peng. Street gaussians for modeling dynamic ur-ban scenes. arXiv preprint arXiv:2401.01339 , 2024. 1, 2, 3, 4, 5, 6, 7 [61] Jiawei Yang, Boris Ivanovic, Or Litany, Xinshuo Weng, Se-ung Wook Kim, Boyi Li, Tong Che, Danfei Xu, Sanja Fidler, Marco Pavone, et al. Emernerf: Emergent spatial-temporal scene decomposition via self-supervision. arXiv preprint arXiv:2311.02077 , 2023. 2 [62] Xuemeng Yang, Licheng Wen, Yukai Ma, Jianbiao Mei, Xin Li, Tiantian Wei, Wenjie Lei, Daocheng Fu, Pinlong Cai, Min Dou, Botian Shi, Liang He, Yong Liu, and Yu Qiao. Drivearena: A closed-loop generative simulation platform for autonomous driving. arXiv preprint arXiv:2408.00415 ,2024. 3 [63] Ze Yang, Yun Chen, Jingkang Wang, Sivabalan Mani-vasagam, Wei-Chiu Ma, Anqi Joyce Yang, and Raquel Ur-tasun. Unisim: A neural closed-loop sensor simulator. In 
+
+CVPR , 2023. 2, 3, 6 [64] Ziyi Yang, Xinyu Gao, Wen Zhou, Shaohui Jiao, Yuqing Zhang, and Xiaogang Jin. Deformable 3d gaussians for high-fidelity monocular dynamic scene reconstruction. In CVPR ,2024. 4, 5, 6, 7 [65] Zhuoyi Yang, Jiayan Teng, Wendi Zheng, Ming Ding, Shiyu Huang, Jiazheng Xu, Yuanming Yang, Wenyi Hong, Xiao-han Zhang, Guanyu Feng, et al. Cogvideox: Text-to-video diffusion models with an expert transformer. arXiv preprint arXiv:2408.06072 , 2024. 3 [66] Zehao Yu, Anpei Chen, Binbin Huang, Torsten Sattler, and Andreas Geiger. Mip-splatting: Alias-free 3d gaussian splat-ting. In CVPR , 2024. 2 [67] Zhongrui Yu, Haoran Wang, Jinze Yang, Hanzhang Wang, Zeke Xie, Yunfeng Cai, Jiale Cao, Zhong Ji, and Mingming Sun. Sgd: Street view synthesis with gaussian splatting and diffusion prior. arXiv preprint arXiv:2403.20079 , 2024. 3 [68] Yan Zeng, Guoqiang Wei, Jiani Zheng, Jiaxin Zou, Yang Wei, Yuchen Zhang, and Hang Li. Make pixels dance: High-dynamic video generation. arXiv preprint arXiv:2311.10982 , 2023. 3 [69] Jiang-Tian Zhai, Ze Feng, Jinhao Du, Yongqiang Mao, Jiang-Jiang Liu, Zichang Tan, Yifu Zhang, Xiaoqing Ye, and Jingdong Wang. Rethinking the open-loop evaluation of end-to-end autonomous driving in nuscenes. arXiv preprint arXiv:2305.10430 , 2023. 2 [70] Guosheng Zhao, Chaojun Ni, Xiaofeng Wang, Zheng Zhu, Guan Huang, Xinze Chen, Boyuan Wang, Youyi Zhang, Wenjun Mei, and Xingang Wang. Drivedreamer4d: World models are effective data machines for 4d driving scene rep-resentation. arXiv preprint arXiv:2410.13571 , 2024. 1, 2, 3, 6, 7 [71] Guosheng Zhao, Xiaofeng Wang, Zheng Zhu, Xinze Chen, Guan Huang, Xiaoyi Bao, and Xingang Wang. Drivedreamer-2: Llm-enhanced world models for diverse driving video generation. arXiv preprint arXiv:2403.06845 ,2024. 2, 3, 4, 5, 7 [72] Hongyu Zhou, Jiahao Shao, Lu Xu, Dongfeng Bai, Weichao Qiu, Bingbing Liu, Yue Wang, Andreas Geiger, and Yiyi Liao. Hugs: Holistic urban 3d scene understanding via gaus-sian splatting. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 21336– 21345, 2024. 2 [73] Xiaoyu Zhou, Zhiwei Lin, Xiaojun Shan, Yongtao Wang, Deqing Sun, and Ming-Hsuan Yang. Drivinggaussian: Composite gaussian splatting for surrounding dynamic au-tonomous driving scenes. In CVPR , pages 21634–21643, 2024. 3 [74] Zheng Zhu, Xiaofeng Wang, Wangbo Zhao, Chen Min, Ni-anchen Deng, Min Dou, Yuqi Wang, Botian Shi, Kai Wang, Chi Zhang, et al. Is sora a world simulator? a comprehensive survey on general world models and beyond. arXiv preprint arXiv:2405.03520 , 2024. 3 1569

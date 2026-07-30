@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "figures": [
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper/fig-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 806,
+      "height": 557,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper/fig-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 1464,
+      "height": 791,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper/fig-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 1542,
+      "height": 388,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper/fig-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 1777,
+      "height": 887,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper/fig-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 663,
+      "height": 448,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-yu-enduring-efficient-and-robust-trajectory-prediction-attack-in-autonomous-driving-cvpr-2025-paper/fig-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 614,
+      "height": 435,
+      "label": "Figure"
+    }
+  ]
+}

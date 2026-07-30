@@ -1,0 +1,444 @@
+Title: Enduring, Efficient and Robust Trajectory Prediction Attack in Autonomous Driving via Optimization-Driven Multi-Frame Perturbation Framework
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Yu_Enduring_Efficient_and_Robust_Trajectory_Prediction_Attack_in_Autonomous_Driving_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 01:16:46 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Enduring, Efficient and Robust Trajectory Prediction Attack in Autonomous Driving via Optimization-Driven Multi-Frame Perturbation Framework 
+
+## Yi Yu 1, Weizhen Han 2, Libing Wu 1†, Bingyi Liu 2†, Enshu Wang 1, Zhuangzhuang Zhang 31Key Laboratory of Aerospace Information Security and Trusted Computing, Ministry of Education, School of Cyber Science and Engineering, Wuhan University 
+
+> 2
+
+## School of Computer Science and Artificial Intelligence, Wuhan University of Technology 
+
+> 3
+
+## Department of Computer Science, City University of Hong Kong     
+
+> {yui1212, wu, wanges17 }@whu.edu.cn
+> {hanweizhen, byliu }@whut.edu.cn {zhuangzhuang.zhang }@cityu.edu.hk
+
+## Abstract 
+
+Trajectory prediction plays a crucial role in autonomous driving systems, and exploring its vulnerability has gar-nered widespread attention. However, existing trajectory prediction attack methods often rely on single-point attacks to make efficient perturbations. This limits their applica-tions in real-world scenarios due to the transient nature of single-point attacks, their susceptibility to filtration, and the uncertainty regarding the deployment environment. To ad-dress these challenges, this paper proposes a novel LiDAR-induced attack framework to impose multi-frame attacks by optimization-driven adversarial location search, achiev-ing endurance, efficiency, and robustness. This framework strategically places objects near the adversarial vehicle to implement an attack and introduces three key innovations. First, successive state perturbations are generated using a multi-frame single-point attack strategy, effectively mislead-ing trajectory predictions over extended time horizons. Sec-ond, we efficiently optimize adversarial objects’ locations through three specialized loss functions to achieve desired perturbations. Lastly, we improve robustness by treating the adversarial object as a point without size constraints dur-ing the location search phase and reduce dependence on both the specific attack point and the adversarial object’s properties. Extensive experiments confirm the superior per-formance and robustness of our framework. 
+
+## 1. Introduction 
+
+Autonomous Driving (AD) systems [1, 2] typically consist of perception, prediction, and planning modules. Among 
+
+> † Corresponding authors.
+> https://github.com/y1y5/OMP-ATTACK
+
+these, the prediction module plays a critical role, as an au-tonomous vehicle (AV) relies on the predicted trajectories of nearby vehicles for decision-making. Errors in trajectory prediction can compromise AV safety. Therefore, exploring the vulnerability of the prediction module is vital to improv-ing the safety of the AD system, and research on attacks targeting trajectory prediction [6, 8, 16, 26, 32, 34] also has received increasing attention. Existing trajectory prediction attacks typically compro-mise the victim AV’s prediction module by manipulating the historical trajectory of an adversarial vehicle [6, 26, 32, 34]. These methods directly inject erroneous trajectory states (including coordinates and heading at each frame) into the victim AV’s prediction module, which effectively distorts trajectory predictions. However, in real-world sce-narios, physical constraints such as coordinate precision and road variability make it difficult to manipulate an ad-versarial vehicle precisely along a pre-calculated trajectory. Furthermore, the prediction module integrates both histori-cal normal trajectory segments and precomputed adversar-ial trajectories. As the input window extends backward, the growing dominance of normal trajectories dilutes adversar-ial impact on earlier time steps, causing direct attacks to decay over time and preventing sustained influence [34]. In contrast, Lou et al . [16] introduced an indirect tra-jectory prediction attack method, termed the SinglePoint Attack (SP-Attack). It involves strategically placing phys-ical objects near a parked adversarial vehicle to deceive the LiDAR perception module, producing perturbed bound-ing box attributes for the adversarial vehicle. These per-turbed attributes are then passed through the tracking mod-ule, which generates incorrect trajectory states that propa-gate through the prediction module. The resulting predic-tion errors can lead to unsafe reactions from the victim AV. The SP-Attack consists of two phases: an attack phase to This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 17229 calculate the target state perturbations (i.e., perturbations of the trajectory states), and a location search phase to iden-tify adversarial locations capable of producing these pertur-bations. By carefully placing objects near the adversarial vehicle, SP-Attack can achieve effects comparable to di-rect attacks. However, the indirect attack faces unique chal-lenges. In the first stage, it uses a single-point attack strat-egy that generates perturbations only for the latest (current) frame of historical trajectory, which spans multiple frames of states. The single-point attack is easily filtered out by the model and lacks the endurance to affect earlier frames. This underscores the need for a multi-frame attack. There-fore, a key challenge lies in extending and maintaining the impact of a single-point attack across multiple frames to en-sure persistent perturbations over time ( Challenge 1 ). The second stage involves identifying optimal adversarial loca-tions within a vast 3D space. To achieve the multi-frame at-tack, state perturbations must be sustained over time, com-plicating the task of efficiently identifying the best loca-tions. The existing method struggles with the scalability required to find such optimal locations within this large do-main ( Challenge 2 ). The success of the indirect attack de-pends on whether the victim AV precisely reaches the target attack point. Any deviation from the attack point can reduce its impact. Additionally, the size and orientation of adver-sarial objects significantly affect the attack’s performance. These properties are predetermined before the attack plan-ning, making the attack sensitive to changes in the object’s characteristics. Ensuring robustness against these variations remains critical, but developing a strategy to achieve this ro-bustness introduces further complexity ( Challenge 3 ). To address the aforementioned challenges, we pro-pose a novel Optimization-driven Multi-frame Perturbation Framework (OMP-Attack) aimed at simultaneously achiev-ing endurance, efficiency, and robustness. OMP-Attack fol-lows a similar two-stage pipeline as SP-Attack. In the at-tack phase, rather than focusing on the single-point attack at the current frame as in SP-Attack, we extend the attack endurance by selecting a sequence of consecutive histori-cal frames, which can be divided into multiple temporally consecutive history trajectories. Specifically, starting from the current frame, we sequentially apply a single-point at-tack by stepping back one frame at a time. The pertur-bations from each frame are then concatenated to form a multi-frame perturbation sequence that effectively disrupts each frame and addresses Challenge 1 . In the location search phase, we design three specialized loss functions to optimize adversarial locations by aligning detected state perturbations with multi-frame state perturbations. These functions focus on per-frame positional distance, directional alignment, and overall trajectory shape similarity respec-tively. Guided by these loss functions, we employ swarm intelligence (SI) algorithm [20, 31] to efficiently navigate the vast search space, tackling Challenge 2 . Furthermore, to enhance robustness, we propose a Robust Attack Strat-egy that ignores the adversarial object’s size and orientation during the search phase, treating it as a single central point. By focusing solely on the 3D central coordinates of an ad-versarial object, we ensure that the real object only needs to overlap with this central point to generate the target pertur-bations. This strategy effectively mitigates the reliance on attack point and object properties, addressing Challenge 3 .Our main contributions are as follows: • We identify key challenges in existing trajectory predic-tion attacks and propose solutions that enhance attack en-durance, optimize adversarial location search efficiency, and improve attack robustness. • We introduce a novel Optimization-driven Multi-frame Perturbation Framework that can simultaneously achieve endurance, efficiency, and robustness in LiDAR-induced trajectory prediction attacks. • We conduct a comprehensive evaluation of the proposed framework on the nuScenes [3] dataset from multiple per-spectives. The results show a strong attack performance, with attack degradation kept within less than 25% under varying conditions. 
+
+## 2. Background and Related Works 
+
+Autonomous driving systems. Autonomous driving (AD) systems ( e.g ., Autoware [1], Baidu Apollo [2]) typically comprise three key modules: object perception, trajectory prediction, and motion planning. The perception module utilizes sensors ( e.g ., LiDAR, camera) to detect and track on-road objects, the prediction module forecasts nearby agents’ future trajectories, and the planning module deter-mines the AV’s actions based on these predictions. 
+
+Adversarial attacks. Deep learning models are highly sus-ceptible to adversarial examples, which are perturbed in-put samples that mislead the model to generate incorrect outputs [9, 11, 17, 22, 24, 27]. Based on this vulnerabil-ity, numerous studies have explored the impact of adver-sarial examples on various modules within AD systems. Prior research indicates that perturbations in sensor signals or physical patches can disrupt tasks such as object detec-tion [4, 23, 25] and tracking [13, 15, 21]. Similarly, trajec-tory prediction [6, 16, 26, 32, 34] and motion planning [30] modules are also vulnerable to perturbations. 
+
+LiDAR-induced attacks. LiDAR is widely utilized in per-ception modules due to its high precision. Many LiDAR-induced attacks involve placing physical objects to gen-erate adversarial points that deceive the perception mod-ule [5, 28, 36] or indirectly disrupt prediction and plan-ning processes. Another form of LiDAR-induced attack involves spoofing and injecting fake points into LiDAR’s data stream by intercepting its emitted laser pulses with a receiver [7, 23, 25], but such an approach incurs high costs. 17230 Trajectory prediction attacks. Trajectory prediction at-tacks can fall into two categories: direct and indirect. Di-rect attacks compromise the prediction module by manipu-lating the historical trajectory of an adversarial agent [6, 26, 32, 34]. Indirect attacks place physical objects near the ad-versarial vehicle to generate adversarial point clouds [16], which disrupt the perception module’s detection results and indirectly attack the prediction module. Compared to di-rect attacks, indirect methods offer greater reproducibility and lower costs in the real world. As such, this paper focuses on the LiDAR-induced indirect method. Our ap-proach achieves sustained attacks while ensuring strong and robust performance through location optimization. 
+
+## 3. Problem Formulation 
+
+3.1. Attack Model 
+
+In this work, we focus on a road scenario where the victim AV is driving along a road with a parked adversarial vehicle on the roadside, as depicted in Fig. 1a. In the attack setup, the victim AV is targeted by an attacker using a parked ad-versarial vehicle and adversarial objects, e.g ., circular card-boards, to generate adversarial state perturbations (i.e., per-turbations of the historical trajectory states). We assume that victim AV runs an AD system for LiDAR-based per-ception (including detection and tracking), trajectory pre-diction, and motion planning. The attacker first strategi-cally places adversarial objects at pre-computed locations near the adversarial vehicle. These adversarial objects are intended to create maximum interference at a specific posi-tion (i.e., the attack point) identified during the attack plan-ning phase. When the victim AV reaches the attack point, it will input the observed historical trajectory states of the ad-versarial vehicle and apply trajectory prediction at the cur-rent frame. However, the adversarial objects already distort the perception module’s output, causing erroneous histori-cal trajectory states for the adversarial vehicle and indirectly leading to inaccurate trajectory predictions. As a result, the victim AV may take sudden actions such as emergent brak-ing to avoid a perceived collision illustrated in Fig. 1b. In a real-world scenario, the attacker needs to access all parameters or only APIs of the prediction model equipped by the victim AV for a white-box attack. The attacker could acquire information through reverse engineering or analyz-ing open-source models. Even in a black-box setting, the adversarial locations from the white-box attack remain ef-fective in black-box attack. Our experimental results vali-date the success of the black-box attack. 
+
+3.2. Attack Formulation 
+
+We assume the current frame is at time step t when the victim AV reaches the attack point. We denote the state of vehicle i at time t as sit, which includes spatial coor-Adversarial  
+
+> vehicle
+> Victim AV
+> Victim AV
+> Planning
+> Without
+> attack
+> Park ing
+> (a) The normal scenario. Adversarial
+> vehicle
+> Victim AV
+> Predicted by
+> Victim AV
+> Collision!
+> Possible
+> collision?
+> Take brake.
+> Adv objects
+> With
+> attack (b) The scenario after the attack.
+
+Figure 1. Attack scenario of indirect trajectory prediction attack. 
+
+dinates and dynamic features. The states of all N (set to 1 in our scenario) on-road vehicles (except the victim AV) at time t are represented by St = sit | i ∈ [1 , N ] .From this, we derive the historical trajectory Ht =
+
+{St−Lh+1 , ..., S t} over Lh time steps and the future trajec-tory Ft = St+1 , ..., S t+Lf over Lf time steps, which serve as the input and label for the prediction module. The originally planned trajectory of victim AV without at-tack is denoted as Y vt =
+
+n
+
+Sego t+1 , ..., S ego t+Lf
+
+o
+
+, and the pre-dicted trajectory of adversarial vehicle by victim AV is de-noted as Y at = fpre (Ht + Pt), where fpre (·) represents the prediction model and Pt = {pt−Lh+1 , ..., p t} repre-sents possible perturbations over Lh historical time steps where pt includes the state perturbation of x-coordinate δxt ,
+
+y-coordinate δyt , and heading δht . Through multiple itera-tions of Projected Gradient Descent (PGD) [12, 18, 19], we obtain the target trajectory state perturbations P tar t . Specifi-cally, the goal is to minimize the average trajectory distance (ATD) Davg between Y vt and Y at as follows: 
+
+min Davg = min L (Y vt , Y at ) , (1) where Davg denotes the ATD and L represents the loss function, typically the mean squared error (MSE). By this way, the target adversarial trajectory Htar t = P tar t + Ht is obtained for direct attacks. However, we focus on indirect attack, aiming to find M adversarial locations (3D coordi-nates) Ladv = {li | i ∈ [1 , M ]} that meet the attack goal by minimizing the following objective: 
+
+min Similarity  P det t , P tar t
+
+ ,
+
+s.t. P det t = Hdet t − Ht,Hdet t = ftrack (fdet (g(Ladv ))) ,
+
+(2) where the similarity between P det t and P tar t can be mea-sured by custom-designed loss functions, P det t represents the detected state perturbations, ftrack (·), f det (·) denote the 17231 State perturb   
+
+> distributions
+> Sampling
+> tH...
+> Historical trajectories
+> Init
+> )1-(tH
+> )1-(ntH
+> State perturbation s
+> 1ntp...
+> tp
+> 1-tp
+> ... ...
+> Perturbed inputs
+> Predictor
+> PGD
+> Loss( ATD )
+> Updat e & Clip
+> ...
+
+Enduring Multi-frame Attack Eff icient Location Optimization    
+
+> Target state
+> perturbations
+> Locations init
+> Detector
+> Detected state
+> perturbations
+> Loss
+> Update
+> Pose loss
+> 2
+> L2Norm
+> Heading loss
+> SI Optimization Algorithm
+> Cosine Similarity
+> cos
+
+## , 
+
+> Shape loss
+> Dynamic Time
+> Warping
+> DTW
+
+## ,
+
+> Adversarial
+> Locations
+
+Robust Attack Strategy 
+
+> Locations sampling
+> Cardboard Attributes :
+> Coordinates, Size, Orientation
+> Attack
+> Locations init
+> Cardboard Attributes :
+> Coordinates
+> Optimization
+
+Precise Attack Vague Optimization  
+
+> element-wise add
+> Point clouds
+> Detector
+> estimate
+> Distributions Point clouds
+> Detector
+> Detected state
+> perturbations
+
+Figure 2. The optimization-driven multi-frame perturbation framework (OMP-Attack) methodology overview. Predictor refers to the trajectory prediction module, and detector refers to the perception module (including object detection and state tracking). 
+
+tracking model and detection model respectively, g(Ladv )
+
+represents the perceived point clouds over Lh historical time steps after placing the adversarial objects, denoted as 
+
+{Ct−Lh+1 , ..., C t}.
+
+## 4. Attack Method 
+
+In this section, we introduce the OMP-Attack framework, and the overall framework is depicted in Fig. 2. 
+
+4.1. Enduring Multi-frame Attack 
+
+To ensure endurance, we propose the Enduring Multi-frame Attack across multiple frames to achieve P tar t , as illustrated in Fig. 2. Compared to a multi-point attack within a single historical trajectory, the advantage of using the single-point attack over multiple temporally continuous historical trajec-tories lies in the fact that single-point attack focuses solely on perturbing the current frame of each trajectory. This ap-proach avoids interference with gradient updates from other frames, maximizing the attack’s effectiveness. 
+
+Perturbations initialization. To facilitate convergence, we utilize a sampling method [16] to initialize perturba-tions. First, we randomly generate Q (the number of query )sets of adversarial locations and use the perception mod-ule to detect the state perturbations, represented as P =δxi , δ yi , δ hi | i ∈ [1 , Q ] . We then estimate Gaussian distri-butions for the perturbations using values from the query 
+
+sets {δji | i ∈ [1 , Q ] , j ∈ {x, y, h }} , represented as 
+
+{N x, Ny , Nh}. Finally, we sample these distributions to initialize n state perturbations, denoted by {pt−n+1 , ..., p t}.
+
+Target state perturbations generation. Starting from time step t, we perform the single-point attack for the preceding 
+
+n historical trajectories successively. For the historical tra-jectory Ht−i at time step (t − i), where i ∈ [0 , n − 1] ,we first add the initialized state perturbation pt−i element-wise to the current frame, resulting in a perturbed input, 
+
+eHt−i = Ht−i + pt−i. We then retrieve the original planned trajectory Y vt−i of victim AV and obtain the predicted tra-jectory Y at−i = fpre ( eHt−i) of the adversarial vehicle. Us-ing PGD, we update the perturbation according to the ob-jective defined in Eq. (1) and apply clipping to pt−i using the 3-σ rule from the perturbation distributions [10]. Af-ter the gradient backpropagation for multiple epochs, the final target state perturbation ptar t−i is obtained. By concate-nating the target state perturbation across n frames, we de-rive the final n-frame successive target state perturbations, denoted as P tar t = ptar t−n+1 , ..., p tar t . The multi-frame target state perturbations introduce adversarial states across multiple time steps, ensuring continuous impact on the vic-tim AV throughout the attack. 
+
+4.2. Efficient Location Optimization 
+
+In this phase, our goal is to efficiently identify adversarial locations where generate the desired successive state per-turbations P tar t (Sec. 4.1). However, the continuous nature of the location space presents a vast search problem. To ad-dress this, we design three loss functions according to the objective defined in Eq. (2) and apply SI algorithms for effi-cient location identification. We select Particle Swarm Op-timization (PSO) [14] due to its balance between search per-formance and efficiency. The evidence is in the appendix. 
+
+Location optimization. We begin by initializing a set of 17232 adversarial locations, L = {li | i ∈ [1 , M ]}. At each loca-tion, cardboard is placed, and the perception module detects perturbations over n historical time steps, yielding the de-tected state perturbations P det t as derived in Eq. (2). To guide the optimization process in locating adversarial lo-cations, we design three loss functions: Lpose , Lheading 
+
+and Lshape . The pose loss Lpose enforces precise align-ment between P det t and P tar t by measuring their spatial dis-tance using the Euclidean norm. The heading loss Lheading 
+
+preserves directional consistency across frames via cosine similarity. Additionally, to account for trajectory shape in filtering, Lshape employs Dynamic Time Warping dis-tance [29, 35] to evaluate overall shape similarity between 
+
+P det t and P tar t . The total loss Ltotal is expressed as: 
+
+Ltotal = α · L pose + β · L heading + γ · L shape , (3) where α, β, and γ represent weights. Details of these loss functions are in the appendix. Guided by Ltotal , PSO it-eratively updates the adversarial locations L and ultimately converges on the optimal adversarial locations Ladv .
+
+4.3. Robust Attack Strategy 
+
+To enhance the attack robustness, we focus on two key fac-tors: (1) the distance offset between victim AV and the at-tack point, and (2) the impact of the adversarial object’s size and orientation on the attack. We propose a ”Precise Attack, Vague Optimization” strategy to address these factors. 
+
+Precise attack. In the attack phase, our goal is to gener-ate state perturbations that maximize the attack’s effective-ness. To achieve this, we need to accurately model the char-acteristics of cardboard, including its central coordinates, size, and orientation. Specifically, we simulate the point cloud detection result for the i-th cardboard at time t using 4 points, represented as Cit = c1 
+
+> i
+
+, c 2 
+
+> i
+
+, c 3 
+
+> i
+
+, c 4 
+
+> i
+
+, where each ci
+
+corresponds to a 3D coordinate and reflectance feature. By accurately simulating the cardboard characteristics, we can derive precise perturbation distributions, ensuring that the target perturbations are highly effective and well-targeted. 
+
+Vague optimization. In contrast, the optimization phase simplifies the object representation by focusing only on its core feature, namely the center coordinates. We simulate the i-th cardboard’s point cloud detection result as a single point Cit = {c1 
+
+> i
+
+}, corresponding to its center point. This simplification assumes that the center point alone is suffi-cient to generate the desired state perturbations at the ad-versarial location. By considering only the center point, we eliminate the need to accurately define the object’s size and orientation, enabling more flexible and efficient optimiza-tion of adversarial locations. In practice, we position the object to ensure that at least one point on it covers the center point. This alignment generates the primary state perturba-tion from the center point’s point cloud, which sustains at-tack performance. Meanwhile, additional perceived points on the object contribute auxiliary perturbations, thereby ef-fectively expanding the attack region. This setup reduces the reliance on precise attack points in any given frame. By combining Precise Attack for generating accurate perturbations with Vague Optimization for flexible adversar-ial location search, we enhance both the effectiveness and robustness. This approach ensures that the attack remains effective even when victim AV experiences lateral devia-tions or when the adversarial object’s properties vary. 
+
+## 5. Experiments 
+
+In this section, we evaluate the proposed OMP-Attack from multiple perspectives and analyze the results. 
+
+5.1. Experimental Setups 
+
+Dataset. We use the nuScenes [3] dataset for evaluation, which includes both perception and prediction tasks. We manually select 50 driving scenes from the dataset that meet the aforementioned attack scenario. The specific selection criteria are provided in the appendix. 
+
+Baselines. We compare the OMP-Attack with two base-lines. The first is SinglePoint Attack [16] (SP-Attack), the only state-of-the-art indirect method. The second is Brute-Force search for finding adversarial locations. In the Brute-Force method, we randomly generate adversarial locations per iteration and select the most effective locations. 
+
+Evaluation metrics & AD models. The evaluation metrics include the average trajectory distance (ATD) between the adversarial vehicle’s predicted trajectory and victim AV’s original planned trajectory, the average planning-response error (PRE) between the victim AV’s attacked and non-attacked planned trajectories, and the collision rate (CR) in future frames. CR is computed by assessing whether the victim and adversarial vehicles overlap at any of the Lf fu-ture time steps based on their center positions, lengths, and widths. A collision is recorded if an overlap occurs in any frame. A lower ATD, higher PRE, and increased CR indi-cate an enhanced effect. To ensure a fair comparison with SP-Attack, we employ the identical AD models as theirs. The details of AD models are in the appendix. 
+
+Implementation details. For the attack phase, we set the number of query in the perturbation distribution to 1000 and the number of initialized perturbations n to 5, applying a single-point attack over 5 consecutive historical trajecto-ries. For the optimization phase, we use the PSO with 10 particles and set the maximum iteration to 100. The num-ber of adversarial objects is set to 3 and the object’s radius is set to 0.1 m. Further details are available in the appendix. 
+
+5.2. Experimental Results 
+
+We present the experimental results from multiple perspec-tives, including attack effectiveness, endurance, and robust-ness. Additional results are provided in the appendix. 17233 11.904             
+
+> 10.922
+> 9.468
+> 7.212
+> 7.783
+> 6.766
+> 5.217 6.439
+> 4
+> 5
+> 6
+> 7
+> 8
+> 9
+> 10
+> 11
+> 12
+> 13
+> t-3 t-2 t-1 t
+> ATD (meter)
+> Time step
+> 1.084
+> 1.407
+> 3.760
+> 1.191
+> 2.332
+> 4.050
+> 2.975 2.393
+> 0.0
+> 0.5
+> 1.0
+> 1.5
+> 2.0
+> 2.5
+> 3.0
+> 3.5
+> 4.0
+> 4.5
+> 5.0
+> t-3 t-2 t-1 t
+> PRE (meter)
+> Time step
+> SP-Attack OMP-Attack
+> 26%
+> 10%
+> 24%
+> 42% 38%
+> 58%
+> 52%
+> 64%
+> 0.0
+> 0.1
+> 0.2
+> 0.3
+> 0.4
+> 0.5
+> 0.6
+> 0.7
+> 0.8
+> t-3 t-2 t-1 t
+> CR
+> Time step
+
+Figure 3. The quantitative results of attack endurance. For the preceding 4 time steps starting from the current frame t, the victim AV predicts the trajectory of the adversarial vehicle and re-planning at each time step. 
+
+5.2.1 Attack Effectiveness Comparison with counterparts. Following the default configuration with Lh=5 and Lf =6, we compare the effec-tiveness of our proposed attack framework against baseline methods, with results summarized in Tab. 1. OMP-Attack outperforms SP-Attack by reducing ATD by 47%, increas-ing PRE by 100%, and improving CR by 52%, indicating a significant performance boost. Additionally, we evaluate the impact of using PSO in SP-Attack and replacing PSO in OMP-Attack with the manual matching method from SP-Attack. Both changes lead to reduced attack effectiveness. This is because SP-Attack focuses solely on disrupting the current frame’s state and using PSO weakens the attack by searching normal states in other frames. In contrast, OMP-Attack disrupts multi-frame states, where the states are un-correlated, making PSO effective. Manual matching re-quires continuous detection across frames and is less suited for uncorrelated multi-frame disruptions, further lowering the performance of enduring attacks. This highlights PSO’s suitability for continuous multi-frame attacks, while man-ual matching works better for single-point attacks. 
+
+Varying particle numbers. In addition, we conduct a pa-rameter selection experiment to assess the effect of vary-ing particle numbers {5, 10 , 15 , 20 } in PSO. The results in Tab. 1 show that the ATD decreases as the number of par-ticles increases, while the PRE exhibits an overall upward trend. At the optimal outcome, PRE reaches 3.183 meters and CR achieves 68%. This suggests that an increased num-ber of particles enhances the ability to identify adversarial locations that correspond to target state perturbations, fur-ther validating the feasibility of our method in Sec. 4.2. 
+
+5.2.2 Attack Endurance 
+
+We conduct endurance experiments to evaluate the persis-tence of our proposed framework. The results are presented both quantitatively and visually. Starting from the manu-ally selected current frame t in each scene, we allow the victim AV to perceive, predict, and plan over the preced-ing 4 time steps. We then calculate the average ATD, PRE, 
+
+Table 1. Average attack results compared with counterparts and the effect of varying particle numbers on the attack effectiveness within the SI optimization algorithm. w represents ’with’ and w/o 
+
+represents ’without’. 
+
+Attack Methods ATD (m) ↓ PRE (m) ↑ CR ↑
+
+Comparison with Counterparts 
+
+Clean Scene 8.855 0 0Brute-Force 8.196 0.998 27% SP-Attack [16] 7.212 1.191 42% OMP-Attack 6.439 2.393 64% SP-Attack w PSO 8.099 1.333 24% OMP-Attack w/o PSO 7.588 0.813 34% 
+
+Varying Particle Numbers 
+
+OMP-Attack w 5 particles 6.734 2.075 50% OMP-Attack w 10 particles 6.439 2.393 64% OMP-Attack w 15 particles 6.143 2.054 44% OMP-Attack w 20 particles 5.821 3.183 68% 
+
+and CR for each frame. The quantitative results in Fig. 3 reveal two valuable insights. First, OMP-Attack maintains a persistent impact across multiple frames, showing only a minor decrease in effectiveness as we trace back through earlier frames. Notably, the maximum increase in ATD for OMP-Attack is under 1.6 meters, in contrast to SP-Attack’s increase of 4 meters. Second, OMP-Attack outperforms SP-Attack across key metrics. Over the 4 time steps, OMP-Attack achieves an average ATD of 6.551 meters, a PRE of 2.938 meters, and a CR of 53%, compared to 9.877 meters, 1.86 meters, and 26% for SP-Attack respectively. In some earlier frames, the OMP-Attack performance even surpasses that of the current frame. For instance, in the frame (t − 1) , the ATD decreases by 1.222 meters, while PRE increases by 0.582 meters compared to the frame t.This indicates that OMP-Attack not only demonstrate at-tack endurance but also maintain strong effectiveness. In Fig. 4, we visually compare the results of our pro-posed method with SP-Attack in a real dataset scene. The predicted trajectories in OMP-Attack exhibit a much more 17234 (a) OMP-Attack at frame t-3. (b) OMP-Attack at frame t-2. (c) OMP-Attack at frame t-1. (d) OMP-Attack at frame t.       
+
+> (e) SP-Attack at frame t-3. (f) SP-Attack at frame t-2. (g) SP-Attack at frame t-1. (h) SP-Attack at frame t.
+
+Figure 4. Visualization of attack endurance results for OMP-Attack and SP-Attack [16]. The attack results of OMP-Attack at frame t-3, 
+
+t-2, t-1, and t are presented in (a)-(d); those of SP-Attack at the same frames are shown in (e)-(h). The yellow line represents the predicted trajectory of the adversarial vehicle by victim AV, the blue line represents the original planning trajectory of victim AV, and the green line represents the actual planning trajectory after the attack. 
+
+aggressive behavior in each time step. Moreover, the pre-dicted trajectories are remarkably smooth, resembling nor-mal driving patterns. This implies that filtering algorithms may struggle to detect the OMP-Attack based on frame-to-frame trajectory changes. 
+
+5.2.3 Attack Robustness 
+
+We focus on two aspects of robustness: the changed ad-versarial object’s properties (size and orientation) on attack effectiveness, and the victim AV’s deviation from the at-tack point. First, we evaluate the impact of varying object placement orientations on OMP-Attack. By rotating the ob-ject center along the z-axis, we set its diameter at angles of 
+
+0◦, 45 ◦, 90 ◦, and 135 ◦ relative to the x-axis. As presented in Tab. 2, the ATD consistently remains around 6.5 meters, PRE around 2 meters, and the CR approximately 60%, re-gardless of orientation. This insensitivity to object orienta-tion is attributed to our vague optimization, which treats the object as a point, diminishing the significance of orientation on attack efficacy. Second, in Fig. 5, we change the card-board diameter from 0.1 to 0.5 meters. For the cardboards of different diameters, we place them at pre-calculated ad-versarial locations, and the metric results are recorded. The results clearly show that the performance of OMP-Attack is minimally affected by variations in object diameter, with ATD fluctuating within a narrow range of 0.456 meters and 6.386 6.439 5.983 6.165 6.009           
+
+> 3.519
+> 2.393 2.84 3.226 3.344
+> 40
+> 64
+> 52
+> 70 66
+> 0
+> 15
+> 30
+> 45
+> 60
+> 75
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 0.1 0.2 0.3 0.4 0.5
+> CR (%)
+> ATD\PRE (meter)
+> Object diameter (meter)
+> ATD PRE CR
+
+Figure 5. The impact of varying object diameters on OMP-Attack. Table 2. The impact of different object orientations at adversar-ial locations on OMP-Attack. The orientation represents the angle between the object and the positive x-axis, observed from an over-head perspective along the z-axis. 
+
+Angle ATD (m) ↓ PRE (m) ↑ CR ↑
+
+0◦ 6.439 2.393 64% 
+
+45 ◦ 6.821 1.854 52% 
+
+90 ◦ 5.591 2.150 72% 
+
+135 ◦ 7.252 1.966 46% 
+
+PRE within 1.126 meters. Attack performance remains sta-ble with fluctuations under 10%. Moreover, two key find-ings arise: (1) When the object is small enough to approxi-17235 7.212                 
+
+> 10.315 11.314
+> 14.443
+> 14.521 14.577 15.313
+> 6.439 6.721 6.744 7.397 7.098 7.311 7.476
+> 4
+> 6
+> 8
+> 10
+> 12
+> 14
+> 16
+> 00.1 0.2 0.4 0.6 0.8 1
+> ATD (meter)
+> Deviation distance (meter)
+> SP-Attack OMP-Attack
+
+Figure 6. The impact of the deviation distance between the victim AV and attack point on attack performance. 
+
+mate a point, its attack efficiency equals that of the assumed target point in our Vague Optimization strategy. The smaller the object, the closer the clustered points resemble the as-sumed target point. For example, at a 0.1-meter diameter, the PRE is 0.1 meters higher than the 0.5-meter case, vali-dating the assumption behind our optimization strategy. (2) As the diameter grows, the overall attack performance im-proves since more perturbed points are generated from the object’s surface, strengthening the disruption to the predic-tion module. These findings verify the effectiveness of the robust attack strategy described in Sec. 4.3. The results for varying object properties on SP-Attack are in the appendix. In Fig. 6, we explore the victim AV’s deviation from the attack point in both longitudinal and lateral directions with offsets from 0 to 1 meter. The average results for each devi-ation distance across four directions are recorded, with the ATD results presented in Fig. 6, and appendix covering the PRE and CR results. The results show that the SP-Attack significantly weakens even with a minimal offset. For ex-ample, at a 0.1-meter offset, SP-Attack’s ATD increases by 3 meters, rendering it ineffective in posing a threat to the victim AV. By contrast, our framework maintains an aver-age ATD of 7.027 meters, compared to SP-Attack’s 12.528 meters. Across a deviation range of 0 to 1 meter, OMP-Attack’s maximum ATD error is only 1.037 meters, with less than 25% decay in attack strength. These results under-score our framework’s robust and adaptable attack range, demonstrating its effectiveness without dependence on pre-cise alignment with the attack point. 
+
+5.3. Attack Transferability Evaluation 
+
+To validate the generalizability of our framework, we assess its attack transferability. We first identify adversarial loca-tions through a white-box attack on the original AD system. We then apply these adversarial locations directly to per-form the black-box attack on the Agentformer model [33], a representative trajectory prediction model on nuScenes dataset that integrates map information and is trained under default configurations. The results in Tab. 3 illustrate that 
+
+Table 3. The average attack results of white-box attack (w-box) and black-box attack (b-box). 
+
+Attack Methods ATD (m) ↓ PRE (m) ↑ CR ↑
+
+Clean Scene (w-box) 8.855 0 0Clean Scene (b-box) 11.083 0 0Brute-Force (w-box) 8.196 0.998 27% Brute-Force (b-box) 10.956 0.610 14% SP-Attack [16] (w-box) 7.212 1.191 42% SP-Attack [16] (b-box) 8.398 1.443 28% OMP-Attack (w-box) 6.439 2.393 64% OMP-Attack (b-box) 7.697 1.705 26% 
+
+the Brute-Force search fails to pose any threat in black-box scenarios. In contrast, adversarial locations identified by both OMP-Attack and SP-Attack exhibit attack transferabil-ity, and OMP-Attack achieves superior outcomes. Specifi-cally, OMP-Attack reduces ATD by 3.386 meters and in-creases PRE by 1.705 meters, outperforming SP-Attack’s 2.685 meters ATD reduction and 1.443 meters PRE in-crease. These results show that our framework induces higher prediction errors in the target model, highlighting its effectiveness in both white-box and black-box settings. 
+
+## 6. Conclusion 
+
+In this paper, we propose a novel Optimization-driven Multi-frame Perturbation Framework (OMP-Attack) to ad-dress three key challenges in indirect attacks. Our ap-proach employs a multi-frame attack, supported by three specialized loss functions that guide the optimization of ad-versarial locations. Additionally, we implement a ”Pre-cise Attack, Vague Optimization” strategy which ignores the adversarial object’s properties and treats it as a cen-tral point. Our method simultaneously enhances attack en-durance, efficiency, and robustness. Comprehensive experi-ments show that our framework effectively maintains attack performance across multiple frames and minimizes reliance on the attack point and object properties. Moreover, our method demonstrates superior transferability and performs robustly even in black-box settings. We believe our work will provide valuable research insights for the community. 
+
+Acknowledgement. This work was supported by the Na-tional Key Research and Development Program of China (No.2022YFB3104502), National Natural Science Foundation of China (62441237, U24A20336, 62302326, 62272357), Wuhan Science and Technology Project for Key Research and Develop-ment (No.2024050702030090), and Wuhan Science and Technol-ogy Joint Project for Building a Strong Transportation Country (No.2023-2-7, No.2024-2-7). 17236 References 
+
+[1] Autoware.ai. https://www.autoware.ai/ , 2020. [2] Baidu apollo. http://apollo.auto/ , 2021. [3] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 11621–11631, 2020. [4] Yulong Cao, Chaowei Xiao, Benjamin Cyr, Yimeng Zhou, Won Park, Sara Rampazzi, Qi Alfred Chen, Kevin Fu, and Z Morley Mao. Adversarial sensor attack on lidar-based per-ception in autonomous driving. In Proceedings of the 2019 ACM SIGSAC Conference on Computer and Communica-tions Security , pages 2267–2281, 2019. [5] Yulong Cao, Ningfei Wang, Chaowei Xiao, Dawei Yang, Jin Fang, Ruigang Yang, Qi Alfred Chen, Mingyan Liu, and Bo Li. Invisible for both camera and lidar: Security of multi-sensor fusion based perception in autonomous driving under physical-world attacks. In 2021 IEEE Symposium on Secu-rity and Privacy , pages 176–194. IEEE, 2021. [6] Yulong Cao, Chaowei Xiao, Anima Anandkumar, Danfei Xu, and Marco Pavone. Advdo: Realistic adversarial attacks for trajectory prediction. In European Conference on Com-puter Vision , pages 36–52. Springer, 2022. [7] Yulong Cao, S Hrushikesh Bhupathiraju, Pirouz Naghavi, Takeshi Sugawara, Z Morley Mao, and Sara Rampazzi. You can’t see me: Physical removal attacks on {lidar-based } au-tonomous vehicles driving frameworks. In 32nd USENIX Security Symposium , pages 2993–3010, 2023. [8] Yulong Cao, Danfei Xu, Xinshuo Weng, Zhuoqing Mao, An-ima Anandkumar, Chaowei Xiao, and Marco Pavone. Robust trajectory prediction against adversarial attacks. In Confer-ence on Robot Learning , pages 128–137. PMLR, 2023. [9] Nicholas Carlini, Anish Athalye, Nicolas Papernot, Wieland Brendel, Jonas Rauber, Dimitris Tsipras, Ian Goodfellow, Aleksander Madry, and Alexey Kurakin. On evaluating adversarial robustness. ArXiv Preprint ArXiv:1902.06705 ,2019. [10] Yinpeng Dong, Fangzhou Liao, Tianyu Pang, Hang Su, Jun Zhu, Xiaolin Hu, and Jianguo Li. Boosting adversarial at-tacks with momentum. In Proceedings of the IEEE Con-ference on Computer Vision and Pattern Recognition , pages 9185–9193, 2018. [11] Yinpeng Dong, Qi-An Fu, Xiao Yang, Tianyu Pang, Hang Su, Zihao Xiao, and Jun Zhu. Benchmarking adversar-ial robustness on image classification. In proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 321–331, 2020. [12] Simon Geisler, Tom Wollschl¨ ager, MHI Abdalla, Johannes Gasteiger, and Stephan G¨ unnemann. Attacking large lan-guage models with projected gradient descent. ArXiv Preprint ArXiv:2402.09154 , 2024. [13] Yunhan Jia, Yantao Lu, Junjie Shen, Qi Alfred, Hao Chen, Zhenyu Zhong, and Tao Wei. Fooling detection alone is not enough: Adversarial attack against multiple object tracking. In International Conference on Learning Representations ,2020. [14] James Kennedy and Russell Eberhart. Particle swarm opti-mization. In Proceedings of ICNN’95-International Confer-ence on Neural Networks , pages 1942–1948. ieee, 1995. [15] Yiming Li, Congcong Wen, Felix Juefei-Xu, and Chen Feng. Fooling lidar perception via adversarial trajectory perturba-tion. In Proceedings of the IEEE/CVF International Confer-ence on Computer Vision , pages 7898–7907, 2021. [16] Yang Lou, Yi Zhu, Qun Song, Rui Tan, Chunming Qiao, Wei-Bin Lee, and Jianping Wang. A first Physical-World trajectory prediction attack via LiDAR-induced deceptions in autonomous driving. In 33rd USENIX Security Sympo-sium , pages 6291–6308, 2024. [17] Chen Ma, Ningfei Wang, Qi Alfred Chen, and Chao Shen. Slowtrack: Increasing the latency of camera-based percep-tion in autonomous driving using adversarial examples. In 
+
+Proceedings of the AAAI Conference on Artificial Intelli-gence , pages 4062–4070, 2024. [18] Yanxiang Ma, Minjing Dong, and Chang Xu. Adversarial robustness through random weight sampling. Advances in Neural Information Processing Systems , 36, 2024. [19] Aleksander Madry. Towards deep learning models resistant to adversarial attacks. ArXiv Preprint ArXiv:1706.06083 ,2017. [20] Michalis Mavrovouniotis, Changhe Li, and Shengxiang Yang. A survey of swarm intelligence for dynamic optimiza-tion: Algorithms and applications. Swarm and Evolutionary Computation , 33:1–17, 2017. [21] Raymond Muller, Yanmao Man, Z Berkay Celik, Ming Li, and Ryan Gerdes. Physical hijacking attacks against object trackers. In Proceedings of the 2022 ACM SIGSAC Con-ference on Computer and Communications Security , pages 2309–2322, 2022. [22] Nicolas Papernot, Patrick McDaniel, Ian Goodfellow, Somesh Jha, Z Berkay Celik, and Ananthram Swami. Practi-cal black-box attacks against machine learning. In Proceed-ings of the 2017 ACM on Asia Conference on Computer and Communications Security , pages 506–519, 2017. [23] Jonathan Petit, Bas Stottelaar, Michael Feiri, and Frank Kargl. Remote attacks on automated vehicles sensors: Ex-periments on camera and lidar. Black Hat Europe , 11(2015): 995, 2015. [24] Mahmood Sharif, Sruti Bhagavatula, Lujo Bauer, and Michael K Reiter. Accessorize to a crime: Real and stealthy attacks on state-of-the-art face recognition. In Proceedings of the 2016 ACM SIGSAC Conference on Computer and Com-munications Security , pages 1528–1540, 2016. [25] Jiachen Sun, Yulong Cao, Qi Alfred Chen, and Z Morley Mao. Towards robust {LiDAR-based } perception in au-tonomous driving: General black-box adversarial sensor at-tack and countermeasures. In 29th USENIX Security Sympo-sium , pages 877–894, 2020. [26] Kaiyuan Tan, Jun Wang, and Yiannis Kantaros. Targeted ad-versarial attacks against neural network trajectory predictors. In Learning for Dynamics and Control Conference , pages 431–444. PMLR, 2023. 17237 [27] Tzungyu Tsai, Kaichen Yang, Tsung-Yi Ho, and Yier Jin. Robust adversarial objects against deep learning models. In 
+
+Proceedings of the AAAI Conference on Artificial Intelli-gence , pages 954–962, 2020. [28] James Tu, Mengye Ren, Sivabalan Manivasagam, Ming Liang, Bin Yang, Richard Du, Frank Cheng, and Raquel Urtasun. Physically realizable adversarial examples for li-dar object detection. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 13716–13725, 2020. [29] Aleksandar Vakanski, Iraj Mantegh, Andrew Irish, and Far-rokh Janabi-Sharifi. Trajectory learning for robot program-ming by demonstration using hidden markov model and dy-namic time warping. IEEE Transactions on Systems, Man, and Cybernetics, Part B (Cybernetics) , 42(4):1039–1052, 2012. [30] Ziwen Wan, Junjie Shen, Jalen Chuang, Xin Xia, Joshua Garcia, Jiaqi Ma, and Qi Alfred Chen. Too afraid to drive: systematic discovery of semantic dos vulnerability in au-tonomous driving planning under physical-world attacks. In Network and Distributed System Security Symposium , 2022. [31] Feng Yang, Pengxiang Wang, Yizhai Zhang, Litao Zheng, and Jianchun Lu. Survey of swarm intelligence optimiza-tion algorithms. In 2017 IEEE International Conference on Unmanned Systems , pages 544–549. IEEE, 2017. [32] Huilin Yin, Jiaxiang Li, Pengju Zhen, and Jun Yan. Sa-attack: Speed-adaptive stealthy adversarial attack on trajec-tory prediction. ArXiv Preprint ArXiv:2404.12612 , 2024. [33] Ye Yuan, Xinshuo Weng, Yanglan Ou, and Kris M Kitani. Agentformer: Agent-aware transformers for socio-temporal multi-agent forecasting. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9813– 9823, 2021. [34] Qingzhao Zhang, Shengtuo Hu, Jiachen Sun, Qi Alfred Chen, and Z Morley Mao. On adversarial robustness of tra-jectory prediction for autonomous vehicles. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition , pages 15159–15168, 2022. [35] Jiaping Zhao and Laurent Itti. shapedtw: Shape dynamic time warping. Pattern Recognition , 74:171–184, 2018. [36] Yi Zhu, Chenglin Miao, Tianhang Zheng, Foad Hajiaghajani, Lu Su, and Chunming Qiao. Can we use arbitrary objects to attack lidar perception in autonomous driving? In Proceed-ings of the 2021 ACM SIGSAC Conference on Computer and Communications Security , pages 1945–1960, 2021. 17238

@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "tables": [
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 874,
+      "height": 452,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 876,
+      "height": 280,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 1548,
+      "height": 540,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 674,
+      "height": 304,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 863,
+      "height": 272,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 873,
+      "height": 211,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-007.webp",
+      "caption": "",
+      "page": 0,
+      "index": 7,
+      "width": 874,
+      "height": 236,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-008.webp",
+      "caption": "",
+      "page": 0,
+      "index": 8,
+      "width": 871,
+      "height": 326,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-zhang-bridging-past-and-future-end-to-end-autonomous-driving-with-historical-prediction-cvpr-2025-paper/table-009.webp",
+      "caption": "",
+      "page": 0,
+      "index": 9,
+      "width": 1762,
+      "height": 280,
+      "label": "Table"
+    }
+  ]
+}

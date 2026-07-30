@@ -1,0 +1,322 @@
+Title: Leveraging SD Map to Augment HD Map-based Trajectory Prediction
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Dong_Leveraging_SD_Map_to_Augment_HD_Map-based_Trajectory_Prediction_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 01:16:36 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Leveraging SD Map to Augment HD Map-based Trajectory Prediction 
+
+## Zhiwei Dong Ran Ding Wei Li * Peng Zhang Guobin Tang Jia Guo Riemann Lab, 2012 Laboratories, Huawei Technologies. 
+
+kivee@foxmail.com liwei.levi@huawei.com 
+
+## Abstract 
+
+Trajectory prediction models in real-world autonomous driving often rely on online High-Definition (HD) maps to understand road environments, but online HD maps suffer from perception errors and feature redundancy, which hin-der the performance of these models. To address this is-sue, we introduce a framework, termed SD map-Augmented 
+
+Trajectory Prediction (SATP), which leverages Standard-Definition (SD) maps to enhance HD map-based trajectory prediction models. First, we propose an SD-HD fusion ap-proach to leverage SD maps across the diverse range of HD map-based trajectory prediction models. Second, we de-sign a novel AlignNet to align the SD map with the HD map, further improving the effectiveness of SD maps. Ex-periments on real-world autonomous driving benchmarks demonstrate that SATP not only improves the performance of HD map-based trajectory prediction up to 25% in real-world scenarios using online HD maps but also brings ben-efits in ideal scenarios with ground-truth HD maps. 
+
+## 1. Introduction 
+
+Trajectory prediction is a fundamental and critical task in autonomous driving, and it aims to predict the future trajec-tories of traffic participants (hereafter referred to as agents). To make more precise predictions, it is essential to accu-rately understand the road environment. HD maps serve as a crucial input for the accurate under-standing of the road environment in recent trajectory pre-diction research [2, 5, 7, 14, 20, 27, 28, 38, 39], albeit with high associated construction and maintenance costs. There-fore, most deployed autonomous systems [11, 12, 26] use online HD maps instead. Online HD maps are constructed in real-time from inexpensive onboard sensor data [4, 15– 17, 32, 34, 40], such as RGB images, making low-cost HD maps available at any location on the earth. However, on-line HD maps introduce perception errors and also retain the inherent feature redundancy of HD maps (as shown in        
+
+> *Corresponding author SD map Online HD map
+> Original SD Map Aligned SD Map
+> SD map Online HD map
+> Lane Divider Road Boundary
+> Perception errors Correct road skeleton Feature redundancy Compact feature
+> Pedestrian Crossing
+
+Figure 1. Left : Due to limitations in sensors or algorithms, on-line HD maps inevitably contain errors, while SD maps accurately capture the road skeleton. Right : Online HD maps require nu-merous elements to precisely describe road details, lacking a com-pact description, which is a characteristic of SD maps. These two problems of online HD maps hinder the performance of trajectory prediction models, while SD maps could be used to address them. 
+
+Figure 1), both of which hinder the performance of trajec-tory prediction models in deployed autonomous driving sys-tems. The method proposed in [8] tries to address the prob-lem of perception errors by producing and leveraging online HD map uncertainty, but it ignores the inherent feature re-dundancy of HD maps. We notice that simple SD maps used for road-level navigation can help address these two problems of complex online HD maps in trajectory prediction (as shown in Figure 1): (1) Perception errors :Although SD maps only provide road-level skeletons, they are generated manually offline, so their accuracy is reliable. When errors arise in online HD maps due to sensor limi-tations, occlusions, or other inherent factors, SD maps can offer corrective support. (2) Feature redundancy : The road skeletons provided by SD maps summarize the key features of detailed lane information in HD maps, which could pro-vide more concise environmental clues for trajectory pre-diction models and improve their learning efficiency. Addi-tionally, SD maps have global coverage and are freely avail-able, making them an ideal complement to HD maps. This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 17219 Based on the above considerations, we propose a frame-work named SATP to effectively integrate SD maps into various online HD map-based trajectory prediction models (hereafter referred to as baseline models 1), along with an AlignNet designed to enhance the utilization of SD maps. 
+
+Our goal is to improve trajectory prediction perfor-mance in real-world autonomous driving scenarios that rely on online HD maps through leveraging SD maps. 
+
+Specifically, we develop an SD-HD fusion approach by abstracting the HD map utilization process of different base-line models. HD map-based trajectory prediction models typically contain HD map encoding and HD feature ex-traction, and these two steps incorporate HD information into the features used for regressing trajectory coordinates. These features have different names across various baseline models, such as agent tokens [28, 38], goal queries [7, 36], or mode queries [25, 39], which we collectively refer to as “queries” for simplicity. Considering the compact feature of SD maps and feature consistency between SD and HD maps, we scale down the HD map encoding and feature ex-traction modules in baseline models to create SD map en-coding and feature extraction modules. Finally, the HD-informed and SD-informed queries are adaptively fused for trajectory prediction. Furthermore, we design AlignNet to address the mis-alignment between SD and HD maps as illustrated in Figure 1. This problem is caused by vehicle positioning errors or SD map precision limitations and weakens the effectiveness of the SD map utilization. AlignNet extracts the structural features of SD and HD maps through 2D point transformers and explicitly predicts a relative pose to transform SD maps to better align with HD maps. Since the map elements con-tained in SD maps and HD maps do not correspond one-to-one, and perception errors exist in online HD maps, it is not feasible to compute an accurate ground-truth relative pose to directly supervise the AlignNet’s output. Instead, we rely on the final trajectory prediction loss to allow it to learn the relative pose adaptively. Our contributions can be summarized as follows: • We find that simple SD maps can help address perception errors and feature redundancy in online HD maps, and thus propose an SD-HD fusion framework to integrate SD maps into various HD map-based trajectory predic-tion models. • We propose AlignNet to explicitly align SD maps with HD maps, enhancing the effectiveness of SD maps in aug-menting HD map-based trajectory prediction. • We implement SATP on several representative trajectory prediction models and improve their performance on real-
+
+> 1The baseline model here does not refer to a specific model; rather, it denotes any trajectory prediction model you intend to enhance with SD maps. For instance, if you wish to integrate SD maps with HiVT [38], then HiVT is the baseline model.
+
+world trajectory prediction benchmarks up to 25% while keeping the increase of inference time within 10%. 
+
+## 2. Related Work 
+
+2.1. HD Map-Based Trajectory Prediction 
+
+Trajectory prediction is challenging because the intentions of agents are uncertain. Intuitively, the road structure im-poses certain restrictions on traffic participants’ intentions, as cars are typically expected to drive within the lanes and not stray off the road. Therefore, researchers usually use HD maps to enhance trajectory prediction, as they contain precise information about road structures, such as lanes, pedestrian crossings, and traffic lights. Currently, there are two methods for using HD maps: rasterization and vec-torization. The rasterization method [2, 14, 19, 20] is an earlier solution where researchers render elements of the HD map into a bird’s-eye-view image (with different at-tributes occupying different channels) and then use well-established convolutional neural networks (CNNs) [10, 24] to extract features from the HD map. This method, bene-fiting from the development of CNNs, dominated the field in the early times. However, rasterization has many dis-advantages. First, it is limited by the resolution, which cannot accurately represent the position of map elements, always leading to a loss of precision during the rasteriza-tion process. Second, it is restricted by the receptive field limitations of CNNs, which struggle to capture distant fea-tures well, resulting in lower accuracy of distant trajectory predictions. Third, many locations without map elements still need to be represented numerically, which is redundant and inefficient. To address the issues with rasterization, re-searchers proposed vectorized representation [7, 38, 39]. In vectorized representation, each element of the HD map is represented as a vector (including its position coordinates, category attributes, etc.), and then GNNs or Transformers are used to compute and extract features from the vectors directly. Due to the absence of information loss caused by rasterization and the limitations of the receptive field, vec-torized representations achieve much better results than ras-terized representations in various benchmarks [1, 3, 6, 29]. To fully exploit the potential of SD maps in trajectory pre-diction, we also adopt the vectorized representation. 
+
+2.2. Utilization of SD Maps in Autonomous Driving 
+
+HD maps provide high-precision and detailed road informa-tion to support precise perception, localization, and plan-ning for autonomous driving systems. However, due to the high cost of HD maps, many researchers are exploring how to use SD maps to advance the development of autonomous driving. In terms of perception, P-MapNet [13], BLOS-BEV [31], and SMERF [18] have significantly improved accuracy by incorporating SD map priors to assist in the 17220 HD Encoding    
+
+> &HD Extraction
+> Prediction
+> Head
+> HD Map &
+> Agent Motion
+> SD Map Trajectories AlignNet
+> (Sec. 3.4)
+> SD -HD Fusion
+> (Sec. 3.3)
+> HD Map
+> Agent motion
+
+Figure 2. Overview of SATP. The gray part is the baseline model. SATP uses AlignNet to align SD with HD and uses SD-HD Fusion to get fused features, which are used for trajectory prediction. 
+
+construction of online HD maps. In localization, Orien-terNet [21] and MapLocNet [30] have achieved good ac-curacy by matching real-world images with SD maps, al-lowing autonomous vehicles to perform visual localization based on free SD maps in areas without HD maps. In trajec-tory prediction, due to the high cost and low coverage of HD maps, the method in [22] attempts to use SD maps instead of HD maps as the map input for trajectory prediction and enhance the performance of the SD map-based trajectory prediction model under conditions where ground-truth HD maps are available through knowledge distillation, but the accuracy is still lower than that based on ground-truth HD maps. This work demonstrates that SD maps can be used to assist trajectory prediction, but it also has flaws. First, it does not achieve accuracy comparable to using ground-truth HD maps. Second, it does not consider the problem of map misalignment. Additionally, it still relies on expen-sive ground-truth HD maps for knowledge distillation dur-ing training, which would further reduce the accuracy of trajectory prediction if not performed. Our method lever-ages SD maps to promote trajectory prediction as well, and it could achieve performance comparable to using expen-sive ground-truth HD maps by combining SD maps with imperfect but inexpensive online HD maps. 
+
+## 3. Methodology 
+
+3.1. Overview 
+
+As shown in Figure 2, SATP is a framework that directly integrates SD map information into HD map-based trajec-tory prediction models. In SATP, SD map information is independently encoded and extracted outside the baseline model and then fused with HD information before the pre-diction head. This SD-HD fusion strategy allows SATP to be easily applied to different types of trajectory prediction models without modifying their internal modules. To en-sure the consistency between SD and HD features, SATP applies model downscaling to create modules for SD map encoding and SD feature extraction. The proposed Align-Net predicts a relative pose between the SD and HD maps and better aligns these two types of maps, which is impor-tant for effectively utilizing SD maps. 
+
+3.2. Preparation of SD Maps 
+
+OpenStreetMap 2 [9] provides global SD maps for free, and we use it as our source of SD maps. For each scenario in the nuScenes [1] and Argoverse2 [29] datasets, we extract the corresponding SD map as follows: 1. Ego-vehicle positioning : We first obtain the latitude and longitude of the ego vehicle based on the original latitude and longitude of the city provided by the dataset and the ground-truth relative pose of the ego vehicle. 2. SD map retrieval : Using the ego vehicle’s pose, we re-trieve the SD map within a certain range centered on the ego vehicle (the specific range is consistent with the HD map range of nuScenes and Argoverse2) 3. Road skeleton extraction : The original SD maps con-tain elements of many attributes, including roads and buildings. For autonomous driving purposes, we ex-tract multilinestring elements that contain the highway 
+
+field, such as highway:primary . These elements repre-sent roads that vehicles can travel on. We then perform equidistant sampling at the 1-meter intervals on these vector elements to accurately capture their shapes. Moreover, it is worth mentioning that the pose of each scene’s ego vehicle obtained by the method above is very accurate, as the dataset provides precise GPS coordinates of the city’s origin, and the relative pose of the ego vehi-cle is highly accurate after complex offline post-processing. However, in practical application, real-time positioning technology often involves larger errors. Since SATP is aimed at real-world autonomous driving, we add random Gaussian noise to the ego vehicle’s pose during the SD map retrieval to simulate positioning errors in real scenarios. 
+
+3.3. SD-HD Fusion 
+
+Our approach to leveraging SD maps is rooted in the fol-lowing principle: SD maps should be integrated into tra-jectory prediction in the same way that the baseline model utilizes HD maps . Therefore, we need to abstract the framework for utilizing HD maps across different base-line models and apply this framework to SD map usage. As illustrated in Figure 3(a), we observe that most recent trajectory prediction models [7, 23, 25, 28, 33, 36, 38, 39] commonly employ a two-step approach when incorporating HD maps: HD map encoding and HD feature extraction. 1. HD Map Encoding: Since HD map elements are gener-ally polylines with specific traffic attributes, they must first be encoded into the feature space to interact with agent motion features and support trajectory predictions effectively. Typically, this step involves applying MLPs [23, 38] to encode the geometric information and traf-fic attributes of the map elements or, in more complex approaches, using self-attention mechanisms to capture 
+
+> 2https://www.openstreetmap.org/
+
+17221 !"#$%&'()%*          
+
+> +"#$%&'()%*
+> …
+> !"#$%#&
+> !"#$,-./&-)'%
+> +"#$,-./&-)'%
+> …
+> '( )%*+,$-#./!"#$%#& /(𝑄 !)
+> …
+> 0( )%*+,$-#./!"#$%#&/ (𝑄 ")
+> …
+> 0( )'( )%*+,$-#./
+> !"#$%#&/ (𝑄 #)
+> 0./12&-'.3#4.2()&-)'%
+> 1#2&
+> 345"#&
+> 1#2&
+> 345"#&
+> !"#5/6
+> +"#5/6
+> 0./12&-'.3#4.2()&-)'%
+> 67#*8/
+> 9*:;
+> '(/<4=/
+> 9*:;
+> 0(/<4=/
+> 9*:;
+> 67#*8 )>4*#
+> ?*8#$4:8%,*
+> 67#*8 )0(
+> ?*8#$4:8%,*
+> '(
+> 67#*8
+> 0(
+> @,*8#A8
+> 9*:;
+> 0(/@,*8#A8/
+> 9*:;
+> (#*&#/
+> B,45/9*:;
+> (#*&#
+> B,45 )0(/9*:;
+> …
+> B,45/!"#$%#&
+> '(C
+> 67#*8
+> 0(
+> 67#*8/9*:;
+> '(/<4=/
+> 9*:;
+> 0(/<4=/
+> 9*:;
+> 67#*8 )>4*#
+> 9*:;
+> 67#*8 )0(
+> 9*:;
+> …
+> <,.#/!"#$%#& <,.# )<4=
+> @$,&& )688*;
+> <,.# )0(
+> @$,&& )688*;
+> <,.# )D%-#
+> @$,&& )688*;
+> '(
+> 67#*8
+> 0(
+> !"#$ %& '(&$ )*+,-.$)/"012-/3
+> !4#$ (,56 2,78$ %& '(&$)*+,-. !9#$ &1.+16:6 2,78$ %& '(&$)*+,-. !;#$ <=:17 2,78$ %& '(&$)*+,-.
+> 6.4=8%E#/+"&%,*
+> 5'(27#('8%9&/7)%*
+> '(/-4=/#*:,.%*7
+> '(/+#48"$#/#A8$4:8%,*
+> 0(/+#48"$#/#A8$4:8%,*
+> 0(/-4=/#*:,.%*7
+> >#7#*.&F
+> 1
+> 3
+> 1
+> 3
+> 1
+> 3
+> 1
+> 3
+> 1
+> 3
+> 1
+> 3
+> !!!!
+> 5'(27#('8%9&/7)%*
+
+Figure 3. Description of SD-HD fusion and its implementations on three baseline models. We downscale the HD map encoding and feature extraction modules to create modules for SD map encoding and feature extraction. The SD map encoding module takes SD maps as input, and its outputs serve as key/value inputs for SD feature extraction. Q, K, and V represent the query, key, and value used for attention. 
+
+more comprehensive global map features [7, 36, 39]. 2. HD Feature Extraction: To combine HD map features with agent motion features and subsequently generate trajectory predictions, recent models usually rely on cross-attention mechanisms. In these models, HD fea-tures serve as key/value inputs, while agent features are used as queries [28, 38], or learnable queries are em-ployed [7, 25, 36], or a combination of both [39]. Thus, for each type of baseline model, we reduce the lay-ers and channels of the HD encoding and extraction mod-ules in the baseline model to generate the structure of the SD encoding and extraction modules, which we call model downscaling. There are two main reasons for employing model downscaling to create new modules for SD maps: (1) Feature Consistency : To ensure compatibility between SD and HD features, using similar structures for encoding and extraction is optimal. (2) Fewer Parameters : Since SD maps contain only essential road skeleton information, they include far fewer map element vectors than HD maps, al-lowing for a smaller model size. Finally, we adopt an adaptive approach to fuse the two sets of queries, each containing HD and SD features, re-spectively. The fusion process is defined by: 
+
+wi = Sigmoid (M LP (Concat (QHi , Q Si ))) ,QFi = (1 − wi) · QHi + wi · QSi , (1) where QHi , QSi and QFi represent the map-informed queries derived from the initial query i, incorporating HD fea-tures, SD features, and SD-HD fusion features, respectively. Here, QFi is used for subsequent trajectory prediction, while baseline HD map-based models use QHi directly for trajec-tory prediction, as illustrated in Figure 3(a). Based on the above principles, we demonstrate specific SATP implementations on three representative trajectory prediction models: HiVT [38], DenseTNT [7], and QCNet [39]. We choose these baseline models because they rep-resent three typical ways of HD feature extraction: agent query, learnable query, and a combination of them. 
+
+HiVT with SATP In HiVT (Figure 3(b)), an HD Map En-coder composed of MLPs is used for HD map encoding, so we downscale it to create an SD Map Encoder for SD map encoding. Next, HiVT performs HD feature extraction through cross-attention in the Agent-Lane Interaction mod-ule, passing HD features to agent queries. Accordingly, we scale down the Agent-Lane Interaction module to create an Agent-SD Interaction module for SD feature extraction. Fi-nally, we fuse the two sets of queries containing different map information. 
+
+DenseTNT with SATP DenseTNT (Figure 3(c)) utilizes a Context Encoder for HD map encoding, which takes both map element polylines and agent trajectories as inputs, ap-plying hierarchical self-attention within and between in-stances. We scale down the Context Encoder to create an SD Context Encoder. However, we input only the poly-lines from the SD map into the SD Context Encoder for effi-ciency. For HD feature extraction, the Dense Goal Encoder uses dense goals sampled from the HD map as queries and employs the Context Encoder output as key/value inputs. To adapt this process, we downscale the Dense Goal Encoder to create a Dense Goal-SD Encoder for SD feature extrac-tion, which takes the output of the SD Context Encoder as key/value inputs and dense goal as queries. 17222 !"#$%&     
+
+> '()*+,-.)/0"-12
+> 3()4&".1
+> !()4&".1
+> 3() 5"$)*+,-.)!&. !$"01&)3()5"$
+> !() 5"$)*+,-.)!&. !$"01&)!()5"$
+> 56* 𝜃 ,𝑡
+> 7%,8-
+> 5,1"%,8-#&-.
+> !()5"$
+> !"#$%&'()(*+
+> $*)&#,%%*%
+> 7%,8-#&-. Figure 4. Structure of the AlignNet.
+
+QCNet with SATP QCNet’s HD Map Encoder employs hierarchical attention for HD map encoding, which we scale down to create an SD Map Encoder. As shown in Figure 3(d), QCNet has two modules for HD feature extraction: the Agent-Lane Encoder and Mode-Map Cross-Attention. By downscaling these modules, we obtain the Agent-SD En-coder and Mode-SD Cross-Attention for SD feature extrac-tion. The Agent-SD Encoder uses agent features as query inputs and SD features as key/value inputs to perform cross-attention. Mode-SD Cross-Attention, on the other hand, uses learnable mode queries as the query inputs for cross-attention. The Agent-Lane Encoder and the Agent-SD En-coder pass HD and SD features, respectively, to the agent queries. The learnable mode queries then acquire features from these agent queries through cross-attention. Finally, HD and SD features are directly injected into the mode queries via the Mode-Map Encoder and Mode-SD Encoder, respectively, enabling them to predict trajectories. 
+
+3.4. AlignNet 
+
+The cropped local SD map from OpenStreetMap based on real-time vehicle positioning results generally has misalign-ment with the corresponding HD map, whether it is an on-line HD map estimated in the ego vehicle’s coordinate sys-tem or an offline constructed ground-truth HD map. As il-lustrated in Figure 4, there are two reasons: (1) The poor precision of SD maps leads to misalignment with the cen-terlines of roads. (2) The vehicle’s positioning results based on GPS/IMU or other technologies have inherent errors. Di-rectly using the misaligned SD maps increases the learning difficulty for the trajectory prediction model due to con-flicting information between misaligned SD and HD maps. Therefore, we design AlignNet to align these two kinds of maps, aiming at improving the effectiveness of SD maps. AlignNet extracts structural features from both the HD map and the SD map, then concatenates these features to predict the translation t and rotation angle θ of the SD map relative to the HD map, and finally applies (θ, t ) to transform the SD map for alignment with the HD map. In AlignNet, we first sample sparse and key points from the input HD and SD maps to preserve maps’ structures but decrease the computational cost of the point transformer. Specifically, for each vector element in the map, we sam-ple at a 5-meter interval and preserve those corner points. Then, a shared light-weighted 2D Point Transformer, which is a variation of the Point Transformer [37], is used as the map encoder. The 2D Point Transformer embeds the coor-dinates of each point as initial features, then performs self-vector attention [35] within its K-Nearest Neighbor (KNN) neighborhood to extract local structural features, followed by local max pooling. After multiple iterations of feature extraction and local max pooling, global average pooling is used to obtain the global features. The structural features of HD and SD maps are concatenated, and then an MLP is used to predict the rotation angle θ and transformation t
+
+of the SD map relative to the HD map. Finally, we compute rotation matrix R =
+
+cosθ −sinθ sinθ cosθ 
+
+
+
+and the following for-mula is used to obtain the aligned SD Map: 
+
+Saligned = R · ST + t,  (2) where S and Saligned are map element vectors of the SD map. In this paper, θ and t are not directly supervised but are optimized by the trajectory prediction loss. To ease the learning process, we use sigmoid activation on the output of the MLP and multiply it by the π, limiting −π ≤ θ ≤ π.
+
+## 4. Experiments 
+
+Dataset nuScenes [1] is a popular real-world autonomous driving dataset, which includes 1,000 driving scenarios over 20 seconds. It provides agent trajectories, offline ground-truth HD maps, and sensor data (RGB images). We ap-ply the methodology in [8] to upsample nuScenes’ data fre-quency to fit trajectory prediction models, which aim to pre-dict 3-second future trajectories based on 2-second histori-cal motion information. Argoverse2 [29] is the latest large-scale trajectory prediction dataset from six cities, totaling 250,000 scenarios. It provides 5-second historical trajecto-ries of various agents sampled at 10Hz and HD maps. The models need to predict a 6-second future trajectory for each agent. 17223 Map Input HiVT DenseTNT QCNet 
+
+Method mAP ↑ ADE ↓ FDE ↓ MR ↓ ADE ↓ FDE ↓ MR ↓ ADE ↓ FDE ↓ MR ↓
+
+SD N/A 0.454 0.89 0.107 1.379 2.255 0.444 0.401 0.871 0.091 MapTRv2 53.49 0.399 0.832 0.095 1.174 2.191 0.403 0.385 0.801 0.087 + SATP 53.49 0.37 0.731 0.075 1.023 2.08 0.393 0.371 0.698 0.071 + SATP + [8] 55.12 0.366 0.715 0.071 1.017 1.92 0.379 0.362 0.673 0.069 HRMapNet 74.16 0.397 0.82 0.091 0.907 1.671 0.218 0.371 0.796 0.083 + SATP 74.16 0.365 0.722 0.071 0.732 1.406 0.183 0.358 0.637 0.062 (-25%) + SATP + [8] 74.91 0.362 0.72 0.07 0.709 1.397 0.181 0.346 0.625 0.062 GT HD GT 0.371 0.736 0.072 0.852 1.475 0.199 0.36 0.632 0.062 GT HD + SATP GT 0.336 0.672 0.065 0.724 1.388 0.175 0.327 0.615 (-3%) 0.06 
+
+> Table 1. Performance of SATP on nuScenes. GT means ground-truth. A larger mAP means a better online HD map. We highlight the maximum (25%) and minimum (3%) improvements brought by SATP for combinations of different map inputs and baseline models.
+
+Metrics For trajectory prediction, we follow the offi-cial metrics of Argoverse2, which include minF DE 6,
+
+minADE 6, M R 6. These metrics are calculated based on the best one out of 6 predicted trajectories. FDE refers to the L2 distance between the predicted trajectory and the ground-truth trajectory at the last frame, while ADE is the average L2 error across all predicted time steps. MR (Miss Rate) refers to the proportion of predicted trajectories with an FDE larger than 2 meters. In our tables, we just use ADE, FDE, and MR to represent minF DE 6, minADE 6,and M R 6 for simplicity. For end-to-end autonomous driv-ing, we follow [12] and use the L2 displacement error and collision rate as metrics. L2 displacement error measures the average L2 distance between the planning trajectory and the ground truth. The collision rate represents the frequency of collisions with other agents using the planning trajectory. 
+
+Model Training First, we train the latest online HD map construction models MapTRv2 [16] and HRMapNet [34] on the nuScenes dataset and perform inference with the mapping models to generate the online HD maps for the trajectory prediction scenarios. Then, we train the trajec-tory prediction models with SATP, using the generated on-line HD maps without inference with HD map construction models. All training configurations for the online HD map-ping models and trajectory prediction models are consistent with their official implementations. All trajectory predic-tion models are trained and tested on a single V100 GPU. 
+
+4.1. Performance on nuScenes 
+
+Quantitative Results Table 1 shows the experimental re-sults of deploying SATP on the three latest trajectory pre-diction models, utilizing the state-of-the-art MapTRv2 and HRMapNet for online HD map construction. First, Table 1 demonstrates that STAP significantly enhances the per-formance of these online HD map-based baseline models by integrating SD maps. This is reasonable because per-ception errors in online HD maps can lead to an imprecise understanding of the road environment, and SD maps can correct these errors to some degree. Second, we combine SATP with the ground-truth HD map and find that it can still bring stable improvements to baseline models. The reason is that SD maps contain only the concise and key information of road environment, which could alleviate the feature redundancy problem and improve the training effi-ciency of baseline models. Overall, across the combina-tions of different map inputs and baseline models, SATP brings an average improvement of 9%, 13%, and 17% in terms of ADE, FDE, and MR, respectively. These results demonstrate the value of SATP in real-world autonomous driving applications: (1) When only defective online HD maps are available, SATP can significantly improve the per-formance of HD map-based trajectory prediction models, achieving results comparable to those using perfect ground-truth HD maps. (2) SATP can also play an important role when offline ground-truth HD maps are available in some areas or when significant advancements are made in the fu-ture online HD map construction technology. The method proposed in [8] enhances the performance of online HD Map-based trajectory prediction models by predicting un-certainty for online HD Maps. We combine it with SATP, and experiment results indicate that these two approaches can jointly improve the performance of trajectory predic-tion models based on online HD Maps. 
+
+Qualitative Results In Figure 5, we draw the results of HiVT on the nuScenes dataset with different map inputs. First, it illustrates that SATP effectively utilizes SD maps, achieving predictions superior to those using only online HD maps and comparable to those using precise ground-truth HD maps. This highlights SATP’s value in most real-world scenarios, where ground-truth HD maps are difficult to obtain. Additionally, Figure 5 shows that our AlignNet could align SD maps with HD maps to some extent. 
+
+4.2. Performance on Argoverse2 
+
+We conduct experiments on the larger and more complex real-world Argoverse2 dataset. The Argoverse2 trajectory 17224 (a) T -shaped intersection (b) Normal intersection (c) Straight road Figure 5. Qualitative results. In each subfigure, left: online HD map (MapTRv2), mid: online HD map + SATP, right: GT HD map. For simplicity, we only show three front-viewed images, but we use six surround-viewed images to construct online HD maps in experiments. 
+
+Map Input QCNet 
+
+ADE ↓ FDE ↓ MR ↓
+
+SD 1.105 2.316 0.238 GT HD + Noise 0.884 1.525 0.206 GT HD + Noise + SATP 0.752 1.306 0.164 GT HD 0.741 1.293 0.162 GT HD + SATP 0.708 1.236 0.152 
+
+> Table 2. Performance of SATP on Argoverse2. We add noise to ground-truth HD maps to simulate online HD maps with errors.
+
+prediction dataset does not provide RGB images or LiDAR data for HD map construction, and there is minimal over-lap between it and the Argoverse2 HD map construction dataset. So, we simulate perception errors in online HD maps by adding noise and randomly dropping map elements of ground-truth HD maps in the Argoverse2 trajectory pre-diction dataset. As shown in Table 2, the performance of QCNet using simulated online HD maps declines compared to using ground-truth HD maps as input, indicating that our simulation is effective. Subsequently, we leverage SD maps using SATP, and QCNet’s performance improves to be com-parable to that using ground-truth HD maps, demonstrating the effectiveness of SATP. Finally, we introduce SATP on top of ground-truth HD maps, which brings performance improvement as well, indicating that SATP leverages the concise and key map elements in SD maps to enhance the learning efficiency of the trajectory prediction model. 
+
+4.3. Ablation Study 
+
+We conduct ablation experiments on HiVT to validate the effectiveness and rational design of each module of SATP. First, we remove AlignNet, not aligning SD maps with HD maps. Although this still yields slightly better predic-tions than using online HD maps alone, the results are sig-nificantly inferior to those using aligned SD maps, demon-strating the necessity of aligning SD maps with HD maps in practical application. Additionally, we implement AlignNet using a CNN-based approach, rasterizing both SD and HD 
+
+Method ADE ↓ FDE ↓ MR ↓
+
+HiVT + MapTRv2 0.399 0.832 0.095 + SATP 0.37 0.731 0.075 
+
++ SATP/without AlignNet 0.391 0.818 0.089 + SATP/with CNN align 0.388 0.807 0.082 + SATP/with SD →HD 0.393 0.81 0.093 + SATP/with HD →SD 0.396 0.823 0.091 
+
+> Table 3. Ablation study of SATP on HiVT.
+
+maps and employing ResNet-18 [10] as a backbone to ex-tract map features and predict translation and rotation. The CNN-based alignment performs less effectively compared to using a 2D Point Transformer. This may be due to CNNs’ limitations in accurately determining the precise positions of map elements, whereas the calculation of relative pose requires precise input of location coordinates. Finally, we replace our SD-HD fusion with an alterna-tive method, sequential fusion. In the sequential fusion, the SD and HD feature extraction modules work sequentially. The two variants with different orders of extraction SD and HD features are labeled as SD →HD and HD →SD. Table 3 shows that sequential fusion methods perform worse than our standard method. We hypothesize that SD maps and HD maps each have their own advantages, and a fixed order might cause features at the beginning of the pipeline to be somewhat forgotten. In contrast, parallel fusion can select appropriate map features more adaptively. 
+
+4.4. Efficiency Study 
+
+Since we introduce additional modules for SD maps, it is crucial to study the impact of these additional computations on the overall efficiency of baseline models. Table 4 shows that SATP does not add a significant amount of parameters to the baseline model, nor does it noticeably decrease their inference speed. There are two reasons for this result: (1) Although we introduce SD map encoding and SD feature extraction modules, these modules have reduced depth and 17225 Model Param(M) ↓ Latency(ms) ↓
+
+HiVT 2.6 36 HiVT + SATP 2.9 (+0.3M) 39 (+8%) DenseTNT 1.6 317 DenseTNT + SATP 1.8 (+0.2M) 335 (+6%) QCNet 7.7 142 QCNet + SATP 8.1 (+0.4M) 153 (+8%) 
+
+Table 4. Efficiency study of SATP. 0 5000 10000 15000 20000 25000 30000 
+
+> Step
+> 2.8
+> 2.6
+> 2.4
+> 2.2
+> 2.0
+> 1.8
+> 1.6
+> Regression loss
+> HiVT + GT HD HiVT + online HD HiVT + SD HiVT + online HD + SATP HiVT + GT HD + SATP
+
+Figure 6. Training process of HiVT on nuScenes. 
+
+width compared to the corresponding modules in the base-line model. (2) The number of vector elements in SD maps is significantly lower than that in HD maps, which further reduces the computational load. On the contrary, Figure 6 shows that whether using online or ground-truth HD maps, SATP improves the training efficiency and enables the base-line model to converge more quickly and better. We be-lieve this is because the concise road skeletons provided by SD maps alleviate the feature redundancy in HD maps and make the model’s learning process easier. 
+
+4.5. End-to-End Autonomous Driving 
+
+To further validate the effectiveness of SATP, we integrate it with the advanced end-to-end autonomous driving model, VAD [12] and validate on the nuScenes [1] val dataset. In VAD, the planning transformer uses a set of learnable ego queries to extract the HD map features by treating the on-line HD map tokens as keys and values, similar to QCNet. Therefore, we implement SATP on VAD in a manner akin to that used with QCNet. Table 5 shows that SATP signifi-cantly improves various metrics of VAD. An interesting ob-servation is that SATP brings greater improvements over a longer time horizon. This is reasonable, as online HD map construction has smaller errors closer to the vehicle than farther away, so the enhancements brought by SD maps are 
+
+Method L2(m) ↓ Collision Rate(%) ↓
+
+1s 2s 3s Avg. 1s 2s 3s Avg. VAD-tiny 0.46 0.76 1.12 0.78 0.21 0.35 0.58 0.38 + SATP 0.39 0.62 0.94 0.65 0.14 0.21 0.42 0.26 
+
+Table 5. Performance of SATP on end-to-end autonomous driving. 
+
+Method mAP ↑ ADE ↓ FDE ↓ MR ↓
+
+HiVT + MapTRv2 53.49 0.399 0.832 0.095 + SATP 53.49 0.37 0.731 0.075 + P-MapNet 61.24 0.395 0.826 0.093 + P-MapNet + SATP 61.24 0.371 0.723 0.073 
+
+Table 6. Comparison with SD-Enhanced online HD map. 
+
+less obvious near the vehicle than at greater distances. 
+
+4.6. SD-Enhanced Online HD Map Comparison 
+
+As SD maps can be used to enhance the construction of on-line HD maps, an intuitive idea is to use SD map-enhanced online HD maps to improve trajectory prediction perfor-mance. To explore the differences between this method and SATP, we incorporate the SD map fusion module from P-MapNet[13] into MapTRv2 for experiments. As shown in Table 6, adding SD maps improves the HD map construc-tion quality of MapTRv2, which slightly enhances HiVT, though not as significantly as SATP. We also combine SATP with MapTRv2-PMapNet, and SATP still leads to better trajectory prediction results. We believe that reasons are twofold: (1) Using SD maps to enhance HD map construc-tion, rather than directly for trajectory prediction, results in greater information loss. (2) Although SD map-enhanced online HD maps have fewer perception errors, this way can-not address the feature redundancy of HD maps. 
+
+## 5. Conclusion 
+
+In this paper, we propose SATP, a framework that integrates SD maps into HD map-based trajectory prediction. This addresses the performance degradation of HD map-only trajectory prediction caused by perception errors and feature redundancy in online HD maps in real-world autonomous driving systems. Our experiments show that SATP yields up to 25% improvement for various representative trajectory prediction models in real-world scenarios while keeping the increase in parameter size and inference time within 10%, which suggests the practical value of SATP for autonomous driving applications. While SATP demonstrates promising results for augmenting HD map-based trajectory prediction, some limitations remain. For instance, we do not account for errors caused by delayed updates of SD maps. In future work, we will focus on addressing such issues by combining real-time sen-sor data with SD maps or leveraging traffic flow monitoring. 17226 References 
+
+[1] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 11621–11631, 2020. 2, 3, 5, 8 [2] Yuning Chai, Benjamin Sapp, Mayank Bansal, and Dragomir Anguelov. Multipath: Multiple probabilistic anchor tra-jectory hypotheses for behavior prediction. arXiv preprint arXiv:1910.05449 , 2019. 1, 2 [3] Ming-Fang Chang, John Lambert, Patsorn Sangkloy, Jag-jeet Singh, Slawomir Bak, Andrew Hartnett, De Wang, Peter Carr, Simon Lucey, Deva Ramanan, et al. Argoverse: 3d tracking and forecasting with rich maps. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 8748–8757, 2019. 2 [4] Zhiwei Dong, Xi Zhu, Xiya Cao, Ran Ding, Caifa Zhou, Wei Li, Yongliang Wang, and Qiangbo Liu. Bezierformer: A uni-fied architecture for 2d and 3d lane detection. In 2024 IEEE International Conference on Multimedia and Expo (ICME) ,pages 1–6. IEEE, 2024. 1 [5] Zhiwei Dong, Ran Ding, Jiaxiang Wang, and Wei Li. Ef-ficient long-range context modeling for motion forecasting with state space models. In International Conference on Pat-tern Recognition , pages 186–201. Springer, 2025. 1 [6] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R Qi, Yin Zhou, et al. Large scale interactive motion forecasting for autonomous driving: The waymo open mo-tion dataset. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9710–9719, 2021. 2 [7] Junru Gu, Chen Sun, and Hang Zhao. Densetnt: End-to-end trajectory prediction from dense goal sets. In Proceedings of the IEEE/CVF International Conference on Computer Vi-sion , 2021. 1, 2, 3, 4 [8] Xunjiang Gu, Guanyu Song, Igor Gilitschenski, Marco Pavone, and Boris Ivanovic. Producing and leveraging on-line map uncertainty in trajectory prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition (CVPR) , 2024. 1, 5, 6 [9] Mordechai Haklay and Patrick Weber. Openstreetmap: User-generated street maps. IEEE Pervasive computing , 7(4):12– 18, 2008. 3 [10] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. In Proceed-ings of the IEEE conference on computer vision and pattern recognition , 2016. 2, 7 [11] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17853–17862, 2023. 1 [12] Bo Jiang, Shaoyu Chen, Qing Xu, Bencheng Liao, Jiajie Chen, Helong Zhou, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. Vad: Vectorized scene representation for efficient autonomous driving. ICCV , 2023. 1, 6, 8 [13] Zhou Jiang, Zhenxin Zhu, Pengfei Li, Huan-ang Gao, Tianyuan Yuan, Yongliang Shi, Hang Zhao, and Hao Zhao. P-mapnet: Far-seeing map generator enhanced by both sdmap and hdmap priors. arXiv preprint arXiv:2403.10521 ,2024. 2, 8 [14] Namhoon Lee, Wongun Choi, Paul Vernaza, Christopher B Choy, Philip HS Torr, and Manmohan Chandraker. Desire: Distant future prediction in dynamic scenes with interacting agents. In Proceedings of the IEEE conference on computer vision and pattern recognition , 2017. 1, 2 [15] Tianyu Li, Peijin Jia, Bangjun Wang, Li Chen, KUN JIANG, Junchi Yan, and Hongyang Li. Lanesegnet: Map learning with lane segment perception for autonomous driving. In 
+
+The Twelfth International Conference on Learning Represen-tations , 2023. 1 [16] Bencheng Liao, Shaoyu Chen, Yunchi Zhang, Bo Jiang, Qian Zhang, Wenyu Liu, Chang Huang, and Xinggang Wang. Maptrv2: An end-to-end framework for online vectorized hd map construction. arXiv preprint arXiv:2308.05736 , 2023. 6[17] Yicheng Liu, Tianyuan Yuan, Yue Wang, Yilun Wang, and Hang Zhao. Vectormapnet: End-to-end vectorized hd map learning. In International Conference on Machine Learning ,pages 22352–22369. PMLR, 2023. 1 [18] Katie Z Luo, Xinshuo Weng, Yan Wang, Shuang Wu, Jie Li, Kilian Q Weinberger, Yue Wang, and Marco Pavone. Aug-menting lane perception and topology understanding with standard definition navigation maps. In 2024 IEEE Inter-national Conference on Robotics and Automation (ICRA) ,pages 4029–4035. IEEE, 2024. 2 [19] Francesco Marchetti, Federico Becattini, Lorenzo Seidenari, and Alberto Del Bimbo. Mantra: Memory augmented net-works for multiple trajectory prediction. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , 2020. 2 [20] Tim Salzmann, Boris Ivanovic, Punarjay Chakravarty, and Marco Pavone. Trajectron++: Dynamically-feasible trajec-tory forecasting with heterogeneous data. In European con-ference on computer vision , 2020. 1, 2 [21] Paul-Edouard Sarlin, Daniel DeTone, Tsun-Yi Yang, Armen Avetisyan, Julian Straub, Tomasz Malisiewicz, Samuel Rota Bulo, Richard Newcombe, Peter Kontschieder, and Vasileios Balntas. Orienternet: Visual localization in 2d public maps with neural matching. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 21632–21642, 2023. 3 [22] Julian Schmidt, Julian Jordan, Franz Gritschneder, Thomas Monninger, and Klaus Dietmayer. Exploring navigation maps for learning-based motion prediction. In 2023 IEEE In-ternational Conference on Robotics and Automation (ICRA) ,pages 3539–3545. IEEE, 2023. 3 [23] Shaoshuai Shi, Li Jiang, Dengxin Dai, and Bernt Schiele. Motion transformer with global intention localization and lo-cal movement refinement. Advances in Neural Information Processing Systems , 35:6531–6543, 2022. 3 [24] Karen Simonyan and Andrew Zisserman. Very deep convo-lutional networks for large-scale image recognition. arXiv preprint arXiv:1409.1556 , 2014. 2 17227 [25] Xiaolong Tang, Meina Kan, Shiguang Shan, Zhilong Ji, Jin-feng Bai, and Xilin Chen. Hpnet: Dynamic trajectory fore-casting with historical prediction attention. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15261–15270, 2024. 2, 3, 4 [26] Inc. Tesla. Tesla ai day 2021. YouTube, 2021. Accessed: 2024-05-12. 1 [27] Mingkun Wang, Xinge Zhu, Changqian Yu, Wei Li, Yuexin Ma, Ruochun Jin, Xiaoguang Ren, Dongchun Ren, Mingxu Wang, and Wenjing Yang. Ganet: Goal area network for motion forecasting. In 2023 IEEE International Conference on Robotics and Automation , 2023. 1 [28] Xishun Wang, Tong Su, Fang Da, and Xiaodong Yang. Prophnet: Efficient agent-centric motion forecasting with anchor-informed proposals. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,2023. 1, 2, 3, 4 [29] Benjamin Wilson, William Qi, Tanmay Agarwal, John Lambert, Jagjeet Singh, Siddhesh Khandelwal, Bowen Pan, Ratnesh Kumar, Andrew Hartnett, Jhony Kaesemodel Pontes, et al. Argoverse 2: Next generation datasets for self-driving perception and forecasting. arXiv preprint arXiv:2301.00493 , 2023. 2, 3, 5 [30] Hang Wu, Zhenghao Zhang, Siyuan Lin, Xiangru Mu, Qiang Zhao, Ming Yang, and Tong Qin. Maplocnet: Coarse-to-fine feature registration for visual re-localization in naviga-tion maps. arXiv preprint arXiv:2407.08561 , 2024. 3 [31] Hang Wu, Zhenghao Zhang, Siyuan Lin, Tong Qin, Jin Pan, Qiang Zhao, Chunjing Xu, and Ming Yang. Blos-bev: Nav-igation map enhanced lane segmentation network, beyond line of sight. In 2024 IEEE Intelligent Vehicles Symposium (IV) , pages 3212–3219. IEEE, 2024. 2 [32] Tianyuan Yuan, Yicheng Liu, Yue Wang, Yilun Wang, and Hang Zhao. Streammapnet: Streaming mapping network for vectorized online hd map construction. In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision , pages 7356–7365, 2024. 1 [33] Bozhou Zhang, Nan Song, and Li Zhang. Decoupling motion forecasting into directional intentions and dynamic states. 
+
+arXiv preprint arXiv:2410.05982 , 2024. 3 [34] Xiaoyu Zhang, Guangwei Liu, Zihao Liu, Ningyi Xu, Yun-hui Liu, and Ji Zhao. Enhancing vectorized map perception with historical rasterized maps. In European Conference on Computer Vision , 2024. 1, 6 [35] Hengshuang Zhao, Jiaya Jia, and Vladlen Koltun. Explor-ing self-attention for image recognition. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 10076–10085, 2020. 5 [36] Hang Zhao, Jiyang Gao, Tian Lan, Chen Sun, Ben Sapp, Balakrishnan Varadarajan, Yue Shen, Yi Shen, Yuning Chai, Cordelia Schmid, et al. Tnt: Target-driven trajectory predic-tion. In Conference on Robot Learning , 2021. 2, 3, 4 [37] Hengshuang Zhao, Li Jiang, Jiaya Jia, Philip HS Torr, and Vladlen Koltun. Point transformer. In Proceedings of the IEEE/CVF international conference on computer vision ,pages 16259–16268, 2021. 5 [38] Zikang Zhou, Luyao Ye, Jianping Wang, Kui Wu, and Ke-jie Lu. Hivt: Hierarchical vector transformer for multi-agent motion prediction. In Proceedings of the IEEE/CVF Confer-ence on Computer Vision and Pattern Recognition , 2022. 1, 2, 3, 4 [39] Zikang Zhou, Jianping Wang, Yung-Hui Li, and Yu-Kai Huang. Query-centric trajectory prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition , 2023. 1, 2, 3, 4 [40] Xi Zhu, Xiya Cao, Zhiwei Dong, Caifa Zhou, Qiangbo Liu, Wei Li, and Yongliang Wang. Nemo: Neural map growing system for spatiotemporal fusion in bird’s-eye-view and bdd-map benchmark. arXiv preprint arXiv:2306.04540 , 2023. 1 17228

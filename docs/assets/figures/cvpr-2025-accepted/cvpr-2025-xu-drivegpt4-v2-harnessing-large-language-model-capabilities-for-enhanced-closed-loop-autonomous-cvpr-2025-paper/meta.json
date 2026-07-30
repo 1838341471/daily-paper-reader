@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "figures": [
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/fig-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 864,
+      "height": 624,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/fig-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 1783,
+      "height": 992,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/fig-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 845,
+      "height": 624,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/fig-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 875,
+      "height": 373,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/cvpr-2025-accepted/cvpr-2025-xu-drivegpt4-v2-harnessing-large-language-model-capabilities-for-enhanced-closed-loop-autonomous-cvpr-2025-paper/fig-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 894,
+      "height": 761,
+      "label": "Figure"
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+Title: MaskGWM: A Generalizable Driving World Model with Video Mask Reconstruction
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Ni_MaskGWM_A_Generalizable_Driving_World_Model_with_Video_Mask_Reconstruction_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 12:13:13 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# MaskGWM: A Generalizable Driving World Model with Video Mask Reconstruction 
+
+# Jingcheng Ni, Yuxin Guo, Yichen Liu, Rui Chen, Lewei Lu, Zehuan Wu SenseTime Research 
+
+# Abstract 
+
+World models that forecast environmental changes from ac-tions are vital for autonomous driving models with strong generalization. The prevailing driving world model mainly build on video prediction model. Although these models can produce high-fidelity video sequences with advanced diffusion-based generator, they are constrained by their pre-dictive duration and overall generalization capabilities. In this paper, we explore to solve this problem by combining generation loss with MAE-style feature-level context learn-ing. In particular, we instantiate this target with three key design: (1) A more scalable Diffusion Transformer (DiT) structure trained with extra mask construction task. (2) we devise diffusion-related mask tokens to deal with the fuzzy relations between mask reconstruction and genera-tive diffusion process. (3) we extend mask construction task to spatial-temporal domain by utilizing row-wise mask for shifted self-attention rather than masked self-attention in MAE. Then, we adopt a row-wise cross-view module to align with this mask design. Based on above improvement, we propose MaskGWM: a Generalizable driving World 
+
+Model embodied with Video Mask reconstruction. Our model contains two variants: MaskGWM-long, focusing on long-horizon prediction, and MaskGWM-mview, dedicated to multi-view generation. Comprehensive experiments on standard benchmarks validate the effectiveness of the pro-posed method, which contain normal validation of Nuscene dataset, long-horizon rollout of OpenDV-2K dataset and zero-shot validation of Waymo dataset. Quantitative met-rics on these datasets show our method notably improving state-of-the-art driving world model. Our project page is https://github.com/SenseTime-FVG/OpenDWM. 
+
+# 1. Introduction 
+
+As an pivotal application of artificial intelligence, au-tonomous driving technologies, which require comprehend-ing the surrounding environment and executing correct ac-tions, have achieved significant advancements following the emergence of various learning models [19, 24] with scal-ability. However, the challenge of limited generalization to complex and varied scenarios remains unresolved for state-of-the-art methods [25]. For example, perception may encounter performance drops [44] in cases like weather changes, scene variations and motion blur. A promising so-lution for this problem is the use of world models, which di-rectly predict environment changes under different actions. These models facilitate unraveling the complexities of data distributions and craft intricate regular patterns like human perception system [22]. Recently, advanced methods [12, 18, 39, 40, 42, 43] de-veloped world models through diffusion-based generation task, capitalizing on the rapid development of advanced im-age generation systems [1, 7, 33]. Despite generating high-fidelity results, these approaches still struggle with long-horizon prediction and zero-shot generalization. To address this, GenAD [46] attempts to conduct training on large-scale OpenDV-2K [46] dataset with carefully-designed tem-poral modules, while VISTA [12] further introduces ex-plicit re-weighted generation loss on structural and mov-ing areas. However, two problems still exist in build-ing a generalizable world model for autonomous driving. First, the combination of large-scale training dataset with more scalable transformer architectures is still under explo-ration. Second, one fundamental question remains unan-swered: Is diffusion-based generation sufficient to build a generalizable world model? Since diffusion loss targets at iterative de-noising, the learning of visual semantics may not be straightforward. For example, MaskDiT [50] has shown diffusion models are complementary to well-known self-supervised methods [14], benefiting both convergence speed and generation quality. Based on these insights into the diffusion pipeline and data for our driving world model, we design a new model, dubbed as MaskGWM, aiming at improving the fidelity, generalizability and long-time series prediction of the ex-isting methods. Additionally, our model can also gener-ate multi-view cases, by incorporating a multi-view mod-ule. We adopt Diffusion Transformer (DiT) as our back-bone, which is more scalable and could take the information from a variety of datasets. Moreover, we introduce the mask This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 22381 Method Model Setup 
+
+Data scale Framework Multi-view Traget Drive-WM [40] 5h Unet √ Diff DiVE [20] 5h DiT √ Diff GenAD [46] 1740h Unet × Diff Vista [12] 1740h Unet × Diff MaskGWM(Ours) 1740h DiT √ Diff+MR  
+
+> (a) Real-world multi-view driving world models. Information
+> exchange
+> Same mask positions
+> Different mask positions
+> Information
+> exchange
+> Temporal Context
+> Spatial Context (b) Different context for mask reconstruction.
+
+Figure 1. (a). MaskGWM improve fidelity and generalization from web-scale dataset, scalable DiT architecture and Mask Reconstruction (MR) target. (b) proposed MR apply a two branch structure for spatial context (scene objects) and temporal context (object motions) Zero Shot Transfer  Long -Horizon Rollout on Web -Scale scenes  Multi -View Generation     
+
+> 0s 1s 3s 7s 12s Time
+
+Figure 2. Our model facilitates zero-shot generation, consistent long-horizon prediction and multi-view video generation. 
+
+reconstruction as a complementary task for generation. Several impactful works [14, 45] have demonstrated that masked autoencoder is a powerful self-supervised method for representation learning from large-scale data and it is also extended to some diffusion methods [11, 50, 52] as an additional supervision to improve the models’ performance. Additionally, the features obtained by self-supervised learn-ing is more contextually meaningful [5], which can be used as an auxiliary supervision to further improve the generation quality [18] However, integrating existing mask reconstruc-tion for image generation into driving world models is not straightforward. There are still two questions to answer: (1) How can we enhance the synergy between diffusion model and mask reconstruction? Though the Mask reconstruction improves the contextual reasoning ability, this task contra-dicts with diffusion steps which include high noise ratio ob-scuring the feature details. (2) What kind of mask strategy should we use for video data? Different from image gen-eration, the prediction of driving future requires an under-standing of not only the objects within the scene but also their dynamic movements. Therefore, we develop several special designs to ad-dress the aforementioned issues: (1) We make use of the mask tokens to improve the synergy between mask recon-struction and diffusion models. Specifically, we propose a diffusion-related mask tokens (Sec.3.2) to initialized the in-visible patches after DiT encoder. This special mask token can balance the learning of global and local features. (2) We design a novel two-branch mask reconstruction strat-egy. For spatial modeling, we use a mask shared across all frames and reconstruct invisible tokens via spatial trans-former, this mask strategy is similar to some video mask modeling methods [36, 38]. For temporal modeling, we in-troduce a frame-specific mask and recover masked tokens via temporal transformer. Unlike the spatial branch, we di-rectly link the unaligned tokens on temporal dimension af-ter masking, which can be seen as a shift augmentation re-stricted by a new-proposed row-wise policy. We find this temporal branch achieves both masked patches prediction in the temporal context and a reduction in training costs. In summary, our main contributions are: • We propose MaskGWM, a generalizable DiT-based driv-ing world model capable of forecasting long-term futures across web-scale scenes. • We introduce mask reconstruction as a complementary task for diffusion-based world model. • Comprehensive experiments on nuScene, OpenDV-2K and Waymo datasets demonstrate the superior video qual-22382 ity and robust generalization capabilities across extended time spans and different viewpoints. 
+
+# 2. Related Works 
+
+2.1. World Models 
+
+World models aim to infer the dynamic environment and ego state from past observations for accurate future pre-dictions and planning. Most studies achieve world under-standing by enabling the model to generate realistic videos that align with physical principles. In autonomous driving area, world models primarily focus on generating control-lable real-world driving scenarios. GAIA-1 [18] employs an autoregressive transformer to predict tokens based on past state and then leverages a diffusion decoder to gen-erate high-quality videos. In contrast, DriveDreamer [39] directly use diffusion model to represent complex environ-ments and generate driving videos from multi-modal in-puts. Drive-WM [40] extends to consistent and control-lable multi-view video generation, exploring its application in end-to-end planning. GenAD [46] enhances generaliza-tion capability of world models by training on large-scale datasets and Vista [12] achieves further improvements by introducing attention on structure and dynamic area. 
+
+2.2. Diffusion Models with Self-supervised Learn-ing 
+
+Recently, diffusion-based methods [13, 15, 32, 48] have become the mainstream of image and video generation. One important advancement in this field is Diffusion Trans-former(DiT) [30]. Due to its better scalability and lower computational cost, DiT has been successfully applied in various diffusion models, achieving state-of-the-art re-sults [7, 8, 20, 51]. On the other hand, masking strategies from self-supervised learning have been effectively applied to en-hance generative models. With the development of DiT, research has focused on migrating this self-supervised approach to diffusion-based models. Initial works like MDT [11] modify DiT blocks to an asymmetric masking diffusion transformer architecture, where the encoder han-dles unmasked tokens only and a side-interpolater is intro-duced to recover the latnet to the original shape. Follow-ing MDT [11], MaskDiT [50] simply utilizes a learnable token to fill in the masked places. SD-DiT [52], notic-ing the training-inference discrepancy and fuzzy relations between mask strategy and diffusion process, introduce a novel masking DiT with self-supervised discrimination. Despite their succuss, none of them applied the masking diffusion to the video generation models. Our work make this attempt on driving world model by applying different design of spatial context and temporal context, which focus on scene objects and nuance motion separately. 
+
+# 3. Method 
+
+Fig. 3 illustrates an overview of the proposed pipeline. MaskGWM builds upon Stable Diffusion 3 (SD3) [7], which is a well-studied DiT-based Text-to-Image (T2I) gen-eration model, and introduce additional spatial and tem-poral blocks to extract the cross-view and cross-frame in-formation. Moreover, we deploy a mask reconstruction module during training to improve the performance of our model. In this section, we first briefly review our DiT-based driving world model in Sec. 3.1. Then, Sec. 3.2 details the pipeline for mask reconstruction and introduces novel diffusion-related mask tokens designed to enhance the syn-ergy between diffusion generation and mask reconstruction. Following this, Sec. 3.3 describes the extension of mask re-construction to the temporal dimension. Finally, in Sec. 3.4, we describe the details of our cross-view module. 
+
+3.1. Preliminaries 
+
+Diffusion Models. A mutli-view video sampled from a video dataset pdata can be represented as x0 ∼ pdata ,where x0 ∈ RT ×K×C×H×W is a sequence of T frames with view K, height H and width W . We first transform 
+
+x0 into video tokens z0 = P(Θ( x0)) ∈ RT ×K×C× ˆH× ˆW
+
+via latent encoder Θ and patch encoding P. MaskGWM applies Rectified Flow [7, 26, 27] to model the generation process. Specifically, given a standard normal distribution 
+
+ϵ ∼ N (0 , I) , Rectified Flow defines the intermediate noisy state as zτ = (1 − τ )z0 + τ ϵ , where τ ∈ [0 , 1] is the diffu-sion timestep. The training target of Rectified Flow adopts the v-prediction, defined as: 
+
+L = Ez0,ϵ ∼N (0 ,I) ,τ 
+
+∥Gθ (zτ , τ, c, M) − (z0 − ϵ)∥22
+
+ ,
+
+(1) where c is the condition, M is a binary mask for mask re-construction and Gθ is the DiT model. 
+
+Temporal Modeling. To facilitate temporal context learn-ing, we attach a temporal transformer block after each 2D spatial transformer block, following common practice in video generation models [2, 29]. During the forward pro-cess, to standardize the inputs to the different self-attention layers in the transformer blocks, we reshape the video latent representation to (TK)( ˆH ˆW)C for spatial self-attention and to (K ˆH ˆW)TC for temporal self-attention. Additionally, we introduce reference frames according to video DiT mod-els [9, 29]. During diffusion process, diffusion timestep τ of the reference frames is always set as 0, while the following frames to be predicted are embedded with regular timestep. 
+
+Unified Action Conditioning. Following VISTA, we pro-vide nuanced control over low-level actions including angle, speed, trajectory and goal point, combining with high-level command capabilities. We construct action embedding by concatenating the Fourier embeddings [35] of all actions. Subsequently, these action embeddings are projected and 22383 Time                
+
+> Text condition
+> Daytime, city road
+> Action
+> if 𝑀 =𝑀 𝑠𝑝𝑎𝑡𝑖𝑎𝑙 if 𝑀 =𝑀 𝑡𝑖𝑚𝑒
+> View
+> Equal Mask
+> Spatial
+> Transformer
+> Temporal
+> Transformer
+> if 𝑀 =𝑀 𝑠𝑝𝑎𝑡𝑖𝑎𝑙
+> if 𝑀 =𝑀 𝑡𝑖𝑚𝑒
+> Token Mask
+> Token  Reconstruction
+> Mask Token 𝑚 τ
+> Spatial  TB
+> Temporal  TB
+> View  TB
+> 𝑇𝐾  ෡𝐻 𝜌  ෡𝑊  𝐶
+> 𝐾  ෢𝐻𝜌  ෡𝑊  𝑇𝐶
+> 𝑇  ෡𝐻  𝐾𝜌  ෡𝑊  𝐶
+> DiT -Block
+> Encoder Decoder
+> DiT -Block  Generative
+> Loss
+> Angle
+
+TB    
+
+> Speed Trajectory
+> Transformer Block Reshape & Froward Only for Training
+> visible
+> invisible
+
+Figure 3. Overview of the MaskGWM. We propose mask reconstruction containing token mask and token reconstruction as a complemen-tary task for training dring world model. Token Mask : we randomly sample tokens by temporal-shared Mspatial and temporal-unshared 
+
+Mtime , specialized for spatial and temporal modeling. Token Reconstruction : we fill invisible tokens by diffusion-related mask tokens (Sec.3.2) and recover features by a two-branch transformer. Moreover, we introduce a row-wise mask strategy (Sec.3.3) for temporal branch. ρ = 1 − r is used for simplicity in encoder. 
+
+added to the key and value features of the cross-attention layers in temporal transformer blocks. 
+
+3.2. Diffusion-related Mask Reconstruction 
+
+Motivated by previous works [50, 52], Masked Image Modeling (MIM) [14, 45] with mask reconstruction object has been adopted to diffusion-based generation model and achieve improvement on training efficiency and local con-textual perception. However, these methods fail to consider the influence of diffusion process, which incorporate noise schedule and complex training target. Therefore, we pro-pose this novel pipeline integrated with mask reconstruc-tion and then introduce our diffusion-related mask tokens for compatibility with diffusion process, which can reduce the effect of noise during diffusion process. 
+
+Mask Reconstruction. During the training phase, the DiT backbone is asymmetrically divided into an encoder 
+
+E and a decoder D for mask reconstruction and includes two additional processing steps. In the encoding stage, MaskGWM produces a token mask by random sampling a binary mask M ∈ RT ×K×1×H×W , given the video latent 
+
+zτ at timestep τ . Similar to [11, 52], M is only use to parti-tion zτ into visible patch tokens zvτ = zτ ⊙ M and invisible patch tokens ziv τ = zτ ⊙ (1 − M ). In the decoding stage, an extra token reconstruction module is introduced to handle dropped invisible patches. Mask tokens mτ , representing invisible patches, are infilled at the positions of the dropped tokens. Then, a transformer block F is utilized to provide contextual awareness from visible patches. In details, 
+
+Gθ (zτ , M) = D(F (E(zvτ ) ⊙ M + mτ ⊙ (1 − M ))) , (2) where τ, c in Eq.(1) are ignored for simplicity. Note that mask reconstruction is skipped for inference in which all tokens are visible, equivalent to Gθ (zτ ) = D(E(zτ )) = 
+
+D(E(zvτ + ziv τ )) . In practice, invisible patches ziv τ are di-rectly dropped during the encoding of training to enable memory and speed benefits. 
+
+Diffusion-related Mask Tokens. SD-DiT [52] describes a fuzzy relationship between generation process and mask reconstruction. Concretely, mask reconstruction focuses on context reasoning while generation diffusion process aims to model the translations between real and fake distribu-tions. From the viewpoint of diffusion model, the mask reconstruction for represent learning can be regard as z0-prediction task, whereas rectified flow employs v-prediction (pred z0 − ϵ). Therefore, simply combining these two dis-22384 M = 𝑀 𝑠𝑝𝑎𝑡𝑖𝑎𝑙 , Temporal Transformer Block  M = 𝑀 time , Temporal Transformer Block   
+
+> Shifted
+> M=෡𝑀 t𝑖𝑚𝑒 , Temporal Transformer Block
+> Each row mask exactly 1 token
+> Self -Attention
+> Attention Mask
+
+Figure 4. The comparison of different mask types and attention operations for temporal transformer block with mask reconstruction task. Attention mask is only applied when M = Mtime 
+
+tinct objectives may not lead to good performance of the diffusion model, as also demonstrated by MaskDiT [50]. Existing works either instantiate mask tokens as learn-able parameters [11, 14] p or directly take noisy tokens zτ
+
+as input [52]. As discussed above, these mask tokens can-not balance these two targets due to the absence of explicit information for acquiring ϵ. We bridge this gap by introduc-ing fm(ϵ) into the mask token, where fm is a small network for encoding noise ϵ. Given that ϵ is explicitly provided, it is easier to recover the original mask reconstruction target for representation learning within diffusion pipeline. Other than explicitly alignment for two prediction tasks, we fur-ther take τ into consideration. Overall, we define our mask token with learnable parameters p as: 
+
+mτ = (1 − τ )fm(ϵ) + τ p.  (3) Based on our experiments in Section 4.4, we designed this mask token accordingly. When τ is large, the generation is performed at a high-noise level, and fine-grained image details are unknown. We hypothesize that the learnable pa-rameters can estimate an average distribution under specific conditions (e.g., text) and assist in guiding the prediction direction when appearance details are lacking [47]. Con-versely, on a low-noise level, mask reconstruction encour-ages the model to be attentive to local details of visible patches. Therefore, the model can leverage the visible infor-mation to recover the patches filled with noise (by fm(ϵ)). 
+
+3.3. Mask Reconstruction Strategy 
+
+Temporal and Spatial Mask. Previous methods [36, 38] extend MIM to video domain by sharing the random mask across time, where the mask M = Mspatial =[M1, M2..., MT ] satisfy Mi = Mj when i̸ = j. Despite the effectiveness on understanding tasks in the aforemen-tioned methods, this masking strategy may not be suitable for temporal modeling on driving video prediction. To in-corporate temporal learning, we introduce a temporal un-shared mask Mtime satisfy Mi̸ = Mj when i̸ = j. Then, we specialize Mspatial for spatial modeling and consider MIM with Mtime for temporal modeling. Then, we make tasks synergy by devising a two-branch transformer block: 
+
+F =
+
+(
+
+Fs if M = Mspatial 
+
+Ft if M = Mtime 
+
+, (4) where M ∈ {M spatial , Mtime }, Fs is a spatial trans-former block and Ft is a temporal transformer block. 
+
+Row-wise Approximation. The most straightforward strat-egy for masking video data is to directly apply a random mask Mtime on each frame like [36, 38], as shown in the middle column of Fig. 4. However, this design cause tokens on masked positions should be masked rather than directly dropped, since temporal self-attention require all entries have the same sequence length and apply an attention mask to control sparsity. As a result, this masked temporal self-attention requires a 3D attention mask to skip masked to-kens, which leads to additional computational cost and pre-cludes the direct application of optimization operators like FlashAttention [6]. To address the aforementioned issues, we employ shifted temporal self-attention for Mtime . As il-lustrated in the right column of Fig. 4, we randomly mask the same number of tokens for each row. Similar to the spa-tial branch, all invisible tokens are dropped, and the visible tokens are directly connected. Consequently, this operation can be regarded as a shift in temporal self-attention, which adheres to the core idea of Masked Reconstruction (MR): masked tokens are invisible and are predicted from context during the decoding stage. Additionally, rearranging the visible tokens row by row ensures the relevance of infor-mation in the temporal attention block during the encoding stage. In experiments, we find this design improves not only the training speed but also the generation metrics, especially on larger mask ratio r. Since this row-wise shifting allows 22385 nearby tokens to fill in the blanks of masked tokens, We analysis this phenomenon by token filling makes all tokens on temporal axis are retained and minor shift can facilitate the temporal block in context reasoning. To formulate this row-wise temporal mask, we define the mask ratio as r. To generate the mask for a ˆH × ˆW image latent at frame t, we randomly generate ˆH one-dimensional mask, each having r ˆW zero values, and concatenate them to formulate the final mask for this image, denoted by cMtime .We use cMtime to replace Mtime in our training. 
+
+3.4. Mask Reconstruction for Cross-View 
+
+Our method can be extended to generate multi-view driving videos by introducing view transformer blocks. We propose a cross-view row-wise self-attention mechanism, which concatenates video features horizontally and computes at-tention across multi-view features on the same row. Specif-ically, given a feature tensor of shape T KC ˆH ˆW , we apply masking, resulting in a tensor of shape T KC ˆH[(1 − r) ˆW ].We then reshape it into size (T ˆH)[ K(1 − r) ˆW ]C.The key insights of the proposed cross-view row-wise attention are twofold: First, since the vertical context can be modeled by spatial transformer blocks, row-wise fea-ture exchange provides sufficient receptive field to extract multi-view information. Second, the proposed row-wise masking for reconstruction can also be utilized as data aug-mentation, since Kr ˆW tokens of each row are randomly dropped. Because the proposed masked modeling task fo-cuses on spatio-temporal modeling, we do not apply mask reconstruction along the view dimension. 
+
+# 4. Experiments 
+
+4.1. Setup 
+
+Datasets. We conduct comprehensive experiments on a single-view dataset OpenDV-2K [46] and two multi-views datasets nuScenes [3] and Waymo [34]. We follow the offi-cial splits to divide the training and validation sets. 
+
+Evaluation. The quality of the generated images and videos are assessed using the Frechet Inception Distance (FID) [16] for images and the Frechet Video Distance (FVD) [37] for videos. For fair comparison with previous works, we apply different settings for single-view model and multi-view model. For single view model, we align the evaluation setting of VISTA [12]. For multi-view model, we adopt the setting of Drive-WM [40]. Please refer to Ap-pendix.7.3 for details. To assess generalization ability, we evaluate zero-shot performance on Waymo validation set, using 600 videos for FVD and 15K frames for FID. 
+
+4.2. Training Scheme 
+
+Our model is initialized with SD3 [7] medium checkpoint with 2B parameters. There are three stages for our training:                                                 
+
+> Method Multi-view Future-layout FID ↓FVD ↓
+> DrivingDiffusion [23] √√15.8 332.0 Panacea [41] √√16.9 139.0 MagicDrive [10] √√19.1 218.1 DiVE [20] √√-94.6 DriveDreamer-2 [49] √×11.2 55.7 Drive-WM [40] √×15.8 122.7 MaskGWM-mview √×8.9 65.4 DriveGAN [21] ××73.4 502.3 GenAD [46] ××15.4 184.0 Vista [12] ××6.9 89.4 MaskGWM-long ××5.6 92.5 Table 1. Performance comparison with state-of-the-art methods on nuScene Dataset. The varying shades of gray indicate our multi-view metric following Drive-WM and single-view metric follow-ing Vista for more fair comparison. Future layout refers to the availability of layout information for future time steps.
+
+Method FVD ↓ FID ↓
+
+VISTA [12] † 176.56 9.76 MaskGWM-long 118.83 9.55  
+
+> Table 2. Zero-shot metrics on 600 Waymo validation samples. †
+> denotes inference by official checkpoint.
+
+Stage 1 for pre-training on large-scale OpenDV-2K dataset, Stage 2 for single-view model MaskGWM-long and Stage 3 for multi-view model MaskGWM-mview. For all stages, we resize the original images to 512 ×288, masking ratio r
+
+is set to 0.25. 
+
+Stage 1. Following VISTA [12], we first pre-train our model on OpenDV-2K dataset. As our model starts from image backbone, we first train our model using single frame videos with batch size 768 for 18K iterations and then we train our temporal blocks with 16/20/24 frame videos and batch size 64. In particular, temporal blocks is initialized with zero and the training of temporal blocks takes 24K iter-ations in this step. Afterwards, we insert the zero-initialized reconstruction blocks F and train with masking strategy for extra 20K iterations. The reason for varying frame length during training is that the frame numbers for single-view and multi-view models are different. 
+
+Stage 2 for MaskGWM-long. We devised MaskGWM-long to align with VISTA, where the frame length T is set to 25 and cross-view blocks are skipped. We also follow the stage 2 of VISTA’s collaborative training, in which data were sampled equally from nuScene and OpenDV-2K, and the action module is zero-initialized and trained. 
+
+Stage 3 for MaskGWM-mview. Based on MaskGWM-22386 Time: 0 -12s Figure 5. Long-horizon prediction results of MaskGWM. Our model is capable of forecasting long video sequences with stability, devoid of collapse or blurring issues.         
+
+> Figure 6. Comparison of Long-horizon FVD metric on OpenDV2K validation set. Our method demonstrates superior performance in terms of both value and growth rate.
+
+long, we enable multi-view ability of MaskGWM-mview by adding the cross-view blocks and train it on nuScene dataset for 6K steps and T is reduced to 8. 
+
+4.3. Comparison 
+
+Generation Quality. Tab.1 presents the quantitative com-parison. In single-view generation, we achieve a remark-able FID of 5.6 and an FVD of 92.5, surpassing the previous state-of-the-art approaches [12, 46] that are also trained on web-scale dataset. For multi-view cases, similar improve-ment can also be observed, with 8.9 FID and 65.4 FVD. It is worth noting that our model directly predict multi-view fu-ture without the requirement of future layouts, unlike those methods [20] deviating from video prediction task. Further-more, our method represents a pioneering effort in extend-ing a generalizable single-view model, trained on OpenDV-2K, to the domain of multi-view models. 
+
+Generalization ability. In Tab.2, we assess the general-ization capability of our approach on the Waymo dataset, which is excluded from our training datasets. We conducted inference using the official checkpoint of VISTA [12]. The results indicate that our method attains superior FVD while maintaining comparable FID, thereby demonstrating the generalization ability of our method. 
+
+Long-horizon prediction. Fig.6 illustrates the comparison of long-time prediction with VISTA. Due to the computa-tional cost of generating long videos, both FID and FVD metrics are calculated on 300 videos randomly sampled from the OpenDV-2K validation set. The slope of FVD curve is significantly lower than VISTA, showing the less degradation. Qualitative results are illustrated in Fig.5. 
+
+4.4. Ablation Studies 
+
+We conduct comprehensive ablation study to verfiy the per-formance of every component in MaskGWM. Following the setting of GenAD for effective experiments, most ablation studies are conducted on stage 1 after mask reconstruction is inserted and the metrics are reported on the validation set of OpenDV-2K dataset with 3000 video clips for FVD and 18000 frames for FID. For the ablation of cross-view trans-former blocks, we use multi-view nuScene metrics. 
+
+Effect of mask tokens. As indicated in Tab.3a, we make comparisons across different designs for mask tokens 
+
+mτ . To analysis the influence of diffusion timestep τ , we test only applying mask reconstruction on certain timestep range. We find learnable parameters p shown better results on high noisy level and proposed noise embedding fm(ϵ)
+
+perform better on low noisy level. This demonstrates the merit of noise embedding, which can recover the original mask reconstruction target for represent learning by explic-itly giving ϵ, achieving better result on generation steps with local details. In addition, we also try the mask tokens used in SD-DiT [52], combining with extra contrastive [4] loss. The experiment shows our proposed diffusion-related mask tokens achieve best performance via combining the advan-tage of p and fm(ϵ).
+
+Effect of mask reconstruction. In Tab.3b and Tab.4a, we 22387 mτ τ range contra. FVD ↓ FID ↓
+
+p [0 , 1] 126.71 7.35 
+
+p [0 .5, 1] 120.35 7.12 
+
+fm(ϵ) [0 , 1] 116.85 6.40 
+
+fm(ϵ) [0 , 0.5] 109.87 5.92 
+
+zτ [0 , 1] √ 113.26 6.32 ours [0 , 1] 105.52 5.69   
+
+> (a) Different design of mτ.
+
+Mtime row shift att. Mspatial r FVD ↓ FID ↓
+
+0 136.55 10.28 √ 0.25 142.68 10.75 √ √ 0.25 143.07 10.39 √ √ √ 0.25 121.38 7.36 √ 0.25 116.73 5.92 
+
+√ √ √ √ 0.25 105.52 5.69 
+
+> (b) Ablations of two-branch mask reconstruction.
+
+Table 3. Ablations of the components in our mask reconstruction. “contra” stands for contrastive loss, “row” denotes whether Mtime 
+
+satisfies above row-wise generation strategy ( Mtime = ˆMtime ) and ”att.” refers to self-attention                                              
+
+> row&shift att rFVD ↓Time ↓
+> 0.1 133.24 0.368d 0.25 142.68 0.352d √0.1 123.70 0.357d √0.25 121.38 0.329d (a) Different mask ratio r.two-branch layers FVD ↓FID ↓
+> 1121.37 5.85 √1105.52 5.69 2127.91 6.03 √2107.34 5.60 (b) Different design of F.att dim ratio rFVD ↓FID ↓
+> KW 065.9 9.2
+> KW 0.25 65.4 8.9
+> K0.25 71.5 8.7
+> KHW 0.25 64.7 8.5 (c) Ablation of cross-view block.
+
+Table 4. Ablations of the impact of mask ratio r, different view transformer block designs and the effect of mask reconstruction on convergence. ”share” stands for applying one shared model for Fs and Ft. Time indicate the training time for 10k steps. 
+
+explore the effectiveness of proposed mask reconstruction in spatial-temporal domain. According to Tab.4a, we find that our row-wise time mask with shift attention mechanism assists a lot the model’s convergence, while larger mask ratio can also make positive effect on the results. Thus, this setting is adopted in the ablation study on the mask strategy M. As shown in Tab.3b, combining Mspatial 
+
+and Mtime can significantly improve the generation qual-ity of the whole videos and each single images. We hy-pothesis this is because the temporal modeling is more sen-sitive to the dropout ratio than spatial counterpart (Please see more details on Appendix.6.1). When shifted temporal self-attention is applied with a row-wise mask, all tokens on temporal axis are retained and experience only minor spatial shifts. Whereas invisible tokens are skipped without shift temporal self-attention, which results in a discrepancy be-tween the number of tokens used in training and inference. Moreover, the training speed is improved since invisible to-kens dropped. From Tab.3b, we can see our two-branch mask reconstruction achieve best results, showing the ef-fectiveness on temporal context. 
+
+Effect of cross-view module. As shown in Tab.4c, we make comparisons across different types of cross-view modeling. We find that introducing mask reconstruction on stage-3 training also yields favorable results. This indicates that randomly masking certain tokens along the view-row dimension is not detrimental and can even enhance the fi-nal results. This is different from temporal counterpart that requires shift-attention to avoiding tokens dropping. Furthermore, the experiment shows that proposed atten-tion on dimensions KW outperforms view-attention on K
+
+used in previous methods [39, 40]. For view attention on 
+
+KHW , despite the minor improvement, the computation complexity explodes significantly. Consequently, this de-sign is not adopted in our experiments. 
+
+Effect of two-branch token reconstruction. We val-idate the effectiveness of two-branch transformer recon-struction structure for token reconstruction on Tab.4b. We remove two-branch structure by applying sequential spatial-temporal transformer blocks, which is shared by Fs and Ft.We find the two-branch structure produces better results, es-pecially on FVD. Unshared design forces the model to re-construct masked features by corresponding context, lead-ing to better spatial and temporal modeling. 
+
+# 5. Conclusion 
+
+We introduce MaskGWM, a DiT-based driving world model trained on web-scale datasets with masking strategy during training. By introducing a novel video dual-branch mask reconstruction, our model excels in both numeric metrics on fidelity and generation ability. Additionally, our mask policy also accelerate the training process and reduce memory consumption. Our extensive experiments show MaskGWM achieves the state-of-the-art performance on generation quality on nuScene, zero-shot ability on Waymo and long-time prediction ability on OpenDV-2K. These results further indicates that our method can serve as a training programs to enable long driving video prediction. 22388 References 
+
+[1] Andreas Blattmann, Tim Dockhorn, Sumith Kulal, Daniel Mendelevitch, Maciej Kilian, Dominik Lorenz, Yam Levi, Zion English, Vikram Voleti, Adam Letts, et al. Stable video diffusion: Scaling latent video diffusion models to large datasets. arXiv preprint arXiv:2311.15127 , 2023. 1, 3 [2] Andreas Blattmann, Robin Rombach, Huan Ling, Tim Dock-horn, Seung Wook Kim, Sanja Fidler, and Karsten Kreis. Align your latents: High-resolution video synthesis with la-tent diffusion models. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 22563–22575, 2023. 3 [3] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 11621–11631, 2020. 6 [4] Mathilde Caron, Hugo Touvron, Ishan Misra, Herv´ e J´ egou, Julien Mairal, Piotr Bojanowski, and Armand Joulin. Emerg-ing properties in self-supervised vision transformers. In Pro-ceedings of the IEEE/CVF international conference on com-puter vision , pages 9650–9660, 2021. 7 [5] Mathilde Caron, Hugo Touvron, Ishan Misra, Herv´ e J´ egou, Julien Mairal, Piotr Bojanowski, and Armand Joulin. Emerg-ing properties in self-supervised vision transformers. In Pro-ceedings of the International Conference on Computer Vi-sion (ICCV) , 2021. 2 [6] Tri Dao, Dan Fu, Stefano Ermon, Atri Rudra, and Christo-pher R´ e. Flashattention: Fast and memory-efficient exact at-tention with io-awareness. Advances in Neural Information Processing Systems , 35:16344–16359, 2022. 5 [7] Patrick Esser, Sumith Kulal, Andreas Blattmann, Rahim Entezari, Jonas M¨ uller, Harry Saini, Yam Levi, Dominik Lorenz, Axel Sauer, Frederic Boesel, et al. Scaling recti-fied flow transformers for high-resolution image synthesis. In Forty-first International Conference on Machine Learn-ing , 2024. 1, 3, 6 [8] Kunyu Feng, Yue Ma, Bingyuan Wang, Chenyang Qi, Haozhe Chen, Qifeng Chen, and Zeyu Wang. Dit4edit: Diffusion transformer for image editing. arXiv preprint arXiv:2411.03286 , 2024. 3 [9] Peng Gao, Le Zhuo, Ziyi Lin, Chris Liu, Junsong Chen, Ruoyi Du, Enze Xie, Xu Luo, Longtian Qiu, Yuhang Zhang, et al. Lumina-t2x: Transforming text into any modality, reso-lution, and duration via flow-based large diffusion transform-ers. arXiv preprint arXiv:2405.05945 , 2024. 3 [10] Ruiyuan Gao, Kai Chen, Enze Xie, Lanqing Hong, Zhenguo Li, Dit-Yan Yeung, and Qiang Xu. Magicdrive: Street view generation with diverse 3d geometry control. arXiv preprint arXiv:2310.02601 , 2023. 6 [11] Shanghua Gao, Pan Zhou, Ming-Ming Cheng, and Shuicheng Yan. Masked diffusion transformer is a strong image synthesizer. In Proceedings of the IEEE/CVF Interna-tional Conference on Computer Vision , pages 23164–23173, 2023. 2, 3, 4, 5 [12] Shenyuan Gao, Jiazhi Yang, Li Chen, Kashyap Chitta, Yi-hang Qiu, Andreas Geiger, Jun Zhang, and Hongyang Li. Vista: A generalizable driving world model with high fidelity and versatile controllability. In Advances in Neural Informa-tion Processing Systems (NeurIPS) , 2024. 1, 2, 3, 6, 7 [13] Yuwei Guo, Ceyuan Yang, Anyi Rao, Zhengyang Liang, Yaohui Wang, Yu Qiao, Maneesh Agrawala, Dahua Lin, and Bo Dai. Animatediff: Animate your personalized text-to-image diffusion models without specific tuning. arXiv preprint arXiv:2307.04725 , 2023. 3 [14] Kaiming He, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Doll´ ar, and Ross Girshick. Masked autoencoders are scalable vision learners. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 16000– 16009, 2022. 1, 2, 4, 5 [15] Roberto Henschel, Levon Khachatryan, Daniil Hayrapetyan, Hayk Poghosyan, Vahram Tadevosyan, Zhangyang Wang, Shant Navasardyan, and Humphrey Shi. Streamingt2v: Con-sistent, dynamic, and extendable long video generation from text. arXiv preprint arXiv:2403.14773 , 2024. 3 [16] Martin Heusel, Hubert Ramsauer, Thomas Unterthiner, Bernhard Nessler, and Sepp Hochreiter. Gans trained by a two time-scale update rule converge to a local nash equilib-rium. Advances in neural information processing systems ,30, 2017. 6 [17] Jonathan Ho and Tim Salimans. Classifier-free diffusion guidance. arXiv preprint arXiv:2207.12598 , 2022. 2 [18] Anthony Hu, Lloyd Russell, Hudson Yeo, Zak Murez, George Fedoseev, Alex Kendall, Jamie Shotton, and Gian-luca Corrado. Gaia-1: A generative world model for au-tonomous driving. arXiv preprint arXiv:2309.17080 , 2023. 1, 2, 3 [19] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17853–17862, 2023. 1 [20] Junpeng Jiang, Gangyi Hong, Lijun Zhou, Enhui Ma, Heng-tong Hu, Xia Zhou, Jie Xiang, Fan Liu, Kaicheng Yu, Haiyang Sun, et al. Dive: Dit-based video generation with enhanced control. arXiv preprint arXiv:2409.01595 , 2024. 2, 3, 6, 7 [21] Seung Wook Kim, Jonah Philion, Antonio Torralba, and Sanja Fidler. Drivegan: Towards a controllable high-quality neural simulation. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 5820–5829, 2021. 6 [22] Yann LeCun. A path towards autonomous machine intelli-gence version 0.9. 2, 2022-06-27. Open Review , 62(1):1–62, 2022. 1 [23] Xiaofan Li, Yifu Zhang, and Xiaoqing Ye. Drivingdiffusion: Layout-guided multi-view driving scenarios video genera-tion with latent diffusion model. In European Conference on Computer Vision , pages 469–485. Springer, 2024. 6 [24] Zhiqi Li, Wenhai Wang, Hongyang Li, Enze Xie, Chong-hao Sima, Tong Lu, Yu Qiao, and Jifeng Dai. Bevformer: Learning bird’s-eye-view representation from multi-camera 22389 images via spatiotemporal transformers. In European con-ference on computer vision , pages 1–18. Springer, 2022. 1 [25] Zhiqi Li, Zhiding Yu, Shiyi Lan, Jiahan Li, Jan Kautz, Tong Lu, and Jose M Alvarez. Is ego status all you need for open-loop end-to-end autonomous driving? In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14864–14873, 2024. 1 [26] Yaron Lipman, Ricky TQ Chen, Heli Ben-Hamu, Maximil-ian Nickel, and Matt Le. Flow matching for generative mod-eling. arXiv preprint arXiv:2210.02747 , 2022. 3 [27] Xingchao Liu, Chengyue Gong, and Qiang Liu. Flow straight and fast: Learning to generate and transfer data with rectified flow. arXiv preprint arXiv:2209.03003 , 2022. 3 [28] I Loshchilov. Decoupled weight decay regularization. arXiv preprint arXiv:1711.05101 , 2017. 2 [29] Open-Sora. Open-sora. URL: https://github.com/ hpcaitech/Open-Sora , 2024. 3 [30] William Peebles and Saining Xie. Scalable diffusion models with transformers. In Proceedings of the IEEE/CVF Inter-national Conference on Computer Vision , pages 4195–4205, 2023. 3 [31] Dustin Podell, Zion English, Kyle Lacey, Andreas Blattmann, Tim Dockhorn, Jonas M¨ uller, Joe Penna, and Robin Rombach. Sdxl: Improving latent diffusion mod-els for high-resolution image synthesis. arXiv preprint arXiv:2307.01952 , 2023. 3 [32] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj¨ orn Ommer. High-resolution image synthesis with latent diffusion models. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 10684–10695, 2022. 3 [33] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj¨ orn Ommer. High-resolution image synthesis with latent diffusion models. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 10684–10695, 2022. 1 [34] Pei Sun, Henrik Kretzschmar, Xerxes Dotiwalla, Aurelien Chouard, Vijaysai Patnaik, Paul Tsui, James Guo, Yin Zhou, Yuning Chai, Benjamin Caine, et al. Scalability in perception for autonomous driving: Waymo open dataset. In Proceed-ings of the IEEE/CVF conference on computer vision and pattern recognition , pages 2446–2454, 2020. 6 [35] Matthew Tancik, Pratul Srinivasan, Ben Mildenhall, Sara Fridovich-Keil, Nithin Raghavan, Utkarsh Singhal, Ravi Ra-mamoorthi, Jonathan Barron, and Ren Ng. Fourier features let networks learn high frequency functions in low dimen-sional domains. Advances in neural information processing systems , 33:7537–7547, 2020. 3 [36] Zhan Tong, Yibing Song, Jue Wang, and Limin Wang. Videomae: Masked autoencoders are data-efficient learners for self-supervised video pre-training. Advances in neural information processing systems , 35:10078–10093, 2022. 2, 5[37] Thomas Unterthiner, Sjoerd Van Steenkiste, Karol Kurach, Raphael Marinier, Marcin Michalski, and Sylvain Gelly. To-wards accurate generative models of video: A new metric & challenges. arXiv preprint arXiv:1812.01717 , 2018. 6 [38] Limin Wang, Bingkun Huang, Zhiyu Zhao, Zhan Tong, Yi-nan He, Yi Wang, Yali Wang, and Yu Qiao. Videomae v2: Scaling video masked autoencoders with dual masking. In 
+
+Proceedings of the IEEE/CVF Conference on Computer Vi-sion and Pattern Recognition , pages 14549–14560, 2023. 2, 5[39] Xiaofeng Wang, Zheng Zhu, Guan Huang, Xinze Chen, Jia-gang Zhu, and Jiwen Lu. Drivedreamer: Towards real-world-driven world models for autonomous driving. arXiv preprint arXiv:2309.09777 , 2023. 1, 3, 8 [40] Yuqi Wang, Jiawei He, Lue Fan, Hongxin Li, Yuntao Chen, and Zhaoxiang Zhang. Driving into the future: Multiview visual forecasting and planning with world model for au-tonomous driving. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 14749–14759, 2024. 1, 2, 3, 6, 8 [41] Yuqing Wen, Yucheng Zhao, Yingfei Liu, Fan Jia, Yanhui Wang, Chong Luo, Chi Zhang, Tiancai Wang, Xiaoyan Sun, and Xiangyu Zhang. Panacea: Panoramic and controllable video generation for autonomous driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 6902–6912, 2024. 6 [42] Wei Wu, Xi Guo, Weixuan Tang, Tingxuan Huang, Chiyu Wang, Dongyue Chen, and Chenjing Ding. Drivescape: To-wards high-resolution controllable multi-view driving video generation. arXiv preprint arXiv:2409.05463 , 2024. 1 [43] Zehuan Wu, Jingcheng Ni, Xiaodong Wang, Yuxin Guo, Rui Chen, Lewei Lu, Jifeng Dai, and Yuwen Xiong. Holodrive: Holistic 2d-3d multi-modal street scene generation for au-tonomous driving. arXiv preprint arXiv:2412.01407 , 2024. 1[44] Shaoyuan Xie, Lingdong Kong, Wenwei Zhang, Jiawei Ren, Liang Pan, Kai Chen, and Ziwei Liu. Benchmarking and im-proving bird’s eye view perception robustness in autonomous driving. arXiv preprint arXiv:2405.17426 , 2024. 1 [45] Zhenda Xie, Zheng Zhang, Yue Cao, Yutong Lin, Jianmin Bao, Zhuliang Yao, Qi Dai, and Han Hu. Simmim: A simple framework for masked image modeling. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 9653–9663, 2022. 2, 4 [46] Jiazhi Yang, Shenyuan Gao, Yihang Qiu, Li Chen, Tianyu Li, Bo Dai, Kashyap Chitta, Penghao Wu, Jia Zeng, Ping Luo, et al. Generalized predictive model for autonomous driving. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14662–14672, 2024. 1, 2, 3, 6, 7 [47] Zhongqi Yue, Jiankun Wang, Qianru Sun, Lei Ji, Eric I Chang, Hanwang Zhang, et al. Exploring diffusion time-steps for unsupervised representation learning. arXiv preprint arXiv:2401.11430 , 2024. 5 [48] Lvmin Zhang, Anyi Rao, and Maneesh Agrawala. Adding conditional control to text-to-image diffusion models. In 
+
+Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 3836–3847, 2023. 3 [49] Guosheng Zhao, Xiaofeng Wang, Zheng Zhu, Xinze Chen, Guan Huang, Xiaoyi Bao, and Xingang Wang. Drivedreamer-2: Llm-enhanced world models for diverse 22390 driving video generation. arXiv preprint arXiv:2403.06845 ,2024. 6 [50] Hongkai Zheng, Weili Nie, Arash Vahdat, and Anima Anandkumar. Fast training of diffusion models with masked transformers. arXiv preprint arXiv:2306.09305 , 2023. 1, 2, 3, 4, 5 [51] Jun Zheng, Fuwei Zhao, Youjiang Xu, Xin Dong, and Xi-aodan Liang. Viton-dit: Learning in-the-wild video try-on from human dance videos via diffusion transformers. arXiv preprint arXiv:2405.18326 , 2024. 3 [52] Rui Zhu, Yingwei Pan, Yehao Li, Ting Yao, Zhenglong Sun, Tao Mei, and Chang Wen Chen. Sd-dit: Unleash-ing the power of self-supervised discrimination in diffusion transformer. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 8435– 8445, 2024. 2, 3, 4, 5, 7 22391

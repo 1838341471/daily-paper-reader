@@ -1,0 +1,551 @@
+Title: SocialMOIF: Multi-Order Intention Fusion for Pedestrian Trajectory Prediction
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Chen_SocialMOIF_Multi-Order_Intention_Fusion_for_Pedestrian_Trajectory_Prediction_CVPR_2025_paper.pdf
+
+Published Time: Mon, 02 Jun 2025 12:14:26 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# SocialMOIF: Multi-Order Intention Fusion for Pedestrian Trajectory Prediction 
+
+## Kai Chen 1∗, Xiaodong Zhao( Q)1∗, Yujie Huang 1, Guoyu Fang 1,Xiao Song 2, Ruiping Wang 3, Ziyuan Wang 11 Nanjing University of Aeronautics and Astronautics  
+
+> 2
+
+## Beihang University 3 Nanyang Technological University      
+
+> {chen kai, xdzhao, yj huang, fanggy, zy wang }@nuaa.edu.cn songxiao@buaa.edu.cn, ruiping.wang@ntu.edu.sg
+
+## Abstract 
+
+The analysis and prediction of agent trajectories are crucial for decision-making processes in intelligent systems, with precise short-term trajectory forecasting being highly sig-nificant across a range of applications. Agents and their social interactions have been quantified and modeled by re-searchers from various perspectives; however, substantial limitations exist in the current work due to the inherent high uncertainty of agent intentions and the complex higher-order influences among neighboring groups. SocialMOIF is proposed to tackle these challenges, concentrating on the higher-order intention interactions among neighboring groups while reinforcing the primary role of first-order in-tention interactions between neighbors and the target agent. This method develops a multi-order intention fusion model to achieve a more comprehensive understanding of both di-rect and indirect intention information. Within SocialMOIF, a trajectory distribution approximator is designed to guide the trajectories toward values that align more closely with the actual data, thereby enhancing model interpretability. Furthermore, a global trajectory optimizer is introduced to enable more accurate and efficient parallel predictions. By incorporating a novel loss function that accounts for dis-tance and direction during training, experimental results demonstrate that the model outperforms previous state-of-the-art baselines across multiple metrics in both dynamic and static datasets. 
+
+## 1. Introduction 
+
+Trajectory prediction is of considerable importance for in-telligent transportation and surveillance systems. Stud-ies indicate that trajectories derived from the physical  
+
+> * Equal contribution. Code is available at https://github.com/XiaodZhao/SocialMOIF .
+> Figure 1. The process of SocialMOIF includes: (1) extracting the position, velocity and trajectory information of agents, (2) achiev-ing multi-order fused intention modeling, (3) guiding the distribu-tion of trajectories and performing global optimization. Finally we obtain accurate parallel predictions.
+
+world encompass rich spatiotemporal intention information [15, 20, 26, 29, 45]. Therefore, a significant challenge arises in effectively capturing (data modeling) and analyz-ing (encoding-decoding) processes related to the complex and diverse historical social intentions of agents, while link-ing this information to future trajectory predictions for en-hanced efficiency. 
+
+History social intentions. Existing research can be broadly classified into two main categories: knowledge-driven methods primarily depend on expert knowledge. For instance, biomimetic method [41] achieved agent lo-calization and intention interaction modeling by simulat-ing the positioning of marine animals. In contrast, cer-tain studies utilized game-theoretic approaches to analyze This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 22465 social intentions through the simulation of agent flows [13, 50] and evacuation processes [14, 55], relying on ex-plicit rules or formulas. However, the behavioral patterns and interaction rules among agents in social scenarios dis-played high nonlinearity and uncertainty [26, 39, 40]. Data-driven methods implicitly learn interactions among agents through neural networks. For instance, LSTM-based meth-ods [1, 11] continuously refined social pooling patterns, while attention-based approaches [7, 49, 51] dynamically adjusted agents’ focal points in global interactions from a spatiotemporal integration perspective to optimize pre-dicted trajectories. These methods primarily focused on straightforward interactions or direct responses between the target agent and its neighbors, often neglecting the higher-order, multidimensional influences exerted by surrounding agents on the target agent’s intentions. Kim et al. [16] modeled agent intentions from 1st-order to N-order equally. However, when the number of agents was large, it may prioritized higher-order intentions, thereby diminishing the primary impact of lower-order intentions. Thus, the devel-opment of a multi-order fusion network that reinforces the dominant role of direct interactions while considering the secondary influence of higher-order transmissions on the target is essential. 
+
+Associating future trajectory information. Knowle-dge-driven methods face limitations due to the inherent flaws of unidirectional inference, which hinder effective as-sociation with future trajectory information. Data-driven methods exhibit two main shortcomings: first, agent move-ments are temporally dynamic, and relying solely on dis-tance loss fails to capture these dynamic variations. Second, in generative model approaches [25, 28, 34, 38, 47], future trajectory information is implicitly involved in the training process without explicit guidance, resulting in poor inter-pretability. In safety-sensitive tasks such as autonomous driving, it is necessary to utilize meaningful and goal-oriented parameters and models. 
+
+Efficiency. Existing methods predominantly emphasize upstream tasks. For example, LSTM-based approaches [5, 6, 36, 43, 54] modeled trajectory data in a serial temporal manner, while Transformer-based methods [9, 19, 48, 49] analyzed trajectory information through parallel processing. However, in downstream tasks, trajectories are often gener-ated independently and sequentially. This method not only accumulates errors but also limits the efficiency of trajec-tory prediction. Therefore, establishing a trajectory parallel prediction model that accounts for global influences across future periods is a promising area for further exploration. As illustrated in Fig. 1, SocialMOIF is proposed to ad-dress the trajectory prediction task. A Multi-Order Inten-tion Fusion model (MOIF) is introduced to guide the learn-ing direction of the network. MOIF includes a first-order intention interaction layer and a higher-order intention in-teraction layer. The first layer focuses on direct interaction information between neighbors and the target agent, while the second layer addresses the indirect interaction infor-mation conveyed to the target agent after multiple interac-tions among neighbor targets. Inspiration is drawn from the squeeze theorem to design a trajectory distribution approxi-mator to guide trajectories toward a distribution that closely aligns with ground truth and to enhance model interpretabil-ity. Simultaneously, RNN is incorporated to update the la-tent variables, achieving explicit supervision during train-ing. The temporal dimension of decoded trajectories is ag-gregated to design a global trajectory optimizer. To the best of our knowledge, KANs [23, 24] are firstly introduced for the global optimization of trajectories, enabling more accu-rate and efficient parallel predictions. Furthermore, consid-ering the travel directions of the agents, a distance-direction fused loss function is designed to comprehensively super-vise the dynamic states of agents. In summary, the main contributions of this paper are: • The proposal of SocialMOIF, which incorporates four novel designs: (1) MOIF is introduced to comprehensively capture in-teraction information between the target agent and its neighbors; (2) A trajectory distribution approximator is developed to approximate and explicitly update the distribu-tion of latent variables, guiding the distribution of trajectories; (3) A global trajectory optimizer is designed, and KANs are introduced for the first time to achieve parallel trajectory optimization across the global spatiotemporal domain; (4) A new direction-distance fused loss function is pro-posed for more effective supervision of agents’ dy-namic changes. • Comprehensive comparative experiments are conducted with existing high-quality models, demonstrating the ef-fective and robust predictive capabilities of SocialMOIF. 
+
+## 2. Related works 
+
+Knowledge-driven methods. Helbing et al. [12] first pro-posed the social force model, which describes pedestrian interactions through an energy potential field. Best et al. [3] introduced a Bayesian inference-based intention inference model, integrating observed movement trajectories with prior knowledge. EqMotion [46] employed geometric anal-ysis to convert human-human interaction trajectory analysis into an optimization problem by examining object geome-try. Morris et al. [31] proposed an implicit Markov model for trajectory prediction, which is utilized for spatiotempo-ral probabilistic modeling of various types of pedestrian tra-jectories. A recent approach, socialcircle [41], incorporated angle-based light rule constraints into the trainable back-22466 bone to achieve interaction modeling of agent intentions. Despite these advancements, these methods rely on knowledge from specific domains and therefore struggle to fully capture the complex agent intentions within social sce-narios. Although attempts have been made to incorporate future trajectory information to overcome the limitations of unidirectional inference, the model’s equations remain overly sensitive to common variations, leading to persistent challenges in trajectory prediction tasks [42, 52]. 
+
+Data-driven methods. LSTM-based methods model trajectory data temporally. Alahi et al. [1] employed a “so-cial pooling mechanism” that considers only the intentions of agents within a grid while neglecting interactions with boundary agents. Gupta et al. [11] improved upon this by implementing a pooling mechanism that treats pedestrians in neighboring areas equally. Transformer-based methods enhanced temporal modeling approaches. Yu et al. [49] modeled and predicted trajectories using a spatio-temporal concatenation approach. Yin et al. [48] introduced op-tical flow to simulate agents’ motion intentions. Graph neural networks were also utilized for trajectory predic-tion to model intention interactions among different nodes [8, 22, 30, 35, 37, 44]. Diffusion models [10, 27] were used to explore trajectory prediction based on randomness. However, most of these methods primarily emphasize di-rect interactions between the target agent and its neighbors, often overlooking the higher-order influences that neighbors exert on the target agent. Furthermore, many of these ap-proaches incorporate future trajectory information only at the network’s output stage, supervising agents’ trajectory changes solely through distance loss. Moreover, the limited interpretability of latent variable distributions in generative models can impede further development of these models. In addition, the aforementioned methods mainly empha-size trajectory analysis and modeling of upstream tasks. For output in downstream tasks, results are generally pro-duced independently in a sequential manner over time. This sequential processing introduces delays that may result in untimely responses, potentially leading to safety concerns. Furthermore, each future prediction is dependent on the state from the preceding time step, which may lead to ac-cumulated errors, adversely affecting prediction accuracy. 
+
+## 3. Approach 
+
+The number of agents in the scenario is set to (Nn + 1) .The trajectory of the target agent i in history period TH is 
+
+g1: TH 
+
+> i
+
+, and gti is the two-dimensional spatial coordinate at moment t. The remaining agents are tentatively designated as neighbors, and the number is Nn. The trajectory of i in the future period to be predicted is denoted as ˆgTH +1: TF 
+
+> i
+
+.We propose the multi-order intention fusion model in Sec-tion 3.1, the trajectory distribution approximator in Section 3.2, the global trajectory optimizer in Section 3.3, and the direction-distance fusion loss function in Section 3.4. 
+
+3.1. Multi-order intention fusion model 
+
+The model consists of two layers: a first-order intention interaction layer and a higher-order intention interaction layer. As shown in Fig. 2, the first-order layer empha-sizes the direct, dominant influence of neighbors on the tar-get agent’s intention. The higher-order layer accounts for the indirect and secondary influences on the target agent’s intention that arise from interactions within the group of neighbors, thereby enabling a more comprehensive under-standing of intentions. Based on the current and final his-tory motion states of the agents, input components for the layers are first constructed, followed by the extraction and fusion of multi-order intention information. 
+
+Higher-order intention interaction layer. From a more fundamental perspective, the higher-order intention interac-tions within the group of neighbors can be decomposed into first-order intention interactions between individual neigh-bors. We define the intention influence of neighbor agent a
+
+on neighbor agent b as wa→b; for an agent itself, it is rep-resented as wa→a. In a scenario with Nn agents, the total number of such intentions is Ω:
+
+Ω = ( Nn − 1) Nn + Nn = N 2 
+
+> n
+
+(1) To obtain the intentions, we extract the absolute posi-tions and velocities of the Nn neighbors corresponding to the target agent i. They are processed as a layer input com-ponent through the embedding layer f S to obtain Ui.
+
+Ui = f U
+
+
+
+x1: TH 
+
+> 1: Nn
+
+, y 1: TH 
+
+> 1: Nn
+
+, v x1: TH 
+
+> 1: Nn
+
+, v y 1: TH
+
+> 1: Nn
+
+
+
+(2) We capture the intention interactions of neighbors through multiple subspaces in parallel. Ui is mapped into a learnable query vector QU , a key vector KU , and a value vector VU . The feature dimensions are flattened into M sub-spaces. For the m-th subspace, the overall intention coeffi-cient matrix within neighbors can be expressed as: 
+
+W mU = SoftMax QmU (KmU )T
+
+dM
+
+!
+
+(3) Thus, we obtain wa→b = [ W mU ]ab . For this matrix, the number of elements is Ω.
+
+The first-order intention interaction layer. The layer input component of the target agent i is processed through the embedding layer f S to obtain Si.
+
+Si = f S
+
+
+
+x1: TH 
+
+> i
+
+, y 1: TH 
+
+> i
+
+, d 1: TH 
+
+> i↔1: Nn
+
+, θ 1: TH 
+
+> i↔1: Nn
+
+, e 1: TH
+
+> i↔1: Nn
+
+
+
+(4) We intensify the dominant role of direct interaction in components and focus on the design of interaction rules. For the present case, d1: TH 
+
+> i↔j
+
+is the distance between the target 22467 Figure 2. Computational pipeline of SocialMOIF. Firstly, the first-order interaction layer focuses on direct interactions between the target agent and its neighbors. The higher-order interaction layer addresses the interactions among neighbors. Multi-order intention is obtained by fusing the information from both layers. This multi-order intention is then combined with the actual future trajectory, with the distribution of the trajectory guided by an approximator. An optimizer is subsequently employed to enhance the decoded trajectory. Additionally, a fused distance-direction loss function supervises the training process. Finally, efficient parallel prediction is achieved. 
+
+agent i and neighbor j, and θ1: TH 
+
+> i↔j
+
+is the velocity angle. For the final history, e1: TH 
+
+> i↔j
+
+is the final distance in the history period, assuming that after moment t, both the target agent 
+
+i and neighbor j maintain the original velocity in the tangent direction −→
+
+vx ti, −→
+
+vx tj ; then, etij can be expressed as: 
+
+λ =
+
+−→
+
+dtij · −→
+
+vtij 
+
+
+
+/ −→
+
+vtij 
+
+> 2
+
+(5) 
+
+etij = −→
+
+dtij + min ( λ, T H − t) ·
+
+−→
+
+vx tj − −→
+
+vy ti
+
+
+
+(6) Similarly, Si is mapped into learnable query vectors QS ,key vectors KS , and value vectors VS . The matrix of the in-tention coefficients between the target agent i and its neigh-bors is as follows: 
+
+WS = SoftMax QS (KS )T
+
+dS
+
+!
+
+(7) 
+
+Intention Fusion. Higher-order interaction intentions are conducted to the target agent and combined with first-order interaction intentions to achieve multi-order intention fusion. During this fusion, the higher-order interaction in-tentions captured within each subspace exert varying effects when applied to the target agent. We set the corresponding trainable influence factor ηm to denote this influence. The attention score Ai is denoted as: 
+
+Ai =
+
+> M
+
+X
+
+> m=1
+
+ηmW mU + WS
+
+!
+
+VS (8) where Ai is processed by two skip connections and a final fully connected layer to obtain the multi-order fused inten-tion Ii.
+
+3.2. Trajectory distribution approximator 
+
+We define the trajectory gTH +1: TF 
+
+> igt
+
+of the target agent i in the future period. Bi is obtained after feature enhancement through the embedding layer f B . By utilizing Ii as the lower bound and Bi as the upper bound, the latent vari-able distribution in the potential space is explicitly approxi-mated. First, the probability distribution of the target agent 
+
+i’s trajectory is initially modeled as: 
+
+p
+
+
+
+gTH +1: TF 
+
+> i
+
+| Ui, S i
+
+
+
+=
+
+> TF
+
+Y 
+
+> t=TH+1
+
+p
+
+
+
+gTH +1+ ti | gTH +1: TH +t−1 
+
+> i
+
+, U i, S i
+
+ (9) 22468 We sample the noise variables ε ∼ N (0 , 1) and reparam-eterize the latent variables that are approximated at t [17]: 
+
+ztiφ = utiφ +ε·σtiφ qφ
+
+ · | It−1 
+
+> i
+
+, B ti
+
+ ∼ N  utiφ , σ tiφ 
+
+ (10) where φ are parameters that need to be optimized during the training process. In the test mode, the latent variables 
+
+ztiϑ are only reasoned by Ii, and ϑ is also involved in the training process of the model. We sample and decode the target agent’s trajectories on the basis of latent variables and multi-order fused intention information. 
+
+gti ∼
+
+(
+
+pδ
+
+ · | ztiφ , I t−1
+
+> i
+
+ if train 
+
+pδ
+
+ · | ztiϑ , I t−1
+
+> i
+
+ if test (11) where δ are parameters that need to be optimized during the training process. Concat the latent variables with the trajectories gener-ated at the current time t, updating It−1 
+
+> i
+
+via f zg .
+
+Iti =
+
+(
+
+f zg 
+
+ concat  ztiφ , g ti
+
+ , I t−1
+
+> i
+
+ if train 
+
+f zg 
+
+ concat ( ztiϑ , g ti ) , I t−1
+
+> i
+
+ if test (12) In the next time step, the updated multi-order fused intention contains the information of the latent variables, which is then combined with Bti to approximate the latent variables and update them. By guiding the trajectory distribution through such a training process, the generated trajectories are explicitly represented by the latent variables as: 
+
+p
+
+
+
+gTH +1: TF 
+
+> i
+
+| Ui, S i
+
+
+
+=
+
+> TF
+
+Y 
+
+> t=TH+1
+
+Z
+
+> ztiφ
+
+p
+
+
+
+gti | gTH +1: t−1 
+
+> i
+
+, I t−1 
+
+> i
+
+, B ti , z tiφ 
+
+
+
+·
+
+p
+
+
+
+ztiφ | gTH +1: t−1 
+
+> i
+
+, I t−1 
+
+> i
+
+, B ti
+
+
+
+dz tiφ 
+
+(13) In test mode, Bti is removed, and φ is replaced with ϑ.
+
+3.3. Global trajectory optimizer 
+
+For efficient prediction, we introduce the KANs for the first time. We aggregate the gTH +1: TF 
+
+> i
+
+time dimension to obtain 
+
+Γ0 ∈ R2TF to facilitate global parallel optimization. The depth of the optimizer is L layers, the number of nodes in the ℓ-th layer is m, the number of nodes in the ℓ + 1 -th layer is n, and the activation function matrix corresponding to the nodes in the l-th layer is Φℓ. The optimization process for the ℓ → ℓ + 1 layer is as follows: 
+
+Γℓ+1 = Φ ℓΓℓ =
+
+
+
+φℓ 
+
+> 1,1
+
+φℓ 
+
+> 1,2
+
+· · · φℓ
+
+> 1,m
+
+φℓ 
+
+> 2,1
+
+φℓ 
+
+> 2,2
+
+. . . φℓ
+
+> 2,m
+
+... ... . . . ...
+
+φℓn, 1 φℓn, 2 . . . φℓn,m 
+
+ Γℓ (14) Eventually, the predicted trajectory is reduced back to the original dimensional space to obtain the final trajectory over the entire prediction period at once. 
+
+ˆgTH +1: TF 
+
+> i
+
+← ΓL = (Φ L ◦ ΦL−1 ◦ · · · ◦ Φ1 ◦ Φ0) Γ 0 (15) Given the diversity of agent intentions, the process pre-dicts multiple possible trajectories. 
+
+3.4. Loss function 
+
+Agents traveling in opposite or the same direction exert dis-tinct effects on their respective movement states. Therefore, direction loss is incorporated to supervise the agent’s dy-namics during backpropagation. For distance. The distance prediction error in future pe-riods can be expressed as: 
+
+Ldis = ˆgti − gtigt (16) For direction, the final moment of the historical period is introduced. Each predicted time step is related to the pre-ceding time step to construct the direction vector, and sub-sequently, the angle between the predicted trajectory and the actual trajectory direction vector is analyzed. 
+
+Langle = − arccos 
+
+ ˆgti − ˆgt+1 
+
+> i
+
+ ·  gtigt − gt+1 
+
+> igt
+
+
+
+ˆgti − ˆgt+1  
+
+> i
+
+gtigt − gt+1 
+
+> igt
+
+!
+
+(17) The objective of our model is to maximize the lower bound on the evidence for all time steps of the target dis-tribution, joints (16) and (17), with a final loss function of: 
+
+L = TFP 
+
+> t=TH+1
+
+
+
+Eztiφ ∼qφ(·| Bti ,I t−1 
+
+> i
+
+) [Ldis + Langle ]
+
+−KL qφ
+
+ ztiφ | Bti , I t−1
+
+> i
+
+ ∥qϑ
+
+ ztiϑ | It−1
+
+> i
+
+  (18) 
+
+## 4. Experiments 
+
+Datasets. ETH [32] and UCY [18] datasets encompass over 1,600 pedestrian trajectories, with positions annotated at 0.4s intervals. SDD [33] dataset is primarily utilized for pedestrian trajectory prediction and object tracking, containing about 19,000 pedestrian trajectories, with po-sitions annotated every 0.4s. NBA dataset focuses on the 2015–2016 season [21, 53]. Two subsets, “Rebounds” and “Scores,” are extracted for benchmarking purposes. The movement intentions of the agents exhibit strong purpose-fulness and complex, hard-to-capture velocity variations. Consequently, the extracted trajectories encompass rich, highly nonlinear motion patterns. NuScenes [4] is a dataset for autonomous driving, and the prediction challenge seg-mentation and configurations are adhered to. 22469 Table 1. Comparison of Related Methods on ETH/UCY, NBA, SDD, and NuScenes (in meters). Every work was realized using best-of-20 predictions for the effect of ade/fde was selected.                                                                                                                                                          
+
+> ETH/UCY FLEAM [6] ST-MR [19] MTN [48] MANTRA [28] Agent-former [51] BiTrap [47] MemoNet [45] EqMotion [46] V2-Net-SC [39, 41] E-V2-Net-SC [40, 41] Ours
+> Eth 0.66/1.21 0.53/0.69 0.58/0.86 0.56/0.97 0.58/0.86 0.66/1.09 0.51/0.69 0.36/0.54 0.23 /0.33 0.23/0.30 0.26/0.31 Hotel 0.37/0.64 0.20/0.31 0.19/0.57 0.17/0.32 0.15/0.24 0.17/0.32 0.14/0.20 0.12/0.16 0.11/0.16 0.10 /0.13 0.10/0.12
+> Univ 0.57/0.97 0.41/0.64 0.32/0.43 0.38/0.79 0.26/0.48 0.26/0.46 0.26/0.52 0.21/0.39 0.17/0.27 0.18/0.24 0.11/0.17
+> Zara01 0.46/0.74 0.26/0.38 0.24/0.37 0.24/0.41 0.19/0.32 0.23/0.47 0.21/0.36 0.16/0.27 0.13/0.18 0.13/ 0.16 0.10 /0.17 Zara02 0.37/0.69 0.18/0.24 0.15/0.21 0.18/0.34 0.16/0.25 0.18/0.35 0.15/0.30 0.11/0.19 0.12/0.21 0.11/0.16 0.09/0.14
+> Avg 0.48/0.85 0.32/0.45 0.30/0.49 0.31/0.57 0.27/0.43 0.30/0.54 0.25/0.41 0.19/0.31 0.15/0.23 0.15/0.20 0.13/0.18 NBA FLEAM [6] ST-MR [19] MTN [48] SGNet [38] EqMotion [46] MemoNet [45] BiTrap [47] GroupNet +CVAE [44] V2-Net-SC [39, 41] E-V2-Net-SC [40, 41] Ours
+> Rebound 1.92/2.21 0.94/1.73 0.84/0.97 0.80/1.78 0.86/1.21 1.73/2.06 0.86/1.88 0.63/0.84 0.54/0.79 0.54/0.86 0.34/0.66
+> Scores 1.29/1.68 0.90/1.03 0.87/1.41 0.71/1.45 0.69/1.02 1.35/1.87 0.76/1.55 0.46/0.76 0.50/0.84 0.47/0.78 0.30/0.56 SDD FLEAM [6] SHENet [29] MemoNet [45] MANTRA [28] BiTrap [47] MID [10] Y-Net [26] NSP-SFM [52] V2-Net-SC [39, 41] E-V2-Net-SC [40, 41] Ours
+> SDD 0.67/1.28 0.44/0.53 0.45/0.64 0.49/0.62 0.46/0.59 0.38/0.73 0.32/0.66 0.21/0.34 0.26/0.36 0.23/0.35 0.17/0.24 NuScenes FLEAM [6] ST-MR [19] MTN [48] MANTRA [28] SGNet [38] Agent-former [51] EqMotion [46] Y-Net [26] V2-Net-SC [39, 41] E-V2-Net-SC [40, 41] Ours
+> NuScenes 2.02/3.14 1.84/2.46 1.64/2.12 1.47/2.01 1.28/2.09 1.04/1.47 1.24/1.98 1.12/1.71 1.06/1.59 1.04/1.64 0.92/1.56
+
+Metrics. Best-of-20 predictions were used to compute Average Displacement Error (ADE) and Final Displace-ment Error (FDE) as primary metrics, with estimated Neg-ative Log Likelihood (NLL) reported from the test set. See their detailed definitions in the Supplementary Material. 
+
+Implementation Details. The model was trained on two NVIDIA RTX 4090 GPUs. Following the methodology in [5, 36], a leave-one-out cross-validation approach was em-ployed for dataset handling. The number of subspaces in the higher-order intention interaction layer was set to M = 6 ,while the depth of the global trajectory optimizer was set to L = 3 . During inference, the best parameter model was loaded to predict the next 8 frames based on the previous 8 frames of history. For more implementation details of the training in the Supplementary Material. 
+
+4.1. Quantitative analysis 
+
+All SOTA performances across datasets were highlighted in bold black in Table 1. In Eth scenario, crowds gen-erally moved in parallel, resulting in weaker interactions among neighbors that conducted to target agent. E-V2-Net-SC [40, 41] achieved optimal performance in this scenario. However, the proposed method still achieved superior per-formance on ETH/UCY dataset, reducing ADE and FDE by 13.33% and 10.00% compared to E-V2-Net-SC, respec-tively. For NBA dataset, where interactions between agents were complex and frequent, the proposed method demon-strated exceptional performance. In Rebound sub-dataset, ADE and FDE decreased by 37.04% and 16.46%, respec-tively, compared to existing SOTA methods. In Scores sub-dataset, ADE and FDE were reduced by 34.78% and 26.32%, respectively, relative to the current SOTA meth-ods. For SDD dataset, image segmentation techniques, as referenced in [2], were employed to capture pedestrian po-sition information across eight scenario. Raw pixel coordi-nates were converted into spatial coordinates defined in me-ters for trajectory prediction tasks. NSP-SFM [52] outper-formed both V2-Net-SC and E-V2-Net-SC. Our method re-duced ADE and FDE by 19.05% and 29.41%, respectively, compared to NSP-SFM. For NuScenes dataset, V2-Net-SC and E-V2-Net-SC showed similar performance levels. Our method reduced ADE and FDE by 11.54% and 1.87%, re-spectively, in comparison to their SOTA performances. Detailed comparative experiments with NLL metric were carried out in the Supplementary Material. Further-more, for wider validation and analysis, we applied direc-tional component in the designed loss function to different models. See the Supplementary Material for details. 
+
+4.2. Qualitative analysis 
+
+Figure 3. Representative cases. Row 1 represented complex his-torical trajectory cases. Row 2 represented state maintenance cases. Row 3 represented numerous neighbors cases. 
+
+Unlike previous studies [6, 26, 39–41, 45, 46], the focus here was on conducting experiments involving historical 22470 Figure 4. Predictions comparison of predictions in ETH/UCY. The comparison included heatmaps of the overall distribution of predictions and best-of-20 predictions of the related methods. 
+
+trajectories in various social contexts. This enabled a more effective validation of the model’s ability to extract and an-alyze multi-order fused intentions in Fig. 3. In panel (a), the target agent continuously changed direction. Although the model displayed slight deviations at certain moments, these deviations remained within the acceptable range of directional changes. In panel (b) and (c), the target agent intended to turn, but the model successfully achieved ac-curate predictions. The target agent moved at a relatively steady speed in panel (d), adopting a conservative deceler-ation strategy in response to numerous neighbors who are stopping or remaining stationary. In panel (e) and (f), there were many stationary neighbors who may be gathered to-gether in conversation. Consequently, the target agent main-tained its original state. In panel (g) and (h), most neighbors moved in the same direction as the target agent, with closer neighbors receiving higher attention scores. This suggested that the target agent prioritized attention to closer neighbors, consistent with social norms. In panel (i), the directions of neighbors were complex, and their speeds varied. The target agent accounted for influences from neighbors in multiple directions while attempting to anticipate and avoid immi-nent collisions. Please see the qualitative analyses of NBA interactions in the Supplementary Material. Comparisons were made between the proposed method and three previous methods in Fig. 4. It was observed that our method produced more accurate predictions than the previous methods. In Eth, when facing neighbors to the left front, the model provided a prediction closest to the true tra-jectory. The predictions from E-V2-Net-SC and EqMotion exhibited slight oscillations, while MemoNet, by mimick-ing retrospective memory mechanisms, tends to maintain its original trajectory. By employing the squeeze theorem to approximate future true trajectories, the proposed model shows greater convergence in the overall distribution of pre-dictions in all scenarios. In Hotel and Zara01, there were many pedestrians ahead of the target agent, and the diverg-ing trajectory distributions from previous methods represent rather aggressive strategies, which conflicted with the safety requirements of autonomous driving. 
+
+4.3. Ablation study 
+
+In Table 2, ablation experiments were conducted by sequen-tially adding components to the PDI baseline. Groups 1-4 focus on the multi-order intention fusion module. Group 1 includes only the neighbors’ position and the distances between the target agent and the neighbors. As additional components, such as neighboring speed V, the angle be-tween the target agent and the neighboring speed Θ, and the final predicted distance over the historical period E,were gradually incorporated, a substantial reduction in the final prediction error was observed. Specifically, ADE de-creased by 23.91% and FDE by 39.47% on the SDD dataset, while ADE reduced by 11.11% and FDE by 14.42% on the Nuscenes dataset. Groups 4-5, 5-6, and 6-7 focus on the ab-lation of the approximator, the optimizer, and the angle loss term in the loss function, respectively. The results demon-strate that each component contributed positively. To examine the influence of B and I, the trajectory distri-bution for several scenarios in the future periods was visu-22471 Table 2. Ablation studies of each component in our method on SDD and Nuscenes datasets. Notably, the positional information of the target agent was essential and was included in each set of ablation experiments. P represented the position of neighbors, V indicated their velocities, D denoted the distance between the target agent and its neighbors, and Θ represented the angle between their velocities. 
+
+E represented the final predicted distance between the target agent and its neighbors over historical periods, I indicated global historical social intent, B denoted future actual trajectories, K referred to the parallel prediction mode, and A signified directional information.                                                                    
+
+> Group PVDΘEIBKASDD Nuscenes 1✓✓✓0.46/0.71 1.26/2.15
+> 2✓✓✓✓0.45/0.66 1.24/2.09
+> 3✓✓✓✓✓0.41/0.56 1.18/1.97
+> 4✓✓✓✓✓✓0.35/0.43 1.12/1.84
+> 5✓✓✓✓✓✓✓0.30/0.36 1.04/1.76
+> 6✓✓✓✓✓✓✓✓0.20/0.27 0.93/1.61
+> 7✓✓✓✓✓✓✓✓✓0.17/0.24 0.92/1.56
+
+Figure 5. Distribution heatmaps. Every heatmap of future trajectory distribution was shown above the real scene image. (a) represented the actual distribution. (b) presented the experimental group containing only I component. (c) showed the group with both I and B components. 
+
+Figure 6. Representative cases about the optimization effects of component K. To ensure fairness, we selected best-of-20 predic-tions in groups 6 and 7 for comparison. 
+
+alized in Fig. 5. It was evident that when both components 
+
+B and I were included, the predicted trajectory distribution aligned more closely with the actual distribution. It can be found that in a strongly regular sports scenario such as Re-bound, (b) and (c) achieved excellent predictions, while in open environments with complex social contexts, the effec-tiveness of the approximator was better demonstrated. To validate the effectiveness of component K under global parallel optimization, six challenging cases were pre-sented in Fig. 6. It was evident that predictions without component K exhibited increasing errors as the prediction time accumulated, whereas the parallel prediction mode demonstrated a closer result toground-truth. 
+
+## 5. Conclusion 
+
+Each human movement path is either directly or indirectly associated with neighbor agents. This study introduces So-cialMOIF, which provides a more comprehensive represen-tation of both direct and indirect intention interactions be-tween the target agent and neighbor agents. SocialMOIF comprises four key designs: a multi-order intention fusion model, a trajectory distribution approximator, a global tra-jectory optimizer, and a novel loss function. Experimen-tal results demonstrate that this approach performs compet-itively across various datasets and effectively approximates and explicitly updates trajectory distributions during train-ing, thereby improving interpretability. 22472 Acknowledgement 
+
+This project is supported by National Natural Sci-ence Foundation of China (52202417), China Postdoc-toral Science Foundation(2022TQ0155, 2022M721605), Open Project Program of State Key Laboratory of Vir-tual Reality Technology and Systems, Beihang Univer-sity(VRLAB2023A02), Young Elite Scientists Sponsor-ship Program by CAST(2023QNRC001), Fundamental Re-search Funds for the Central Universities (NS2024030), Young Elite Scientists Sponsorship Program by JSTJ(JSTJ-2023-XH032). 
+
+## References 
+
+[1] Alexandre Alahi, Kratarth Goel, Vignesh Ramanathan, Alexandre Robicquet, Li Fei-Fei, and Silvio Savarese. So-cial lstm: Human trajectory prediction in crowded spaces. In 
+
+Proceedings of the IEEE conference on computer vision and pattern recognition , pages 961–971, 2016. 2, 3 [2] Stefan Becker, Ronny Hug, Wolfgang H¨ ubner, and Michael Arens. An evaluation of trajectory prediction approaches and notes on the trajnet benchmark. arXiv preprint arXiv:1805.07663 , 2018. 6 [3] Graeme Best and Robert Fitch. Bayesian intention inference for trajectory prediction with an unknown goal destination. In 2015 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 5817–5823. IEEE, 2015. 2[4] Holger Caesar, Varun Bankiti, Alex H Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Gi-ancarlo Baldan, and Oscar Beijbom. nuscenes: A multi-modal dataset for autonomous driving. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 11621–11631, 2020. 5 [5] Kai Chen, Xiao Song, and Xiaoxiang Ren. Pedestrian trajec-tory prediction in heterogeneous traffic using pose keypoints-based convolutional encoder-decoder network. IEEE Trans-actions on Circuits and Systems for Video Technology , 31(5): 1764–1775, 2020. 2, 6 [6] Kai Chen, Xiao Song, Haitao Yuan, and Xiaoxiang Ren. Fully convolutional encoder-decoder with an attention mech-anism for practical pedestrian trajectory prediction. IEEE Transactions on Intelligent Transportation Systems , 23(11): 20046–20060, 2022. 2, 6 [7] Kai Chen, Haihua Zhu, Dunbing Tang, and Kun Zheng. Fu-ture pedestrian location prediction in first-person videos for autonomous vehicles and social robots. Image and Vision Computing , 134:104671, 2023. 2 [8] Lingwei Dang, Yongwei Nie, Chengjiang Long, Qing Zhang, and Guiqing Li. Msr-gcn: Multi-scale residual graph convolution networks for human motion prediction. In Pro-ceedings of the IEEE/CVF international conference on com-puter vision , pages 11467–11476, 2021. 3 [9] Francesco Giuliari, Irtiza Hasan, Marco Cristani, and Fabio Galasso. Transformer networks for trajectory forecasting. In 
+
+2020 25th international conference on pattern recognition (ICPR) , pages 10335–10342. IEEE, 2021. 2 [10] Tianpei Gu, Guangyi Chen, Junlong Li, Chunze Lin, Yong-ming Rao, Jie Zhou, and Jiwen Lu. Stochastic trajectory prediction via motion indeterminacy diffusion. In Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17113–17122, 2022. 3, 6 [11] Agrim Gupta, Justin Johnson, Li Fei-Fei, Silvio Savarese, and Alexandre Alahi. Social gan: Socially acceptable tra-jectories with generative adversarial networks. In Proceed-ings of the IEEE conference on computer vision and pattern recognition , pages 2255–2264, 2018. 2, 3 [12] Dirk Helbing and Peter Molnar. Social force model for pedestrian dynamics. Physical review E , 51(5):4282, 1995. 2[13] Serge Hoogendoorn and Piet HL Bovy. Simulation of pedes-trian flows by optimal control and differential games. Opti-mal control applications and methods , 24(3):153–172, 2003. 2[14] SP Hoogendoorn, Winnie Daamen, Yaqing Shu, and Han Ligteringen. Modeling human behavior in vessel maneuver simulation by optimal control and game theory. Transporta-tion research record , 2326(1):45–53, 2013. 2 [15] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17853–17862, 2023. 1 [16] Sungjune Kim, Hyung-gun Chi, Hyerin Lim, Karthik Ra-mani, Jinkyu Kim, and Sangpil Kim. Higher-order relational reasoning for pedestrian trajectory prediction. In Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15251–15260, 2024. 2 [17] Christos Kyrkou, Panayiotis Kolios, Theocharis Theocharides, and Marios Polycarpou. Machine learn-ing for emergency management: A survey and future outlook. Proceedings of the IEEE , 111(1):19–41, 2022. 5 [18] Alon Lerner, Yiorgos Chrysanthou, and Dani Lischinski. Crowds by example. In Computer graphics forum , pages 655–664. Wiley Online Library, 2007. 5 [19] Lihuan Li, Maurice Pagnucco, and Yang Song. Graph-based spatial transformer with memory replay for multi-future pedestrian trajectory prediction. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 2221–2231, 2022. 2, 6 [20] Linhui Li, Xiaotong Lin, Yejia Huang, Zizhen Zhang, and Jian-Fang Hu. Beyond minimum-of-n: Rethinking the eval-uation and methods of pedestrian trajectory prediction. IEEE Transactions on Circuits and Systems for Video Technology ,2024. 1 [21] Kostya Linou. Nba-player-movements. Software for Visual-ization of NBA Games , 2016. 5 [22] Congcong Liu, Yuying Chen, Ming Liu, and Bertram E Shi. Avgcn: Trajectory prediction using graph convolutional net-works guided by human attention. In 2021 IEEE Inter-national Conference on Robotics and Automation (ICRA) ,pages 14234–14240. IEEE, 2021. 3 [23] Ziming Liu, Pingchuan Ma, Yixuan Wang, Wojciech Ma-tusik, and Max Tegmark. Kan 2.0: Kolmogorov-arnold net-22473 works meet science. arXiv preprint arXiv:2408.10205 , 2024. 2[24] Ziming Liu, Yixuan Wang, Sachin Vaidya, Fabian Ruehle, James Halverson, Marin Soljaˇ ci´ c, Thomas Y Hou, and Max Tegmark. Kan: Kolmogorov-arnold networks. arXiv preprint arXiv:2404.19756 , 2024. 2 [25] Karttikeya Mangalam, Harshayu Girase, Shreyas Agarwal, Kuan-Hui Lee, Ehsan Adeli, Jitendra Malik, and Adrien Gaidon. It is not the journey but the destination: End-point conditioned trajectory prediction. In Computer Vision– ECCV 2020: 16th European Conference, Glasgow, UK, Au-gust 23–28, 2020, Proceedings, Part II 16 , pages 759–776. Springer, 2020. 2 [26] Karttikeya Mangalam, Yang An, Harshayu Girase, and Jiten-dra Malik. From goals, waypoints & paths to long term hu-man trajectory forecasting. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 15233– 15242, 2021. 1, 2, 6 [27] Weibo Mao, Chenxin Xu, Qi Zhu, Siheng Chen, and Yanfeng Wang. Leapfrog diffusion model for stochastic trajectory prediction. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 5517–5526, 2023. 3 [28] Francesco Marchetti, Federico Becattini, Lorenzo Seidenari, and Alberto Del Bimbo. Mantra: Memory augmented net-works for multiple trajectory prediction. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 7143–7152, 2020. 2, 6 [29] Mancheng Meng, Ziyan Wu, Terrence Chen, Xiran Cai, Xiang Zhou, Fan Yang, and Dinggang Shen. Forecast-ing human trajectory from scene history. arXiv preprint arXiv:2210.08732 , 2022. 1, 6 [30] Alessio Monti, Alessia Bertugli, Simone Calderara, and Rita Cucchiara. Dag-net: Double attentive graph neural network for trajectory forecasting. In 2020 25th international con-ference on pattern recognition (ICPR) , pages 2551–2558. IEEE, 2021. 3 [31] Brendan Tran Morris and Mohan Manubhai Trivedi. Trajec-tory learning for activity understanding: Unsupervised, mul-tilevel, and long-term adaptive approach. IEEE transactions on pattern analysis and machine intelligence , 33(11):2287– 2301, 2011. 2 [32] Stefano Pellegrini, Andreas Ess, Konrad Schindler, and Luc Van Gool. You’ll never walk alone: Modeling social behav-ior for multi-target tracking. In 2009 IEEE 12th international conference on computer vision , pages 261–268. IEEE, 2009. 5[33] Alexandre Robicquet, Amir Sadeghian, Alexandre Alahi, and Silvio Savarese. Learning social etiquette: Human tra-jectory prediction in crowded scenes. In European Confer-ence on Computer Vision (ECCV) , page 5, 2016. 5 [34] Tim Salzmann, Boris Ivanovic, Punarjay Chakravarty, and Marco Pavone. Trajectron++: Dynamically-feasible tra-jectory forecasting with heterogeneous data. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part XVIII 16 , pages 683–700. Springer, 2020. 2 [35] Liushuai Shi, Le Wang, Chengjiang Long, Sanping Zhou, Mo Zhou, Zhenxing Niu, and Gang Hua. Sgcn: Sparse graph convolution network for pedestrian trajectory prediction. In 
+
+Proceedings of the IEEE/CVF conference on computer vi-sion and pattern recognition , pages 8994–9003, 2021. 3 [36] Xiao Song, Kai Chen, Xu Li, Jinghan Sun, Baocun Hou, Yong Cui, Baochang Zhang, Gang Xiong, and Zilie Wang. Pedestrian trajectory prediction based on deep convolutional lstm network. IEEE Transactions on Intelligent Transporta-tion Systems , 22(6):3285–3302, 2020. 2, 6 [37] Yuchao Su, Jie Du, Yuanman Li, Xia Li, Rongqin Liang, Zhongyun Hua, and Jiantao Zhou. Trajectory forecasting based on prior-aware directed graph convolutional neural network. IEEE Transactions on Intelligent Transportation Systems , 23(9):16773–16785, 2022. 3 [38] Chuhua Wang, Yuchen Wang, Mingze Xu, and David J Cran-dall. Stepwise goal-driven networks for trajectory predic-tion. IEEE Robotics and Automation Letters , 7(2):2716– 2723, 2022. 2, 6 [39] Conghao Wong, Beihao Xia, Ziming Hong, Qinmu Peng, Wei Yuan, Qiong Cao, Yibo Yang, and Xinge You. View vertically: A hierarchical network for trajectory prediction via fourier spectrums. In European Conference on Computer Vision , pages 682–700. Springer, 2022. 2, 6 [40] Conghao Wong, Beihao Xia, Qinmu Peng, and Xinge You. Another vertical view: A hierarchical network for hetero-geneous trajectory prediction via spectrums. arXiv preprint arXiv:2304.05106 , 2023. 2, 6 [41] Conghao Wong, Beihao Xia, Ziqian Zou, Yulong Wang, and Xinge You. Socialcircle: Learning the angle-based social in-teraction representation for pedestrian trajectory prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 19005–19015, 2024. 1, 2, 6 [42] Beihao Xia, Conghao Wong, Qinmu Peng, Wei Yuan, and Xinge You. Cscnet: Contextual semantic consistency net-work for trajectory prediction in crowded spaces. Pattern Recognition , 126:108552, 2022. 3 [43] Song Xiao, Kai Chen, Xiaoxiang Ren, and Haitao Yuan. Pedestrian trajectory prediction in heterogeneous traffic us-ing facial keypoints-based convolutional encoder-decoder network. ACM Transactions on Internet Technology , 22(4): 1–14, 2022. 2 [44] Chenxin Xu, Maosen Li, Zhenyang Ni, Ya Zhang, and Si-heng Chen. Groupnet: Multiscale hypergraph neural net-works for trajectory prediction with relational reasoning. In 
+
+Proceedings of the IEEE/CVF Conference on Computer Vi-sion and Pattern Recognition , pages 6498–6507, 2022. 3, 6[45] Chenxin Xu, Weibo Mao, Wenjun Zhang, and Siheng Chen. Remember intentions: Retrospective-memory-based trajec-tory prediction. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 6488– 6497, 2022. 1, 6 [46] Chenxin Xu, Robby T Tan, Yuhong Tan, Siheng Chen, Yu Guang Wang, Xinchao Wang, and Yanfeng Wang. Eqmo-tion: Equivariant multi-agent motion prediction with invari-22474 ant interaction reasoning. arXiv preprint arXiv:2303.10876 ,2023. 2, 6 [47] Yu Yao, Ella Atkins, Matthew Johnson-Roberson, Ram Va-sudevan, and Xiaoxiao Du. Bitrap: Bi-directional pedestrian trajectory prediction with multi-modal goal estimation. IEEE Robotics and Automation Letters , 6(2):1463–1470, 2021. 2, 6[48] Ziyi Yin, Ruijin Liu, Zhiliang Xiong, and Zejian Yuan. Mul-timodal transformer networks for pedestrian trajectory pre-diction. In Proceedings of the Twenty-Ninth International Joint Conference on Artificial Intelligence , pages 1259– 1265, 2021. 2, 3, 6 [49] Cunjun Yu, Xiao Ma, Jiawei Ren, Haiyu Zhao, and Shuai Yi. Spatio-temporal graph transformer networks for pedestrian trajectory prediction. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part XII 16 , pages 507–523, 2020. 2, 3 [50] Wenjian Yu and Dirk Helbing. Game theoretical interactions of moving agents. In Simulating Complex Systems by Cellu-lar Automata , pages 219–239. Springer, 2010. 2 [51] Ye Yuan, Xinshuo Weng, Yanglan Ou, and Kris M Kitani. Agentformer: Agent-aware transformers for socio-temporal multi-agent forecasting. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9813– 9823, 2021. 2, 6 [52] Jiangbei Yue, Dinesh Manocha, and He Wang. Human tra-jectory prediction via neural social physics. In European conference on computer vision , pages 376–394, 2022. 3, 6 [53] Yisong Yue, Patrick Lucey, Peter Carr, Alina Bialkowski, and Iain Matthews. Learning fine-grained spatial models for dynamic sports play prediction. In 2014 IEEE international conference on data mining , pages 670–679. IEEE, 2014. 5 [54] Pu Zhang, Wanli Ouyang, Pengfei Zhang, Jianru Xue, and Nanning Zheng. Sr-lstm: State refinement for lstm to-wards pedestrian trajectory prediction. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 12085–12094, 2019. 2 [55] Xiaoping Zheng and Yuan Cheng. Conflict game in evacu-ation process: A study combining cellular automata model. 
+
+Physica A: Statistical Mechanics and its Applications , 390 (6):1042–1050, 2011. 2 22475

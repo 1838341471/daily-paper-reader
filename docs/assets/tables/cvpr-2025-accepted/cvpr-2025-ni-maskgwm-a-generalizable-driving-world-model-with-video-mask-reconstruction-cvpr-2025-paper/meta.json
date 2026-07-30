@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "tables": [
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 1129,
+      "height": 380,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 874,
+      "height": 628,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 588,
+      "height": 211,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 718,
+      "height": 379,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 562,
+      "height": 235,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 989,
+      "height": 383,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-007.webp",
+      "caption": "",
+      "page": 0,
+      "index": 7,
+      "width": 496,
+      "height": 236,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-ni-maskgwm-a-generalizable-driving-world-model-with-video-mask-reconstruction-cvpr-2025-paper/table-008.webp",
+      "caption": "",
+      "page": 0,
+      "index": 8,
+      "width": 546,
+      "height": 234,
+      "label": "Table"
+    }
+  ]
+}

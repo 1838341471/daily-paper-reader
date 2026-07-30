@@ -1,0 +1,365 @@
+Title: Generating Multimodal Driving Scenes via Next-Scene Prediction
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Wu_Generating_Multimodal_Driving_Scenes_via_Next-Scene_Prediction_CVPR_2025_paper.pdf
+
+Published Time: Sun, 18 May 2025 22:32:27 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Generating Multimodal Driving Scenes via Next-Scene Prediction 
+
+# Yanhao Wu 1,2 * Haoyang Zhang 2 Tianwei Lin 2 Lichao Huang 2 Shujie Luo 2
+
+# Rui Wu 2 Congpei Qiu 1 Wei Ke 1† Tong Zhang 3,41 School of Software Engineering, XJTU 2 Horizon Robotics  
+
+> 3
+
+# School of Computer and Communication Sciences, EPFL  
+
+> 4
+
+# University of Chinese Academy of Sciences 
+
+Figure 1. An overview of our proposed driving scene generation paradigm − UMGen. Starting from a random initialization (a) UM-Gen generates ego-centric, multimodal scenes frame-by-frame. Each scene encompasses four modalities: ego-vehicle action, map, traffic agent, and image; (b) UMGen offers multiple functions. It can autonomously generate multimodal scene sequences based solely on its own historical context, but also predict other modalities based on input ego-vehicle actions provided by users. Furthermore, UMGen can incorporate user-specified agent actions to create customized scene sequences. In three scene sequences, arranged from top to bottom, we demonstrate the ego vehicle autonomously driving straight through an intersection, executing a user-defined right turn, and encountering scenes where a user-specified white car cuts in front of it. For better visualization, a portion of the map in the last row is zoomed in. 
+
+# Abstract 
+
+Generative models in Autonomous Driving (AD) enable di-verse scenario creation, yet existing methods fall short by only capturing a limited range of modalities, restricting the capability of generating controllable scenes for com-prehensive evaluation of AD systems. In this paper, we in-troduce a multimodal generation framework that incorpo-rates four major data modalities, including a novel addi-tion of the map modality. With tokenized modalities, our scene sequence generation framework autoregressively pre-dicts each scene while managing computational demands through a two-stage approach. The Temporal AutoRegres-sive (TAR) component captures inter-frame dynamics for This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 6844 each modality, while the Ordered AutoRegressive (OAR) component aligns modalities within each scene by sequen-tially predicting tokens in a fixed order. To maintain coher-ence between map and ego-action modalities, we introduce the Action-aware Map Alignment (AMA) module, which ap-plies a transformation based on the ego-action to maintain coherence between these two modalities. Our framework effectively generates complex, realistic driving scenes over extended sequences, ensuring multimodal consistency and offering fine-grained control over scene elements. Project page: https://yanhaowu.github.io/UMGen. 
+
+# 1. Introduction 
+
+Generative models are becoming increasingly essential across various domains [1, 12, 13, 21]. In Autonomous Driving (AD) systems, generative models are utilized for producing diverse driving scenes—particularly those that are rare or not well-represented in datasets [6, 28, 31] or real-life. More importantly, generative models can be used to build a closed-loop simulation system that generates real-istic interactive scenes to test AD systems without causing potential accidents before deployment [29, 30]. Such ca-pabilities enhance the safety, adaptability, and reliability of autonomous driving [8, 14, 24, 27] systems when dealing with the complexities of real-world driving conditions. To generate comprehensive driving scenes, as described in Tab. 1, most existing studies [7, 9] focus primarily on generating two modalities. For instance, GUMP [9] and TrafficGen [5] generate ego-action and agent motion within a given static map segment; DriveDreamer [28] and GAIA-1 [7] are capable of generating images given initial con-ditions. While these approaches offer valuable insights, they face some limitations. The lack of map progression in GUMP and TrafficGen limits their realism, as real-world driving scenes involve dynamically evolving maps from the ego-vehicle’s viewpoint. DriveDreamer and GAIA-1 fail to forecast traffic agent motion, which limits control over agent behaviors and, consequently, constrains the genera-tion of user-specific scenes. In this work, we propose a Unified Multimodal driving scene Gen eration framework (UMGen) for driving scenes, each containing four key modalities. Our framework inte-grates map prediction to enhance scene representation, en-abling finer control over ego-action and agent behaviors. Generating these modalities scene-by-scene while ensuring consistency presents a significant challenge. To address the diverse domains of each modality, we frame scene genera-tion as a sequence scene prediction task. However, directly applying an AutoRegressive (AR) model is impractical due to the high token count from the four modalities and the length of the video data. To address this, we decompose the 
+
+> *: Work done during internship at Horizon Robotics.
+> †: Corresponding author. Email: wei.ke[at]mail.xjtu.edu.cn
+
+Methods Modalities Ego-action Map Agent Image Drivedreamer [28] ✓ ✗ ✗ ✓
+
+TrafficGen [5] ✓ ✗ ✓ ✗
+
+GAIA-1 [7] ✓ ✗ ✗ ✓
+
+GUMP [9] ✓ ✗ ✓ ✗
+
+UMGen (Ours) ✓ ✓ ✓ ✓
+
+> Table 1. Comparison of different driving scene generation meth-ods across four modalities.
+
+sequence prediction task into two stages: inter-frame pre-diction and intra-frame prediction. For inter-frame predic-tion, we propose the Temporal AutoRegressive (TAR) mod-ule, which models temporal evolution across frames using causal attention, allowing each token to be influenced only by its past states. For intra-scene prediction, we introduce the Ordered AutoRegressive (OAR) module, which cap-tures relationships within each scene by enforcing a struc-tured modality order, ensuring alignment and coherence across modalities. Together, TAR and OAR effectively cap-ture cross-modal dependencies over time, enhancing align-ment while reducing computational complexity. To further maintain consistency between ego-action and map data, we introduce an Action-aware Map Alignment (AMA) module. AMA applies an affine transformation, based on predicted ego-action, to prior map features, aligning them with the ego-vehicle’s movement. This re-alignment preserves co-herence between ego-action and map modalities. With these components, our model demonstrates strong capabilities in multimodal driving scene generation, as shown in Fig. 1, producing scene sequences that can span up to 60 seconds in duration. Additionally, thanks to the modality alignment capability provided by the AMA and OAR modules, our model can create specific multimodal-consistent scenes, like a cut-in situation, by controlling ego-vehicle and agents’ actions. In summary, UMGen offers several key contributions: • We introduce a novel generative framework that inte-grates four distinct modalities—ego-action, road users, traffic maps, and images—with the flexibility to incorpo-rate additional modalities, enhancing the scene represen-tation and fidelity of driving scene generation. • We design a computationally efficient AR approach, com-prising TAR and OAR modules, to capture both inter-frame and intra-frame dependencies, enabling realistic scene generation with reduced computational costs. • We introduce an AMA module to apply affine transforma-tions to map features with the ego-vehicle’s movement, ensuring consistency between ego-action and map. Our experimental results provide both quantitative and qualitative evidence of our method’s effectiveness, show-ing that UMGen enables user-defined, ego-centric scenario generation adaptable to specific driving conditions. 6845 Figure 2. Pipeline of our UMGen. Given T past frames of multimodal driving scenes, including ego-action, map, traffic agents, and image in each scene, each modality is tokenized into discrete tokens. The token embeddings are then processed through the Ego-action Prediction module, which forecasts the ego-action for T + 1 time step. Using this predicted ego-action, the AMA module adjusts the map features. Next, the TAR module aggregates temporal information across sequences, while the OAR module ensures sequential modality prediction within each frame by autoregressively generating each token conditioned on the aggregated history information. Finally, the predicted tokens are fed to the decoder to obtain the next scene. 
+
+# 2. Related Work 
+
+Autoregressive generative models. In recent years, AR generative models have achieved significant success in natu-ral language processing and image generation, as evidenced by models such as GPT-2 [20] and VQGAN [3]. This architecture has since been adapted for autonomous driv-ing scene generation, with methods like [19, 23, 32] lever-aging it to predict agent behaviors, and GAIA-1 [7] ap-plying it to generate high-quality driving videos sequen-tially. Our model, however, extends beyond generating limited-modality data by targeting the generation of mul-timodal data that collectively compose driving scenes. This extension results in a substantial increase in token count, especially as the number of scene frames grows, mak-ing the vanilla AR [7] approach—where tokens from dif-ferent scene frames are concatenated into a single se-quence—computationally prohibitive. Additionally, ap-plying the AR mechanism solely along the temporal di-mension—without incorporating an intra-frame AR mecha-nism—may lead to inconsistencies across modalities within the same frame [23, 32]. By contrast, our method consists of parallel inter-frame temporal prediction with intra-frame AR decoding which balances efficiency and consistency to enable multimodal driving scene generation. 
+
+Driving scene sequence generation. Traditional meth-ods rely on hand-crafted rules [2, 11, 14, 15] to generate driving scenes, limiting their ability to capture the diver-sity and realism of the real world. Recently, data-driven deep learning approaches have gained traction, but most focus on generating a limited set of modalities. For ex-ample, models like [10, 16, 26, 32] generate diverse agent trajectories based on map segments but fail to handle the emergence and disappearance of agents. GUMP [9] ad-dresses this challenge through a GPT-like [20] generative framework. However, the lack of map generation confines trajectories to specific map segments with static perspec-tives, which differs from the real world, where vehicles are observed from the dynamic viewpoint of the ego-vehicle. While DriveDreamer2 [31] addresses this limitation by gen-erating maps, it employs two separate networks for map and video generation, resulting in the loss of explicit per-frame control. Other models [6, 7, 17, 28], like Dreamforge, pro-duce videos based on predefined traffic dynamics, which restricts interactivity and user-defined scene generation. In contrast, UMGen generates four essential modalities—ego-action, map, agent, and image—enriching scene representa-tion within a unified framework and providing finer control over user-specific scene sequence generation. 
+
+# 3. Method 
+
+## 3.1. Problem Setup 
+
+Our method generates multimodal driving scenes in an autoregressive scene-by-scene manner, starting from either a provided or self-generated initial scene sequence. To achieve this, we tokenize each scene element into sequen-tial tokens, transforming the generation process into a scene token prediction task. These elements include the ego-6846 vehicle’s action, a traffic map, other scene agents, and the camera image. Specifically, the ego-vehicle action  aAV t rep-resents displacements along the x and y axes, as well as angular changes relative to the previous timestamp. The traffic map  mt depicts road layouts and situational details surrounding the ego vehicle, while the  Na agents  {a(i) 
+
+> t
+
+}Na
+
+> i=1
+
+represent each agent’s coordinates, size, velocity, head-ing and category. This combination of data provides a comprehensive view of the scene’s dynamic and static el-ements. Finally, the camera image  vt adds visual con-text. Thus, the multimodal scene at time  t is defined as 
+
+st = {aAV t , mt, {a(i) 
+
+> t
+
+}Na
+
+> i=1
+
+, vt}. Therefore, our task is to learn a neural network to generate the next scene st+1 , con-ditioned on s1: t.
+
+## 3.2. Framework 
+
+Throughout the following formulation, we assume the availability of the past T scenes as inputs to predict the scene at the  T + 1  timestep. The pipeline of our model is demonstrated in Fig. 2, which comprises several core com-ponents: Tokenization , an Ego-action prediction module, an Action-aware Map Alignment (AMA) module, a Tempo-ral AutoRegressive (TAR) module, and an Ordered Auto-gressive (OAR) module. We discuss each component below. 
+
+Tokenization. The ego-action and agent attributes are tokenized through discretization, whereas the raster map 
+
+and image data are tokenized using pretrained VQ-GAN models [3]. Discrete tokens from modalities are arranged in a fixed sequence within each frame: ego-action, map, agent, and image. This sequence reflects the causal flow: the ego vehicle’s actions modify the observable traffic map and influence the behavior of surrounding agents. These in-teractions are ultimately captured in the camera view. Using this order and the tokenizer functions, we obtain the ordered token at t−th scene as follows: 
+
+zt = g (st) = 
+
+h
+
+zego  
+
+> t
+
+, zmap  
+
+> t
+
+, zagent  
+
+> t
+
+, zimage 
+
+> t
+
+i
+
+, (1) where zt ∈ NN , N denotes the total number of to-kens obtained by concatenating tokens from all modali-ties and g represents the tokenizer function. Unlike vanilla AR approaches [7] that concatenate tokens from multiple frames into a single sequence, we maintain tokens in a structured per-frame format. Consequently, the tokenized scene sequence across  T time steps is organized as: Z =[z1, z2, . . . , zT ] , Z ∈ NT ×N , where tokens of each frame retain their intra-frame order. This structured token arrange-ment enables parallel aggregation of temporal information, forming the basis for subsequent modules. To ensure a fixed token count per frame, we apply padding or jointly sample agents across T frames, preserving a consistent set of ob-jects across all frames for temporal coherence. 
+
+Token Embedding. Each token is embedded into latent features through learnable token embedding codebooks. All embeddings are then summed with a learnable positional embedding and projected to a unified dimension using a Multi-Layer Perceptron (MLP) head: 
+
+eit = MLP  Embed (zit) + PE (i) , eit ∈ RD (2) where i is the position index in the token sequence of zt,
+
+PE is the learnable position embedding and Embed is the learnable token embedding. Thus, the token sequence rep-resenting an entire scene can be expressed as: 
+
+et = e1 
+
+> t
+
+, . . . , enego 
+
+> t
+
+| {z }
+
+> eego t
+
+, enego +1  
+
+> t
+
+, . . . , enm
+
+> t
+
+| {z }
+
+> emap t
+
+,
+
+enm+1  
+
+> t
+
+, . . . , ena
+
+> t
+
+| {z } 
+
+> {eagent t}
+
+, ena+1  
+
+> t
+
+, . . . , env
+
+> t
+
+| {z }
+
+> eimg t
+
+, (3) where et ∈ RN ×D , and the indices  nego , nm, na, and  nv
+
+correspond to the cumulative token counts for each modal-ity. The terms  eego t , emap t , eagent t , and  eimg t represent the tokens derived from each modality at time step  t. More de-tails about tokenization and token embedding can be found in the supplementary material section B. 
+
+Ego-action Prediction. We first predict the next ego-action  eego T +1 , using it as a prior for generating the remain-ing modalities. Historical ego actions are aggregated via a cross-attention mechanism to capture the ego vehicle’s intentions, which is then integrated with the current envi-ronment state  ET =
+
+h
+
+emap T , eagent T , eimg T
+
+i
+
+through another cross-attention mechanism: 
+
+uT = CA hist (Q = q, K = {eego  
+
+> 1: T
+
+}, V = {eego  
+
+> 1: T
+
+}) ,
+
+eego T +1 = CA env (Q = uT , K = {ET }, V = {ET }) , (4) where  q represents the query tokens, and  CA hist  and  CA env 
+
+denote the two cross-attention blocks. This module serves as a basic planning component. 
+
+Action-aware Map Alignment (AMA). The AMA module is motivated by the continuity of map features across adjacent frames: adjusting current map features based on the ego-vehicle’s displacement offers a strong prior for the next timestep. As a result, we first rearrange the map feature vector emap T to obtain a spatial map represen-tation, denoted as FT = Γ( emap ), where Γ : RNm×D →
+
+RH×W ×D . Here, Nm refers to the number of tokens repre-senting the map, and H and W denote the height and width of the resulting spatial map, respectively. An affine trans-formation, parameterized by  θ, dx , and  dy  (derived from 
+
+eAV T +1 ), generates a sampling grid  G that maps coordinates from the original map representation  FT to the transformed locations. For each point  (x, y ) in  FT , the transformed co-ordinates  (x′, y ′) are given by: 
+
+x′
+
+y′
+
+
+
+= G(x, y ) = 
+
+cos θ − sin θ
+
+sin θ cos θ
+
+  xy
+
+
+
++
+
+dx dy 
+
+
+
+. (5) Using the sampling grid  G(x, y ), we interpolate  FT ,producing the transformed map representation  ¯FT ∈6847 RH×W ×D that represents the transformed map features. Fi-nally, we flatten the representation ¯FT and add it with emap T
+
+to yield transformed map representation ¯emap T :
+
+¯emap T = Flatten ( ¯FT ) + emap T . (6) 
+
+Inter-frame Temporal Autoregression (TAR). With the predicted ego-action and transformed map features, the scene state is updated as  ¯eT = [ eego T +1 , ¯emap T , eagent T , eimg T ].For previous frames, we similarly obtain the ego-action and apply the AMA module to map features, resulting in 
+
+¯e1: T ∈ RT ×N ×D . A causal self-attention (CSA) block is applied to  e1: T , where each token attends only to tokens at the same position across previous scenes: 
+
+¯eiT +1 = CSA  ¯ei
+
+> 1
+
+, ¯ei
+
+> 2
+
+, . . . , ¯eiT
+
+ , ¯eiT +1 ∈ RD . (7) Where  i denotes the token’s position. This design cap-tures temporal dependencies efficiently by processing to-kens in parallel, thereby avoiding the computational costs associated with performing attention mechanism on the long sequence generated by token concatenation [7]. Sub-sequently, a bidirectional self-attention (SA) block facili-tates information exchange between tokens within the same scene, yielding a coarse prediction hT +1 for the next scene: 
+
+hT +1 = SA  ¯e1 
+
+> T+1
+
+, . . . , ¯eNT +1 
+
+ , hT +1 ∈ RN ×D . (8) 
+
+Intra-frame Ordered Autoregression (OAR). The OAR module leverages TAR predictions as temporal priors to enhance inter-frame continuity while maintaining intra-frame consistency through GPT-like autoregressive decod-ing. To predict the i th token embedding  oiT +1 , the OAR combines the previous token embedding  o1: i−1  
+
+> T+1
+
+with the TAR-derived feature  hT +1 , incorporating temporal priors at each prediction step. The OAR then applies a causal self-attention block to sequentially predict each token em-bedding  oiT +1 . Following this, a projection head is applied to  oiT +1 , generating a probability vector  p(OAR,i )  
+
+> T+1
+
+∈ RK ,where  K represents the codebook size: 
+
+wj = ojT +1 + hj+1  
+
+> T+1
+
+, j = 1 , . . . , i − 1, (9) 
+
+oiT +1 = CSA (w1, w 2, . . . , w i−1) , (10) 
+
+p(OAR,i )  
+
+> T+1
+
+= Softmax (MLP (oiT +1 )) . (11) A Top-k sampling strategy [20] is then used on  p(OAR,i ) 
+
+> T+1
+
+to select token  ziT +1 , which is transformed into embed-ding for the next prediction. This autoregressive structure aligns tokens contextually, preventing conflicts and enhanc-ing modality coherence. 
+
+Loss functions. Additional to the OAR predicted token probability pOAR T +1 , we also apply a projection head to hT +1 
+
+to obtain pT AR T +1 . We then apply cross-entropy loss functions to calculate the total loss: 
+
+p(T AR )  
+
+> T+1
+
+= Softmax (MLP (hT +1 )) , (12) 
+
+Ltotal = CE (pOAR T +1 , zT +1 ) + CE (pT AR T +1 , zT +1 ), (13) where CE represents the cross-entropy loss function. 
+
+# 4. Experiments 
+
+Our experiments evaluate the effectiveness of UMGen in both multimodal driving scene sequence generation and user-guided specific scene sequence generation. We also demonstrate that our model can generate realistic initial scenes, serving as the starting point for sequence genera-tion. Finally, we conduct ablation studies to confirm the critical role of each module. 
+
+## 4.1. Experimental Settings 
+
+Training details. We randomly select a 21-frame se-quence at each iteration, allowing the model to leverage up to 20 past frames. The training process is conducted over 300 epochs on 32 RTX4090 GPUs for two days. 
+
+Evaluation details. Our experiments leverage two pub-lic datasets: nuPlan [2] and the Waymo Open Motion Dataset (WOMD) [4]. We assess the realism of the gen-erated initial scenes using Maximum Mean Discrepancy (MMD) [5, 16, 26] scores, following the experimental setup in TrafficGen [5] on both nuPlan and WOMD datasets. The MMD metric quantifies the distributional divergence between the generated and ground-truth agent attributes. When generating initial scenes, we temporarily discard the TAR module since there is no temporal information needed. We present visualizations of the generated multimodal driv-ing scene sequences based on the provided initial frames from nuPlan, verifying both the generation of diverse mul-timodal scenes and user-specified scene segments. For as-sessing the computational efficiency of the TAR module rel-ative to the vanilla AR approach, we measure the per-token inference time and peak GPU memory usage during infer-ence. To verify the efficacy of the OAR module in main-taining token consistency, we use both the MMD metric and the average collision rate (CR) among generated road users. Lower CR values indicate reduced conflicts between tokens, demonstrating better consistency. Further training and evaluation details are provided in the Appendix. 
+
+## 4.2. Driving Scene Sequence Generation 
+
+Unlike other methods that rely on supplementary condi-tions and generate limited modalities [6, 9, 28], our model is capable of generating diverse multimodal scene sequences from only given initial frames. To demonstrate the dynamic evolution of our multimodal scenes, as well as the tempo-ral and multimodal consistency of the generated scenes, we present two video samples at different time intervals. As shown in the first row of Fig 3, we display the gener-ated scenes at 15-second intervals, showing how all modal-ities evolve as the ego-vehicle moves. Specifically, the ego vehicle performs maneuvers such as lane changes, turns, and straight driving. The map modality generates a vari-ety of road elements, including intersections, curves, and straight paths according to the ego vehicle’s movement. The 6848 Figure 3. Generated multimodal driving scenes by UMGen : The generated scenes evolve continuously from the ego vehicle’s perspec-tive. Red Box: ego-vehicle, Green Box: cars, Orange Box: pedestrians or cyclists, Arrow: agent velocities. 
+
+number of agents decreases from numerous at the begin-ning to fewer on narrower roads. Furthermore, the image modality presents the corresponding visualization that re-flects these dynamics. This capability of on-the-fly multi-modal generation allows our approach to simulate a broader spectrum of driving worlds. The second row of Fig 3 shows 2-second intervals of the ego vehicle passing a hotel en-trance. Dashed boxes are used to mark the same car across these frames, showing that its position and movement on the map remain consistent with those in the generated images. This multimodal consistency and temporal continuity pro-vide a solid foundation for generating specified multimodal scenes in the subsequent sections. 
+
+## 4.3. Initial Scene Generation 
+
+The ability to generate realistic initial scenes is paramount for facilitating the generation of driving scene sequences. To evaluate the generated initial scenes, we fol-low the experimental setting of TrafficGen [5] and evalu-ate the MMD score on the WOMD [4] and nuPlan [2]. As shown in Table 2 and Table 3, our UMGen achieved lower MMD values compared to other approaches, indicating that it generates more realistic scenes. 
+
+## 4.4. User-Guided Scene Sequence Generation 
+
+The ability to generate interactive scene sequences that replicate real-world conditions, along with control over the ego vehicle’s movements within these scenes, is essential Method Position Heading Size Velocity TrafficGen[5] 0.1451 0.1325 0.0926 0.1733 LCTGen[26] 0.1319 0.1418 0.1092 0.1938 SceneGen[25] 0.1362 0.1307 0.1190 0.1772 UniGen[16] 0.1208 0.1104 0.0815 0.1591 Ours 0.0730 0.0550 0.0533 0.1502  
+
+> Table 2. MMD results on Waymo Open Motion Dataset
+
+Method Position Heading Size Velocity TrafficGen* 0.0926 0.0799 0.0856 0.0988 Ours 0.0828 0.0682 0.0674 0.0760   
+
+> Table 3. MMD results on nuPlan. ⋆: Results reproduced by us under the same experimental setting
+
+for validating AD systems. This section, therefore, focuses on user-guided scene generation, highlighting our model’s flexibility in adapting to diverse ego-vehicle controls and simulating various traffic interactions. 
+
+Interactive ego-vehicle control. To illustrate the model’s ability to control ego-vehicle actions, we present visualization from two distinct generated scene sequences. As shown in the first row of Fig.4, we actively control the ego-vehicle to execute either a left turn or a right turn. The map undergoes corresponding rotations and transformations based on the ego vehicle’s actions, while the image modal-ity provides a visualization of these changes. Notably, al-though the scene observed after the right turn does not exist in the dataset, our model generates a corresponding multi-6849 Figure 4. Generated scenes with input ego actions . The first row shows the interactive control of the ego vehicle to perform left and right turns. The second row shows the ego vehicle, initialized with a right-turn velocity or a gradual deceleration to a stop. Red box: ego-vehicle, green box: vehicle, orange box: pedestrians or cyclists, arrow: agent velocity. 
+
+modal scene. In another scene (second row), instead of fol-lowing the dataset’s ”gradual stop” action (left), we assign the ego vehicle a one-frame right-turn velocity. The model autonomously executes maneuvers of lane change and over-taking (right), showcasing its ability to interpret intention, predict maneuvers, and update modalities. Leveraging mul-timodal generation, we observe the ego vehicle avoids colli-sion with the car ahead despite close proximity—an insight that would be challenging to achieve with models restricted to image-only predictions. 
+
+User-specified agent control. UMGen also provides flexible control over other road users, enabling the gen-eration of specific scenes. Moreover, it can simultane-ously simulate how these controls impact the behavior of other road users. For example, in the scene shown in Fig.5, we simulate a sudden cut-in maneuver by assign-ing a forward-left velocity to the agent marked by yellow dashed boxes. In response, the ego-vehicle executes emer-gency braking (the velocity arrow quickly turns shorter), as shown in the second row, with a trailing agent (highlighted with white dashed boxes) also decelerating in reaction to the ego-vehicle’s braking. Compared to the ego’s spontaneous braking action, we can also simultaneously control the ego-vehicle to perform a lane change to avoid the collision, as shown in the third row. This shows the flexible controllabil-ity of our model. Notably, such agent control through speed settings and realistic interaction simulation are two key fea-tures that simplify the creation of specific scenes. Speed control offers a human-like way to adjust agent behavior, Method CR( %) MMD Posi Size Head Vel UMGen-T 5.6 0.040 0.043 0.041 0.049 UMGen 5.1 0.038 0.037 0.040 0.036   
+
+> Table 4. MMD and collision rate results. UMGen-T represents UMGen without OAR module. CR: averaged agent collision rates. Vel: Velocity.
+
+while interaction simulation enables agents to respond dy-namically to each other. Without these capabilities, gener-ating such situations would require manual calculations of agent positions and interactions between road users. 
+
+## 4.5. Ablation study 
+
+In this section, we analyze each component of UMGen. 
+
+Effectiveness of TAR . Our TAR module applies causal self-attention exclusively to tokens at the same position across historical frames, reducing the time complexity from 
+
+O(( T N )2) in the vanilla AR model to  O(T 2) for mod-eling temporal dependencies, where  T is the number of frames and  N is the number of tokens per frame. This design enhances computational efficiency and significantly reduces GPU memory usage. We conducted comparative experiments to validate these benefits using the vanilla AR model and UMGen, monitoring peak GPU memory usage and per-token inference time. As shown in Fig. 6, UM-Gen maintains stable performance, in contrast to the vanilla AR model, whose GPU memory consumption and inference time increase sharply with the addition of frames, highlight-ing the challenges of long-horizon scene generation. 6850 Figure 5. Customized scenario generation by UMGen : The first row presents the original scene from the dataset. We assign a forward-left velocity to the vehicle highlighted by the yellow dashed line box and the ego-vehicle spontaneously takes a brak-ing action (second row). Alternatively, we can actively control the ego-vehicle to perform a lane change (third row). Red box: ego-vehicle, green box: vehicle, arrow: agent velocity.   
+
+> Figure 6. Comparison of peak GPU memory usage and per-token inference time for the vanilla AR model and our UMGen.
+
+Decoding without OAR . Our OAR module autoregres-sively decodes tokens within a frame aiming to prevent in-consistency between tokens. To analyze the impact of this component, we created a variant of UMGen by removing the OAR module, directly decoding from the TAR output. This modified version, referred to as UMGen-T, was eval-uated by generating scene sequences based on the initial frames provided by the nuPlan validation set. Performance was measured using the average collision rates between agents and MMD scores on generated scene sequences. As shown in Table 4, UMGen-T exhibits higher MMD values, indicating that its generated scenarios appear less realistic. More importantly, the elevated agent collision rates suggest that UMGen-T struggles to effectively capture intra-frame  
+
+> Figure 7. Map predictions with and without the AMA module .The bar below illustrates the ego vehicle’s velocity over time.
+
+token relationships, resulting in more frequent conflicts. 
+
+Improved coherence by AMA module. Given the role of the AMA module in maintaining map consistency rela-tive to the ego vehicle’s movement, we conducted experi-ments to assess its impact. We trained an alternative model without this module. As illustrated in Figure 7, we apply a forward-right velocity to the ego-vehicle while it was trav-eling along a straight road. With the AMA module enabled, the map adjusts accurately to reflect the ego-vehicle’s ac-tions. In contrast, without the AMA module, the map re-veals a lack of responsiveness. This experiment underscores the importance of the AMA module in enhancing coherence between ego actions and map modalities. 
+
+# 5. Conclusion and Discussion 
+
+Conclusion. We have presented UMGen, a generative framework that enhances multimodal driving scene genera-tion by integrating ego-action, road users, traffic maps, and images. Addressing existing limitations, UMGen formu-lates scene generation as a sequence prediction task, uti-lizing Temporal AutoRegressive (TAR) and Ordered Au-toRegressive (OAR) modules to achieve temporal coher-ence and cross-modal alignment with reduced computa-tional costs. Additionally, we introduce an Action-aware Map Alignment (AMA) module to ensure consistency be-tween ego-action and map data by dynamically aligning map features with the ego-vehicle’s movement. Experimen-tal results have demonstrated the effectiveness of UMGen in generating diverse and realistic scenarios. In addition, it has been experimentally validated that UMGen can gener-ate user-specified scenarios by controlling both the ego ve-hicle and other vehicles. This further highlights its potential as an interactive closed-loop simulator for AD systems. 
+
+Discussion. Building on this, to further improve the quality of the generated images, one promising approach is to incorporate generated multimodal scenes as conditions for a diffusion model [18, 22]. Results demonstrating this approach are provided in the Appendix. 6851 References 
+
+[1] Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ah-mad, Ilge Akkaya, Florencia Leoni Aleman, Diogo Almeida, Janko Altenschmidt, Sam Altman, Shyamal Anadkat, et al. Gpt-4 technical report. arXiv preprint arXiv:2303.08774 ,2023. 2 [2] Holger Caesar, Juraj Kabzan, Kok Seang Tan, Whye Kit Fong, Eric Wolff, Alex Lang, Luke Fletcher, Oscar Beijbom, and Sammy Omari. nuplan: A closed-loop ml-based plan-ning benchmark for autonomous vehicles. arXiv preprint arXiv:2106.11810 , 2021. 3, 5, 6 [3] Patrick Esser, Robin Rombach, and Bjorn Ommer. Taming transformers for high-resolution image synthesis. In Pro-ceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 12873–12883, 2021. 3, 4 [4] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R Qi, Yin Zhou, et al. Large scale interactive motion forecasting for autonomous driving: The waymo open mo-tion dataset. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 9710–9719, 2021. 5, 6[5] Lan Feng, Quanyi Li, Zhenghao Peng, Shuhan Tan, and Bolei Zhou. Trafficgen: Learning to generate diverse and re-alistic traffic scenarios. In 2023 IEEE International Confer-ence on Robotics and Automation (ICRA) , pages 3567–3575. IEEE, 2023. 2, 5, 6 [6] Ruiyuan Gao, Kai Chen, Enze Xie, Lanqing Hong, Zhenguo Li, Dit-Yan Yeung, and Qiang Xu. Magicdrive: Street view generation with diverse 3d geometry control. arXiv preprint arXiv:2310.02601 , 2023. 2, 3, 5 [7] Anthony Hu, Lloyd Russell, Hudson Yeo, Zak Murez, George Fedoseev, Alex Kendall, Jamie Shotton, and Gian-luca Corrado. Gaia-1: A generative world model for au-tonomous driving. arXiv preprint arXiv:2309.17080 , 2023. 2, 3, 4, 5 [8] Yihan Hu, Jiazhi Yang, Li Chen, Keyu Li, Chonghao Sima, Xizhou Zhu, Siqi Chai, Senyao Du, Tianwei Lin, Wenhai Wang, et al. Planning-oriented autonomous driving. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17853–17862, 2023. 2 [9] Yihan Hu, Siqi Chai, Zhening Yang, Jingyu Qian, Kun Li, Wenxin Shao, Haichao Zhang, Wei Xu, and Qiang Liu. Solv-ing motion planning tasks with a scalable generative model. 
+
+arXiv preprint arXiv:2407.02797 , 2024. 2, 3, 5 [10] Maximilian Igl, Daewoo Kim, Alex Kuefler, Paul Mougin, Punit Shah, Kyriacos Shiarlis, Dragomir Anguelov, Mark Palatucci, Brandyn White, and Shimon Whiteson. Sym-phony: Learning realistic and diverse agents for autonomous driving simulation. In 2022 International Conference on Robotics and Automation (ICRA) , pages 2445–2451. IEEE, 2022. 3 [11] Amlan Kar, Aayush Prakash, Ming-Yu Liu, Eric Cameracci, Justin Yuan, Matt Rusiniak, David Acuna, Antonio Torralba, and Sanja Fidler. Meta-sim: Learning to generate synthetic datasets. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 4551–4560, 2019. 3 [12] Tero Karras, Samuli Laine, and Timo Aila. A style-based generator architecture for generative adversarial networks. In Proceedings of the IEEE/CVF conference on computer vi-sion and pattern recognition , pages 4401–4410, 2019. 2 [13] Durk P Kingma, Shakir Mohamed, Danilo Jimenez Rezende, and Max Welling. Semi-supervised learning with deep gen-erative models. Advances in neural information processing systems , 27, 2014. 2 [14] Quanyi Li, Zhenghao Peng, Lan Feng, Qihang Zhang, Zhenghai Xue, and Bolei Zhou. Metadrive: Composing diverse driving scenarios for generalizable reinforcement learning. IEEE transactions on pattern analysis and machine intelligence , 45(3):3461–3475, 2022. 2, 3 [15] Pablo Alvarez Lopez, Michael Behrisch, Laura Bieker-Walz, Jakob Erdmann, Yun-Pang Fl¨ otter¨ od, Robert Hilbrich, Leon-hard L¨ ucken, Johannes Rummel, Peter Wagner, and Eva-marie Wießner. Microscopic traffic simulation using sumo. In 2018 21st international conference on intelligent trans-portation systems (ITSC) , pages 2575–2582. IEEE, 2018. 3 [16] Reza Mahjourian, Rongbing Mu, Valerii Likhosherstov, Paul Mougin, Xiukun Huang, Joao Messias, and Shimon White-son. Unigen: Unified modeling of initial agent states and tra-jectories for generating autonomous driving scenarios. arXiv preprint arXiv:2405.03807 , 2024. 3, 5, 6 [17] Jianbiao Mei, Xuemeng Yang, Licheng Wen, Tao Hu, Yu Yang, Tiantian Wei, Yukai Ma, Min Dou, Botian Shi, and Yong Liu. Dreamforge: Motion-aware autoregressive video generation for multi-view driving scenes. arXiv preprint arXiv:2409.04003 , 2024. 3 [18] William Peebles and Saining Xie. Scalable diffusion models with transformers. In Proceedings of the IEEE/CVF Inter-national Conference on Computer Vision , pages 4195–4205, 2023. 8 [19] Jonah Philion, Xue Bin Peng, and Sanja Fidler. Trajeglish: Traffic modeling as next-token prediction. In The Twelfth In-ternational Conference on Learning Representations , 2024. 3[20] Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, Ilya Sutskever, et al. Language models are unsu-pervised multitask learners. OpenAI blog , 1(8):9, 2019. 3, 5[21] Aditya Ramesh, Mikhail Pavlov, Gabriel Goh, Scott Gray, Chelsea Voss, Alec Radford, Mark Chen, and Ilya Sutskever. Zero-shot text-to-image generation. In International confer-ence on machine learning , pages 8821–8831. Pmlr, 2021. 2 [22] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj¨ orn Ommer. High-resolution image synthesis with latent diffusion models. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 10684–10695, 2022. 8 [23] Ari Seff, Brian Cera, Dian Chen, Mason Ng, Aurick Zhou, Nigamaa Nayakanti, Khaled S Refaat, Rami Al-Rfou, and Benjamin Sapp. Motionlm: Multi-agent motion forecast-ing as language modeling. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 8579– 8590, 2023. 3 [24] Wenchao Sun, Xuewu Lin, Yining Shi, Chuang Zhang, Hao-ran Wu, and Sifa Zheng. Sparsedrive: End-to-end au-6852 tonomous driving via sparse scene representation. arXiv preprint arXiv:2405.19620 , 2024. 2 [25] Shuhan Tan, Kelvin Wong, Shenlong Wang, Sivabalan Mani-vasagam, Mengye Ren, and Raquel Urtasun. Scenegen: Learning to generate realistic traffic scenes. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition , pages 892–901, 2021. 6 [26] Shuhan Tan, Boris Ivanovic, Xinshuo Weng, Marco Pavone, and Philipp Kraehenbuehl. Language conditioned traffic generation. arXiv preprint arXiv:2307.07947 , 2023. 3, 5, 6[27] Junming Wang, Xingyu Zhang, Zebin Xing, Songen Gu, Xiaoyang Guo, Yang Hu, Ziying Song, Qian Zhang, Xi-aoxiao Long, and Wei Yin. He-drive: Human-like end-to-end driving with vision language models. arXiv preprint arXiv:2410.05051 , 2024. 2 [28] Xiaofeng Wang, Zheng Zhu, Guan Huang, Xinze Chen, Jia-gang Zhu, and Jiwen Lu. Drivedreamer: Towards real-world-driven world models for autonomous driving. arXiv preprint arXiv:2309.09777 , 2023. 2, 3, 5 [29] Xuemeng Yang, Licheng Wen, Yukai Ma, Jianbiao Mei, Xin Li, Tiantian Wei, Wenjie Lei, Daocheng Fu, Pinlong Cai, Min Dou, Botian Shi, Liang He, Yong Liu, and Yu Qiao. Drivearena: A closed-loop generative simulation platform for autonomous driving. arXiv preprint arXiv:2408.00415 ,2024. 2 [30] Ze Yang, Yun Chen, Jingkang Wang, Sivabalan Mani-vasagam, Wei-Chiu Ma, Anqi Joyce Yang, and Raquel Ur-tasun. Unisim: A neural closed-loop sensor simulator. In 
+
+Proceedings of the IEEE/CVF Conference on Computer Vi-sion and Pattern Recognition , pages 1389–1399, 2023. 2 [31] Guosheng Zhao, Xiaofeng Wang, Zheng Zhu, Xinze Chen, Guan Huang, Xiaoyi Bao, and Xingang Wang. Drivedreamer-2: Llm-enhanced world models for diverse driving video generation. arXiv preprint arXiv:2403.06845 ,2024. 2, 3 [32] Zikang Zhou, Haibo Hu, Xinhong Chen, Jianping Wang, Nan Guan, Kui Wu, Yung-Hui Li, Yu-Kai Huang, and Chun Jason Xue. Behaviorgpt: Smart agent simulation for autonomous driving with next-patch prediction. arXiv preprint arXiv:2405.17372 , 2024. 3 6853

@@ -1,0 +1,535 @@
+Title: ModeSeq: Taming Sparse Multimodal Motion Prediction with Sequential Mode Modeling
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Zhou_ModeSeq_Taming_Sparse_Multimodal_Motion_Prediction_with_Sequential_Mode_Modeling_CVPR_2025_paper.pdf
+
+Published Time: Sun, 18 May 2025 21:15:02 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# ModeSeq: Taming Sparse Multimodal Motion Prediction with Sequential Mode Modeling 
+
+# Zikang Zhou 1 Hengjian Zhou 2 Haibo Hu 1 Zihao Wen 1
+
+# Jianping Wang 1 Yung-Hui Li 3 Yu-Kai Huang 41City University of Hong Kong 
+
+> 2
+
+# Zhejiang University 3Hon Hai Research Institute 4Carnegie Mellon University 
+
+# Abstract 
+
+Anticipating the multimodality of future events lays the foundation for safe autonomous driving. However, multi-modal motion prediction for traffic agents has been clouded by the lack of multimodal ground truth. Existing works predominantly adopt the winner-take-all training strategy to tackle this challenge, yet still suffer from limited tra-jectory diversity and uncalibrated mode confidence. While some approaches address these limitations by generating excessive trajectory candidates, they necessitate a post-processing stage to identify the most representative modes, a process lacking universal principles and compromising trajectory accuracy. We are thus motivated to introduce ModeSeq, a new multimodal prediction paradigm that mod-els modes as sequences. Unlike the common practice of decoding multiple plausible trajectories in one shot, Mod-eSeq requires motion decoders to infer the next mode step by step, thereby more explicitly capturing the correlation between modes and significantly enhancing the ability to reason about multimodality. Leveraging the inductive bias of sequential mode prediction, we also propose the Early-Match-Take-All (EMTA) training strategy to diversify the trajectories further. Without relying on dense mode pre-diction or heuristic post-processing, ModeSeq considerably improves the diversity of multimodal output while attain-ing satisfactory trajectory accuracy, resulting in balanced performance on motion prediction benchmarks. Moreover, ModeSeq naturally emerges with the capability of mode extrapolation, which supports forecasting more behavior modes when the future is highly uncertain. 
+
+# 1. Introduction 
+
+Handling the intricate uncertainty presented in the real world is one of the major hurdles in autonomous driving. One aspect of the uncertainty lies in the multimodal behav-ior of traffic agents, i.e ., multiple instantiations of an agent’s Scene Embedding   
+
+> 0.5
+> 0.4
+> 0.3
+> (a) Parallel mode modeling Scene Embedding
+> 0.7 0.3 0.1
+> (b) Sequential mode modeling
+
+Figure 1. A comparison between parallel and sequential mode modeling. While parallel mode modeling (Fig. 1a) decodes mul-timodal trajectories in one shot, our sequential mode modeling (Fig. 1b) reasons about multiple plausible futures step by step, which captures the relationships between modes to avoid produc-ing indistinguishable trajectories and confidence scores. 
+
+future may be compatible with a given observation of the past. Without characterizing the multimodal distribution of agent motions, autonomous vehicles may fail to interact with the surroundings in a safe and human-like manner. For this reason, advanced decision-making systems demand a motion predictor to forecast several plausible and represen-tative trajectories of critical agents [8, 16]. Although multimodality has long been the central topic studied in motion prediction, this problem has not been fundamentally solved owing to the unavailability of mul-timodal ground truth, i.e ., only one possibility is observable in real-world driving data. To struggle with this dilemma, most existing works adopt the winner-take-all (WTA) strat-egy [15] for training [4, 6, 17, 25, 37, 44, 50, 51]. Un-der this strategy, only the best among all predicted modes will receive explicit supervision signals for trajectory re-gression and confidence scoring, while all the remaining will be masked in loss calculation. Despite being the cur-rent standard practice in the research community, the WTA solution has been found to cause mode collapse easily and produce indistinguishable trajectories [23, 32, 43], further confusing the learning of mode scoring [18]. As a rem-edy, some recent research intends to cover the ground-truth mode by generating a massive number of trajectory candi-dates [25, 37, 44], from which the most representative ones are heuristically selected based on post-processing methods This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 1612 such as non-maximum suppression (NMS). However, such a post-processing step requires carefully tuning the hyper-parameters, e.g ., the thresholds in NMS. Even if the hyper-parameters were well-tuned, they might not fit various sce-narios with diverse road conditions, leading to inferior gen-eralization. Moreover, performing dense mode prediction followed by rule-based post-processing may significantly sacrifice trajectory accuracy in practice [37], given that cor-rectly extracting the best trajectories from a large set of can-didates is non-trivial. The limitations of mainstream methods prompt us to seek an end-to-end solution that directly produces a sparse set of diverse, high-quality, and representative agent tra-jectories, eliminating the need for dense mode prediction and heuristic mode selection. To begin with, we identify a commonality of existing multimodal motion predictors, that all trajectory modes are decoded in one shot, which we dub parallel mode modeling as depicted in Fig. 1a. De-spite its efficiency, this paradigm neglects the relationship between the predicted modes, hindering models from de-coding diverse multimodal output. For anchor-free meth-ods with parallel mode modeling [25, 26, 44, 50, 51], the distinction between the decoded trajectories depends en-tirely on the difference in sub-network parameters, which may not be controllable under the unstable WTA train-ing. For this reason, some of these solutions turn to dense mode prediction and rely on post-processing steps to diver-sify the output [25, 44]. While anchor-based approaches offload the duties of ensuring diversity onto the input an-chors [4, 27, 37, 48], determining a sparse set of anchors that can adapt to specific scenarios is challenging, com-pelling all these approaches to employ excessive anchors for dense mode prediction. Under the paradigm of paral-lel mode modeling, producing multimodal trajectories with sparse mode prediction faces significant obstacles. To tackle these challenges, this paper explores sequential mode modeling ( ModeSeq ), a completely different path-way toward sparse multimodal motion prediction. As illus-trated in Fig. 1b, we attempt to construct a chain of modes when decoding the future from the scene embeddings, pro-ducing only one plausible trajectory and the corresponding confidence at each decoding step. Compared with paral-lel prediction, our approach puts more effort into captur-ing the correlation between modes, asking the model to tell what the next mode should be and how much confidence it has conditioned on the mode embeddings at previous steps. By giving the model a chance to look at the prior modes and learning the factorized joint latent space of multiple futures, we tremendously boost the capability of reason-ing about multimodality and characterizing the full distri-bution without the reliance on dense mode prediction, post-processing tricks, and all manner of anchors. Leveraging the order of modes in the sequence, we further propose the Early-Match-Take-All (EMTA) training strategy, which fa-cilitates decoding matched trajectories with high confidence as early as possible. Meanwhile, our EMTA scheme en-forces the decoder to vacate the duplicated modes to cover the missing futures at the cost of negligible degradation in trajectory accuracy, thereby achieving better mode cover-age and easing the learning of confidence scoring. Fur-thermore, we strengthen the model capacity under our new paradigm by developing an iterative refinement framework similar to DETR-like decoders [3, 37, 49, 51], which inte-grates a mode rearrangement mechanism in between decod-ing layers to coordinate with the EMTA training scheme. We validate ModeSeq on the Waymo Open Motion Dataset [9] and the Argoverse 2 Motion Forecasting Dataset [46], where we achieve more balanced performance in terms of mode coverage, mode scoring, and trajectory accuracy, compared with representative motion forecasting methods such as QCNet [51] and MTR [37]. Furthermore, our approach naturally emerges with the capability of mode extrapolation thanks to sequential mode modeling, which enables predicting a dynamic number of modes on demand. 
+
+# 2. Related Work 
+
+Multimodality has been a dark cloud in the field of motion prediction. Early works employ generative models to sam-ple multimodal trajectories [11, 13, 14, 30, 42], but they are susceptible to mode collapse. Modern motion predic-tors [4, 6, 17, 25, 37, 44, 50, 51] mostly follow the paradigm of multiple choice learning [15], where multiple trajec-tory modes are produced directly from mixture density net-works [2]. Due to the lack of multimodal ground truth, these methods adopt the WTA training strategy [15], which is unstable and fails to deal with mode collapse fundamen-tally [23, 32, 43]. To mitigate this issue, a line of research performs dense mode prediction, i.e ., decoding excessive trajectory candidates for better mode coverage [25, 37, 44]. Among these works, some equip the decoder with an-chors [4, 27, 37, 48] to achieve more stable training. How-ever, dense mode prediction necessitates heuristic selection of the most representative trajectories from a large set of candidates during inference, risking the precision of mul-timodal output and the generalization across a wide range of scenarios. This paper provides new insights into mul-timodal problems by introducing the paradigm of sequen-tial mode modeling and the EMTA training strategy, pursu-ing an end-to-end solution that produces a sparse set of di-verse, high-quality, and representative trajectories directly. 
+
+Sequential modeling has found many applications in mo-tion prediction and traffic modeling. On the one hand, ap-plying sequential modeling to the time dimension results in trajectory encoders and decoders based on recurrent net-works [1, 5, 7, 11, 12, 14, 24, 29, 30, 33, 42, 44] or Trans-formers [10, 20, 25, 26, 28, 34, 45, 47, 50–52], which can 1613 facilitate the learning of temporal dynamics. In particu-lar, recent advances in motion generation [28, 34, 52] have shown that factorizing the joint distribution of multi-agent time-series in a social autoregressive manner [1, 30, 42] can better characterize the evolution of traffic scenarios. On the other hand, some works utilize sequential modeling in the agent dimension for multi-agent motion prediction [31, 41]. For example, M2I [41] uses heuristic methods to label influ-encers and reactors from pairs of agents, followed by pre-dicting the marginal distribution of the influencers and the conditional distribution of the reactors. FJMP [31] extends M2I to model the joint distribution of an arbitrary number of agents, where the joint future trajectories of agents are fac-torized using a directed acyclic graph. Our work is the first attempt that employs sequential prediction in the mode di-mension, which enhances the understanding of multimodal behavior by capturing the correlation between modes. 
+
+# 3. Methodology 
+
+3.1. Problem Formulation 
+
+Denote S as the input of motion prediction models, which encompasses the map elements represented as M polygo-nal instances and the T -step historical trajectories of A traf-fic agents ( e.g ., vehicles, pedestrians, and cyclists) in the scene. Each map polygon comprises line segments outlin-ing its contour and semantic tags describing the traffic rules it associates. On the other hand, each trajectory is labeled with agent type ( e.g ., vehicles, pedestrians, and cyclists) and composed of 3D bounding boxes across various time steps. The models are tasked with forecasting K plausi-ble trajectory modes per agent of interest, each comprising 
+
+ˆT waypoints and an associated confidence score. The K
+
+confidence scores are not restricted to a sum of 1, as it is sufficient to only care about their relative ranking. The pre-dicted trajectories are desired to be representative, reflecting distinct behavior modes of agents and properly measuring the likelihood of each mode via the estimated confidence. Typical motion predictors employ the encoder-decoder architecture, where an encoder computes the embedding 
+
+Ψ from the scene input, based on which a decoder learns the embeddings {mi,k }k∈{ 1,...,K } of the i-th agent’s future modes. Without loss of generality, the following simplifies 
+
+mi,k as mk to discuss the prediction for a single agent, which can be extended for multiple agents by repeating the same decoding process. Given mk, a prediction head then outputs a trajectory ˆyk = [ ˆ y1
+
+> k
+
+, . . . , ˆy ˆTk ] and a confidence score ˆϕk via simple modules such as multi-layer percep-trons (MLPs). The whole pipeline can be summarized as 
+
+
+
+Ψ = Encoder ( S) ,
+
+{mk}k∈{ 1,...,K } = Decoder (Ψ) ,
+
+ˆyk, ˆϕk = Head ( mk) , k ∈ { 1, . . . , K } .
+
+(1) 
+
+3.2. Scene Encoding 
+
+Since this work focuses on the decoding of multimodal tra-jectories, we mainly adopt QCNet [51] as the scene en-coder, which is one of the de facto best practices in industry and academia due to its symmetric modeling in space and time leveraging relative positional embeddings [35]. This encoder, on the one hand, exploits a hierarchical map en-coding module based on map-map self-attention to produce the map embedding of shape [M, D ], with D referring to the hidden size. On the other hand, the encoder consists of Transformer modules that factorize the space and time axes, including temporal self-attention, agent-map cross-attention, and agent-agent self-attention. These three types of attention are grouped and interleaved twice to yield the agent embedding of shape [A, T, D ] for A agents and T his-torical time steps, which constitutes the final scene embed-dings together with the map embedding. In principle, any scene encoding method can fit into our ModeSeq framework with reasonable efforts (see the supplementary material). 
+
+3.3. Sequential Mode Decoding 
+
+To facilitate reasoning about multimodality in the absence of multimodal ground truth, our framework requires the decoder to conduct chain-based factorization on the joint mode embeddings, which is demonstrated as follows: 
+
+mk = Decoder (Ψ , {m1, . . . , mk−1}) , k ∈ { 1, . . . , K } .
+
+(2) With such a factorization that converts the unordered set of modes into a sequence, the correlation between modes can be naturally strengthened, as the mode to be decoded de-pends on the ones that appear previously. Further equipping this framework with appropriate model implementation and training scheme has the potential to offer better mode cov-erage and scoring without severe sacrifice in trajectory ac-curacy, which we introduce in the following sections. 
+
+3.4. Single-Layer Mode Sequence 
+
+This section illustrates the detailed structure of a single ModeSeq layer, which consists of a Memory Transformer module and a Context Transformer module. Stacking mul-tiple ModeSeq layers can further improve the performance via iterative refinement, which will be discussed in Sec. 3.5. 
+
+Routine. We introduce the decoding procedure of the ℓ-th ModeSeq layer, with the right-hand side of Fig. 2 depicting the first layer ( i.e ., ℓ = 1 ) for a single agent. Note that the computation graph of the layer can be executed for multi-ple agents in parallel. The layer is designed to recurrently output a sequence of mode embeddings [m(ℓ)1 , . . . , m(ℓ) 
+
+> K
+
+],where we slightly complicate the notation of modes with a superscript that identifies the layer index. The input of the layer includes the scene embedding Ψ yielded by the en-coder and the mode embeddings produced by the (ℓ − 1) -th 1614 Scene Embedding      
+
+> A
+> T
+> M
+> Context Transformer
+> Memory
+> Transformer
+> K
+> V
+> Q
+> Q
+> KV
+> Push
+> MLP 0.2
+> [𝑚 !
+> (!),𝑚 $
+> (!)]
+> 𝑚 %
+> (&)
+> 𝑚 %
+> (!)
+> Mode Rearrangement
+> ModeSeq Layer 1
+> ModeSeq Layer 2
+> Scene Embedding
+> 0.2 0.4 0.5
+> 0.2 0.5 0.4
+> 0.0 0.0 0.0
+> 0.1 0.3 0.7
+> 0.4
+> 0. 5
+> 0.0
+> EMTA Loss
+> EMTA Loss
+> 0.x Mode Confidence
+> Mode Embedding
+> Map Embedding
+> Agen tEmbedding
+
+Figure 2. Overview of the ModeSeq framework. Left: We stack multiple ModeSeq layers with mode rearrangement in between to iteratively refine the multimodal output under the Early-Match-Take-All (EMTA) training strategy. Right: Each ModeSeq layer consists of a Memory Transformer module for capturing mode-wise dependencies and a Context Transformer module for retrieving the scene embeddings produced by the encoder, operating in a recurrent fashion to decode a sequence of trajectory modes. 
+
+decoding layer, i.e ., [m(ℓ−1) 1 , . . . , m(ℓ−1)  
+
+> K
+
+]. Since the latter input does not apply to the first layer, we introduce an em-bedding e ∈ RD to serve as the output of the “ 0-th layer”, which is randomly initialized at the beginning of training. The same learnable e is shared across the K input embed-dings of the first layer: 
+
+m(0)  
+
+> k
+
+= e, k ∈ { 1, . . . , K } . (3) Before starting the decoding, we create an empty sequence 
+
+Ω(ℓ)0 = [ ] with the subscript and superscript indicating the 
+
+0-th decoding step and the ℓ-th layer, respectively. This sequence will be used to keep track of the mode embed-dings produced at various steps. At the k-th decoding step, we employ a Memory Transformer module and a Context Transformer module to update m(ℓ−1)  
+
+> k
+
+to become m(ℓ) 
+
+> k
+
+,leveraging the information in the memory bank Ω(ℓ) 
+
+> k−1
+
+and the scene embedding Ψ. The output mode embedding m(ℓ)
+
+> k
+
+is then pushed to the end of the sequence Ω(ℓ) 
+
+> k−1
+
+to obtain 
+
+Ω(ℓ) 
+
+> k
+
+= [ m(ℓ)1 , . . . , m(ℓ) 
+
+> k
+
+], which will serve as the input at the (k + 1) -th decoding step. After going through K decod-ing steps, we use a prediction head to transform each of the mode embeddings stored in Ω(ℓ) 
+
+> K
+
+into a specific trajectory and a corresponding confidence score via MLPs. The fol-lowing paragraphs detail the modules constituting a Mode-Seq layer and discuss the differences between our approach and other alternatives. 
+
+Memory Transformer. The Memory Transformer takes charge of modeling the sequential dependencies of trajec-tory modes. At the k-th decoding step of the ℓ-th layer, this module takes as input Ω(ℓ) 
+
+> k−1
+
+and m(ℓ−1)  
+
+> k
+
+, the memory bank for the current layer and the k-th mode embedding derived from the last layer. Since we desire the generation of the 
+
+k-th mode embedding m(ℓ) 
+
+> k
+
+to be aware of the existence of the preceding modes, we treat m(ℓ−1)  
+
+> k
+
+as the query of the Transformer module, which retrieves the memory bank in a cross-attention manner: 
+
+ˆm(ℓ) 
+
+> k
+
+= MemFormer 
+
+
+
+query =m(ℓ−1)  
+
+> k
+
+, key /value =Ω (ℓ)
+
+> k−1
+
+
+
+.
+
+(4) In this way, the information in Ω(ℓ) 
+
+> k−1
+
+is assimilated into 
+
+m(ℓ−1)  
+
+> k
+
+to produce ˆm(ℓ) 
+
+> k
+
+, which is a query feature condi-tioned on the modes up to the (k − 1) -th decoding step. 
+
+Context Transformer. To derive scene-compliant modes, we must provide the query feature with the specific scene context. To this end, we use the Context Transformer mod-ule to refine the conditional query ˆm(ℓ) 
+
+> k
+
+with the scene em-beddings output by the encoder. Specifically, the k-th mode embedding m(ℓ) 
+
+> k
+
+is computed by enriching ˆm(ℓ) 
+
+> k
+
+with Ψ us-ing cross-attention: 
+
+m(ℓ) 
+
+> k
+
+= CtxFormer 
+
+
+
+query = ˆ m(ℓ) 
+
+> k
+
+, key /value = Ψ 
+
+
+
+.
+
+(5) Considering the high complexity of performing global at-tention, we decompose the Context Transformer into three separate modules in practice, including mode-time cross-attention, mode-map cross-attention, and mode-agent cross-attention, each of which takes as input only a subset of the embeddings contained in Ψ. First, the mode-time cross-attention fuses the query feature with the historical encod-ing belonging to the agent of interest, enabling the query to adapt to the specific agent. Second, we aggregate the map information surrounding the agent of interest into the query feature leveraging the mode-map cross-attention, which contributes to the map compliance of the forecasting results. Finally, utilizing the mode-agent cross-attention module to fuse the neighboring agents’ embeddings at the current time step promotes the model’s social awareness. After going through these three modules, the conditional query ˆm(ℓ)
+
+> k
+
+eventually becomes m(ℓ) 
+
+> k
+
+, which is now context-aware. 
+
+Prediction Head. Given the conditional, context-aware 1615 mode embedding m(ℓ) 
+
+> k
+
+, we use an MLP head to output the 
+
+k-th trajectory ˆy(ℓ) 
+
+> k
+
+and another to estimate the correspond-ing confidence score ˆϕ(ℓ) 
+
+> k
+
+:
+
+
+
+ˆy(ℓ) 
+
+> k
+
+= MLP 
+
+
+
+m(ℓ)
+
+> k
+
+
+
+,
+
+ˆϕ(ℓ) 
+
+> k
+
+= MLP 
+
+
+
+m(ℓ)
+
+> k
+
+
+
+.
+
+(6) 
+
+Comparison with DETR-Like Decoders. In contrast to motion decoders [25, 37, 44, 51] inspired by DETR [3], where the relationships between modes are completely ne-glected [25, 44] or weakly modeled by mode-mode self-attention [37, 51], modeling modes as a sequence strength-ens mode-wise relational reasoning thanks to the condi-tional dependence in generating multimodal embeddings, which is beneficial to eliminating duplicated trajectories. Furthermore, DETR-like approaches can only decode a fixed number of modes, as the number of learnable/static anchors cannot be changed once specified at the start of training. By contrast, our ModeSeq framework completely achieves parameter sharing across decoding steps and sup-ports outputting more/fewer modes at test time, which can be simply achieved by changing the number of decoding steps. This characteristic can be helpful since the degree of uncertainty varies by scenario. 
+
+Comparison with Typical Recurrent Networks. The ModeSeq layer can be viewed as a sort of recurrent net-work [5, 12] due to its parameter sharing across decod-ing steps, though its core components are modernized with Transformers. While typical recurrent networks compress the memory into a single hidden state, which is often lossy, the Memory Transformer in a ModeSeq layer allows for di-rect access to all prior mode embeddings, naturally scaling the capacity of the memory as the number of modes grows. 
+
+3.5. Multi-Layer Mode Sequences 
+
+Single-layer mode sequences may have limited capability of learning high-quality mode representations. In particu-lar, if the layer happens to produce unrealistic or less likely modes at the first few decoding steps, the learning of the later modes may be unexpectedly disturbed. Inspired by DETR [3], we develop an iterative refinement framework by stacking multiple ModeSeq layers and applying training losses to the output of each layer. As shown in the left part of Fig. 2, all layers except for the first one take as input the mode embeddings output from the last round of decod-ing, refining the features with the scene context. Crucially, we introduce the operation of mode rearrangement in be-tween layers, which corrects the order of the embeddings in the mode sequence to encourage decoding trajectory modes with monotonically decreasing confidence scores. 
+
+Mode Rearrangement. Before transitioning from the ℓ-th to the (ℓ + 1) -th ModeSeq layer, we sort the mode em-beddings stored in the memory bank Ω(ℓ) 
+
+> K
+
+according to the descending order of the confidence scores predicted from them. The sorted mode embeddings will then be sequen-tially input to the (ℓ+1) -th ModeSeq layer for recurrent de-coding. Through iterative refinement with mode rearrange-ment, the trajectories and the order of modes become more scene-compliant and more monotonous, respectively. 
+
+3.6. Early-Match-Take-All Training 
+
+The WTA training strategy [15] is blamed for produc-ing overlapped trajectories and indistinguishable confidence scores [18, 23, 32, 43]. Fortunately, our approach has the opportunity to mitigate this issue by opting for a more ap-propriate training method under the paradigm of sequen-tial mode modeling. In this section, we propose the EMTA loss, which leverages the order of modes to define the posi-tive and negative samples toward better mode coverage and confidence scoring without significantly sacrificing trajec-tory accuracy. Typical WTA loss optimizes only the trajectory with the minimum displacement error with respect to the ground truth. In comparison, our EMTA loss optimizes the matched 
+
+trajectory decoded at the earliest recurrent step. For exam-ple, if both the second and the third trajectories match the ground truth, only the second one will be optimized, regard-less of which one has the minimum error. To this end, we search over the K predictions to acquire the collection of mode indices associated with matched trajectories: 
+
+G(ℓ) =
+
+n
+
+k | k ∈ { 1, · · · , K } ∧ 1
+
+n
+
+IsMatch 
+
+
+
+ˆy(ℓ) 
+
+> k
+
+, y
+
+oo 
+
+,
+
+(7) where G(ℓ) denotes the set of qualified mode indices in the ℓ-th ModeSeq layer, 1{·} represents the indicator func-tion, and IsMatch( ·, ·) defines the criterion for a match given the ground-truth trajectory y. The implementation of IsMatch( ·, ·) can be flexible, depending on the trajec-tory accuracy demanded by practitioners. For instance, on the Waymo Open Motion Dataset [9], we decide whether a predicted trajectory is a match based on the velocity-aware distance thresholds defined in the Miss Rate metric of the benchmark; while on the Argoverse 2 Motion Forecasting Dataset [46], a matched trajectory is expected to have less than 2-meter final displacement error. Given G(ℓ), we de-termine the unique positive sample’s index ˆk(ℓ) as follows, with all the remaining modes treated as negative samples: 
+
+ˆk(ℓ) =
+
+
+
+min 
+
+> k∈G(ℓ)
+
+k if |G(ℓ)| > 0 ; argmin 
+
+> k
+
+Dist 
+
+
+
+ˆy(ℓ) 
+
+> k
+
+, y
+
+
+
+otherwise , (8) where |·| denotes the cardinality of a set, and Dist( ·, ·) mea-sures the average displacement error between trajectories. This strategy for label assignment encourages the model to decode matched trajectories as early as possible by treating the earliest instead of the best matches as positive samples. Meanwhile, it drives the later matches, if any, away from the 1616 Table 1. Quantitative results on the 2024 Waymo Open Dataset Motion Prediction Benchmark.                                                                                                   
+
+> Dataset Method Ensemble Lidar Soft mAP 6↑mAP 6↑MR 6↓minADE 6↓minFDE 6↓
+> Val MTR v3 [36] ×✓-0.4593 0.1175 0.5791 1.1809 MTR++ [38] ××-0.4382 0.1337 0.6031 1.2135 QCNet [51] ××0.4508 0.4452 0.1254 0.5122 1.0225 ModeSeq (Ours) ××0.4562 0.4507 0.1206 0.5237 1.0681 Test MTR v3 [36] ✓✓0.4967 0.4859 0.1098 0.5554 1.1062 RMP Ensemble [40] ✓×0.4726 0.4553 0.1113 0.5596 1.1272 ModeSeq (Ours) ✓×0.4737 0.4665 0.1204 0.5680 1.1766 ModeSeq (Ours) ××0.4487 0.4450 0.1244 0.5304 1.0836
+> Table 2. Quantitative results on the 2024 Argoverse 2 Single-Agent Motion Forecasting Benchmark.
+> Method Ensemble b-minFDE 6↓MR 6↓minADE 6↓minFDE 6↓
+> MTR [37] ✓1.98 0.15 0.73 1.44 MTR++ [38] ✓1.88 0.14 0.71 1.37 QCNet [51] ×1.91 0.16 0.65 1.29 ModeSeq (Ours) ×1.87 0.14 0.63 1.26
+
+ground truth by assigning negative labels to them. On the other hand, if none of the predictions match, which com-monly happens at the early stage of training, we will fall back to the regular WTA scheme to ease the difficulty in op-timization. Following label assignment, we use the Laplace negative log-likelihood [50, 51] as the regression loss, opti-mizing the trajectories of the positive samples. Besides, we use the Binary Focal Loss [19] to optimize the confidence scores according to the labels assigned. We also try a vari-ant of confidence loss, where we introduce the definition of ignored samples to mask the confidence loss of the modes decoded earlier than the positive samples, which is shown to be effective in the absence of mode rearrangement. 
+
+# 4. Experiments 
+
+4.1. Experimental Setup 
+
+Datasets. We conduct experiments on the Waymo Open Motion Dataset (WOMD) [9] and the Argoverse 2 Mo-tion Forecasting Dataset [46]. The WOMD contains 
+
+486995 /44097 /44920 training/validation/testing samples, where the history of 1.1 seconds is provided as the con-text and the 8-second future trajectories of up to 8 agents are required to predict. The Argoverse 2 dataset com-prises 199908 /24988 /24984 samples with 5-second obser-vation windows and 6-second prediction horizons for train-ing/validation/testing. 
+
+Metrics. Following the standard of the benchmarks [9, 46], we constrain models to output at most K = 6 trajecto-ries. We use Miss Rate (MR K ) to measure mode cover-age, which counts the fraction of cases in which the model fails to produce any trajectories that match the ground truth within the required thresholds. Built upon the definition of a match, mAP K and Soft mAP K assess the quality of the confidence scores by computing the P/R curves and averag-ing the precision values over various confidence thresholds. If multiple predictions match the ground truth, only the one with the highest confidence is deemed true-positive, so gathering multiple predictions around the same region with high confidence may introduce more false positives and lower precision. Moreover, if the confidence of a matched mode is below the threshold, the recall would be harmed. Since mAP K and Soft mAP K penalize high-confidence un-matched and low-confidence matched modes, a model must predict diverse trajectories with calibrated confidences to score high on these metrics. To further evaluate trajec-tory quality, we use minimum Average Displacement Er-ror (minADE K ) and minimum Final Displacement Error (minFDE K ) as indicators, which calculate the distance be-tween the ground truth and the best-predicted trajectories as an average over the whole horizon and at the final time step, respectively. Finally, the b-minFDE K concerns the joint performance of trajectories and confidences by sum-ming the minFDE K and the Brier scores of the best modes. 
+
+Implementation Details. We develop models with a hid-den size of 128 . The decoder stacks 6 layers for iterative refinement, with each layer executing 6 steps to obtain ex-actly 6 modes as required by the benchmarks [9, 46]. On the WOMD [9], we use the AdamW optimizer [22] to train models for 30 epochs on the training set with a batch size of 
+
+32 , a weight decay rate of 0.1, and a dropout rate of 0.1. On Argoverse 2 [46], we use a similar training configuration except that the number of epochs is extended to 64 . The initial learning rate is set to 5 × 10 −4, which is decayed to 0
+
+at the end of training following the cosine annealing sched-ule [21]. Unless specified, the ablation studies are based on experiments on the WOMD with 20% of the training data. 
+
+4.2. Comparison with State of the Art 
+
+We compare our approach with QCNet [51] and the MTR series [36–38], which are currently the most effective sparse and dense multimodal prediction solutions across the WOMD and the Argoverse 2 dataset. As demonstrated in Tab. 1, ModeSeq achieves the best scoring performance among the Lidar-free methods on the validation split of the WOMD, though it lags behind the mAP 6 performance of MTR v3 [36], a model that augments the input information with raw sensor data. As a sparse mode predictor, ModeSeq undoubtedly outperforms MTR++ [38] in terms of MR 6,1617 Table 3. Effects of sequential mode modeling and Early-Match-Take-All training on the validation set of the WOMD.                                               
+
+> Decoder Training Strategy Ignored Samples Soft mAP 6↑mAP 6↑MR 6↓minADE 6↓minFDE 6↓
+> DETR w/ Refinement WTA None 0.4096 0.4050 0.1536 0.5660 1.1716 Other Matches 0.4150 0.4103 0.1502 0.5619 1.1621
+> ModeSeq (Ours) WTA None 0.4138 0.4093 0.1502 0.5563 1.1498
+> Other Matches 0.4207 0.4161 0.1503 0.5556 1.1501 EMTA None 0.4231 0.4196 0.1457 0.5700 1.1851
+> Other Matches 0.4098 0.4060 0.1496 0.5817 1.2207
+
+Table 4. Effects of mode rearrangement on the validation set of the WOMD.                                            
+
+> Mode Rearrangement Ignored Samples Soft mAP 6↑mAP 6↑MR 6↓minADE 6↓minFDE 6↓×None 0.4112 0.4077 0.1548 0.5884 1.2389 Early Mismatches 0.4141 0.4109 0.1489 0.5749 1.2066
+> ✓None 0.4231 0.4196 0.1457 0.5700 1.1851
+> Early Mismatches 0.4161 0.4129 0.1461 0.5751 1.2041 123456
+> Decoder Layer
+> 0.38
+> 0.39
+> 0.40
+> 0.41
+> 0.42
+> 0.43
+> Soft mAP
+> 123456
+> Decoder Layer
+> 0.14
+> 0.15
+> 0.16
+> 0.17
+> 0.18
+> MR
+
+Figure 3. The performance after each decoding layer on the vali-dation set of the WOMD. 
+
+minADE 6, and minFDE 6 by a large margin. Compared with QCNet [51], ModeSeq attains better Soft mAP 6, mAP 6,and MR 6 at the cost of slight degradation on minADE 6 and minFDE 6, confirming that our approach can improve the mode coverage and confidence scoring of sparse predictors without significant sacrifice in trajectory accuracy. In the 2024 Waymo Open Motion Prediction Challenge, the en-semble version of ModeSeq ranked first among Lidar-free approaches on the test set of the WOMD. Our approach also exhibits promising performance on the Argoverse 2 dataset, where our ensemble-free model surpasses QCNet and the MTR series on all critical metrics as shown in Tab. 2. 
+
+4.3. Ablation Study 
+
+Effects of Sequential Mode Modeling. In Tab. 3, we ex-amine the effectiveness of sequential mode modeling by comparing ModeSeq with the sparse DETR-like decoder enhanced with iterative refinement [3], both employing the same QCNet encoder [51] for fair comparisons. The results demonstrate that ModeSeq outperforms the baseline on all metrics when using the same training strategy. Interestingly, ignoring the confidence loss of the suboptimal modes that match the ground truth can improve the performance of both methods under the WTA training. The reason behind this is that treating the other matched modes as negative samples will confuse the optimization process, given that the best and the other matches usually have similar mode represen-tations while they are assigned as opposite samples. 
+
+Effects of EMTA Training. We also investigate the role of EMTA training in Tab. 3. After replacing the WTA loss with our EMTA scheme, the results on Soft mAP 6, mAP 6,and MR 6 are considerably improved, which demonstrates the benefits of EMTA training in terms of mode coverage and confidence scoring. On the other hand, the performance on minADE 6 and minFDE 6 slightly deteriorates since the EMTA loss has relaxed the requirement for trajectory accu-racy, but the degree of deterioration is less than 0.02 me-ters in minADE 6 and 0.04 meters in minFDE 6, leading to more balanced performance taken overall. Contrary to the conclusion drawn from the WTA baselines, treating other matches as ignored samples is detrimental under the EMTA strategy. This is because the joint effects of sequential mode decoding and EMTA training have broken the symmetry of mode modeling and label assignment, allowing us to assign the other matches as negative samples to drive them away from the ground truth for covering other likely modes. 
+
+Effects of Iterative Refinement. To understand the effects of iterative refinement under our framework, we take the output from different decoding layers for evaluation. As shown in Fig. 3, the performance on Soft mAP 6 and MR 6
+
+is generally improved as the depth increases, totaling a sub-stantial enhancement between the first and the last layer. One of the reasons why iterative refinement works well can be attributed to the operation of mode rearrangement in be-tween layers, which we explain in the following. 
+
+Effects of Mode Rearrangement. Mode rearrangement coordinates with EMTA training to facilitate decoding matched trajectories with high confidence as early as possi-ble. Comparing the first and third rows of Tab. 4, we can see that reordering the mode embeddings before further refine-ment can remarkably promote the forecasting capability. To gain deeper insights into the results, we develop a variant of label assignment, where the modes decoded earlier than the first match are deemed ignored samples. Again, incorpo-rating mode rearrangement is beneficial under this setting 1618 (a) #Mode@Training=3, #Mode@Inference=3 (b) #Mode@Training=6, #Mode@Inference=6 (c) #Mode@Training=6, #Mode@Inference=24 
+
+Figure 4. Visualization on the WOMD. The agents in purple are predicted with blue trajectories, with the opacity indicating confidence. 
+
+according to the second and fourth rows of Tab. 4. Interest-ingly, we found this strategy of label assignment to outper-form the default one in the absence of mode rearrangement (see the first half of Tab. 4). This phenomenon can be ex-plained by the fact that bad modes may appear in the first few decoding steps of the shallow layers, which can neg-atively impact the learning of the subsequent modes. To implicitly guide the model to output more confident modes first, we can provide monotonically decreasing confidence labels by ignoring the confidence loss of the early mis-matches. Playing a similar but stronger role, mode rear-rangement explicitly prioritizes the refinement of the more probable trajectories in the next layer by manually placing the less confident modes at the end of the sequence. 
+
+Capability of Representative Mode Learning. We demonstrate ModeSeq’s ability to produce representative modes in Tab. 5. While training models to decode merely 3
+
+modes necessarily leads to worse performance, the 3-mode variant of ModeSeq achieves the same level of performance on Soft mAP 6 and mAP 6 compared with the 6-mode model. By comparison, QCNet [51] fails to achieve comparable re-sults if only using 3 mode queries during training. 
+
+Capability of Mode Extrapolation. We ask the model trained by generating 6 modes to execute more decoding steps at test time. As depicted in Fig. 5, ModeSeq achieves lower prediction error with the increase of the decoded modes, emerging with the capability of mode extrapolation thanks to sequential modeling. This characteristic enables handling various degrees of uncertainty across scenarios. 
+
+Inference Cost. As shown in Tab. 5, the inference latency of ModeSeq is about twice as high as that of QCNet [51] if predicting 6 modes. However, in many industrial au-tonomous driving solutions, the number of modes used by downstream planning is refrained from exceeding 3. Table 5 shows that the latency gap between the 3-mode models is much smaller, while the mAP 6 of 3-mode ModeSeq is even better than that of 6-mode QCNet. Given our approach’s ca-pability of producing representative trajectories with fewer modes, we believe sequential mode modeling has the poten-tial to be deployed on board. 
+
+Table 5. Capability of generating representative modes with pre-cise confidence scores. Models are trained on 100% training data and evaluated on the validation split of the WOMD.                                 
+
+> #Mode Model Soft mAP 6↑mAP 6↑MR 6↓Latency (ms) 3QCNet [51] 0.4214 0.4163 0.2007 63 ±11 ModeSeq (Ours) 0.4509 0.4479 0.1967 86 ±96QCNet [51] 0.4508 0.4452 0.1254 69 ±16 ModeSeq (Ours) 0.4562 0.4507 0.1206 143 ±10 612 24 48 96
+> #Mode@Inference
+> 1.5
+> 1.6
+> 1.7
+> 1.8
+> 1.9
+> 2.0
+> 2.1
+> minFDE
+> 612 24 48 96
+> #Mode@Inference
+> 0.23
+> 0.26
+> 0.29
+> 0.32
+> 0.35
+> 0.38
+> MR
+
+Figure 5. The results of generating more than 6 modes on the validation set of the WOMD. 
+
+4.4. Qualitative Results 
+
+The qualitative results produced by ModeSeq are presented in Fig. 4. Figure 4a demonstrates that our model can gener-ate representative trajectories when being trained to decode only 3 modes. Comparing Fig. 4c with Fig. 4b, we can see that the 6-mode model successfully extrapolates diverse yet realistic modes when executing 24 decoding steps during in-ference, showcasing the extrapolation ability of ModeSeq. 
+
+# 5. Conclusion 
+
+This paper introduces ModeSeq, a modeling framework that achieves sparse multimodal motion prediction via sequen-tial mode modeling. The framework comprises a mecha-nism of sequential multimodal decoding, an architecture of iterative refinement with mode rearrangement, and a train-ing strategy of Early-Match-Take-All label assignment. As an alternative to the unordered multimodal decoding and the winner-take-all training strategy, ModeSeq achieves state-of-the-art results on motion prediction benchmarks and ex-hibits the characteristic of mode extrapolation, creating a new path to solving multimodal problems. 1619 Acknowledgement 
+
+This project is supported by a grant from Hong Kong Research Grant Council under CRF C1042-23G. 
+
+# References 
+
+[1] Alexandre Alahi, Kratarth Goel, Vignesh Ramanathan, Alexandre Robicquet, Li Fei-Fei, and Silvio Savarese. So-cial lstm: Human trajectory prediction in crowded spaces. In 
+
+CVPR , 2016. 2, 3 [2] Christopher M Bishop. Mixture density networks. 1994. 2 [3] Nicolas Carion, Francisco Massa, Gabriel Synnaeve, Nicolas Usunier, Alexander Kirillov, and Sergey Zagoruyko. End-to-end object detection with transformers. In ECCV , 2020. 2, 5, 7 [4] Yuning Chai, Benjamin Sapp, Mayank Bansal, and Dragomir Anguelov. Multipath: Multiple probabilistic anchor trajec-tory hypotheses for behavior prediction. In CoRL , 2019. 1, 2[5] Kyunghyun Cho, Bart van Merrienboer, C ¸ aglar G¨ ulc ¸ehre, Dzmitry Bahdanau, Fethi Bougares, Holger Schwenk, and Yoshua Bengio. Learning phrase representations using rnn encoder-decoder for statistical machine translation. In 
+
+EMNLP , 2014. 2, 5 [6] Henggang Cui, Vladan Radosavljevic, Fang-Chieh Chou, Tsung-Han Lin, Thi Nguyen, Tzu-Kuo Huang, Jeff Schnei-der, and Nemanja Djuric. Multimodal trajectory predictions for autonomous driving using deep convolutional networks. In ICRA , 2019. 1, 2 [7] Nachiket Deo and Mohan M Trivedi. Convolutional social pooling for vehicle trajectory prediction. In CVPRW , 2018. 2[8] Wenchao Ding, Lu Zhang, Jing Chen, and Shaojie Shen. Ep-silon: An efficient planning system for automated vehicles in highly interactive environments. T-RO , 2021. 1 [9] Scott Ettinger, Shuyang Cheng, Benjamin Caine, Chenxi Liu, Hang Zhao, Sabeek Pradhan, Yuning Chai, Ben Sapp, Charles R. Qi, Yin Zhou, Zoey Yang, Aur´ elien Chouard, Pei Sun, Jiquan Ngiam, Vijay Vasudevan, Alexander McCauley, Jonathon Shlens, and Dragomir Anguelov. Large scale in-teractive motion forecasting for autonomous driving: The waymo open motion dataset. In ICCV , 2021. 2, 5, 6, 1 [10] Francesco Giuliari, Irtiza Hasan, Marco Cristani, and Fabio Galasso. Transformer networks for trajectory forecasting. In 
+
+ICPR , 2020. 2 [11] Agrim Gupta, Justin Johnson, Li Fei-Fei, Silvio Savarese, and Alexandre Alahi. Social gan: Socially acceptable trajec-tories with generative adversarial networks. In CVPR , 2018. 2[12] Sepp Hochreiter and J¨ urgen Schmidhuber. Long short-term memory. Neural Computation , 1997. 2, 5 [13] Joey Hong, Benjamin Sapp, and James Philbin. Rules of the road: Predicting driving behavior with a convolutional model of semantic interactions. In CVPR , 2019. 2 [14] Namhoon Lee, Wongun Choi, Paul Vernaza, Christopher B Choy, Philip HS Torr, and Manmohan Chandraker. Desire: Distant future prediction in dynamic scenes with interacting agents. In CVPR , 2017. 2 [15] Stefan Lee, Senthil Purushwalkam Shiva Prakash, Michael Cogswell, Viresh Ranjan, David Crandall, and Dhruv Batra. Stochastic multiple choice learning for training diverse deep ensembles. In NIPS , 2016. 1, 2, 5 [16] Tong Li, Lu Zhang, Sikang Liu, and Shaojie Shen. Marc: Multipolicy and risk-aware contingency planning for au-tonomous driving. RA-L , 2023. 1 [17] Ming Liang, Bin Yang, Rui Hu, Yun Chen, Renjie Liao, Song Feng, and Raquel Urtasun. Learning lane graph representa-tions for motion forecasting. In ECCV , 2020. 1, 2 [18] Longzhong Lin, Xuewu Lin, Tianwei Lin, Lichao Huang, Rong Xiong, and Yue Wang. Eda: Evolving and distinct anchors for multimodal motion prediction. In AAAI , 2024. 1, 5 [19] Tsung-Yi Lin, Priya Goyal, Ross Girshick, Kaiming He, and Piotr Doll´ ar. Focal loss for dense object detection. In CVPR ,2017. 6 [20] Yicheng Liu, Jinghuai Zhang, Liangji Fang, Qinhong Jiang, and Bolei Zhou. Multimodal motion prediction with stacked transformers. In CVPR , 2021. 2 [21] Ilya Loshchilov and Frank Hutter. Sgdr: Stochastic gradient descent with warm restarts. In ICLR , 2017. 6 [22] Ilya Loshchilov and Frank Hutter. Decoupled weight decay regularization. In ICLR , 2019. 6 [23] Osama Makansi, Eddy Ilg, Ozgun Cicek, and Thomas Brox. Overcoming limitations of mixture density networks: A sam-pling and fitting framework for multimodal future prediction. In CVPR , 2019. 1, 2, 5 [24] Jean Mercat, Thomas Gilles, Nicole El Zoghby, Guil-laume Sandou, Dominique Beauvois, and Guillermo Pita Gil. Multi-head attention for multi-modal joint vehicle mo-tion forecasting. In ICRA , 2020. 2 [25] Nigamaa Nayakanti, Rami Al-Rfou, Aurick Zhou, Kratarth Goel, Khaled S Refaat, and Benjamin Sapp. Wayformer: Motion forecasting via simple & efficient attention networks. In ICRA , 2023. 1, 2, 5 [26] Jiquan Ngiam, Benjamin Caine, Vijay Vasudevan, Zheng-dong Zhang, Hao-Tien Lewis Chiang, Jeffrey Ling, Rebecca Roelofs, Alex Bewley, Chenxi Liu, Ashish Venugopal, David Weiss, Ben Sapp, Zhifeng Chen, and Jonathon Shlens. Scene transformer: A unified architecture for predicting multiple agent trajectories. In ICLR , 2022. 2, 1 [27] Tung Phan-Minh, Elena Corina Grigore, Freddy A Boulton, Oscar Beijbom, and Eric M Wolff. Covernet: Multimodal behavior prediction using trajectory sets. In CVPR , 2020. 2 [28] Jonah Philion, Xue Bin Peng, and Sanja Fidler. Trajeglish: Traffic modeling as next-token prediction. In ICLR , 2024. 2, 3[29] Nicholas Rhinehart, Kris M Kitani, and Paul Vernaza. R2p2: A reparameterized pushforward policy for diverse, precise generative path forecasting. In ECCV , 2018. 2 [30] Nicholas Rhinehart, Rowan McAllister, Kris Kitani, and Sergey Levine. Precog: Prediction conditioned on goals in visual multi-agent settings. In ICCV , 2019. 2, 3 1620 [31] Luke Rowe, Martin Ethier, Eli-Henry Dykhne, and Krzysztof Czarnecki. Fjmp: Factorized joint multi-agent motion prediction over learned directed acyclic interaction graphs. In CVPR , 2023. 3 [32] Christian Rupprecht, Iro Laina, Robert DiPietro, Maximil-ian Baust, Federico Tombari, Nassir Navab, and Gregory D Hager. Learning in an uncertain world: Representing am-biguity through multiple hypotheses. In ICCV , 2017. 1, 2, 5[33] Tim Salzmann, Boris Ivanovic, Punarjay Chakravarty, and Marco Pavone. Trajectron++: Dynamically-feasible trajec-tory forecasting with heterogeneous data. In ECCV , 2020. 2[34] Ari Seff, Brian Cera, Dian Chen, Mason Ng, Aurick Zhou, Nigamaa Nayakanti, Khaled S Refaat, Rami Al-Rfou, and Benjamin Sapp. Motionlm: Multi-agent motion forecasting as language modeling. In ICCV , 2023. 2, 3 [35] Peter Shaw, Jakob Uszkoreit, and Ashish Vaswani. Self-attention with relative position representations. In NAACL ,2018. 3 [36] Chen Shi, Shaoshuai Shi, and Li Jiang. Mtr v3: 1st place so-lution for 2024 waymo open dataset challenge - motion pre-diction. In CVPR 2024 Workshop on Autonomous Driving ,2024. 6 [37] Shaoshuai Shi, Li Jiang, Dengxin Dai, and Bernt Schiele. Motion transformer with global intention localization and lo-cal movement refinement. In NeurIPS , 2022. 1, 2, 5, 6 [38] Shaoshuai Shi, Li Jiang, Dengxin Dai, and Bernt Schiele. Mtr++: Multi-agent motion prediction with symmetric scene modeling and guided intention querying. TPAMI , 2024. 6, 1 [39] Roman Solovyev, Weimin Wang, and Tatiana Gabruseva. Weighted boxes fusion: Ensembling boxes from different ob-ject detection models. Image and Vision Computing , 2021. 1[40] Jiawei Sun, Jiahui Li, Tingchen Liu, Chengran Yuan, Shuo Sun, Zefan Huang, Anthony Wong, Keng Peng Tee, and Marcelo H Ang Jr. Rmp-yolo: A robust motion predictor for partially observable scenarios even if you only look once. 
+
+arXiv preprint arXiv:2409.11696 , 2024. 6 [41] Qiao Sun, Xin Huang, Junru Gu, Brian C Williams, and Hang Zhao. M2i: From factored marginal trajectory pre-diction to interactive prediction. In CVPR , 2022. 3 [42] Yichuan Charlie Tang and Ruslan Salakhutdinov. Multiple futures prediction. In NeurIPS , 2019. 2, 3 [43] Luca Anthony Thiede and Pratik Prabhanjan Brahma. Ana-lyzing the variety loss in the context of probabilistic trajec-tory prediction. In ICCV , 2019. 1, 2, 5 [44] Balakrishnan Varadarajan, Ahmed Hefny, Avikalp Srivas-tava, Khaled S Refaat, Nigamaa Nayakanti, Andre Cornman, Kan Chen, Bertrand Douillard, Chi Pang Lam, Dragomir Anguelov, and Benjamin Sapp. Multipath++: Efficient in-formation fusion and trajectory aggregation for behavior pre-diction. In ICRA , 2022. 1, 2, 5 [45] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszko-reit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. In NIPS , 2017. 2 [46] Benjamin Wilson, William Qi, Tanmay Agarwal, John Lam-bert, Jagjeet Singh, Siddhesh Khandelwal, Bowen Pan, Rat-nesh Kumar, Andrew Hartnett, Jhony Kaesemodel Pontes, Deva Ramanan, Peter Carr, and James Hays. Argoverse 2: Next generation datasets for self-driving perception and fore-casting. In NeurIPS Datasets and Benchmarks , 2021. 2, 5, 6, 1 [47] Cunjun Yu, Xiao Ma, Jiawei Ren, Haiyu Zhao, and Shuai Yi. Spatio-temporal graph transformer networks for pedestrian trajectory prediction. In ECCV , 2020. 2 [48] Hang Zhao, Jiyang Gao, Tian Lan, Chen Sun, Ben Sapp, Balakrishnan Varadarajan, Yue Shen, Yi Shen, Yuning Chai, Cordelia Schmid, Congcong Li, and Dragomir Anguelov. Tnt: Target-driven trajectory prediction. In CoRL , 2020. 2 [49] Yang Zhou, Hao Shao, Letian Wang, Steven L Waslander, Hongsheng Li, and Yu Liu. Smartrefine: A scenario-adaptive refinement framework for efficient motion prediction. In 
+
+CVPR , 2024. 2 [50] Zikang Zhou, Luyao Ye, Jianping Wang, Kui Wu, and Kejie Lu. Hivt: Hierarchical vector transformer for multi-agent motion prediction. In CVPR , 2022. 1, 2, 6 [51] Zikang Zhou, Jianping Wang, Yung-Hui Li, and Yu-Kai Huang. Query-centric trajectory prediction. In CVPR , 2023. 1, 2, 3, 5, 6, 7, 8 [52] Zikang Zhou, Haibo Hu, Xinhong Chen, Jianping Wang, Nan Guan, Kui Wu, Yung-Hui Li, Yu-Kai Huang, and Chun Jason Xue. Behaviorgpt: Smart agent simulation for autonomous driving with next-patch prediction. In NeurIPS ,2024. 2, 3 1621

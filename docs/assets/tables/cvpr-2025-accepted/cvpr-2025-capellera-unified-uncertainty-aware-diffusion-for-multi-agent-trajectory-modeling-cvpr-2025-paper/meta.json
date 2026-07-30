@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "tables": [
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper/table-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 861,
+      "height": 473,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper/table-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 806,
+      "height": 367,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper/table-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 806,
+      "height": 170,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper/table-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 862,
+      "height": 315,
+      "label": "Table"
+    },
+    {
+      "url": "assets/tables/cvpr-2025-accepted/cvpr-2025-capellera-unified-uncertainty-aware-diffusion-for-multi-agent-trajectory-modeling-cvpr-2025-paper/table-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 717,
+      "height": 326,
+      "label": "Table"
+    }
+  ]
+}

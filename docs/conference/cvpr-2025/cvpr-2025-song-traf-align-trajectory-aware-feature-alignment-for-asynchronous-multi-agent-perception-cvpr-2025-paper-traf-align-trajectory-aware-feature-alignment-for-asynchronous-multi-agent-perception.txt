@@ -1,0 +1,328 @@
+Title: TraF-Align: Trajectory-aware Feature Alignment for Asynchronous Multi-agent Perception
+
+URL Source: https://openaccess.thecvf.com/content/CVPR2025/papers/Song_TraF-Align_Trajectory-aware_Feature_Alignment_for_Asynchronous_Multi-agent_Perception_CVPR_2025_paper.pdf
+
+Published Time: Mon, 19 May 2025 12:08:06 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# TraF-Align: Trajectory-aware Feature Alignment for Asynchronous Multi-agent Perception 
+
+## Zhiying Song 1, Lei Yang 1, Fuxi Wen 1,2, †, Jun Li 1,2 1School of Vehicle and Mobility, Tsinghua University †Corresponding author 
+
+> 2
+
+## State Key Lab of Intelligent Green Vehicle and Mobility  
+
+> {song-zy24,yanglei20 }@mails.tsinghua.edu.cn, {wenfuxi,lijun1958 }@tsinghua.edu.cn
+
+## Abstract 
+
+Cooperative perception presents significant potential for enhancing the sensing capabilities of individual vehicles, however, inter-agent latency remains a critical challenge. Latencies cause misalignments in both spatial and seman-tic features, complicating the fusion of real-time observa-tions from the ego vehicle with delayed data from others. To address these issues, we propose TraF-Align, a novel framework that learns the flow path of features by predict-ing the feature-level trajectory of objects from past obser-vations up to the ego vehicle’s current time. By generat-ing temporally ordered sampling points along these paths, TraF-Align directs attention from the current-time query to relevant historical features along each trajectory, sup-porting the reconstruction of current-time features and pro-moting semantic interaction across multiple frames. This approach corrects spatial misalignment and ensures se-mantic consistency across agents, effectively compensating for motion and achieving coherent feature fusion. Exper-iments on two real-world datasets, V2V4Real and DAIR-V2X-Seq, show that TraF-Align sets a new benchmark for asynchronous cooperative perception. The code is avail-able at https://github.com/zhyingS/TraF-Align. 
+
+## 1. Introduction 
+
+Intelligent vehicles rely on advanced onboard sensors, such as LiDAR and cameras, to perceive and understand the surrounding world. Nevertheless, the limited field of view and detection range of onboard sensors restrict their ability to perceive objects in occluded areas and at greater distances [2, 23, 36, 47]. Vehicle-to-everything (V2X) communication-enabled cooperative perception sys-tems bridge this gap by exchanging perception information between vehicles and other agents, thereby extending the perception capability of a single agent [3, 4, 20, 41, 45]. In real-world scenarios, cooperative perception systems observation    
+
+> (II) Semantic Misalignment (I) Spatial Misalignment
+> LiDAR observations of the same object from Agent ior Ego agent
+> Figure 1. Asynchronous observations of ego vehicle and other agents result in spatial and semantic misalignments.
+
+are cursed with inter-agent time delays [33, 35]. Consider a network with an ego agent and agent i, where their ob-servations of the same object are shown in Figure 1. La-tency in agent i’s message, captured before ego’s observa-tion time, can result in either a complete loss of features (1-I) or feature misalignment relative to ego’s observation (1-II). Corresponding to Figure 1-I and 1-II, there are two main challenges: i) Spatial misalignment, where observa-tions from other agents fail to align with the ground truth in space, lacking any reference from the ego vehicle’s ob-servations. ii) Semantic misalignment, where both the ego vehicle and another agent observe the same object but fail to recognize it as the same entity. These misalignments lead to mislocated objects and increased false positives [29, 30]. To address the first challenge, some studies have pro-posed potential solutions, by predicting the current-frame features using historical frames [15], or predicting the pixel-level flow of features and then extrapolating them [44] or directly warping them to their future positions [34]. For in-stance, FFNet [44] uses a self-supervised approach to learn the first-order derivatives of features between consecutive This CVPR paper is the Open Access version, provided by the Computer Vision Foundation. Except for this watermark, it is identical to the accepted version; the final published version of the proceedings is available on IEEE Xplore. 12048 frames, and CoBEVFlow [34] generates an instance-level region of interest (ROI) and calculates feature motion vec-tors by matching and tracking these regions. However, pre-dicting the movement of high-dimensional neural features is non-trivial. Despite their efforts, these methods strug-gle with larger delays and lack end-to-end capability. For the second challenge, the significance of semantic misalign-ment has not been well investigated in previous work. To address these misalignments, our core idea is to re-construct current-time features and achieve semantic con-sensus across agents on multi-frame LiDAR features within a unified framework. We guide the flow and interaction of high-dimensional features by learning the motion of low-dimensional trajectory features. A trajectory field is de-fined as a spatiotemporal map of each object’s anticipated path, guiding the generation of temporally ordered sampling points along each trajectory. Cross-attention between each query and its aligned sampling points allows the query to access relevant past features along the trajectory, enabling effective feature reconstruction and semantic interaction for robust spatial alignment and inter-agent consensus. Con-sider the spatial misalignment scenario shown in Figure 1-I. By aggregating multi-frame point cloud features from agent 
+
+i, we learn the object’s past trajectory distribution and pre-dict its motion direction up to the ego vehicle’s current time, forming a trajectory field. This field guides attention from the predicted position to historical features along the same trajectory, enabling the reconstruction of the object’s cur-rent features near the ground truth and compensating for motion. For semantic misalignment cases (Figure 1-II), while delays may misalign agent i’s observations with the ego vehicle’s, the continuity of object motion implies over-lap with point clouds from past ego frames. By learning the trajectory distribution from the ego’s multi-frame point clouds and applying attention to compute feature correla-tions along the trajectory, the model recognizes that all fea-tures along the trajectory correspond to the same object, thus achieving cross-agent semantic alignment. Building on the abovementioned idea, we propose TraF-Align, a novel framework for asynchronous multi-agent co-operative perception (as shown in Figure 2). The proposed method includes three key parts: i) a field predictor that gen-erates synchronized trajectory fields aligned with the ego vehicle’s time, ii) an offset generator that produces sam-pling points for each query position and distributes them along the corresponding trajectory, and iii) attention layers where each query position is treated as a token, with atten-tion focused only on positions specified by the offset gener-ator. Extensive experiments are conducted on two widely used large-scale real-world datasets, V2V4Real [38] and DAIR-V2X-Seq [43], one for vehicle-to-vehicle (V2V) co-operative perception, another for vehicle-to-infrastructure (V2I) applications. Experimental results show that state-of-the-art (SOTA) performance is achieved for TraF-Align in both object detection precision and robustness to inter-agent latency. The contributions are summarized as follows: • We propose TraF-Align, a novel framework for asyn-chronous cooperative perception, addressing spatial and semantic misalignments caused by time delays. • We leverage a field predictor and an offset generator to align trajectory fields and distribute attention points along object trajectories, enabling robust feature reconstruction and interaction along spatiotemporally aligned paths. • We introduce a field loss and an offset loss to super-vise trajectory alignment and the generation of attention points, providing an end-to-end trainable solution. 
+
+## 2. Related work 
+
+Asynchronous V2X cooperative perception. V2X co-operative perception extends the sensing range of single vehicles by exchanging information with other agents via wireless communication [13]. Previous studies have con-ducted extensive research under time-synchronized con-ditions, such as F-Cooper [3], V2VNet [33], V2X-ViT [35, 39], ERMVP [45], etc . In the presence of latency, previous research emphasizes using historical data to esti-mate and compensate for object motion. For instance, at the output level, the object state filters are designed to pre-dict and update the dynamic state of the received objects [1]. Using raw data, Zhang et al . [46] and Dao et al . [8] estimated the motion of point clouds and predicted com-pensatory flows for late-arriving data. However, these lev-els may encounter challenges, such as short prediction time horizons or high communication data volumes. At the fea-ture level, which has a better balance between accuracy and transmission bandwidth [18], SyncNet [15] employs a pyramidal LSTM to iteratively process and learn from delayed features, enabling the prediction of current-frame features. FFNet [44] predicts inter-frame feature changes in a self-supervised feature manner to synchronize features across agents. Nevertheless, predicting high-dimensional features is challenging and prone to uncontrollable varia-tions. Additionally, CoBEVFlow [34] extracts and warps object-specific features to anticipated locations by predict-ing instance-wise motion vectors. However, this approach requires generating ROIs and tracking their motion, result-ing in a non-end-to-end two-stage method. This paper uses multi-frame LiDAR sequences to predict low-dimensional trajectory features and guide attention to fuse features on past trajectories. By operating directly at the feature level, our approach enables end-to-end training and avoids the complexities of high-dimensional feature prediction. 
+
+Learning from LiDAR sequences across agents. Multi-frame point cloud fusion is widely applied in single-vehicle autonomous systems to amalgamate semantic data across different perspectives [5, 21, 22, 24, 32, 42]. However, its 12049 Figure 2. Proposed Architecture. With asynchronous LiDAR inputs from the ego agent (time t) and agent i (time s = t − τ it ), BEV features are extracted using an onboard sparse encoder. Agent i’s features are transmitted to the ego agent and stored in memory. TraF-Align predicts a trajectory field up to time t, generates target attention positions, and uses features at these positions as keys/values in attention layers. Finally, the multi-agent features are fused and processed by the head to generate cooperative predictions at time t.
+
+application in V2X cooperative perception remains under-explored. Although studies like SCOPE [40] and MRC-Net [11] have leveraged recurrent neural networks to fuse sequences from ego vehicles, these methods are resource-intensive and limited by sequence length. This has re-stricted their use to ego vehicles rather than a broader agent network, necessitating a more straightforward multi-frame fusion network. In cooperative perception scenarios, multi-frame point clouds offer crucial motion cues that enable agents to synchronize their understanding of object posi-tions despite time delays, thereby correlating trajectories across agents. This aspect has yet to be fully explored at the feature level. This paper proposes a novel approach us-ing trajectory fields and customized attention with offsets for direct multi-frame fusion, thus establishing a consistent understanding of object motion across the network. 
+
+## 3. Method 
+
+3.1. Problem formulation 
+
+Consider a group of networked agents indexed by I =
+
+{e, 1, 2, . . . , N − 1}, each is equipped with LiDAR and communication units. Index e indicates the ego agent, which integrates information from other agents to extend its sensing range and reduce the blind spots. The LiDAR ob-servation of the ith agent at its local timestamp s is denoted as Lis, where i ∈ I . A shared neural network f (·) pro-cesses this observation into deep features. At each times-tamp s, agent i transmits F is = f (Lis) to the ego agent, who then accumulates these features in the cache, forming a historical feature set for agent i at time s, represented as 
+
+Fis = {F is−k}k∈K , where K = {k ∈ Z|1 ⩽ k ⩽ mi}, mi
+
+is the maximal sequence length for agent i. Accounting for delays in the collaborative process, messages from various agents arrive at ego at different times. Let τ it be the delay for agent i’s message, and this means the information sent by agent i at time t − τ it is received by the ego at time t. If ignoring feature extraction delay, then s = t − τ it . The task is to fuse these multi-agent features and estimate the state of objects, i.e ., the bounding boxes, at ego timestamp t within the detection range. The information available for fusion in-cludes: i) the ego’s historical features Fet , and ii) the histor-ical features from other agents, denoted as {F it−τ it
+
+}i∈I\{ e}.The proposed method is shown in Figure 2. 
+
+3.2. Feature extraction 
+
+The encoder converts single-frame raw point cloud data into BEV features. Similar to PointPillars [14], the point cloud is first discretized into a regular grid on the x-y plane. Within each pillar, the point features are encapsulated as the vec-tor [x, y, z, xc, yc, zc, xp, yp, zp] ∈ R9. Here, [x, y, z] is the point’s position, while [xc, yc, zc] indicates the center of the pillar. The vector [xp, yp, zp] represents the point’s offset from the pillar center. The pillar feature extraction and backbone network architectures are adopted from Pil-larNext [16]. Multi-Layer Perceptron (MLP) serves to en-code point-wise features, while a sparse variant of ResNet [10] is utilized as the backbone to distill deeper and more 12050 complex features with size (C, H, W ). The sparse net-work is implemented using Spatially Sparse Convolution (SpConv) library [6]. The extracted single-frame features are transmitted and stored in the ego’s feature bank ( Fet and 
+
+Fis), which maintains a fixed capacity by admitting new fea-tures and discarding the oldest ones, ensuring an up-to-date repository for feature reuse. The extracted features of each agent are then processed using TraF-Align separately. 
+
+Temporal Encoding. Temporal information is decoupled from the point features to facilitate the reuse of historical features across frames. This allows for the immediate re-trieval of historical features at any timestamp. Inspired by the positional embedding in Transformer [31], a temporal embedding T E ∈ RC×H×W is defined as 
+
+T E (τ ,2 j) = sin( ξ), T E (τ ,2 j+1) = cos( ξ),  (1) where ξ = τ /ε 2j/C , j indexes the dimension along C chan-nels, τ represents the number of frames delayed from the current frame, and ε is set to eight in this study. Each fea-ture within the memory cache, Fet for the ego agent and 
+
+Fis for agent i, associated with a specific temporal delay, is concatenated with a corresponding temporal embedding. These concatenated features are refined through a convolu-tional layer with a 1 × 1 kernel and then warped to time t
+
+by ego-motion compensation. 
+
+3.3. Trajectory field 
+
+Each agent processes its aggregated multi-frame feature map via a field predictor, which generates a trajectory field consisting of position and orientation fields. The position field creates heatmap peaks along the object’s trajectory, while the orientation field captures the inverse tangent di-rection of the trajectory. Due to delays, agents’ local obser-vations may be outdated. To achieve temporal alignment, the field predictor predicts the trajectory features of all ob-jects up to the ego vehicle’s latest time (with temporal in-formation encoded in the features via Equation 1). This en-sures that, for the same object, trajectory fields from differ-ent viewpoints spatially overlap and are aligned temporally to the ego vehicle’s current time. Our model uses a vari-ant of UNet [25] as the field predictor, whose architecture is detailed in the supplementary material, along with a super-vision signal to guide the learning process. As shown in Figure 3, when generating the ground truth field, we first extract bounding box annotations of each ob-ject from the local perspective of each agent within the max-imum temporal window, starting from the object’s initial appearance up to the ego’s current time. A trajectory is then constructed by connecting the centers of these bound-ing boxes. Specifically, the length of the object’s trajectory is given by ⌈τi · ωi⌉ + mi, ∀ i ∈ I , where ⌈·⌉ denotes the ceiling function, ωi is the LiDAR sampling frequency (s −1)of agent i, and τi represents its cooperative latency (s). The Position field  Orientation field   
+
+> Agent i: current time has no observation
+> t
+> x
+> t-1
+> t-2
+> t-3
+> t-4
+> t-5
+> Ego time
+> t
+> x
+> t-1
+> t-2
+> t-3
+> t-4
+> t-5
+> Ego time
+> x
+> y
+> Ego: current time has observation
+> tt-1 t-2
+> Ground truth trajectory
+> up to ego time t
+> information missed
+> shared trajectory field
+> to BEV feature space
+
+Figure 3. Illustration of trajectory field, which includes a position field indicating the occupancy grid of the trajectory and a direction field depicting the trajectory’s flow orientation. 
+
+trajectory field is then generated by interpolating along the trajectory and projecting it onto the BEV feature space. If two object trajectories overlap, the trajectory with the more recent timestamp will overwrite the older one. For cases in Figure 1-I, such a design compels the net-work to predict the trajectory field up to the present mo-ment, thereby supporting the learning of motion informa-tion. Failing to do so would result in the network detect-ing only the delayed bounding box. Compared to the direct forecasting of high-dimensional features from the backbone network, predicting the trajectory field provides a more straightforward and more reliable method with predictable outcomes. 
+
+3.4. Trajectory-aware attention 
+
+We flatten the input feature map F i (∀i ∈ I) of size 
+
+C × H × W into H × W embeddings, each serving as a query q ∈ R1×C . For each query, the offset genera-tor creates a response set R ∈ Rn×C , capturing features at designated attention positions that are learned based on predefined ground truth. n is the number of attention po-sitions for each query, and it’s set to 18 in this paper. To generate the ground truth offsets, we select n pixels on the feature map that satisfy three conditions: i) The position field has a response (indicating the presence of an object), ii) The pixels belong to the same trajectory as the query (in-dicating the same object), and iii) The pixels correspond to earlier timestamps than the query (indicating historical po-sitions of the object). As shown in Figure 4b, this ground truth aligns each query with preceding trajectory positions, enabling it to draw in relevant historical information. The 12051 trajectory field has effectively modeled the motion and flow of the historical features, offering valuable guidance to the offset generator. With this rich information, the generator can rely on simple convolution layers to produce good at-tention offsets, and we use PReLU activation [9] to provide flexibility in adjusting the offsets’ directional orientation. Given the response set R, the feature of query q is updated or reconstructed by the attention process: 
+
+Attention (q, R) = Softmax 
+
+" qW q  RW kT
+
+√d
+
+#
+
+RW v , (2) where W q , W k, W v ∈ RC×d are the query, key and value projection matrices. Similar to the original Transformer [31], we also incorporate feed-forward networks, addition and normalization layers, and a multi-head attention design, the details are shown in Figure 4a. Using attention along the trajectory transfers features to the current time step and en-ables feature interaction along the trajectory. This allows the model to recognize which features belong to the same object, aligning the features across agents for effective fu-sion. As a result, each agent aligns its feature map to the ego vehicle’s latest time step. 
+
+3.5. Inter-agent fusion, detection head and loss 
+
+While inter-agent fusion has been extensively studied [3, 36, 45], this paper adopts a simplified approach by concate-nating features from all agents and utilizing a basic convo-lution layer for fusion. We use an anchor-based detection head and employ three losses: a detection loss, a field loss, and an offset loss: 
+
+L = Ldetection + αLfield + βLoffset , (3) where Ldetection is consistent with the loss used in [14], Lfield 
+
+includes a focal loss [17] for the position field and an L1
+
+loss for the orientation field. The constants α and β bal-ance the contributions of each loss term. Here, we set 
+
+α = β = 0.05 . Considering the offset loss, because the generated attention positions are unordered, we first apply the Sinkhorn algorithm [7, 26, 27] to compute the matching probabilities Pjk ∈ Rn×n between the generated attention positions and the ground truth. This is done using the L1 distance matrix Cjk ∈ Rn×n as the cost for the pixel lo-cated at (j, k) on the feature map. The offset loss is then defined as: 
+
+Loffset = X
+
+> j,k
+
+Pjk · Cjk , ∀j ∈ [1, H], k ∈ [1, W ].  (4) 
+
+## 4. Experiments 
+
+To evaluate robustness to cross-agent latency, we conduct 3D object detection experiments on two large-scale real-world datasets, V2V4Real [38] and DAIR-V2X-Seq [43]. x x       
+
+> Multi-head attention
+> FFN
+> xN Enhanced q
+> weight x
+> qv... k... v2k2v1k1
+> ... query position attention position Intra-layer flow Inter-layer flow Linear Add & Norm ...
+> (a) Trajectory-aware attention layers.
+> (b) Query and ground truth attention positions.
+
+Figure 4. Attention positions and trajectory-aware attention layers. 
+
+These datasets encompass both V2V and V2I scenarios, as well as sparse and dense LiDAR conditions. The detec-tion results are evaluated using Average Precision (AP) at Intersection-over-Union (IoU) thresholds of 0.5 (AP50) and 
+
+0.7 (AP70). To enable a fair comparison, we omit feature compression operations from the methods under evaluation. 
+
+4.1. Implementation details 
+
+Datasets and Benchmarks. V2V4Real [38] is specialized for V2V cooperative detection in urban settings, and DAIR-V2X-Seq [43] captures sequential data in V2I scenarios at intersections. The benchmarks include single-agent percep-tion relying on the ego vehicle’s data for detection, along-side eight SOTA intermediate fusion models: F-Cooper [3], V2VNet [33], Where2comm [12], AttFuse [36], V2X-ViT [35], CoBEVT [37], MRCNet [11], and ERMVP [45]. 
+
+Training details. All the models are trained within the same codebase for 60 epochs on nine RTX 3090 GPUs, employing the one-cycle learning rate strategy [28] with AdamW [19] as the optimizer. The point clouds are seg-mented at a grid size of 0.4 ×0.4 m, and the backbone’s fea-ture map size output is one-fourth the original size. During training on V2V4Real, all models shuffle the vehicle list and randomly select the ego vehicle at the start of each epoch. Standard LiDAR data augmentations are applied, including random flip, scaling, rotation, and translation. Multi-frame methods are trained with random latency augmentation, fol-lowing a uniform distribution from 0 to 400 ms. TraF-Align leverages two LiDAR frames for the ego vehicle and four 12052 Table 1. Performance comparison of vehicle class on V2V4Real validation and DAIR-V2X-Seq validation dataset with different latencies. The results are reported in AP 50 /70 (%). 
+
+Method V2V4Real DAIR-V2X-Seq 0ms 100 ms 200 ms 300 ms 400 ms 0ms 100 ms 200 ms 300 ms 400 ms Single Agent 48.75/30.53 48.75/30.53 48.75/30.53 48.75/30.53 48.75/30.53 51.31/40.45 51.31/40.45 51.31/40.45 51.31/40.45 51.31/40.45 AttFuse [36] 63.84/33.30 59.16/27.36 55.57/26.03 53.25/25.44 51.69/25.09 68.94/49.68 65.83/45.76 63.02/44.24 61.61/43.28 60.19/42.53 F-Cooper [3] 66.86/33.39 62.15/27.61 58.03/26.30 55.31/25.46 53.92/24.95 69.47/50.01 65.85/44.96 62.74/43.21 61.12/42.28 60.01/41.70 V2VNet [33] 67.11/35.47 61.97/29.14 58.09/27.85 56.26/27.43 54.62/26.75 71.44/51.91 67.26/46.63 63.84/44.59 61.68/43.24 59.78/42.08 Where2comm [12] 67.03/37.55 61.86/31.52 58.22/30.20 56.22/29.71 54.47/29.07 68.37/48.50 64.81/44.32 61.51/42.80 59.66/41.63 58.25/40.80 V2X-ViT [35] 68.51/35.88 63.45/29.57 59.42/28.04 57.35/27.65 55.60/27.20 70.21/50.92 66.42/46.44 62.58/44.29 61.00/43.56 59.63/42.66 MRCNet [11] 67.83/37.37 62.65/31.59 58.98/30.39 56.70/29.53 55.03/28.94 69.27/50.67 65.90/45.60 62.65/44.15 60.09/42.39 58.19/41.35 CoBEVT [37] 70.59/38.82 65.50/32.11 61.55/30.40 58.91/29.54 57.05/29.26 71.51/51.31 67.60/46.55 64.38/45.03 62.39/44.11 60.74/43.08 ERMVP [45] 70.74/38.45 65.53/31.91 61.63/30.53 59.24/30.18 57.26/29.31 71.19/53.85 67.04/48.09 63.67/46.37 61.23/44.76 59.55/43.93 TraF-Align (Ours) 74.28/44.14 73.04/39.99 71.51/39.54 70.07/38.99 69.41/38.49 76.90/58.31 73.95/53.68 72.69/52.83 71.66/52.33 71.22/52.01 
+
+for the cooperative vehicle on V2V4Real, while using four LiDAR frames for the vehicle and infrastructure on DAIR-V2X-Seq. The number of attention layers is set to two, each containing four attention heads. 
+
+Latency settings. To comprehensively evaluate robustness to time delays, we introduce delays of 0, 100 , 200 , 300 ,and 400 ms to one of the agents separately, extensively test-ing the model’s performance under each delay condition. Unless specified otherwise, these delays are applied to the point cloud data of the non-ego agent. 
+
+4.2. Comparison with state-of-the-art 
+
+Detection performance. Table 1 presents a comparison of detection performance on two real-world datasets for ve-hicle class, which includes cars, vans, trucks, buses, etc .It’s observed that the proposed method i) achieves state-of-the-art performance across all benchmarks under vari-ous latency conditions on both datasets. ii) In synchronous scenarios, i.e ., when the delay is 0 ms, our model im-proves AP 50 /70 by 25.53% /13.61% (on V2V4Real) and 
+
+25.59% /18.26% (on DAIR-V2X-Seq) compared to single-agent perception, it also surpasses ERMVP, the SOTA per-formance of feature-level methods, by 3.54% /5.69% and 
+
+5.71% /4.46% , respectively. 
+
+Robustness to inter-agent latency. As shown in Ta-ble 1, our model demonstrates stronger robustness in the presence of time delays. Even under a 400 ms delay, our AP decreases by only 4.87% /5.65% (on V2V4Real) and 5.68% /6.30% (on DAIR-V2X-Seq) com-pared to the synchronous scenario. This performance sig-nificantly outperforms the ERMVP, which shows declines of 13.48% /9.14% and 11.64% /9.92% , respectively. To gain a deeper understanding of the impact of latency on collaboration, we plot the Precision-Recall curves of the models under various latency conditions, as shown in Fig-ure 5. It is obvious that cooperation is effective in enhanc-ing the recall limit of single-vehicle perception, helping the ego vehicle to detect a more significant number of objects.      
+
+> 00.2 0.4 0.6 0.8 1
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+> Recall (Sync)
+> Precision (Sync)
+
+# 0 0.2 0.4 0.6 0.8 1
+
+# 0.2 
+
+# 0.4 
+
+# 0.6 
+
+# 0.8 
+
+# 1
+
+# Recall (Sync)      
+
+> Precision (Sync)
+> 00.2 0.4 0.6 0.8 1
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+> Recall (Async @ 200ms)
+> Precision (Async @ 200ms)
+
+# 0 0.2 0.4 0.6 0.8 1
+
+# 0.2 
+
+# 0.4 
+
+# 0.6 
+
+# 0.8 
+
+# 1
+
+# Recall (Async @ 200ms)                 
+
+> Precision (Async @ 200ms)
+> 00.2 0.4 0.6 0.8 1
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+> Recall (ERMVP)
+> Precision (ERMVP)
+> Delay (ms)
+> 0
+> 100
+> 200
+> 300
+> 400
+> 00.2 0.4 0.6 0.8 1
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+> Recall (TraF-Align)
+> Precision (TraF-Align)
+> Delay (ms)
+> 0
+> 100
+> 200
+> 300
+> 400
+> Single Agent V2VNet Where2comm V2X-ViT CoBEVT MRCNet ERMVP TraF-Align
+
+Figure 5. Precision-Recall curves for models on the V2V4Real validation dataset under various latency conditions. 
+
+However, at a 200 ms latency, state-of-the-art methods ex-hibit lower precision in the low-recall range compared to single-vehicle perception. This suggests that the delayed collaborative information interferes with the objects that the single vehicle could detect, corresponding to the semantic misalignment issues depicted in Figure 1-II. In areas not visible to the ego vehicle, specifically at high recall lev-els, the precision of SOTA methods significantly declines with the introduction of latency. This indicates that spatial misalignment issues (Figure 1-I) become dominant, lead-12053 ing to decreased performance. These findings reinforce our analysis of latency’s impact on cooperative perception. Fur-thermore, using ERMVP as an example, the differences be-tween the PR curves diminish as latency increases, indicat-ing that existing models progressively lose their effective-ness in managing delays. In contrast, TraF-Align retains the original performance of single-agent perception in low-recall regions and shows no significant decline in perfor-mance in high-recall areas due to latency. This highlights our model’s ability to establish strong semantic consistency between the ego vehicle’s data and the received informa-tion, demonstrating robust reconstruction capability and ef-fectively addressing the scenarios in Figures 1-I and 1-II. 
+
+4.3. Ablation studies 
+
+In this section, we conducted ablation studies on the ef-fectiveness of significant components and loss and multi-frame point clouds using average precision as the evaluation metric. Other ablation experiments and analyses (using PR curves) are presented in the supplementary material. 
+
+Effectiveness of Major Components. To evaluate the con-tribution of modules, we progressively remove i) the field predictor, ii) the offset generator, and iii) the attention lay-ers. The results are shown in Table 2. The experiments are conducted on the DAIR-V2X-Seq dataset. To ensure a com-prehensive assessment of each component’s contributions, we train the model for 120 epochs, double the duration of the experiments presented in Table 1. Additionally, we test the effects of adding latency to both the ego and non-ego agents to fully evaluate the impact of each module. The consistent rise in detection precision over different latency settings demonstrates the effectiveness of each introduced component. Notably, applying latency to vehicles results in lower AP than when latency is applied to infrastructure. This discrepancy arises from the different distributions of object visibility between the vehicle agent and roadside in-
+
+Table 2. Results of the ablation study of the core components on the DAIR-V2X-Seq dataset.                          
+
+> FP OG AL Latency of Infrastructure 0ms 100ms 200ms 300ms 400ms 75.35/54.72 73.01/50.81 71.88/50.17 71.04/49.77 70.09/49.45
+> ✓76.31/57.02 74.60/53.53 73.90/52.34 72.91/51.99 71.84/51.02
+> ✓✓77.11/58.63 75.15/54.77 74.18/53.77 73.24/52.99 71.96/52.19
+> ✓✓✓77.83/59.72 75.74/55.85 74.99/54.82 74.10/54.07 72.89/53.21 FP OG AL Latency of Vehicle 0ms 100ms 200ms 300ms 400ms 75.35/54.72 74.31/49.61 72.17/43.32 67.19/34.82 56.93/24.51
+> ✓76.31/57.02 75.10/51.93 72.91/46.22 69.22/39.15 59.93/27.87
+> ✓✓77.11/58.63 75.76/53.48 73.44/47.55 69.92/40.52 62.05/29.68
+> ✓✓✓77.83/59.72 76.41/54.88 74.24/49.46 70.75/42.62 63.59/32.31 FP: Field predictor . OG: Offset generator . AL: Attention layers .
+
+Table 3. Results of the ablation study of the loss on the DAIR-V2X-Seq dataset.                       
+
+> FL OL Latency of Infrastructure 0ms 100ms 200ms 300ms 400ms 76.43/57.74 74.44/53.91 73.65/52.97 72.71/52.10 71.83/51.87
+> ✓77.12/58.36 74.96/54.51 74.02/53.68 72.98/52.91 72.01/52.27
+> ✓77.15/58.70 75.19/54.58 74.31/53.66 73.68/53.07 72.52/52.28
+> ✓✓77.83/59.72 75.74/55.85 74.99/54.82 74.10/54.07 72.89/53.21 FL OL Latency of Vehicle 0ms 100ms 200ms 300ms 400ms 76.43/57.74 75.09/52.81 72.84/46.54 69.14/39.12 61.53/29.15
+> ✓77.12/58.36 75.69/53.23 72.76/46.85 69.25/39.78 62.13/30.41
+> ✓77.15/58.70 75.80/53.90 73.34/48.49 70.12/41.80 63.21/32.02
+> ✓✓77.83/59.72 76.41/54.88 74.24/49.46 70.75/42.62 63.59/32.31 FL: Field loss . OL: Offset loss .
+> (a) LiDAR points. (b) Trajectory field. (c) Deep features.
+
+Figure 6. Visualization of TraF-Align in real-world scenarios from the DAIR-V2X-Seq dataset with latency of 400 ms. 
+
+frastructure agent in the dataset. 
+
+Effectiveness of loss. Table 3 presents the ablation study of field loss and offset loss, both designed to guide the at-tention biases, under the same settings as in Table 2. The results show that introducing the field loss provides better initial values for the offset generator, enhancing the model’s performance. Optimal results are achieved only when both losses are incorporated. 
+
+Impact of LiDAR frames. Table 4 presents the ablation study conducted on V2V4Real, investigating the impact of different historical frame numbers for both the ego and co-operative vehicle on detection performance and robustness to time delays. It’s observed that increasing the ego frames primarily enhances AP70, indicating improved accuracy in object localization, while AP50 shows no significant in-crease. Conversely, increasing the CV frames enhances both AP50 and the model’s robustness to time delays, as most latency originates from the cooperative vehicle’s Li-12054 (a) V2VNet (b) COBEVT (c) V2X-ViT (d) TraF-Align (Ours) (e) Learned attention offsets at scale 1/4 
+
+Figure 7. Qualitative results in real-world scenarios from the DAIR-V2X-Seq dataset with latency of 400 ms. Green and red boxes denote the ground truths and detection results, respectively. Table 4. Results of the ablation study of the number of LiDAR frames on the V2V4Real dataset.                        
+
+> Ego CV Latency of Cooperative Vehicle (CV) 0ms 100ms 200ms 300ms 400ms 1173.35/40.54 69.76/34.03 66.51/32.54 65.17/32.13 64.28/32.28 4172.85/44.81 69.45/38.32 66.73/37.16 66.00/37.28 65.67/37.32 4273.02/ 45.00 71.74/39.88 69.71/38.25 67.88/37.49 66.98/37.39 1471.28/42.16 70.28/39.18 69.31/38.15 67.68/37.52 66.47/36.90 2474.28/44.14 73.04/ 39.99 71.51/ 39.54 70.07/ 38.99 69.41 /38.49
+> 4474.76 /44.03 73.28 /39.58 71.64 /38.58 70.10 /37.70 69.08/37.08
+
+DAR. Furthermore, having too many point cloud frames for the ego vehicle may not yield optimal results, as it could introduce additional motion blur issues, which have been proved in the context of single-vehicle perception [24]. 
+
+4.4. Qualitative results 
+
+Visualization of detection results. Figure 7a-7d compare TraF-Align with three previous methods on a real-world scenario from DAIR-V2X-Seq dataset under a latency of 
+
+400 ms. It is observed that in region A1, due to the latency in roadside (Agent 2), V2VNet, COBEVT, and V2X-ViT all exhibit a false positive detection and fail to capture the correct bounding box; a similar issue occurs in region A2.The reasons for this phenomenon have been discussed in section 1. In contrast, TraF-Align not only identifies the object but also avoids false positives. This improvement is due to our trajectory-guided attention, which enables both agents to achieve a consensus on the same object. 
+
+Visualization of trajectory field. Figure 6b illustrates the predicted trajectory fields (specifically, the position field) from both the vehicle (Agent 1) and roadside (Agent 2) per-spectives. Despite the delays in the roadside point clouds, the predicted trajectory field is aligned to the latest frame. 
+
+Visualization of attention. Figure 7e shows the response within the A1 box of Figure 7d from the roadside perspec-tive, with six different query positions. Since the ego data is undelayed, the offset distribution centers around the query points, resembling a convolution kernel. In contrast, the roadside agent extends attention along the trajectory. Af-ter fusion by TraF-Align, as shown in Figure 6c, the road-side features align toward the vehicles, demonstrating spa-tial alignment. The feature intensity near the trajectory is uniform, indicating semantic alignment. More results are available in the supplementary material. 
+
+## 5. Conclusions 
+
+We propose TraF-Align, a novel cooperative perception framework robust to inter-agent latencies. Our method han-dles delays by predicting the flow of object features and aligning them across agents through attention within the expected trajectory paths. Extensive experiments on real-world datasets demonstrate its effectiveness. 
+
+Limitations and future work. TraF-Align is primarily trained on data with regular latencies (multiples of 100 ms). In practical applications, more realistic latency set-tings should be considered. Additionally, while TraF-Align is robust to latency, detection precision under delay can still be improved. The main challenges are: i) Designing more accurate trajectory field predictors and attention posi-tion generators to enhance feature reconstruction capabili-ties; ii) Improving object localization precision. Although multi-frame information improves motion understanding, it also introduces motion blur, making precise object localiza-tion challenging and iii) Addressing pose estimation errors. Multi-frame processing relies on accurate inter-frame and inter-agent pose alignment, errors in these estimates can de-grade performance. Future work will explore methods to reduce the impact of these factors. 
+
+Acknowledgments. This research is supported by the Na-tional Key Research and Development Program of China under Grant 2024YFB2505803. 12055 References 
+
+[1] Kunyang Cai, Ting Qu, Bingzhao Gao, and Hong Chen. Consensus-based distributed cooperative perception for con-nected and automated vehicles. IEEE Transactions on Intel-ligent Transportation Systems , 24(8):8188–8208, 2023. 2 [2] Antoine Caillot, Safa Ouerghi, Pascal Vasseur, R´ emi Bout-teau, and Yohan Dupuis. Survey on cooperative perception in an automotive context. IEEE Transactions on Intelligent Transportation Systems , 23(9):14204–14223, 2022. 1 [3] Qi Chen, Xu Ma, Sihai Tang, Jingda Guo, Qing Yang, and Song Fu. F-cooper: Feature based cooperative perception for autonomous vehicle edge computing system using 3d point clouds. In Proceedings of the 4th ACM/IEEE Symposium on Edge Computing , pages 88–100, 2019. 1, 2, 5, 6 [4] Qi Chen, Sihai Tang, Qing Yang, and Song Fu. Cooper: Cooperative perception for connected autonomous vehicles based on 3d point clouds. In 2019 IEEE 39th International Conference on Distributed Computing Systems (ICDCS) ,pages 514–524. IEEE, 2019. 1 [5] Xuesong Chen, Shaoshuai Shi, Benjin Zhu, Ka Chun Che-ung, Hang Xu, and Hongsheng Li. Mppnet: Multi-frame feature intertwining with proxy points for 3d temporal ob-ject detection. In European Conference on Computer Vision ,pages 680–697. Springer, 2022. 2 [6] Spconv Contributors. Spconv: Spatially sparse convolu-tion library. https://github.com/traveller59/ spconv , 2022. 4 [7] Marco Cuturi. Sinkhorn distances: Lightspeed computation of optimal transport. Advances in neural information pro-cessing systems , 26, 2013. 5 [8] Minh-Quan Dao, Julie Stephany Berrio, Vincent Fr´ emont, Mao Shan, Elwan H´ ery, and Stewart Worrall. Practical col-laborative perception: A framework for asynchronous and multi-agent 3d object detection. IEEE Transactions on Intel-ligent Transportation Systems , 2024. 2 [9] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Delving deep into rectifiers: Surpassing human-level per-formance on imagenet classification. In Proceedings of the IEEE International Conference on Computer Vision (ICCV) ,2015. 5 [10] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. In Proceed-ings of the IEEE conference on computer vision and pattern recognition , pages 770–778, 2016. 3 [11] Shixin Hong, Yu Liu, Zhi Li, Shaohui Li, and You He. Multi-agent collaborative perception via motion-aware robust com-munication network. In Proceedings of the IEEE/CVF Con-ference on Computer Vision and Pattern Recognition , pages 15301–15310, 2024. 3, 5, 6 [12] Yue Hu, Shaoheng Fang, Zixing Lei, Yiqi Zhong, and Si-heng Chen. Where2comm: Communication-efficient collab-orative perception via spatial confidence maps. Advances in neural information processing systems , 35:4874–4886, 2022. 5, 6 [13] Tao Huang, Jianan Liu, Xi Zhou, Dinh C Nguyen, Mostafa Rahimi Azghadi, Yuxuan Xia, Qing-Long Han, and Sumei Sun. V2x cooperative perception for autonomous driving: Recent advances and challenges. arXiv preprint arXiv:2310.03525 , 2023. 2 [14] Alex H Lang, Sourabh Vora, Holger Caesar, Lubing Zhou, Jiong Yang, and Oscar Beijbom. Pointpillars: Fast encoders for object detection from point clouds. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 12697–12705, 2019. 3, 5 [15] Zixing Lei, Shunli Ren, Yue Hu, Wenjun Zhang, and Siheng Chen. Latency-aware collaborative perception. In Computer Vision – ECCV 2022 , pages 316–332, Cham, 2022. Springer Nature Switzerland. 1, 2 [16] Jinyu Li, Chenxu Luo, and Xiaodong Yang. Pillarnext: Re-thinking network designs for 3d object detection in lidar point clouds. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 17567– 17576, 2023. 3 [17] Tsung-Yi Lin, Priya Goyal, Ross Girshick, Kaiming He, and Piotr Doll´ ar. Focal loss for dense object detection. In Pro-ceedings of the IEEE international conference on computer vision , pages 2980–2988, 2017. 5 [18] Si Liu, Chen Gao, Yuan Chen, Xingyu Peng, Xianghao Kong, Kun Wang, Runsheng Xu, Wentao Jiang, Hao Xiang, Jiaqi Ma, et al. Towards vehicle-to-everything autonomous driving: A survey on collaborative perception. arXiv preprint arXiv:2308.16714 , 2023. 2 [19] Ilya Loshchilov and Frank Hutter. Decoupled weight decay regularization, 2019. 5 [20] Yifan Lu, Yue Hu, Yiqi Zhong, Dequan Wang, Yanfeng Wang, and Siheng Chen. An extensible framework for open heterogeneous collaborative perception. In The Twelfth In-ternational Conference on Learning Representations , 2024. 1[21] Tao Ma, Xuemeng Yang, Hongbin Zhou, Xin Li, Botian Shi, Junjie Liu, Yuchen Yang, Zhizheng Liu, Liang He, Yu Qiao, et al. Detzero: Rethinking offboard 3d object detec-tion with long-term sequential point clouds. In Proceedings of the IEEE/CVF International Conference on Computer Vi-sion , pages 6736–6747, 2023. 2 [22] Charles R Qi, Yin Zhou, Mahyar Najibi, Pei Sun, Khoa Vo, Boyang Deng, and Dragomir Anguelov. Offboard 3d ob-ject detection from point cloud sequences. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 6134–6144, 2021. 2 [23] Hang Qiu, Po-Han Huang, Namo Asavisanu, Xiaochen Liu, Konstantinos Psounis, and Ramesh Govindan. Autocast: scalable infrastructure-less cooperative perception for dis-tributed collaborative driving. In Proceedings of the 20th Annual International Conference on Mobile Systems, Appli-cations and Services , pages 128–141, 2022. 1 [24] Yao Rong, Xiangyu Wei, Tianwei Lin, Yueyu Wang, and Enkelejda Kasneci. Dynstatf: An efficient feature fusion strategy for lidar 3d object detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 3237–3246, 2023. 2, 8 [25] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: Convolutional networks for biomedical image segmen-tation. In Medical image computing and computer-assisted 12056 intervention–MICCAI 2015: 18th international conference, Munich, Germany, October 5-9, 2015, proceedings, part III 18 , pages 234–241. Springer, 2015. 4 [26] Paul-Edouard Sarlin, Daniel DeTone, Tomasz Malisiewicz, and Andrew Rabinovich. Superglue: Learning feature matching with graph neural networks. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 4938–4947, 2020. 5 [27] Richard Sinkhorn and Paul Knopp. Concerning nonnegative matrices and doubly stochastic matrices. Pacific Journal of Mathematics , 21(2):343–348, 1967. 5 [28] Leslie N Smith and Nicholay Topin. Super-convergence: Very fast training of neural networks using large learn-ing rates. In Artificial intelligence and machine learning for multi-domain operations applications , pages 369–386. SPIE, 2019. 5 [29] Zhiying Song, Fuxi Wen, Hailiang Zhang, and Jun Li. Acooperative perception system robust to localization errors. In 2023 IEEE Intelligent Vehicles Symposium (IV) , pages 1– 6. IEEE, 2023. 1 [30] Zhiying Song, Tenghui Xie, Hailiang Zhang, Jiaxin Liu, Fuxi Wen, and Jun Li. A spatial calibration method for robust cooperative perception. IEEE Robotics and Automation Let-ters , 9(5):4011–4018, 2024. 1 [31] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszko-reit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. Advances in neural information processing systems , 30, 2017. 4, 5 [32] Haiyan Wang and Yingli Tian. Sequential point clouds: A survey. IEEE Transactions on Pattern Analysis and Machine Intelligence , 2024. 2 [33] Tsun-Hsuan Wang, Sivabalan Manivasagam, Ming Liang, Bin Yang, Wenyuan Zeng, and Raquel Urtasun. V2vnet: Vehicle-to-vehicle communication for joint perception and prediction. In Computer Vision–ECCV 2020: 16th Euro-pean Conference, Glasgow, UK, August 23–28, 2020, Pro-ceedings, Part II 16 , pages 605–621. Springer, 2020. 1, 2, 5, 6[34] Sizhe Wei, Yuxi Wei, Yue Hu, Yifan Lu, Yiqi Zhong, Siheng Chen, and Ya Zhang. Asynchrony-robust collaborative per-ception via bird's eye view flow. In Advances in Neural In-formation Processing Systems , pages 28462–28477. Curran Associates, Inc., 2023. 1, 2 [35] Runsheng Xu, Hao Xiang, Zhengzhong Tu, Xin Xia, Ming-Hsuan Yang, and Jiaqi Ma. V2x-vit: Vehicle-to-everything cooperative perception with vision transformer. In European conference on computer vision , pages 107–124. Springer, 2022. 1, 2, 5, 6 [36] Runsheng Xu, Hao Xiang, Xin Xia, Xu Han, Jinlong Li, and Jiaqi Ma. Opv2v: An open benchmark dataset and fusion pipeline for perception with vehicle-to-vehicle communica-tion. In 2022 International Conference on Robotics and Au-tomation (ICRA) , pages 2583–2589. IEEE, 2022. 1, 5, 6 [37] Runsheng Xu, Zhengzhong Tu, Hao Xiang, Wei Shao, Bolei Zhou, and Jiaqi Ma. Cobevt: Cooperative bird’s eye view semantic segmentation with sparse transformers. In Confer-ence on Robot Learning , pages 989–1000. PMLR, 2023. 5, 6[38] Runsheng Xu, Xin Xia, Jinlong Li, Hanzhao Li, Shuo Zhang, Zhengzhong Tu, Zonglin Meng, Hao Xiang, Xiaoyu Dong, Rui Song, et al. V2v4real: A real-world large-scale dataset for vehicle-to-vehicle cooperative perception. In Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 13712–13722, 2023. 2, 5 [39] Runsheng Xu, Chia-Ju Chen, Zhengzhong Tu, and Ming-Hsuan Yang. V2x-vitv2: Improved vision transformers for vehicle-to-everything cooperative perception. IEEE Trans-actions on Pattern Analysis and Machine Intelligence , 2024. 2[40] Kun Yang, Dingkang Yang, Jingyu Zhang, Mingcheng Li, Yang Liu, Jing Liu, Hanqi Wang, Peng Sun, and Liang Song. Spatio-temporal domain awareness for multi-agent collabo-rative perception. In Proceedings of the IEEE/CVF Interna-tional Conference on Computer Vision , pages 23383–23392, 2023. 3 [41] Lei Yang, Kaicheng Yu, Tao Tang, Jun Li, Kun Yuan, Li Wang, Xinyu Zhang, and Peng Chen. Bevheight: A robust framework for vision-based roadside 3d object detection. In 
+
+Proceedings of the IEEE/CVF Conference on Computer Vi-sion and Pattern Recognition , pages 21611–21620, 2023. 1 [42] Zetong Yang, Yin Zhou, Zhifeng Chen, and Jiquan Ngiam. 3d-man: 3d multi-frame attention network for object de-tection. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 1863–1872, 2021. 2 [43] Haibao Yu, Wenxian Yang, Hongzhi Ruan, Zhenwei Yang, Yingjuan Tang, Xu Gao, Xin Hao, Yifeng Shi, Yifeng Pan, Ning Sun, et al. V2x-seq: A large-scale sequential dataset for vehicle-infrastructure cooperative perception and forecast-ing. In Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition , pages 5486–5495, 2023. 2, 5 [44] Haibao Yu, Yingjuan Tang, Enze Xie, Jilei Mao, Ping Luo, and Zaiqing Nie. Flow-based feature fusion for vehicle-infrastructure cooperative 3d object detection. Advances in Neural Information Processing Systems , 36, 2024. 1, 2 [45] Jingyu Zhang, Kun Yang, Yilei Wang, Hanqi Wang, Peng Sun, and Liang Song. ERMVP: Communication-efficient and collaboration-robust multi-vehicle perception in chal-lenging environments. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 12575–12584, 2024. 1, 2, 5, 6 [46] Qingzhao Zhang, Xumiao Zhang, Ruiyang Zhu, Fan Bai, Mohammad Naserian, and Z Morley Mao. Robust real-time multi-vehicle collaboration on asynchronous sensors. In 
+
+Proceedings of the 29th Annual International Conference on Mobile Computing and Networking , pages 1–15, 2023. 2 [47] Xumiao Zhang, Anlan Zhang, Jiachen Sun, Xiao Zhu, Y Ethan Guo, Feng Qian, and Z Morley Mao. Emp: Edge-assisted multi-vehicle perception. In Proceedings of the 27th Annual International Conference on Mobile Computing and Networking , pages 545–558, 2021. 1 12057
