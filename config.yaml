@@ -92,6 +92,38 @@ subscriptions:
           source: manual
           note: ''
       updated_at: '2026-07-23T02:51:30.330Z'
+    - tag: av-traj-pred
+      description: 请帮我查找自动驾驶轨迹预测相关的论文
+      enabled: true
+      paper_sources:
+        - arxiv
+      keywords:
+        - keyword: trajectory prediction
+          keyword_cn: 轨迹预测
+          query: trajectory prediction for autonomous vehicles
+        - keyword: autonomous driving
+          keyword_cn: 自动驾驶
+          query: autonomous driving trajectory forecasting
+        - keyword: behavior prediction
+          keyword_cn: 行为预测
+          query: driver behavior trajectory prediction
+      intent_queries:
+        - query: deep learning methods for trajectory prediction in autonomous driving
+          query_cn: 自动驾驶中轨迹预测的深度学习方法
+          enabled: true
+          source: manual
+          note: ''
+        - query: multimodal trajectory prediction for self driving cars
+          query_cn: 自动驾驶汽车的多模态轨迹预测
+          enabled: true
+          source: manual
+          note: ''
+        - query: interaction aware trajectory prediction for autonomous vehicles
+          query_cn: 考虑交互的自动驾驶车辆轨迹预测
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-07-30T02:06:42.702Z'
 source_backends:
   arxiv:
     papers_table: arxiv_papers
