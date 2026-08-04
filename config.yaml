@@ -124,6 +124,49 @@ subscriptions:
           source: manual
           note: ''
       updated_at: '2026-07-30T02:06:42.702Z'
+    - tag: traj-pred
+      description: 调研人类轨迹预测相关论文
+      enabled: true
+      paper_sources:
+        - arxiv
+      keywords:
+        - keyword: human trajectory prediction
+          keyword_cn: 人类轨迹预测
+          query: human trajectory prediction methods and models
+        - keyword: pedestrian trajectory forecasting
+          keyword_cn: 行人轨迹预测
+          query: pedestrian trajectory forecasting deep learning
+        - keyword: social interaction model
+          keyword_cn: 社交交互模型
+          query: modeling social interactions for pedestrian path prediction
+        - keyword: multimodal trajectory prediction
+          keyword_cn: 多模态轨迹预测
+          query: multimodal trajectory prediction with multiple future paths
+        - keyword: generative trajectory model
+          keyword_cn: 生成式轨迹模型
+          query: generative models for human motion trajectory generation
+      intent_queries:
+        - query: How to incorporate social interactions in human trajectory prediction models?
+          query_cn: 如何在人类轨迹预测模型中融入社交交互？
+          enabled: true
+          source: manual
+          note: ''
+        - query: What deep learning architectures are used for pedestrian trajectory forecasting?
+          query_cn: 行人轨迹预测常用哪些深度学习架构？
+          enabled: true
+          source: manual
+          note: ''
+        - query: How to evaluate the uncertainty of multimodal trajectory predictions?
+          query_cn: 如何评估多模态轨迹预测的不确定性？
+          enabled: true
+          source: manual
+          note: ''
+        - query: What are the common benchmarks for human trajectory prediction?
+          query_cn: 人类轨迹预测常用的基准数据集有哪些？
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-08-04T07:35:09.651Z'
 source_backends:
   arxiv:
     papers_table: arxiv_papers
