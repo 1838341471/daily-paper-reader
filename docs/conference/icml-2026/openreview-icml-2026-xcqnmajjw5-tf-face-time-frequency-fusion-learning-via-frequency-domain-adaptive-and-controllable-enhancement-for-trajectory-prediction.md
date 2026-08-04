@@ -1,19 +1,19 @@
 ---
 title: "TF-FACE: Time-Frequency Fusion Learning via Frequency-Domain Adaptive and Controllable Enhancement for Trajectory Prediction"
-title_zh: TF-FACE：面向轨迹预测的频域自适应可控增强时频融合学习
+title_zh: TF-FACE：通过频域自适应可控制增强的时频融合学习用于轨迹预测
 authors: "Dongjian Song, Yunhao Meng, Songjun Huang, Jiayi Han"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/c7ccc16b88f29bc08f891a76d49048b19edd29ae.pdf"
-tags: ["query:av-pnc"]
+tags: ["query:av-traj-pred"]
 score: 9.0
-evidence: 提出时频融合的轨迹预测方法，对自动驾驶行为决策至关重要
-tldr: 针对现有轨迹预测方法忽视频域信息、难以捕捉长期依赖和短期动态的问题，TF-FACE提出时频融合学习框架，通过可学习的门控频域注意力自适应增强。在驾驶数据集上的实验表明，该方法能够更准确地预测交通参与者未来轨迹，为自动驾驶行为决策提供更可靠的输入。
+evidence: 自动驾驶场景中交通参与者轨迹预测的时频融合学习方法
+tldr: 现有基于学习的轨迹预测方法主要在时域建模，忽视了频域中低频长期依赖和高频短期动态信息。本文提出TF-FACE时频融合学习框架，通过可学习的门控频域注意力自适应增强各频带特征，并设计可控增强机制提升轨迹预测精度。在多个自动驾驶轨迹预测基准上，TF-FACE显著优于现有方法，尤其对长时程预测和动态交互场景有突出效果。该工作为轨迹预测提供了频域视角的互补建模新思路。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有轨迹预测方法主要基于时域，未能充分挖掘频域信息。
-method: 设计融合编码器，采用可学习门控频域注意力机制，自适应操控频带特定特征。
-result: 在多个基准上取得最优轨迹预测性能，提升自动驾驶安全性。
-conclusion: TF-FACE通过频域增强有效提高轨迹预测精度，是自动驾驶行为决策的关键技术。
+motivation: 现有轨迹预测方法主要在时域建模，未能充分利用频域信息以平衡长期依赖和短期动态。
+method: 提出TF-FACE，使用可学习门控频域注意力融合时频特征，并以自适应可控方式增强轨迹预测。
+result: 在自动驾驶轨迹预测基准上显著优于现有方法，尤其在长时程和动态场景下表现突出。
+conclusion: 时频融合能有效提升轨迹预测精度，为自动驾驶轨迹预测提供新方向。
 ---
 
 ## Abstract

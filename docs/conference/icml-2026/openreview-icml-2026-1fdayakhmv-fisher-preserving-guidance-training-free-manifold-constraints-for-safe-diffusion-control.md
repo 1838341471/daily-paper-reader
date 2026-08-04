@@ -1,19 +1,19 @@
 ---
 title: "Fisher-Preserving Guidance: Training-Free Manifold Constraints for Safe Diffusion Control"
-title_zh: Fisher保持引导：用于安全扩散控制的免训练流形约束
+title_zh: 保Fisher引导：面向安全扩散控制的免训练流形约束
 authors: "Hao Ren, Zetong Bi, Yiming Zeng, Le Zheng, Zhi Li, Zhaoliang Wan, Lu Qi, Hui Cheng"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/4c2cfbcdb554c973e7ad59b0d05a451090534f90.pdf"
 tags: ["query:av-pnc"]
-score: 4.0
-evidence: 视觉导航中安全扩散控制方法，可应用于自动驾驶轨迹规划
-tldr: 扩散模型在视觉导航路点预测中有效，但标准采样可能导致轨迹脱离训练流形而不安全。本文提出Fisher保持引导与截断敏感性指标，在不重新训练的情况下约束采样过程，避免分布外动作。该方法计算高效，仅需单次反向传播，可实时运行。实验表明提高了导航轨迹的可靠性与效率，其安全约束思想也可用于自动驾驶车辆的轨迹规划。
+score: 6.0
+evidence: 免训练扩散引导用于安全轨迹生成与不确定性感知融合
+tldr: 这项工作针对扩散模型在测试时引导易偏离训练流形的问题，提出保Fisher引导方法，利用外积跨度投影避免Fisher漂移，通过低秩雅可比分解实现每次仅需一次反向传播的实时推理。同时引入截断Fisher去噪敏感性作为不确定性信号，用于多采样动作融合。在视觉导航等任务上生成更可靠、高效的轨迹，对自动驾驶的安全规划具有借鉴价值。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 扩散模型在导航中路点预测可能产生不可靠轨迹，因更新偏离训练流形。
-method: 提出Fisher保持引导与截断敏感性指标，在推理时约束采样保持流形，无需训练。
-result: 实验证明提高了导航轨迹的可靠性与效率，且计算高效可实时。
-conclusion: 安全约束思想可推广至自动驾驶车辆的轨迹规划中。
+motivation: 标准扩散模型在测试时引导易偏离训练流形，产生不可靠或低效的轨迹。
+method: 提出保Fisher引导与截断Fisher去噪敏感性，通过低秩雅可比分解实现单步回传的在线约束优化。
+result: 在视觉导航中生成满足目标且保持在流形上的可靠轨迹，支持多样本混合。
+conclusion: 免训练流形约束提升扩散控制的安全性与实时性，可用于路径规划与自动驾驶。
 ---
 
 ## Abstract

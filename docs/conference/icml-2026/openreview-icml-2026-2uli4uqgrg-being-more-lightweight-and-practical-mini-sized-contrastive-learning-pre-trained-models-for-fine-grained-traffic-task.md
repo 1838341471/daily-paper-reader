@@ -1,19 +1,19 @@
 ---
 title: "Being More Lightweight and Practical: Mini-sized Contrastive Learning Pre-trained Models for Fine-grained Traffic Task"
-title_zh: 更轻量更实用：面向细粒度交通任务的微型对比学习预训练模型
+title_zh: 更轻量实用：面向细粒度交通任务的微型对比学习预训练模型
 authors: "Shuhao Li, Weidong Yang, Ben Fei, Yue Cui, Lipeng Ma, Fan Zhang"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/b7707114e8e84f24a85a2796e85ccfd398ad84ce.pdf"
-tags: ["query:av-pnc"]
+tags: ["query:av-traj-pred"]
 score: 7.0
-evidence: 轻量级预训练用于细粒度交通预测，为自动驾驶车辆提供换道指导
-tldr: 针对车道级交通数据稀缺和资源受限的问题，MiniTraffic提出轻量级预训练框架，利用频域稳定性增强和道路-车道对比聚类，实现细粒度交通预测，为自动驾驶换道引导提供支持。
+evidence: 面向自动驾驶车辆的细粒度交通预测与换道引导
+tldr: 该论文针对细粒度交通预测任务中任务特定模型效率低、城市级预训练模型忽略细粒度需求以及计算资源消耗大等问题，提出轻量级预训练框架MiniTraffic。框架利用道路级数据通过频域稳定性增强模块应对车道级数据稀缺，并通过对比聚类捕捉道路-车道相关性。实验表明，MiniTraffic在细粒度交通预测上性能优异且模型体积小，能有效支持自动驾驶换道引导等实际应用。该方法为智慧交通和自动驾驶场景提供了高效预训练方案，兼顾精度与部署成本。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有模型效率不足，缺乏细粒度预测，难以部署。
-method: 利用频域稳定性增强模块解决数据稀缺，通过对比聚类捕获道路-车道关联。
-result: 实现了高效、轻量的车道级交通预测。
-conclusion: MiniTraffic以轻量化设计有效助力自动驾驶车辆的换道决策。
+motivation: 现有细粒度交通预测模型效率低，城市级预训练模型忽略细粒度需求，且计算资源开销大。
+method: 提出MiniTraffic轻量预训练框架，利用频域增强和对比聚类捕捉道路-车道相关性。
+result: 实验表明MiniTraffic在细粒度交通预测上性能优异，且模型体积小、计算开销低。
+conclusion: 该方法为自动驾驶和智慧城市中的交通预测提供了轻量实用的预训练模型。
 ---
 
 ## Abstract

@@ -1,19 +1,19 @@
 ---
 title: Mitigating Error Accumulation in Continuous Navigation via Memory-Augmented Kalman Filtering
-title_zh: 通过记忆增强卡尔曼滤波减轻连续导航中的误差累积
+title_zh: 通过记忆增强卡尔曼滤波缓解连续导航中的误差累积
 authors: "Yin Tang, Jiawei Ma, Jinrui Zhang, Alex Jinpeng Wang, Deyu Zhang"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/711857fd38004509b173ac1ca4148cf32ab031d1.pdf"
-tags: ["query:av-pnc"]
-score: 5.0
-evidence: 记忆增强卡尔曼滤波用于连续导航，可应用于自动驾驶轨迹规划
-tldr: 无人机视觉语言导航中，逐步预测导致位置误差累积，即状态漂移问题。本文借鉴控制理论，将连续预测形式化为递归贝叶斯估计，提出记忆增强卡尔曼滤波方法进行误差校正。实验证明该方法能显著减轻状态漂移，提高轨迹预测准确性，对自动驾驶的连续导航具有借鉴意义。
+tags: ["query:av-traj-pred"]
+score: 6.0
+evidence: 面向自主导航的连续轨迹预测及误差累积修正
+tldr: 无人飞行器在复杂环境中的连续轨迹预测常采用逐点航位推算，导致误差随位置更新不断累积并产生状态漂移。本文借鉴控制论，将连续预测建模为递归贝叶斯状态估计，并引入记忆增强卡尔曼滤波来动态修正位姿误差。实验表明该方法能有效缓解状态漂移，增强后续轨迹预测的可靠性。该思路可迁移至自动驾驶等其他自主系统的轨迹预测任务。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有视觉语言导航模型采用航位推算，导致状态漂移和轨迹预测不准。
-method: 将连续预测建模为递归贝叶斯状态估计，使用记忆增强卡尔曼滤波修正误差。
-result: 实验表明该方法有效纠正状态漂移，提升连续导航的轨迹精度。
-conclusion: 为无人机及自动驾驶的连续轨迹优化提供了误差累积缓解的新思路。
+motivation: 无人系统连续轨迹预测中逐步航位推算造成误差累积与状态漂移，损害后续轨迹预测。
+method: 将连续预测看作递归贝叶斯状态估计，用记忆增强卡尔曼滤波修正位置偏差。
+result: 实验验证了该方法能有效抑制误差累积，提升轨迹预测的稳定性和准确性。
+conclusion: 为连续轨迹预测提供基于控制理论的校正框架，可推广到自动驾驶等领域。
 ---
 
 ## Abstract

@@ -1,19 +1,19 @@
 ---
 title: "WestWorld: A Knowledge-Encoded Scalable Trajectory World Model for Diverse Robotic Systems"
-title_zh: WestWorld：面向多类机器人系统的知识编码可扩展轨迹世界模型
+title_zh: WestWorld：面向多样化机器人系统的知识编码可扩展轨迹世界模型
 authors: "Yuchen Wang, Jiangtao Kong, Sizhe Wei, Xiaochang Li, Haohong Lin, Hongjue Zhao, Tianyi Zhou, Lu Gan, Huajie Shao"
 date: 2026-04-30
 pdf: "https://openreview.net/pdf/8810a4114256df804745ae8c7e2b3babeffa3e24.pdf"
-tags: ["query:av-pnc"]
+tags: ["query:av-traj-pred"]
 score: 8.0
-evidence: 知识编码的轨迹世界模型，用于机器人动力学学习，可直接应用于自动驾驶规划与控制
-tldr: 针对轨迹世界模型难以扩展到多类机器人系统的问题，WestWorld提出系统感知的混合专家模型，通过可学习系统嵌入动态组合专家，并融入物理领域知识，实现零样本泛化。在多种机器人上的动力学学习实验表明，该模型有效支持规划与控制任务，可推广至自动驾驶领域。
+evidence: 面向机器人规划与控制的轨迹世界模型，可扩展专家混合
+tldr: 该论文指出现有轨迹世界模型难以扩展到大量不同机器人系统且忽略物理结构知识，导致规划控制性能受限。为此提出WestWorld，通过系统感知的专家混合（Sys-MoE）机制动态组合和路由各机器人系统专属专家，并编码物理结构知识以增强零样本泛化。实验表明，WestWorld在轨迹预测和机器人规划控制任务中显著优于现有基线，并能迁移到未见系统。该工作为多机器人统一轨迹建模提供了可扩展新方法。同时，模型保持了较高的可扩展性。
 source: ICML-2026-Accepted
 selection_source: conference_retrieval
-motivation: 现有轨迹世界模型无法有效扩展到大量不同动力学系统，且忽略物理结构领域知识。
-method: 提出系统感知的混合专家模型（Sys-MoE），通过可学习系统嵌入路由专家，并编码领域知识。
-result: 在多种机器人系统中提升了规划与控制的零样本泛化能力。
-conclusion: WestWorld为跨系统轨迹学习提供了可扩展框架，是机器人规划与控制的有力工具。
+motivation: 现有轨迹世界模型扩展性差且未利用物理结构知识，难以适应多种机器人系统。
+method: 提出系统感知的专家混合机制与知识编码，构建可扩展的轨迹世界模型。
+result: 在轨迹预测与规划控制上提升精度和泛化能力，支持多系统动态学习。
+conclusion: WestWorld为多机器人系统提供可扩展轨迹世界模型，推动规划控制研究。
 ---
 
 ## Abstract

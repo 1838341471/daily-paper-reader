@@ -1,0 +1,2544 @@
+{
+  "top_k": 200,
+  "generated_at": "2026-08-04T07:38:07.625841+00:00",
+  "papers": [
+    {
+      "id": "openreview-icml-2026-xcqnmajjw5",
+      "source": "ICML-2026-Accepted",
+      "title": "TF-FACE: Time-Frequency Fusion Learning via Frequency-Domain Adaptive and Controllable Enhancement for Trajectory Prediction",
+      "abstract": "Accurately predicting the future trajectories of traffic participants is critical for safe, efficient, and human-friendly autonomous driving. Existing learning-based trajectory prediction methods are predominantly time-domain and insufficiently exploit latent frequency information, which limits their capability to capture low-frequency long-term dependencies and high-frequency short-term dynamics. To address this, we propose TF-FACE, a time-frequency learning framework via frequency-domain adaptive and controllable enhancement. TF-FACE introduces a fusion encoder with learnable gated frequency-domain attention that adaptively manipulates band-specific features for trajectory prediction. Building on the fused representation, we design a dual-stage decoder and a band-specific time–frequency dual-consistency loss to enable controllable decoupling and coupling across long- and short-term temporal scales, global and local scales, and then generate final multimodal predictions. Experiments on Argoverse 1 demonstrate that TF-FACE achieves state-of-the-art accuracy, while maintaining real-time inference for autonomous driving. Additional experiments are conducted on Argoverse 2, further validating TF-FACE's performance and generalizability.",
+      "authors": [
+        "Dongjian Song",
+        "Yunhao Meng",
+        "Songjun Huang",
+        "Jiayi Han"
+      ],
+      "primary_category": "Autonomous driving",
+      "categories": [
+        "Autonomous driving",
+        "Trajectory prediction",
+        "Time-frequency fusion learning",
+        "Gated frequency domain attention",
+        "Frequency domain decoupling"
+      ],
+      "published": "2026-04-30T19:17:25.766+00:00",
+      "link": "https://openreview.net/forum?id=XCqnmajjW5",
+      "pdf_url": "https://openreview.net/pdf/c7ccc16b88f29bc08f891a76d49048b19edd29ae.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-wiwfiew7y4",
+      "source": "ICML-2026-Accepted",
+      "title": "STFlow: Data-Coupled Flow Matching for Geometric Trajectory Simulation",
+      "abstract": "Simulating trajectories of dynamical systems is a fundamental problem in a wide range of fields such as molecular dynamics, biochemistry, and pedestrian dynamics. Machine learning has become an invaluable tool for scaling physics-based simulators and developing models directly from experimental data. In particular, recent advances in deep generative modeling and geometric deep learning enable probabilistic simulation by learning complex trajectory distributions while respecting intrinsic permutation and time-shift symmetries. However, trajectories of N-body systems are commonly characterized by high sensitivity to perturbations leading to bifurcations, as well as multi-scale temporal and spatial correlations. To address these challenges, we introduce STFlow (Spatio-Temporal Flow), a generative model based on graph neural networks and hierarchical convolutions. By incorporating data-dependent couplings within the Flow Matching framework, STFlow denoises starting from conditioned random-walks instead of Gaussian noise. This novel informed prior simplifies the learning task by reducing transport cost, increasing training and inference efficiency. We validate our approach on N-body systems, molecular dynamics, and human trajectory forecasting. Across these benchmarks, STFlow achieves the lowest prediction errors with fewer simulation steps and improved scalability.",
+      "authors": [
+        "Kiet Bennema ten Brinke",
+        "Koen Minartz",
+        "Vlado Menkovski"
+      ],
+      "primary_category": "Generative modeling",
+      "categories": [
+        "Generative modeling",
+        "Trajectory simulation",
+        "flow matching",
+        "n-body dynamics",
+        "stochastic simulation"
+      ],
+      "published": "2026-04-30T19:18:52.175+00:00",
+      "link": "https://openreview.net/forum?id=Wiwfiew7Y4",
+      "pdf_url": "https://openreview.net/pdf/284f024c6ac4c2f9754ea5fbbc7c02f5389c743d.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-hyw7wlpzae",
+      "source": "ICML-2026-Accepted",
+      "title": "Hierarchical Policy Learning via Spectral Decomposition",
+      "abstract": "In this paper, we identify a semantic decomposition in robot action sequences, separating task-level motion intent from execution-level refinements.\nBy analyzing actions in the spectral domain using the discrete cosine transform (DCT), we observe that low-frequency components capture global motion trajectories, while high-frequency components encode precise timing, alignment, and contact behaviors.\nMotivated by this structure, we propose Causal Spectral Policy (CSP), which models action generation as a causal coarse-to-fine process: coarse motion is predicted from observation and language, and fine corrections are generated conditionally on the realized trajectory.\nAcross simulation and real-world evaluations, CSP consistently outperforms strong baselines on precision-sensitive manipulation tasks.\nAdditionally, we propose human-inspired teleoperation noise injection as a data augmentation method under which our approach demonstrates strong robustness to noisy demonstrations",
+      "authors": [
+        "Shuxin Cao",
+        "Liquan Wang",
+        "Walker Byrnes",
+        "Yiye Chen",
+        "Yilun Du",
+        "Animesh Garg"
+      ],
+      "primary_category": "Robot Learning",
+      "categories": [
+        "Robot Learning",
+        "Manipulation",
+        "Imitation Learning"
+      ],
+      "published": "2026-04-30T19:21:54.517+00:00",
+      "link": "https://openreview.net/forum?id=hyw7WLPZae",
+      "pdf_url": "https://openreview.net/pdf/ae8b660d34d860ba0ca6e593037424a14cc92883.pdf",
+      "tags": [
+        "keyword:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-bxiaowdft2",
+      "source": "ICML-2026-Accepted",
+      "title": "MotionMAR: Multi-scale Auto-Regressive Human Motion Reconstruction from Sparse Observations",
+      "abstract": "Human motion follows a temporal hierarchical structure, transitioning from low-frequency global trajectories to high-frequency details. Inspired by the success of multi-level autoregressive models in computer vision, we propose MotionMAR, a coarse-to-fine framework for motion reconstruction from sparse observations. It first estimates the global trajectory of human motion and then gradually refines the temporal details. This architecture consists of four integrated components. The Temporal Multi-scale Tokenization (TMT) VQ-VAE encodes the data at multiple temporal resolutions, separating semantic motion from minor jitters. The Motion Autoregressive Network (MAN) operates in this latent space, predicting motion across scales. It first establishes the global structure through coarse indices and then generates finer indices to recover specific details. Meanwhile, the Scale-Aware Control (SAC) module integrates sparse tracking data to ensure the generated output aligns with actual observations. The Motion Refinement Network (MRN) subsequently smooths consecutive poses and eliminates quantization artifacts. Experiments show that MotionMAR achieves state-of-the-art accuracy on the AMASS dataset, providing a reliable and structure-aware approach for motion reconstruction. The source code is publicly available at \\url{http://www.lidarhumanmotion.net/motionmar/}.",
+      "authors": [
+        "Yuhua Luo",
+        "Junsheng Zhang",
+        "Mengyin Liu",
+        "Xincheng Lin",
+        "Ming Yan",
+        "Zhudi Chen",
+        "Chenglu Wen",
+        "Lan Xu",
+        "Siqi Shen",
+        "Cheng Wang"
+      ],
+      "primary_category": "Human Motion Reconstruction，Sparse Observations，Autoregressive Network",
+      "categories": [
+        "Human Motion Reconstruction，Sparse Observations，Autoregressive Network"
+      ],
+      "published": "2026-04-30T19:18:50.042+00:00",
+      "link": "https://openreview.net/forum?id=BXiAOWdFT2",
+      "pdf_url": "https://openreview.net/pdf/5769a2e7216018bfaba27dd469af1c7f7b8a35bf.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-lpqtiyphzn",
+      "source": "ICML-2026-Accepted",
+      "title": "Offline Reinforcement Learning with Generative Trajectory Policies",
+      "abstract": "Generative models have emerged as a powerful class of policies for offline reinforcement learning (RL) due to their ability to capture complex, multi-modal behaviors. \nHowever, existing methods face a stark trade-off: slow, iterative models like diffusion policies are computationally expensive, while fast, single-step models like consistency policies often suffer from degraded performance. \nIn this paper, we demonstrate that it is possible to bridge this gap.\nThe key to moving beyond the limitations of individual methods, we argue, lies in a unifying perspective that views modern generative models—including diffusion, flow matching, and consistency models—as specific instances of learning a continuous-time generative trajectory governed by an Ordinary Differential Equation (ODE).\nThis principled foundation provides a clearer design space for generative policies in RL and allows us to propose *Generative Trajectory Policies* (GTPs), a new and more general policy paradigm that learns the entire solution map of the underlying ODE.\nTo make this paradigm practical for offline RL, we further introduce two key theoretically principled adaptations. \nEmpirical results demonstrate that GTP achieves state-of-the-art performance on D4RL benchmarks -- it significantly outperforms prior generative policies, achieving perfect scores on several notoriously hard AntMaze tasks.",
+      "authors": [
+        "Xinsong Feng",
+        "Leshu Tang",
+        "Chenan Wang",
+        "Haipeng Chen"
+      ],
+      "primary_category": "offline RL",
+      "categories": [
+        "offline RL",
+        "generative models"
+      ],
+      "published": "2026-04-30T19:16:26.691+00:00",
+      "link": "https://openreview.net/forum?id=LpqtiYpHzn",
+      "pdf_url": "https://openreview.net/pdf/6a56154b18763b639b76a9c407f935e2d860c792.pdf",
+      "tags": [
+        "keyword:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-rkiq95zucw",
+      "source": "ICML-2026-Accepted",
+      "title": "Rethinking Instruction Drift as a Sampling Error: SNR-Aware Power Distributions for Long-Horizon Robotic Planning",
+      "abstract": "Despite rapid progress in Vision-Language-Action (VLA) models for robotic control, instruction drift remains a persistent failure mode in long-horizon tasks. This paper reconceptualizes this phenomenon, positing that instruction drift is fundamentally a systematic sampling error: local greedy sampling is prone to collapsing into “Negative Pivotal Windows”—irreversible local optima with high local probability that sever global success pathways. To address this, we propose Context-Aware Power Sampling (CAPS), a training-free inference-time computation framework. CAPS leverages power distributions to sharpen global trajectory probabilities, enabling lookahead search over the model's conditional generative trajectory distribution. Furthermore, we introduce a metacognitive control mechanism based on Signal-to-Noise Ratio (SNR). This mechanism triggers adaptive MCMC search solely when drift risk is detected, enabling a dynamic transition from “intuitive fast thinking” to “rational slow search.” Experiments on RoboTwin, Simpler-WindowX, and Libero-long benchmarks show that CAPS achieves substantial improvements over strong baselines, including OpenVLA and TACO, without parameter updates. These results support the effectiveness of adaptive inference-time computation for improving long-horizon robustness in embodied control.",
+      "authors": [
+        "Kewei Chen",
+        "Yayu Long",
+        "Mingsheng Shang"
+      ],
+      "primary_category": "Embodied AI",
+      "categories": [
+        "Embodied AI",
+        "Vision-Language-Action Models",
+        "Inference-Time Compute",
+        "Sampling Methods",
+        "Long-Horizon Reasoning"
+      ],
+      "published": "2026-04-30T19:14:25.951+00:00",
+      "link": "https://openreview.net/forum?id=RKiQ95ZuCW",
+      "pdf_url": "https://openreview.net/pdf/a53475ef3452dd06c41a4cc9ab1384c3fca9eb16.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-aae3hxdkbt",
+      "source": "ICML-2026-Accepted",
+      "title": "CHESS: Chebyshev Spectral Synthesis for Trajectory Condensation",
+      "abstract": "Learning from continuous-time trajectories requires modeling multivariate sensor measurements generated by underlying physical or dynamical processes. Under extreme data compression and heterogeneous sampling, directly optimizing synthetic signals as discrete sample values becomes fundamentally misaligned with the underlining \\emph{continuous-time physical processes}, often producing high-frequency, non-physical artifacts that overfit specific models and break reuse across architectures and sampling rates. We propose CHESS, a \\emph{function-first} synthesis framework shifts optimization from discrete samples to underlying continuous-time signal trajectories. CHESS injects physics-induced structure by jointly enforcing low-rank spatial coherence and piecewise Chebyshev polynomial temporal parameterization, constraining synthesis to a physically meaningful function manifold. We provide theoretical analysis establishing explicit smoothness and stability guaranties. Experiments on diverse sensor testbeds under the dataset distillation protocol demonstrate CHESS consistently outperform state-of-the-art methods with a compression ratios up to $133\\times$ for each synthetic sample. Furthermore, CHESS exhibits strong cross-architecture generalization and enables zero-shot adaptation across different sampling resolutions.",
+      "authors": [
+        "Ruituo Wu",
+        "Hongyu Zhang",
+        "Qiang Wang",
+        "Jiawei Du",
+        "Wei Cui",
+        "Ce Zhu",
+        "Bing Li"
+      ],
+      "primary_category": "Data compression",
+      "categories": [
+        "Data compression",
+        "Sensor data",
+        "Dataset consendation"
+      ],
+      "published": "2026-04-30T19:14:09.925+00:00",
+      "link": "https://openreview.net/forum?id=AaE3hXDKBT",
+      "pdf_url": "https://openreview.net/pdf/b175a10cfa375d2d6576ed47cbec859db5634109.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ihbw4rqm7l",
+      "source": "ICML-2026-Accepted",
+      "title": "Model-Based Diffusion Sampling for Predictive Control in Offline Decision Making",
+      "abstract": "Offline decision-making via diffusion models often produces trajectories that are misaligned with system dynamics, limiting their reliability for control. We propose *Model Predictive Diffuser* (MPDiffuser), a compositional diffusion framework that combines a diffusion planner with a dynamics diffusion model to generate task-aligned and dynamically plausible trajectories. MPDiffuser interleaves planner and dynamics updates during sampling, progressively correcting feasibility while preserving task intent. A lightweight ranking module then selects trajectories that best satisfy task objectives. The compositional design improves sample efficiency and adaptability by enabling the dynamics model to leverage diverse and previously unseen data independently of the planner. Empirically, we demonstrate consistent improvements over prior diffusion-based methods on unconstrained (D4RL) and constrained (DSRL) benchmarks, and validate practicality through deployment on a real quadrupedal robot.",
+      "authors": [
+        "Haldun Balim",
+        "Na Li",
+        "Yilun Du"
+      ],
+      "primary_category": "Learning-based control",
+      "categories": [
+        "Learning-based control",
+        "Decision Making",
+        "Diffusion Models"
+      ],
+      "published": "2026-04-30T19:13:14.647+00:00",
+      "link": "https://openreview.net/forum?id=IhBW4rQM7L",
+      "pdf_url": "https://openreview.net/pdf/9f62365d89d899455343f6465f27b6dee30f2a22.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-rytz3y2mbj",
+      "source": "ICML-2026-Accepted",
+      "title": "SKETCH: Semantic Key-Point Conditioning for Long-Horizon Vessel Trajectory Prediction",
+      "abstract": "Accurate long-horizon vessel trajectory prediction remains challenging due to compounded uncertainty from complex navigation behaviors and environmental factors. Existing methods often struggle to maintain global directional consistency, leading to drifting or implausible trajectories when extrapolated over long time horizons. To address this issue, we propose a semantic-key-point-conditioned trajectory modeling framework, in which future trajectories are predicted by conditioning on a high-level Next Key Point (NKP) that captures navigational intent. This formulation decomposes long-horizon prediction into global semantic decision-making and local motion modeling, effectively restricting the support of future trajectories to semantically feasible subsets. To efficiently estimate the NKP prior from historical observations, we adopt a pretrain-finetune strategy. Extensive experiments on real-world AIS data demonstrate that the proposed method consistently outperforms state-of-the-art approaches, particularly for long travel durations, directional accuracy, and fine-grained trajectory prediction.",
+      "authors": [
+        "Linyong Gan",
+        "Zimo Li",
+        "Wenxin XU",
+        "Li Xingjian",
+        "Jianhua Z. Huang",
+        "Enmei Tu",
+        "Shuhang Chen"
+      ],
+      "primary_category": "Maritime Navigational Intent",
+      "categories": [
+        "Maritime Navigational Intent",
+        "Next Key Point",
+        "Semantic Conditioning",
+        "Long-Horizon Trajectory Prediction"
+      ],
+      "published": "2026-04-30T19:11:13.308+00:00",
+      "link": "https://openreview.net/forum?id=RYTZ3Y2mBJ",
+      "pdf_url": "https://openreview.net/pdf/71a92f4c37a9684c09d2f5351bc616e5c5117a9d.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-sdcoyjz34e",
+      "source": "ICML-2026-Accepted",
+      "title": "Mitigating Error Accumulation in Continuous Navigation via Memory-Augmented Kalman Filtering",
+      "abstract": "Continuous prediction in complex environments is critical for Unmanned Aerial Vehicle (UAV). However, the existing Vision-Language Navigation (VLN) models follows the dead-reckoning, which iteratively predicts the next waypoint and updates its position, thereby constructing the complete trajectory. Then, such stepwise manner will inevitably lead to accumulated errors of position over time, resulting in misalignment between internal belief and objective coordinates, which is known as ``state drift'' and ultimately compromises the subsequent trajectory prediction. Drawing inspiration from classical control theory, we propose to correct for errors by formulating the continuous prediction as a recursive Bayesian state estimation problem. In this paper, we design NeuroKalman, a novel framework that decouples navigation into two complementary processes: a Prior Prediction, based on motion dynamic,s and a Likelihood Correction, from historical observation. We first mathematically associate Kernel Density Estimation of the measurement likelihood with the attention-based retrieval mechanism, which then allows the system to rectify the latent representation using retrieved historical anchors without gradient updates. Comprehensive experiments on TravelUAV benchmark demonstrate that, with only 10\\% of the full training data fine-tuning, our method clearly outperforms strong baselines and regulates drift accumulation.",
+      "authors": [
+        "Yin Tang",
+        "Jiawei Ma",
+        "Jinrui Zhang",
+        "Alex Jinpeng Wang",
+        "Deyu Zhang"
+      ],
+      "primary_category": "Vision-Language Navigation",
+      "categories": [
+        "Vision-Language Navigation",
+        "Kalman filtering",
+        "Temporal Modeling"
+      ],
+      "published": "2026-04-30T19:13:49.036+00:00",
+      "link": "https://openreview.net/forum?id=SdcOyjz34E",
+      "pdf_url": "https://openreview.net/pdf/711857fd38004509b173ac1ca4148cf32ab031d1.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-emwu5ry8m9",
+      "source": "ICML-2026-Accepted",
+      "title": "NOMAD: Lifelong Trajectory Planning via Non-Parametric Bayesian Memory-Adaptive Diffusion Experts",
+      "abstract": "Autonomous vehicles operating in open-world environments must continually adapt to rare long-tail scenarios while preserving previously acquired driving skills. However, existing trajectory planning approaches struggle with this stability--plasticity trade-off, as they rely on static models or rigid rule-based controllers that cannot robustly handle evolving and complex traffic dynamics. Against this background, we propose **NOMAD**, a lifelong trajectory planning framework that integrates non-parametric Bayesian memory with diffusion-based trajectory generation, enabling continuous adaptation to long-tail scenarios without catastrophic forgetting. Our method maps growing scene contexts to a dynamically growing set of discrete memory clusters, which guide a conditional diffusion model to function as a mixture of experts specialized for diverse driving behaviors. To retain past knowledge during incremental learning, we introduce a generative replay mechanism that synthesizes pseudo-experiences from previously learned memory clusters. Extensive closed-loop evaluations on the nuPlan benchmark demonstrate that our approach achieves state-of-the-art performance on long-tail scenarios, improving the interPlan score by **9.4%** over the strongest baseline, while maintaining competitive performance on regular driving benchmarks. Moreover, our method exhibits robust continual learning capability, achieving the highest average closed-loop score with positive backward transfer when adapting to sequentially introduced long-tail scenarios.",
+      "authors": [
+        "Yixian Chen",
+        "Rufan Bai",
+        "Jiangbin Zheng",
+        "Yimin Wang",
+        "Tiantian CHEN",
+        "Wei Wang",
+        "Yuhuan Lu"
+      ],
+      "primary_category": "Trajectory planning",
+      "categories": [
+        "Trajectory planning",
+        "continual learning",
+        "diffusion model",
+        "discrete memory"
+      ],
+      "published": "2026-04-30T19:10:03.316+00:00",
+      "link": "https://openreview.net/forum?id=emwU5Ry8M9",
+      "pdf_url": "https://openreview.net/pdf/d1c1fb8aca1386b5f851fe8cd9d097c39695e998.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-epvory8h4y",
+      "source": "ICML-2026-Accepted",
+      "title": "RealisMotion: Decomposed Human Motion Control and Video Generation in the World Space",
+      "abstract": "Generating human videos with realistic and controllable motions is a challenging task. While existing methods can generate visually compelling videos, they lack separate control over four key video elements: foreground subject, background video, human trajectory, and action patterns. In this paper, we propose a decomposed human motion control and video generation framework that explicitly decouples motion from appearance, subject from background, and action from trajectory, enabling flexible mix-and-match composition of these elements. Concretely, we first build a ground-aware 3D world coordinate system and perform motion editing directly in the 3D space. Trajectory control is implemented by unprojecting edited 2D trajectories into 3D with focal-length calibration and coordinate transformation, followed by speed alignment and orientation adjustment; actions are supplied by a motion bank or generated via text-to-motion methods. Then, based on modern text-to-video diffusion transformer models, we inject the subject as tokens for full attention, concatenate the background along the channel dimension, and add motion (trajectory and action) control signals by addition. Such a design opens up the possibility for us to generate realistic videos of anyone doing anything anywhere. Extensive experiments on benchmark datasets and real-world cases demonstrate that our method achieves state-of-the-art performance on both element-wise controllability and overall video quality.",
+      "authors": [
+        "Jingyun Liang",
+        "Jingkai Zhou",
+        "Shikai Li",
+        "Chenjie Cao",
+        "Lei Sun",
+        "Yichen Qian",
+        "Weihua Chen",
+        "Fan Wang"
+      ],
+      "primary_category": "Video Editing",
+      "categories": [
+        "Video Editing",
+        "Motion Editing",
+        "Human Motion Control",
+        "Trajectory Control",
+        "Action Control",
+        "Human Video Generation"
+      ],
+      "published": "2026-04-30T19:16:17.344+00:00",
+      "link": "https://openreview.net/forum?id=epVORy8H4y",
+      "pdf_url": "https://openreview.net/pdf/4390e29da1bd04e2a2c6241f44e910191ae4ab94.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ofzlydmmhe",
+      "source": "ICML-2026-Accepted",
+      "title": "DisPOSE: Projected Polystochastic Diffusion for Self-Supervised Multi-View 3D Human Pose Estimation",
+      "abstract": "Recovering 3D human poses for multiple individuals from different camera views is a fundamental bottleneck for analyzing interacting behaviors. Existing self-supervised approaches leverage synthetic catalogues of 3D poses; however, this leads to poor generalization in real-world scenarios due to distribution shifts. We therefore introduce DisPOSE, a self-supervised framework that approximates the inherently discrete multi-view person-assignment problem as a generative diffusion process over the space of polystochastic tensors. By employing differentiable Sinkhorn projections during denoising, our model learns to guide solutions toward valid and feasible assignments based on 2D image priors. The complete 3D skeletons of localized individuals are then regressed using a Hypergraph-Convolutional Decoder that explicitly models relational structures and articulated joints across multiple views. The proposed approach outperforms current state-of-the-art self-supervised methods on standard datasets and demonstrates strong performance on a newly proposed benchmark featuring highly occluded scenes from surgical operating rooms. Our diffusion-based localization demonstrates high label efficiency, retaining 99\\% of its performance with only 10\\% of the pseudo-labels. Notably, disentangling the assignment and root regression components while maintaining differentiability makes DisPOSE nearly agnostic to different camera arrangements.",
+      "authors": [
+        "Tony Danjun Wang",
+        "Tolga Birdal",
+        "Nassir Navab",
+        "Lennart Bastian"
+      ],
+      "primary_category": "Multi-view Human Pose Estimation",
+      "categories": [
+        "Multi-view Human Pose Estimation",
+        "Denoising Diffusion",
+        "Discrete Optimization"
+      ],
+      "published": "2026-04-30T19:09:01.112+00:00",
+      "link": "https://openreview.net/forum?id=OfzLydmMHe",
+      "pdf_url": "https://openreview.net/pdf/e418774588dadff270a2304f25735c660c868590.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-bz1utqkd58",
+      "source": "ICML-2026-Accepted",
+      "title": "Motion Planning in Compressed Representation Spaces",
+      "abstract": "Deep learning methods have vastly expanded the capabilities of motion planning in robotics applications, as learning priors from large-scale data has been shown to be essential in capturing the highly complex behavior required for solving tasks such as manipulation or navigation for autonomous vehicles. At the same time, model-based planning algorithms based on search or optimization remain an essential tool due to their flexibility, efficiency, and the ability to incorporate domain knowledge via expert-designed algorithms and objective functions. We propose a new generative framework to unify these two paradigms. First, we learn an autoencoder with a high compression ratio and a latent space of hierarchically ordered, discrete-valued tokens. Leveraging both the dimensionality reduction and the hierarchical coarse-to-fine structure learned by this autoencoder, we then perform motion planning by directly searching in the latent space of tokens. This search can optimize arbitrary objective functions specified at test time, providing a large degree of flexibility while maintaining efficiency and producing realistic solutions by relying on the generative capabilities of the highly compressed autoencoder. We evaluate our method on nuPlan and the Waymo Open Motion Dataset, showing how latent space search can be used for a variety of guided behavior generation tasks, achieving strong performance for closed-loop motion planning and multi-agent guided scenario synthesis without requiring any task-specific training.",
+      "authors": [
+        "Lukas Lao Beyer",
+        "Sertac Karaman"
+      ],
+      "primary_category": "robotics",
+      "categories": [
+        "robotics",
+        "motion planning",
+        "motion prediction",
+        "autonomous vehicles",
+        "tokenization",
+        "generative models"
+      ],
+      "published": "2026-04-30T19:11:43.604+00:00",
+      "link": "https://openreview.net/forum?id=Bz1uTQKD58",
+      "pdf_url": "https://openreview.net/pdf/d1d57586df5e61de44748077cc96bc464726ada2.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-rwqiud7rhp",
+      "source": "ICML-2026-Accepted",
+      "title": "FunPhase: A Periodic Functional Autoencoder for Motion Generation via Phase Manifolds",
+      "abstract": "Learning natural body motion remains challenging due to the strong coupling between spatial geometry and temporal dynamics.\nEmbedding motion in phase manifolds, latent spaces that capture local periodicity, has proven effective for motion prediction; however, existing approaches are tied to fixed skeletons and narrow motion distributions, limiting their applicability across diverse settings.\nWe introduce FunPhase, a functional periodic autoencoder that learns a phase manifold for motion and replaces discrete temporal decoding with a function-space formulation, enabling smooth trajectories that can be sampled at arbitrary temporal resolutions.\nFunPhase unifies motion prediction and generation within a single interpretable phase manifold, enabling motion generation via latent diffusion, generalizes across skeletons and datasets, and supports downstream tasks such as motion super-resolution and partial-body completion.\nOur model achieves substantially lower reconstruction error than prior periodic autoencoder baselines, achieving uniform improvements of at least 45% across all metrics, while enabling a broader range of applications and performing on par with state-of-the-art motion generation methods.",
+      "authors": [
+        "Marco Pegoraro",
+        "Evan Atherton",
+        "Bruno Roy",
+        "Aliasghar Khani",
+        "Arianna Rampini"
+      ],
+      "primary_category": "Motion Generation",
+      "categories": [
+        "Motion Generation",
+        "Phase Manifold"
+      ],
+      "published": "2026-04-30T19:18:42.462+00:00",
+      "link": "https://openreview.net/forum?id=RWQiuD7RHP",
+      "pdf_url": "https://openreview.net/pdf/234ff91a4c02dcfb1fb5a0321e0736de6888cb07.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-gd2s0bjqnz",
+      "source": "ICML-2026-Accepted",
+      "title": "Learning Transferable Interaction Primitives from Game Videos for Humanoid Locomotion",
+      "abstract": "Learning humanoid control from video provides a scalable alternative to the scarcity of high-fidelity robot data. Existing methods, however, often rely on curated datasets and treat video as passive kinematic priors. They fail to capture dynamic humanoid interactions with the environment, which are essential for robust control in complex physical environments. To address this, we propose ***TR**ansferable **I**nteraction **P**rimitives (TRIP)*, a framework designed to extract and ground interactions from unlabeled game videos for locomotion control. TRIP explicitly models dependencies between motion dynamics and environmental context via a discrete library of interaction-based action primitives. To bridge the reality gap, we introduce a shared context latent space that aligns implicit video-domain features with functional target-domain observations, enabling the seamless transfer of video-mined strategies to reinforcement learning policies. Our experiments on complex terrain navigation demonstrate that TRIP achieves significant improvements in task performance, sample efficiency, and robustness.",
+      "authors": [
+        "Xiangming Zhu",
+        "Huayu Deng",
+        "Haoran Zhao",
+        "Yiwei Hao",
+        "Yunbo Wang"
+      ],
+      "primary_category": "Transferable interaction primitives",
+      "categories": [
+        "Transferable interaction primitives",
+        "humanoid control"
+      ],
+      "published": "2026-04-30T19:10:17.459+00:00",
+      "link": "https://openreview.net/forum?id=Gd2S0bJqNZ",
+      "pdf_url": "https://openreview.net/pdf/cb77deec6df361019a80b3b74359f8e7bebe5fc1.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ub6m4bsvwj",
+      "source": "ICML-2026-Accepted",
+      "title": "DynVLA: Learning World Dynamics for Action Reasoning in Autonomous Driving",
+      "abstract": "We propose DynVLA, a driving VLA model that introduces a new CoT paradigm termed Dynamics CoT. DynVLA forecasts compact world dynamics before action generation, enabling more informed and physically grounded decision-making. To obtain compact dynamics representations, DynVLA introduces a Dynamics Tokenizer that compresses future evolution into a small set of dynamics tokens. Considering the rich environment dynamics in interaction-intensive driving scenarios, DynVLA decouples ego-centric and environment-centric dynamics, yielding more accurate world dynamics modeling. We then train DynVLA to generate dynamics tokens before actions through SFT and RFT, improving decision quality while maintaining latency-efficient inference. Compared to Textual CoT, which lacks fine-grained spatiotemporal understanding, and Visual CoT, which introduces substantial redundancy due to dense image prediction, Dynamics CoT captures the evolution of the world in a compact, interpretable, and efficient form. Extensive experiments on NAVSIM, Bench2Drive, and a large-scale in-house dataset demonstrate that DynVLA consistently outperforms Textual CoT and Visual CoT methods, validating the effectiveness and practical value of Dynamics CoT.",
+      "authors": [
+        "Shuyao Shang",
+        "Bing Zhan",
+        "Yunfei Yan",
+        "Yuqi Wang",
+        "Yingyan Li",
+        "Yasong An",
+        "Xiaoman Wang",
+        "Jierui Liu",
+        "Lu Hou",
+        "Lue Fan",
+        "Zhaoxiang Zhang",
+        "Tieniu Tan"
+      ],
+      "primary_category": "Autonomous Driving",
+      "categories": [
+        "Autonomous Driving",
+        "End-to-End Autonomous Driving",
+        "Vision–Language–Action Model",
+        "Chain-of-Thought"
+      ],
+      "published": "2026-04-30T19:08:43.238+00:00",
+      "link": "https://openreview.net/forum?id=UB6M4BSvwJ",
+      "pdf_url": "https://openreview.net/pdf/51db5c75cae53ef147fa3a7b0d739e23c486cbaa.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-1fdayakhmv",
+      "source": "ICML-2026-Accepted",
+      "title": "Fisher-Preserving Guidance: Training-Free Manifold Constraints for Safe Diffusion Control",
+      "abstract": "Diffusion models are effective for waypoint prediction in visual navigation, but standard sampling and test time guidance can produce unreliable or inefficient trajectories when updates drift off the training manifold. We propose Fisher Preserving Guidance with Outer Product Span Projection, a training-free inference method that avoids large Fisher drift associated with off-distribution actions while optimizing a task objective. Our method computes the Fisher-preserving update via a low-rank Jacobian factorization, requiring only a single backward pass per step and enabling real-time use. We further introduce Truncated Fisher Denoising Sensitivity as an uncertainty signal and use it for robust multi-sample action blending. Experiments on toy and realistic navigation benchmarks, including Maze2D with TSDF-based guidance, PushT with official Diffusion Policy weights, and visual navigation in simulation and on real robots, demonstrate consistent improvements in performance over strong diffusion-policy baselines without additional training.",
+      "authors": [
+        "Hao Ren",
+        "Zetong Bi",
+        "Yiming Zeng",
+        "Le Zheng",
+        "Zhi Li",
+        "Zhaoliang Wan",
+        "Lu Qi",
+        "Hui Cheng"
+      ],
+      "primary_category": "Visual Navigation",
+      "categories": [
+        "Visual Navigation",
+        "Diffusion Policy",
+        "Uncertainty Measurement"
+      ],
+      "published": "2026-04-30T19:22:35.115+00:00",
+      "link": "https://openreview.net/forum?id=1fDAyaKHMv",
+      "pdf_url": "https://openreview.net/pdf/4c2cfbcdb554c973e7ad59b0d05a451090534f90.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-fzp6xzgg4d",
+      "source": "ICML-2026-Accepted",
+      "title": "Human-AI Collaborative Uncertainty Quantification",
+      "abstract": "AI predictive systems increasingly support high-stakes decision making, yet robust decisions under uncertainty often rely on human capabilities beyond AI alone. This motivates collaborative approaches that combine human judgment with AI predictions. We study this problem through the lens of uncertainty quantification and introduce **Human-AI Collaborative Uncertainty Quantification**, a framework in which an AI system refines a human expert’s proposed prediction set subject to two principles: **counterfactual harm**, requiring that the AI not degrade correct human judgments, and **complementarity**, requiring recovery of correct outcomes the human missed. At the population level, we show that the optimal collaborative prediction set has a simple two-threshold structure over a single score function, governing pruning and augmentation relative to the human proposal. Building on this characterization, we develop offline and online calibration algorithms with **distribution-free** finite-sample guarantees. The online algorithm adapts to arbitrary distribution shifts, including settings where human behavior evolves through interaction with the AI. Empirically, we show that collaborative prediction sets outperform human-only and AI-only baselines, achieving improved coverage--efficiency tradeoffs across image classification, regression, and text-based medical decision making.",
+      "authors": [
+        "Sima Noorani",
+        "Shayan Kiyani",
+        "George J. Pappas",
+        "Hamed Hassani"
+      ],
+      "primary_category": "Human-AI",
+      "categories": [
+        "Human-AI",
+        "Human-AI Collaboration",
+        "Uncertainty Quantification",
+        "Prediction Sets",
+        "Conformal Prediction"
+      ],
+      "published": "2026-04-30T19:21:26.565+00:00",
+      "link": "https://openreview.net/forum?id=FzP6XZGG4d",
+      "pdf_url": "https://openreview.net/pdf/f80bfe87eeb994f88c8ee04109a5cb333a5f6516.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ncrrcg4bfp",
+      "source": "ICML-2026-Accepted",
+      "title": "WestWorld: A Knowledge-Encoded Scalable Trajectory World Model for Diverse Robotic Systems",
+      "abstract": "Trajectory world models play a crucial role in robotic dynamics learning, planning, and control. While recent works have explored trajectory world models for diverse robotic systems, they struggle to scale to a large number of distinct system dynamics and overlook domain knowledge of physical structures. To address these limitations, we introduce *WestWorld*, a kno**W**ledge-**E**ncoded **S**calable **T**rajectory **World** model for diverse robotic systems. To tackle the scalability challenge, we propose a novel system-aware Mixture-of-Experts (Sys-MoE) that dynamically combines and routes specialized experts for different robotic systems via a learnable system embedding. To further enhance zero-shot generalization, we incorporate domain knowledge of robot physical structures by introducing a structural embedding that aligns trajectory representations with morphological information. After pretraining on 89 complex environments spanning diverse morphologies across both simulation and real-world settings, *WestWorld* achieves significant improvements over competitive baselines in zero- and few-shot trajectory prediction. Additionally, it shows strong scalability across a wide range of robotic environments and significantly improves performance on downstream model-based control for different robots. Finally, we deploy our model on a real-world Unitree Go1, where it demonstrates stable locomotion performance. The code is available at https://github.com/511205787/WestWorld.",
+      "authors": [
+        "Yuchen Wang",
+        "Jiangtao Kong",
+        "Sizhe Wei",
+        "Xiaochang Li",
+        "Haohong Lin",
+        "Hongjue Zhao",
+        "Tianyi Zhou",
+        "Lu Gan",
+        "Huajie Shao"
+      ],
+      "primary_category": "Trajectory World Model",
+      "categories": [
+        "Trajectory World Model",
+        "Knowledge-Encoded Robotics Learning",
+        "Mixture-of-Experts"
+      ],
+      "published": "2026-04-30T19:11:55.802+00:00",
+      "link": "https://openreview.net/forum?id=ncRRCG4BfP",
+      "pdf_url": "https://openreview.net/pdf/8810a4114256df804745ae8c7e2b3babeffa3e24.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-2uli4uqgrg",
+      "source": "ICML-2026-Accepted",
+      "title": "Being More Lightweight and Practical: Mini-sized Contrastive Learning Pre-trained Models for Fine-grained Traffic Task",
+      "abstract": "Fine-grained traffic prediction is critically important for mitigating traffic congestion in key urban areas and for providing lane-change guidance in autonomous vehicles and navigation systems. However, task-specific models are not efficient enough, city-scale pre-trained models often overlook fine-grained requirements, and the demand for extensive computational resources hinders practical deployment. To address this issue, we developed a lightweight pre-training framework, MiniTraffic. This framework leverages abundant road-level data to address lane-level data scarcity through a frequency domain stability augmentation module and captures road-lane correlations via contrastive clustering to construct small-scale graph structures, significantly reducing model parameters. Fine-tuning with minimal target data provides a unified and efficient solution for fine-grained traffic prediction. In multi-granularity traffic prediction tasks across six fine-grained datasets, MiniTraffic demonstrated superior performance compared to existing baselines.",
+      "authors": [
+        "Shuhao Li",
+        "Weidong Yang",
+        "Ben Fei",
+        "Yue Cui",
+        "Lipeng Ma",
+        "Fan Zhang"
+      ],
+      "primary_category": "Fine-grained traffic prediction",
+      "categories": [
+        "Fine-grained traffic prediction",
+        "Spatio-temporal modeling",
+        "Lightweight models"
+      ],
+      "published": "2026-04-30T19:11:08.695+00:00",
+      "link": "https://openreview.net/forum?id=2ulI4uqGRG",
+      "pdf_url": "https://openreview.net/pdf/b7707114e8e84f24a85a2796e85ccfd398ad84ce.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-bjodtiusvx",
+      "source": "ICML-2026-Accepted",
+      "title": "From Noise to Control: Parameterized Diffusion Policies",
+      "abstract": "We propose Parameterized Diffusion Policy (PDP), a framework that learns a diffusion policy parameterized in a smooth continuous space. By structuring a latent manifold such that distances between latents' values reflect the semantic similarity of physical trajectories, we transform diffusion from a mechanism of stochastic diversity into a precise tool for behavior steering. Our approach also enables smooth interpolation between known strategies and efficient generalization to novel constraints without the need to update policy weights. We demonstrate that PDP significantly improves adaptation performance on complex multimodal benchmarks in both simulation and real-robot hardware compared to regular diffusion policy, particularly in scenarios requiring the discovery of novel behaviors.",
+      "authors": [
+        "Renhao Zhang",
+        "Haotian Fu",
+        "Mingxi Jia",
+        "George Konidaris",
+        "Yilun Du",
+        "Bruno Castro da Silva"
+      ],
+      "primary_category": "Diffusion Policy",
+      "categories": [
+        "Diffusion Policy",
+        "Imitation Learning",
+        "Multimodal Behavior Learning"
+      ],
+      "published": "2026-04-30T19:20:37.394+00:00",
+      "link": "https://openreview.net/forum?id=bjoDtIUSvx",
+      "pdf_url": "https://openreview.net/pdf/bedb2ab2f27911101438c5f85460f630e1161ef1.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-vwwbpznnaq",
+      "source": "ICML-2026-Accepted",
+      "title": "CooT: Learning to Coordinate In-Context with Coordination Transformers",
+      "abstract": "Effective coordination among unfamiliar partners remains a major challenge in multi-agent systems. Existing approaches, such as population-based methods, improve robustness through diversity but often lack mechanisms for efficient adaptation beyond the training distribution. Fine-tuning is also impractical for few-shot learning because it requires a large number of interactions for meaningful improvement. \nTo address these limitations, we propose Coordination Transformers (CooT), a framework that leverages in-context learning (ICL) for real-time partner adaptation. Unlike prior ICL approaches that focus on task generalization, CooT is designed to generalize across diverse partner behaviors. Trained on trajectories from behavior-preferring agents, it learns to align actions with partner intentions purely through observation. We evaluate CooT on two challenging multi-agent benchmarks: Overcooked and Google Research Football.\nResults show that CooT consistently outperforms population-based methods, gradient-based fine-tuning, and Meta-RL baselines, achieving stable and rapid adaptation without parameter updates. Human evaluations also identify CooT as a preferred collaborator, and our ablations confirm its ability to adapt quickly to new partners and remain stable under sudden partner changes, making it reliable for real-world human-AI collaboration.",
+      "authors": [
+        "Huai-Chih Wang",
+        "Hsiang-Chun Chuang",
+        "Hsi-Chun Cheng",
+        "Dai-Jie Wu",
+        "Shao-Hua Sun"
+      ],
+      "primary_category": "In-Context Reinforcement Learning",
+      "categories": [
+        "In-Context Reinforcement Learning",
+        "Multi-Agent Reinforcement Learning",
+        "Human-AI Collaboration",
+        "Transformers for Decision Making",
+        "Ad-Hoc Teamwork"
+      ],
+      "published": "2026-04-30T19:13:59.082+00:00",
+      "link": "https://openreview.net/forum?id=VWWbpznnaQ",
+      "pdf_url": "https://openreview.net/pdf/41ec9d7578f44a4227ccfcbe515f7fb3145138bc.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-ebuja4tldv",
+      "source": "ICML-2026-Accepted",
+      "title": "Flow for Future: Geometric SE(3)-Equivariant Flow Matching for 3D Trajectory Prediction",
+      "abstract": "Predicting 3D geometric  trajectory requires capturing complex spatiotemporal dependencies while  preserving  physical symmetries. While flow matching offers a powerful generative paradigm, extending it to SE(3)-equivariant dynamics is challenging due to the inherent gap between deterministic history and stochastic evolving flows. To address this, we introduce GSE-Flow, an SE(3)-equivariant flow matching framework. We first propose a Coherent Sequence Encoding and Time-Modulated Embedding strategy that unifies historical and evolving streams, incorporating velocity and flow time via equivariant affine transformations to guide continuous evolution. We further design a Geometry-Feature Tensorization mechanism that projects node states into a tensor product space, enabling Context-Flow Fusion to guide trajectory evolution with historical context. GSE-Flow guarantees theoretical SE(3)-equivariance and achieves SOTA accuracy on MD17, MD22, and CMU MoCap benchmarks for geometric trajectory prediction, while demonstrating generality by enhancing deterministic baselines.  Code is available at https://github.com/aegine/GSE-Flow.",
+      "authors": [
+        "Junwei Wu",
+        "Yihang Liu",
+        "Ruixuan Yu",
+        "Jian Sun"
+      ],
+      "primary_category": "SE(3)-equivariant; Geometric trajectory prediction; Flow matching",
+      "categories": [
+        "SE(3)-equivariant; Geometric trajectory prediction; Flow matching"
+      ],
+      "published": "2026-04-30T19:09:12.364+00:00",
+      "link": "https://openreview.net/forum?id=EBujA4tldV",
+      "pdf_url": "https://openreview.net/pdf/b841463fb81506a8b833fbd0bb1a0e07cd61e7c4.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-woiiket6bn",
+      "source": "ICML-2026-Accepted",
+      "title": "SafeDec: Constrained Decoding for Safe Autoregressive Generalist Robot Navigation Policies",
+      "abstract": "Recent advances in end-to-end, multi-task robot policies based on transformer models have demonstrated impressive generalization to real-world embodied navigation tasks. Trained on vast datasets of simulated and real-world trajectories, these policies map multimodal observations directly to action sequences for physical execution. Despite promising real-world capabilities, these models are still data-driven and, therefore, lack explicit notions of behavioral correctness. We address this gap by introducing **SafeDec**, a constrained decoding framework for autoregressive, transformer-based robot navigation policies that enforces safety specifications expressed as Signal Temporal Logic (STL) formulas. Our method ensures that generated actions provably satisfy STL specifications under assumed dynamics at runtime without retraining while remaining agnostic of the underlying policy. \nWe evaluate **SafeDec** on tasks from the CHORES benchmark for state-of-the-art embodied navigation policies across hundreds of procedurally generated environments and show that our decoding-time interventions are useful not only for filtering unsafe actions but also for conditional action generation. Videos are available at constrained-robot-fms.github.io.",
+      "authors": [
+        "Parv kapoor",
+        "Akila Ganlath",
+        "Michael Clifford",
+        "Changliu Liu",
+        "Sebastian Scherer",
+        "Eunsuk Kang"
+      ],
+      "primary_category": "Generalist Robot Policies",
+      "categories": [
+        "Generalist Robot Policies",
+        "Provably Safe Robotics",
+        "Neuro-symbolic Robotics"
+      ],
+      "published": "2026-04-30T19:15:35.467+00:00",
+      "link": "https://openreview.net/forum?id=woiiKET6bn",
+      "pdf_url": "https://openreview.net/pdf/6e455d6687e375fb048d677aeb7229056f70d05a.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-jizqaemuqk",
+      "source": "ICML-2026-Accepted",
+      "title": "The Theory and Practice of MAP Inference over Non-Convex Constraints",
+      "abstract": "In many safety-critical settings, probabilistic ML systems have to make predictions subject to algebraic constraints, e.g., predicting the most likely trajectory that does not cross obstacles. These real-world constraints are rarely convex, nor the densities considered are (log-)concave.\nThis makes computing this constrained maximum a posteriori (MAP) prediction in an efficient and reliable way extremely challenging. In this paper, we first investigate under which conditions we can perform constrained MAP inference over continuous variables exactly and efficiently and devise a scalable message-passing algorithm for this tractable fragment. Then, we devise a general constrained MAP strategy that interleaves partitioning the domain into convex feasible regions with numerical constrained optimization. We evaluate both methods on synthetic and real-world benchmarks, showing our structure aware approach outperforms constraint-agnostic baselines.",
+      "authors": [
+        "Leander Kurscheidt",
+        "Gabriele Masina",
+        "Roberto Sebastiani",
+        "Antonio Vergari"
+      ],
+      "primary_category": "probabilistic machine learning",
+      "categories": [
+        "probabilistic machine learning",
+        "SMT(LRA)-constraints",
+        "constrained optimization"
+      ],
+      "published": "2026-04-30T19:15:37.335+00:00",
+      "link": "https://openreview.net/forum?id=jIZqAemuqk",
+      "pdf_url": "https://openreview.net/pdf/3ba959caa7d4c1c2ecf5442a33f9df55c3e33df5.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-c4isirb6iv",
+      "source": "ICML-2026-Accepted",
+      "title": "Reasoning-VLA: An Efficient and Spatial-Guided General Vision-Language-Action Reasoning Model for Autonomous Driving",
+      "abstract": "Vision-Language-Action (VLA) models have recently shown strong decision-making capabilities in autonomous driving. However, existing VLAs often struggle with achieving efficient inference and generalizing to novel autonomous vehicle configurations and driving scenarios. In this paper, we propose Reasoning-VLA, a general and efficient action-generation VLA framework. The proposed model employs a set of learnable action queries, implicitly guided by predefined spatial representations to enhance spatial awareness. \nThese learnable queries interact with reasoning-enhanced vision–language features to generate continuous action trajectories in parallel. To promote robust generalization, we consolidate eight publicly available autonomous driving datasets into a standardized, Chain-of-Thought reasoning–based, and easy-to-use data format for model training. Leveraging both supervised learning and reinforcement learning fine-tuning, extensive empirical evaluations across multiple benchmarks demonstrate that Reasoning-VLA achieves state-of-the-art performance, strong generalization capability, and the excellent inference speed with parallel decode.",
+      "authors": [
+        "Dapeng Zhang",
+        "Zhenlong Yuan",
+        "Zhangquan Chen",
+        "Chih-Ting Liao",
+        "Yinda Chen",
+        "Fei Shen",
+        "Qingguo Zhou",
+        "Tat-Seng Chua"
+      ],
+      "primary_category": "Scene Understanding",
+      "categories": [
+        "Scene Understanding",
+        "End-to-end",
+        "VLM",
+        "VLA",
+        "RL",
+        "Robotics"
+      ],
+      "published": "2026-04-30T19:10:25.569+00:00",
+      "link": "https://openreview.net/forum?id=c4iSIrb6Iv",
+      "pdf_url": "https://openreview.net/pdf/2958fe5249a1a673a414d689de7784b306b2a02a.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-7noudctums",
+      "source": "ICML-2026-Accepted",
+      "title": "Controlled SDEs for Long-Horizon Motion Generation under Latent Decision Uncertainty",
+      "abstract": "Long-horizon motion prediction under external commands is challenged by latent decision uncertainty, where the internal states governing future behavior are unobservable and evolve stochastically over time. This issue is particularly pronounced in biological agents, whose motion trajectories reflect decision-making processes rooted in underlying cognitive states. To address these challenges, we propose CogSDE, a formulation of a controlled stochastic differential equation (SDE) for modeling instruction-driven latent decision dynamics. The drift term in the SDE incorporates a dual-channel control modulation mechanism, enabling external commands to modulate the evolution of latent states. The diffusion term employs a state-dependent operator to model intrinsic uncertainty in latent decision dynamics. Furthermore, we establish dissipativity-based mean-square boundedness for the latent decision dynamics. Experiments demonstrate that CogSDE consistently improves predictive accuracy in long-horizon motion generation. Importantly, predicted trajectories remain well aligned with control commands over extended horizons, a property widely recognized as challenging in long-horizon motion prediction.",
+      "authors": [
+        "Han Zhang",
+        "Nenggan Zheng"
+      ],
+      "primary_category": "motion prediction",
+      "categories": [
+        "motion prediction",
+        "latent dynamics",
+        "uncertainty modeling",
+        "instruction conditioning",
+        "stochastic differential equation"
+      ],
+      "published": "2026-04-30T19:12:31.13+00:00",
+      "link": "https://openreview.net/forum?id=7NOuDCtuMs",
+      "pdf_url": "https://openreview.net/pdf/7e0b1673a3abdaddb9eac9fb647ddeae198a3d73.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    },
+    {
+      "id": "openreview-icml-2026-cuqzjo3re4",
+      "source": "ICML-2026-Accepted",
+      "title": "Trajectory Consistency for One-Step Generation on Euler Mean Flows",
+      "abstract": "We propose \\emph{Euler Mean Flows (EMF)}, a flow-based generative framework for one-step and few-step generation that enforces long-range trajectory consistency with minimal sampling cost. \nThe key idea of EMF is to replace the trajectory consistency constraint, which is difficult to supervise and optimize over long time scales, with a principled linear surrogate that enables direct data supervision for long-horizon flow-map compositions.  We derive this approximation from the semigroup formulation of flow-based models and show that, under mild regularity assumptions, it faithfully approximates the original consistency objective while being substantially easier to optimize.  This formulation leads to a unified, JVP-free training framework that supports both $u$-prediction and $x_1$-prediction variants, avoiding explicit Jacobian computations and significantly reducing memory and computational overhead.  Experiments on image synthesis, particle-based geometry generation, and functional generation demonstrate improved optimization stability and sample quality under fixed sampling budgets, together with approximately $50\\%$ reductions in training time and memory consumption compared to existing one-step methods for image generation.",
+      "authors": [
+        "Zhiqi Li",
+        "Yuchen Sun",
+        "Duowen Chen",
+        "Jinjin He",
+        "Bo Zhu"
+      ],
+      "primary_category": "Generative Model; One-Step Generation; Mean Flow;",
+      "categories": [
+        "Generative Model; One-Step Generation; Mean Flow;"
+      ],
+      "published": "2026-04-30T19:18:23.364+00:00",
+      "link": "https://openreview.net/forum?id=CuqZJO3RE4",
+      "pdf_url": "https://openreview.net/pdf/67b5115073fb3add16dac92a626479542cda5a7e.pdf",
+      "tags": [
+        "keyword:traj-pred",
+        "query:traj-pred"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "type": "intent_query",
+      "tag": "traj-pred",
+      "paper_tag": "query:traj-pred",
+      "query_text": "How to evaluate the uncertainty of multimodal trajectory predictions?",
+      "sim_scores": {
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-rytz3y2mbj": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-jizqaemuqk": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.013333333333333334,
+          "rank": 15
+        },
+        "openreview-icml-2026-rkiq95zucw": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "openreview-icml-2026-ebuja4tldv": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-7noudctums": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "openreview-icml-2026-cuqzjo3re4": {
+          "score": 0.011627906976744186,
+          "rank": 26
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.010309278350515464,
+          "rank": 37
+        },
+        "openreview-icml-2026-ncrrcg4bfp": {
+          "score": 0.01,
+          "rank": 40
+        },
+        "openreview-icml-2026-aae3hxdkbt": {
+          "score": 0.009433962264150943,
+          "rank": 46
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-rytz3y2mbj",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-1fdayakhmv",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-7noudctums",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-sdcoyjz34e",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-jizqaemuqk",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-rkiq95zucw",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-xcqnmajjw5",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ebuja4tldv",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-fzp6xzgg4d",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-lpqtiyphzn",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-wiwfiew7y4",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-cuqzjo3re4",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hyw7wlpzae",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-bjodtiusvx",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-woiiket6bn",
+          "score": 0.46719946719946726,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-bxiaowdft2",
+          "score": 0.4411571334648256,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-aae3hxdkbt",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-rwqiud7rhp",
+          "score": 0.1737891737891738,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-2uli4uqgrg",
+          "score": 0.06517094017094004,
+          "star_rating": 2
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.0483743061062648,
+          "star_rating": 2
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "traj-pred",
+      "paper_tag": "query:traj-pred",
+      "query_text": "How to incorporate social interactions in human trajectory prediction models?",
+      "sim_scores": {
+        "openreview-icml-2026-vwwbpznnaq": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-fzp6xzgg4d": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-xcqnmajjw5",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-rytz3y2mbj",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-ebuja4tldv",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-7noudctums",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-wiwfiew7y4",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.73604826546003,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-bxiaowdft2",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ofzlydmmhe",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-sdcoyjz34e",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-fzp6xzgg4d",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-vwwbpznnaq",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-jizqaemuqk",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-epvory8h4y",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-gd2s0bjqnz",
+          "score": 0.4411571334648256,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-cuqzjo3re4",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-bjodtiusvx",
+          "score": 0.3433395872420263,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-rkiq95zucw",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-hyw7wlpzae",
+          "score": 0.25462134764460337,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-1fdayakhmv",
+          "score": 0.23371647509578536,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-rwqiud7rhp",
+          "score": 0.23371647509578536,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-lpqtiyphzn",
+          "score": 0.21328671328671328,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-aae3hxdkbt",
+          "score": 0.15469146238377016,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.11772814998621459,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 0.11772814998621459,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-2uli4uqgrg",
+          "score": 0.06517094017094004,
+          "star_rating": 2
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "traj-pred",
+      "paper_tag": "query:traj-pred",
+      "query_text": "What are the common benchmarks for human trajectory prediction?",
+      "sim_scores": {
+        "openreview-icml-2026-wiwfiew7y4": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-rytz3y2mbj": {
+          "score": 0.01639344262295082,
+          "rank": 2
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.016129032258064516,
+          "rank": 3
+        },
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.015873015873015872,
+          "rank": 4
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.014705882352941176,
+          "rank": 9
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.014492753623188406,
+          "rank": 10
+        },
+        "openreview-icml-2026-rkiq95zucw": {
+          "score": 0.014285714285714285,
+          "rank": 11
+        },
+        "openreview-icml-2026-epvory8h4y": {
+          "score": 0.013888888888888888,
+          "rank": 13
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.0136986301369863,
+          "rank": 14
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.013157894736842105,
+          "rank": 17
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.012987012987012988,
+          "rank": 18
+        },
+        "openreview-icml-2026-ebuja4tldv": {
+          "score": 0.01282051282051282,
+          "rank": 19
+        },
+        "openreview-icml-2026-rwqiud7rhp": {
+          "score": 0.012658227848101266,
+          "rank": 20
+        },
+        "openreview-icml-2026-ncrrcg4bfp": {
+          "score": 0.0125,
+          "rank": 21
+        },
+        "openreview-icml-2026-gd2s0bjqnz": {
+          "score": 0.012345679012345678,
+          "rank": 22
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.011111111111111112,
+          "rank": 31
+        },
+        "openreview-icml-2026-fzp6xzgg4d": {
+          "score": 0.010869565217391304,
+          "rank": 33
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.010309278350515464,
+          "rank": 38
+        },
+        "openreview-icml-2026-ofzlydmmhe": {
+          "score": 0.009259259259259259,
+          "rank": 49
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-xcqnmajjw5",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-rytz3y2mbj",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-ebuja4tldv",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-bxiaowdft2",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-sdcoyjz34e",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-7noudctums",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-epvory8h4y",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-jizqaemuqk",
+          "score": 0.8422090729783037,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-rwqiud7rhp",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-cuqzjo3re4",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-bjodtiusvx",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-wiwfiew7y4",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-fzp6xzgg4d",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-1fdayakhmv",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-rkiq95zucw",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hyw7wlpzae",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ofzlydmmhe",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-gd2s0bjqnz",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-2uli4uqgrg",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-aae3hxdkbt",
+          "score": 0.29792429792429775,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.25462134764460337,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.23371647509578536,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-woiiket6bn",
+          "score": 0.21328671328671328,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 0.1360089186176142,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-lpqtiyphzn",
+          "score": 0.1360089186176142,
+          "star_rating": 3
+        }
+      ]
+    },
+    {
+      "type": "intent_query",
+      "tag": "traj-pred",
+      "paper_tag": "query:traj-pred",
+      "query_text": "What deep learning architectures are used for pedestrian trajectory forecasting?",
+      "sim_scores": {
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-2uli4uqgrg": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.0136986301369863,
+          "rank": 13
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.011235955056179775,
+          "rank": 29
+        },
+        "openreview-icml-2026-bjodtiusvx": {
+          "score": 0.010638297872340425,
+          "rank": 34
+        },
+        "openreview-icml-2026-wiwfiew7y4": {
+          "score": 0.010101010101010102,
+          "rank": 39
+        },
+        "openreview-icml-2026-ofzlydmmhe": {
+          "score": 0.009708737864077669,
+          "rank": 43
+        },
+        "openreview-icml-2026-rwqiud7rhp": {
+          "score": 0.009523809523809525,
+          "rank": 45
+        },
+        "openreview-icml-2026-rytz3y2mbj": {
+          "score": 0.009433962264150943,
+          "rank": 46
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        }
+      },
+      "ranked": [
+        {
+          "paper_id": "openreview-icml-2026-xcqnmajjw5",
+          "score": 1.0,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-wiwfiew7y4",
+          "score": 0.9586435070306036,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-bz1utqkd58",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+          "score": 0.9185999185999183,
+          "star_rating": 5
+        },
+        {
+          "paper_id": "openreview-icml-2026-bxiaowdft2",
+          "score": 0.8798076923076922,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-rwqiud7rhp",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-emwu5ry8m9",
+          "score": 0.8057498057498057,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-2uli4uqgrg",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-rytz3y2mbj",
+          "score": 0.7703788748564866,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-ebuja4tldv",
+          "score": 0.702712746191007,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-hyw7wlpzae",
+          "score": 0.6703296703296702,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-1fdayakhmv",
+          "score": 0.6388587937883712,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-c4isirb6iv",
+          "score": 0.608262108262108,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-7noudctums",
+          "score": 0.578503688092729,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-aae3hxdkbt",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-cuqzjo3re4",
+          "score": 0.5495495495495496,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-woiiket6bn",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-gd2s0bjqnz",
+          "score": 0.5213675213675214,
+          "star_rating": 4
+        },
+        {
+          "paper_id": "openreview-icml-2026-sdcoyjz34e",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+          "score": 0.49392712550607265,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+          "score": 0.41577409931840303,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-epvory8h4y",
+          "score": 0.3910256410256411,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-bjodtiusvx",
+          "score": 0.3433395872420263,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-jizqaemuqk",
+          "score": 0.32035835650293487,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-rkiq95zucw",
+          "score": 0.1933160472486314,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-lpqtiyphzn",
+          "score": 0.1737891737891738,
+          "star_rating": 3
+        },
+        {
+          "paper_id": "openreview-icml-2026-ofzlydmmhe",
+          "score": 0.0823211875843454,
+          "star_rating": 2
+        },
+        {
+          "paper_id": "openreview-icml-2026-vwwbpznnaq",
+          "score": 0.015799015799015898,
+          "star_rating": 2
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "generative models for human motion trajectory generation",
+      "sim_scores": {
+        "openreview-icml-2026-epvory8h4y": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-rwqiud7rhp": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-gd2s0bjqnz": {
+          "score": 0.014084507042253521,
+          "rank": 11
+        },
+        "openreview-icml-2026-cuqzjo3re4": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-hyw7wlpzae": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "openreview-icml-2026-ofzlydmmhe": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.009433962264150943,
+          "rank": 46
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "generative trajectory model",
+      "sim_scores": {
+        "openreview-icml-2026-lpqtiyphzn": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-rkiq95zucw": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-aae3hxdkbt": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.011235955056179775,
+          "rank": 29
+        },
+        "openreview-icml-2026-wiwfiew7y4": {
+          "score": 0.010638297872340425,
+          "rank": 34
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "human trajectory prediction",
+      "sim_scores": {
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-wiwfiew7y4": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-hyw7wlpzae": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "human trajectory prediction methods and models",
+      "sim_scores": {
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-rytz3y2mbj": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.015625,
+          "rank": 4
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.014492753623188406,
+          "rank": 9
+        },
+        "openreview-icml-2026-epvory8h4y": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-ofzlydmmhe": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.013513513513513514,
+          "rank": 14
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.013157894736842105,
+          "rank": 16
+        },
+        "openreview-icml-2026-rwqiud7rhp": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-gd2s0bjqnz": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.012345679012345678,
+          "rank": 21
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "openreview-icml-2026-hyw7wlpzae": {
+          "score": 0.011904761904761904,
+          "rank": 24
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.011363636363636364,
+          "rank": 28
+        },
+        "openreview-icml-2026-fzp6xzgg4d": {
+          "score": 0.010526315789473684,
+          "rank": 35
+        },
+        "openreview-icml-2026-rkiq95zucw": {
+          "score": 0.00980392156862745,
+          "rank": 42
+        },
+        "openreview-icml-2026-ncrrcg4bfp": {
+          "score": 0.00909090909090909,
+          "rank": 50
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "modeling social interactions for pedestrian path prediction",
+      "sim_scores": {
+        "openreview-icml-2026-ofzlydmmhe": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "openreview-icml-2026-vwwbpznnaq": {
+          "score": 0.009523809523809525,
+          "rank": 45
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "multimodal trajectory prediction",
+      "sim_scores": {
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "multimodal trajectory prediction with multiple future paths",
+      "sim_scores": {
+        "openreview-icml-2026-rytz3y2mbj": {
+          "score": 0.01639344262295082,
+          "rank": 1
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-sdcoyjz34e": {
+          "score": 0.015873015873015872,
+          "rank": 3
+        },
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.015151515151515152,
+          "rank": 6
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.014925373134328358,
+          "rank": 7
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-ebuja4tldv": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.0125,
+          "rank": 20
+        },
+        "openreview-icml-2026-bjodtiusvx": {
+          "score": 0.012195121951219513,
+          "rank": 22
+        },
+        "openreview-icml-2026-rwqiud7rhp": {
+          "score": 0.012048192771084338,
+          "rank": 23
+        },
+        "openreview-icml-2026-2uli4uqgrg": {
+          "score": 0.011764705882352941,
+          "rank": 25
+        },
+        "openreview-icml-2026-rkiq95zucw": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "openreview-icml-2026-woiiket6bn": {
+          "score": 0.010638297872340425,
+          "rank": 34
+        },
+        "openreview-icml-2026-gd2s0bjqnz": {
+          "score": 0.00980392156862745,
+          "rank": 42
+        },
+        "openreview-icml-2026-jizqaemuqk": {
+          "score": 0.009523809523809525,
+          "rank": 45
+        },
+        "openreview-icml-2026-c4isirb6iv": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        },
+        "openreview-icml-2026-7noudctums": {
+          "score": 0.00909090909090909,
+          "rank": 50
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "pedestrian trajectory forecasting",
+      "sim_scores": {
+        "openreview-icml-2026-wiwfiew7y4": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "pedestrian trajectory forecasting deep learning",
+      "sim_scores": {
+        "openreview-icml-2026-bz1utqkd58": {
+          "score": 0.016129032258064516,
+          "rank": 2
+        },
+        "openreview-icml-2026-ofzlydmmhe": {
+          "score": 0.015384615384615385,
+          "rank": 5
+        },
+        "openreview-icml-2026-bxiaowdft2": {
+          "score": 0.014705882352941176,
+          "rank": 8
+        },
+        "openreview-icml-2026-2uli4uqgrg": {
+          "score": 0.014285714285714285,
+          "rank": 10
+        },
+        "openreview-icml-2026-rwqiud7rhp": {
+          "score": 0.013888888888888888,
+          "rank": 12
+        },
+        "openreview-icml-2026-bjodtiusvx": {
+          "score": 0.012987012987012988,
+          "rank": 17
+        },
+        "openreview-icml-2026-rytz3y2mbj": {
+          "score": 0.01282051282051282,
+          "rank": 18
+        },
+        "openreview-icml-2026-xcqnmajjw5": {
+          "score": 0.012658227848101266,
+          "rank": 19
+        },
+        "openreview-icml-2026-ub6m4bsvwj": {
+          "score": 0.011494252873563218,
+          "rank": 27
+        },
+        "openreview-icml-2026-emwu5ry8m9": {
+          "score": 0.011111111111111112,
+          "rank": 30
+        },
+        "openreview-icml-2026-wiwfiew7y4": {
+          "score": 0.01098901098901099,
+          "rank": 31
+        },
+        "openreview-icml-2026-gd2s0bjqnz": {
+          "score": 0.010309278350515464,
+          "rank": 37
+        },
+        "openreview-icml-2026-1fdayakhmv": {
+          "score": 0.01020408163265306,
+          "rank": 38
+        },
+        "openreview-icml-2026-ihbw4rqm7l": {
+          "score": 0.009345794392523364,
+          "rank": 47
+        }
+      }
+    },
+    {
+      "type": "keyword",
+      "tag": "traj-pred",
+      "paper_tag": "keyword:traj-pred",
+      "query_text": "social interaction model",
+      "sim_scores": {}
+    }
+  ],
+  "global_candidate_ids": [
+    "openreview-icml-2026-sdcoyjz34e",
+    "openreview-icml-2026-rytz3y2mbj",
+    "openreview-icml-2026-hf8axmtint",
+    "openreview-icml-2026-k4krf5tbi3",
+    "openreview-icml-2026-wiwfiew7y4",
+    "openreview-icml-2026-n9kbjrh0cx",
+    "openreview-icml-2026-zygdikr8uz",
+    "openreview-icml-2026-epvory8h4y",
+    "openreview-icml-2026-bz1utqkd58",
+    "openreview-icml-2026-57lp1pmjvo",
+    "openreview-icml-2026-lpqtiyphzn",
+    "openreview-icml-2026-xcqnmajjw5",
+    "openreview-icml-2026-wkpfacg2fj",
+    "openreview-icml-2026-bxiaowdft2",
+    "openreview-icml-2026-nsetk9afiz",
+    "openreview-icml-2026-adt1e7r9q8",
+    "openreview-icml-2026-emwu5ry8m9",
+    "openreview-icml-2026-qu17sfbmao",
+    "openreview-icml-2026-mfyblnfrsm",
+    "openreview-icml-2026-o4v0sr8mpy",
+    "openreview-icml-2026-i2ncwygk6k",
+    "openreview-icml-2026-rso6nr7noz",
+    "openreview-icml-2026-rwqiud7rhp",
+    "openreview-icml-2026-ub6m4bsvwj",
+    "openreview-icml-2026-ikxfh6alzn",
+    "openreview-icml-2026-ofzlydmmhe",
+    "openreview-icml-2026-1fdayakhmv",
+    "openreview-icml-2026-rkiq95zucw",
+    "openreview-icml-2026-rutnwe1wr7",
+    "openreview-icml-2026-gd2s0bjqnz",
+    "openreview-icml-2026-ihbw4rqm7l",
+    "openreview-icml-2026-n2mwmok6pl",
+    "openreview-icml-2026-ikzcb2jzqm",
+    "openreview-icml-2026-j2ivokp7vs",
+    "openreview-icml-2026-kqindlhknk",
+    "openreview-icml-2026-ik1mktuylz",
+    "openreview-icml-2026-e0zb8qdzye",
+    "openreview-icml-2026-r8vdduz4s3",
+    "openreview-icml-2026-gec0ijcyxw",
+    "openreview-icml-2026-2t26db5nma",
+    "openreview-icml-2026-oavnosbhwl",
+    "openreview-icml-2026-2uli4uqgrg",
+    "openreview-icml-2026-twq39yysul",
+    "openreview-icml-2026-s7mxhzgv5p",
+    "openreview-icml-2026-juevnh20ti",
+    "openreview-icml-2026-ebuja4tldv",
+    "openreview-icml-2026-txhot32maj",
+    "openreview-icml-2026-e0c3irefsd",
+    "openreview-icml-2026-hyw7wlpzae",
+    "openreview-icml-2026-2gqosf4y8n",
+    "openreview-icml-2026-0dngyqndo2",
+    "openreview-icml-2026-yteeie3ytd",
+    "openreview-icml-2026-wkeljrz5kg",
+    "openreview-icml-2026-pxvtbzvmce",
+    "openreview-icml-2026-s6ja3obxvg",
+    "openreview-icml-2026-6yz4cxkkoy",
+    "openreview-icml-2026-bjodtiusvx",
+    "openreview-icml-2026-eeo0ubd5mt",
+    "openreview-icml-2026-fzp6xzgg4d",
+    "openreview-icml-2026-d1ipe7qr0n",
+    "openreview-icml-2026-rwbtuevv4q",
+    "openreview-icml-2026-zqjknzyro4",
+    "openreview-icml-2026-ncrrcg4bfp",
+    "openreview-icml-2026-lj8rxwl9n6",
+    "openreview-icml-2026-qjc5wymfk1",
+    "openreview-icml-2026-v6xrfejnqv",
+    "openreview-icml-2026-xofhge60fr",
+    "openreview-icml-2026-jk7bhonaal",
+    "openreview-icml-2026-kqzkqdlpqc",
+    "openreview-icml-2026-jq7nk1p7mw",
+    "openreview-icml-2026-adblax1per",
+    "openreview-icml-2026-ndyucnjxks",
+    "openreview-icml-2026-mrupcembmy",
+    "openreview-icml-2026-9uohnmtqk5",
+    "openreview-icml-2026-mcazvj7apl",
+    "openreview-icml-2026-skgahlxhxx",
+    "openreview-icml-2026-lkyd1ulxpy",
+    "openreview-icml-2026-vjsjpnrfij",
+    "openreview-icml-2026-l6mbbwswus",
+    "openreview-icml-2026-ovwruzgqlu",
+    "openreview-icml-2026-rbeauiypkb",
+    "openreview-icml-2026-znvyfeup1n",
+    "openreview-icml-2026-mcu8sojpad",
+    "openreview-icml-2026-ew7fmahpls",
+    "openreview-icml-2026-hykswonb7h",
+    "openreview-icml-2026-v2rdjbvvet",
+    "openreview-icml-2026-o4tapjqni6",
+    "openreview-icml-2026-uisdcosd3g",
+    "openreview-icml-2026-vwwbpznnaq",
+    "openreview-icml-2026-cuqzjo3re4",
+    "openreview-icml-2026-x01mwoak3k",
+    "openreview-icml-2026-q2tar1xdfq",
+    "openreview-icml-2026-jizqaemuqk",
+    "openreview-icml-2026-k5gv8yptne",
+    "openreview-icml-2026-c7nez94waq",
+    "openreview-icml-2026-t6ovjczbrs",
+    "openreview-icml-2026-ny6uyz8ysn",
+    "openreview-icml-2026-ncwnyfezum",
+    "openreview-icml-2026-64lggwz47x",
+    "openreview-icml-2026-wqiyx69dfg",
+    "openreview-icml-2026-it7la8t0s6",
+    "openreview-icml-2026-jo0isgjg16",
+    "openreview-icml-2026-aae3hxdkbt",
+    "openreview-icml-2026-7noudctums",
+    "openreview-icml-2026-9valxstwcg",
+    "openreview-icml-2026-woiiket6bn",
+    "openreview-icml-2026-mweh9ipz8n",
+    "openreview-icml-2026-a9cuw1f0ct",
+    "openreview-icml-2026-vmsumctgvg",
+    "openreview-icml-2026-gwelvrnksd",
+    "openreview-icml-2026-qeahjgz1qd",
+    "openreview-icml-2026-kkdi5hufkt",
+    "openreview-icml-2026-udpiy1ndtx",
+    "openreview-icml-2026-jue8i1vakj",
+    "openreview-icml-2026-f2cgtzhq4e",
+    "openreview-icml-2026-zyjrz6r7zn",
+    "openreview-icml-2026-hw9esvumtm",
+    "openreview-icml-2026-j4saxji4pl",
+    "openreview-icml-2026-bqkkvguhza",
+    "openreview-icml-2026-2t0kl2qqkb",
+    "openreview-icml-2026-c4isirb6iv"
+  ],
+  "global_pool_lane_top_k": 30,
+  "global_pool_limit": 120,
+  "global_pool_guaranteed_per_lane": 2,
+  "global_pool_effective_size": 121,
+  "reranked_at": "2026-08-04T07:39:18.072386+00:00",
+  "llm_ranked": [
+    {
+      "paper_id": "openreview-icml-2026-bz1utqkd58",
+      "score": 9.0,
+      "evidence_en": "Motion planning for robotics and autonomous vehicles, combining deep generative models with model-based search and optimization.",
+      "evidence_cn": "面向机器人及自动驾驶车辆的压缩表示空间运动规划，融合深度生成与搜索优化。",
+      "canonical_evidence": "面向机器人及自动驾驶车辆的压缩表示空间运动规划，融合深度生成与搜索优化。",
+      "tldr_en": "Proposes a generative framework unifying deep learning and model-based planning by learning a compressed discrete latent space and hierarchical tokens, improving planning efficiency for navigation and manipulation.",
+      "tldr_cn": "现有机器人运动规划要么依赖深度模型但可解释性与灵活性不足，要么依赖搜索优化但计算开销大。该文提出在高度压缩的离散标记潜在空间中进行规划的新生成框架，将二者统一。学习到的分层离散表示降低了规划复杂度，同时保留模型先验带来的行为合理性。实验显示该方法在导航与操作任务上既保持规划有效性又提升效率，对自动驾驶规划控制具有参考价值。",
+      "title_zh": "压缩表示空间中的运动规划",
+      "motivation_cn": "深度学习方法在运动规划中擅长利用数据先验，但搜索/优化方法仍不可或缺，两者缺乏统一框架。",
+      "method_cn": "学习高压缩比自编码器，构建层次化离散标记的潜在空间，并在该表示空间内进行生成式规划。",
+      "result_cn": "在机械臂操作与自动驾驶导航等任务上验证了高压缩离散空间规划的有效性与效率。",
+      "conclusion_cn": "为学习与规划的统一提供了一种生成式方案，可提升复杂机器人轨迹规划的能力。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-c4isirb6iv",
+      "score": 9.0,
+      "evidence_en": "autonomous driving decision-making with continuous action trajectory generation via VLA",
+      "evidence_cn": "用视觉-语言-动作模型生成自动驾驶连续动作轨迹",
+      "canonical_evidence": "用视觉-语言-动作模型生成自动驾驶连续动作轨迹",
+      "tldr_en": "Reasoning-VLA improves autonomous driving decision-making with learnable action queries and spatial guidance, enabling efficient parallel continuous trajectory generation and robust generalization.",
+      "tldr_cn": "视觉-语言-动作（VLA）模型在自动驾驶中推理效率较低，且难以泛化到新型车辆配置与驾驶场景。为此，本文提出Reasoning-VLA，采用可学习的动作查询，在空间表征引导下与推理增强的视觉-语言特征交互，并行生成连续动作轨迹。模型整合了八个公开数据集进行训练与评估，实验结果表明其推理高效、泛化能力强，为自动驾驶的规划与控制提供了高效的端到端解决方案。",
+      "title_zh": "Reasoning-VLA：面向自动驾驶的高效空间引导通用视觉-语言-动作推理模型",
+      "motivation_cn": "现有VLA模型在自动驾驶中推理开销大，对新型车辆配置与场景泛化不足。",
+      "method_cn": "使用可学习动作查询结合空间引导与视觉-语言特征并行生成连续动作轨迹。",
+      "result_cn": "在八个公开数据集上验证了高效推理和强泛化能力，优于现有方法。",
+      "conclusion_cn": "为自动驾驶提供了一个高效、可泛化的动作生成范式，推进VLA在驾驶决策中的应用。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-emwu5ry8m9",
+      "score": 9.0,
+      "evidence_en": "Autonomous vehicle lifelong trajectory planning via diffusion experts",
+      "evidence_cn": "自动驾驶车辆终身轨迹规划，基于扩散专家",
+      "canonical_evidence": "自动驾驶车辆终身轨迹规划，基于扩散专家",
+      "tldr_en": "NOMAD combines non-parametric Bayesian memory with diffusion-based trajectory generation for lifelong autonomous vehicle trajectory planning, adapting to long-tail scenarios while avoiding catastrophic forgetting.",
+      "tldr_cn": "现有自动驾驶轨迹规划方法难以在开放世界中持续适应罕见长尾场景，同时保持已学驾驶技能。为此提出NOMAD框架，将非参数贝叶斯记忆与扩散式轨迹生成相结合，使车辆在面对不断演化的交通动态时能持续适应而不遗忘旧知识。在长期规划任务上，NOMAD相比静态模型和规则控制器显著提升了长尾场景鲁棒性和规划稳定性。该方法为自动驾驶系统的终身学习与安全规划提供了新思路。",
+      "title_zh": "NOMAD：基于非参数贝叶斯记忆自适应扩散专家的终身轨迹规划",
+      "motivation_cn": "现有轨迹规划方法在稳定性-可塑性权衡上表现不佳，难以应对开放世界的长尾场景和动态交通。",
+      "method_cn": "提出NOMAD框架，融合非参数贝叶斯记忆与扩散式轨迹生成，持续适应长尾场景并避免灾难性遗忘。",
+      "result_cn": "实验表明NOMAD在长期规划中相比现有方法显著提升了长尾场景适应能力和规划性能。",
+      "conclusion_cn": "NOMAD实现了自动驾驶轨迹规划的终身学习，为开放世界中的安全规划提供了有效方案。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-xcqnmajjw5",
+      "score": 9.0,
+      "evidence_en": "Time-frequency fusion learning for traffic participant trajectory prediction in autonomous driving",
+      "evidence_cn": "自动驾驶场景中交通参与者轨迹预测的时频融合学习方法",
+      "canonical_evidence": "自动驾驶场景中交通参与者轨迹预测的时频融合学习方法",
+      "tldr_en": "TF-FACE proposes a time-frequency fusion framework with learnable gated frequency-domain attention to capture both low-frequency long-term dependencies and high-frequency short-term dynamics for accurate trajectory prediction of traffic participants.",
+      "tldr_cn": "现有基于学习的轨迹预测方法主要在时域建模，忽视了频域中低频长期依赖和高频短期动态信息。本文提出TF-FACE时频融合学习框架，通过可学习的门控频域注意力自适应增强各频带特征，并设计可控增强机制提升轨迹预测精度。在多个自动驾驶轨迹预测基准上，TF-FACE显著优于现有方法，尤其对长时程预测和动态交互场景有突出效果。该工作为轨迹预测提供了频域视角的互补建模新思路。",
+      "title_zh": "TF-FACE：通过频域自适应可控制增强的时频融合学习用于轨迹预测",
+      "motivation_cn": "现有轨迹预测方法主要在时域建模，未能充分利用频域信息以平衡长期依赖和短期动态。",
+      "method_cn": "提出TF-FACE，使用可学习门控频域注意力融合时频特征，并以自适应可控方式增强轨迹预测。",
+      "result_cn": "在自动驾驶轨迹预测基准上显著优于现有方法，尤其在长时程和动态场景下表现突出。",
+      "conclusion_cn": "时频融合能有效提升轨迹预测精度，为自动驾驶轨迹预测提供新方向。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-rytz3y2mbj",
+      "score": 8.0,
+      "evidence_en": "Long-horizon vessel trajectory prediction with semantic key-point conditioning, directly relevant to trajectory prediction methods.",
+      "evidence_cn": "长时程船舶轨迹预测，采用语义关键点条件化，与轨迹预测方法直接相关。",
+      "canonical_evidence": "长时程船舶轨迹预测，采用语义关键点条件化，与轨迹预测方法直接相关。",
+      "tldr_en": "Presents SKETCH, a semantic key-point conditioned framework for long-horizon vessel trajectory prediction, decomposing prediction into global semantic decision-making and local motion modeling to reduce drift.",
+      "tldr_cn": "针对长时程轨迹预测中易漂移的问题，提出SKETCH框架，通过预测一个高层语义下一关键点来限定未来轨迹的可能范围，将全局态势决策与局部运动建模分离，从而在保证方向一致性的同时减少误差。大量长时程船舶轨迹实验表明该语义条件化方法能显著提升预测合理性与准确性，也为其他运动体轨迹预测提供可迁移思路。",
+      "title_zh": "SKETCH：面向长时程船舶轨迹预测的语义关键点条件化",
+      "motivation_cn": "长时程船舶轨迹预测因环境复杂和不确定性累积而挑战巨大，现有方法易出现漂移或生成不合理的轨迹。",
+      "method_cn": "提出语义关键点条件化轨迹建模框架，利用下一关键点NKP编码航行意图，将长期预测分解为全局语义决策和局部运动建模。",
+      "result_cn": "实验表明该方法能有效约束未来轨迹的语义合理范围，减少预测漂移，提升长时程预测的准确性。",
+      "conclusion_cn": "为长时程轨迹预测提供了一种语义条件化的有效范式，可推广至其他运动目标预测任务。",
+      "matched_requirement_id": "req-1",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "human trajectory prediction methods and models"
+    },
+    {
+      "paper_id": "openreview-icml-2026-7noudctums",
+      "score": 8.0,
+      "evidence_en": "Generative motion generation under latent decision uncertainty using controlled stochastic differential equations for long-horizon trajectories.",
+      "evidence_cn": "利用受控随机微分方程进行潜决策不确定下的长时程运动生成，属于生成式运动轨迹建模。",
+      "canonical_evidence": "利用受控随机微分方程进行潜决策不确定下的长时程运动生成，属于生成式运动轨迹建模。",
+      "tldr_en": "Introduces CogSDE, a controlled stochastic differential equation model for instruction-driven long-horizon motion generation, addressing latent decision uncertainty through drift control and state-dependent diffusion.",
+      "tldr_cn": "长时程运动预测常因内在决策状态不可观测且随机演化而困难，生物体尤其如此。该文提出CogSDE，用受控随机微分方程刻画指令驱动的潜决策动态，漂移项通过双通道控制调制外部指令，扩散项采用状态依赖算子表达随机性。模型在长时程运动生成任务上优于既有方法，能够在外界命令影响下生成合理连续的轨迹。该框架为理解决策与运动生成的关系提供了数学化视角。",
+      "title_zh": "受控随机微分方程：潜决策不确定下的长时程运动生成",
+      "motivation_cn": "生物体长时程运动生成面临不可观测的潜决策状态随机演化的挑战，常规方法难以建模。",
+      "method_cn": "提出受控随机微分方程CogSDE，用漂移项双通道控制调制外部指令，用状态依赖扩散项刻画随机性。",
+      "result_cn": "实验验证其在长时程指令驱动运动生成上的有效性，生成的轨迹更合理且符合低层运动学约束。",
+      "conclusion_cn": "为长期运动生成与潜决策不确定性建模提供统一的受控SDE范式。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ub6m4bsvwj",
+      "score": 8.0,
+      "evidence_en": "Learning world dynamics before action generation for autonomous driving",
+      "evidence_cn": "自动驾驶中在动作生成前学习并预测世界动态",
+      "canonical_evidence": "自动驾驶中在动作生成前学习并预测世界动态",
+      "tldr_en": "DynVLA introduces Dynamics CoT for driving VLA models, forecasting compact world dynamics via a dynamics tokenizer before action generation, improving decision quality and physical grounding while maintaining latency-efficient inference.",
+      "tldr_cn": "现有的自动驾驶视觉-语言-动作模型通常在生成动作前缺乏对世界演化的显式建模，导致决策不够物理一致。本文提出DynVLA，引入动力学链式思考(Dynamics CoT)，通过动态分词器将未来场景演化为紧凑的动态token，并在动作生成前先行预测，实现更符合物理规律的决策。同时解耦自车与环境动态，提升复杂交互场景下的建模精度。实验表明DynVLA相比文本式CoT显著提升了决策质量和推理效率。该工作为自动驾驶动作推理提供了新的预测-决策范式。",
+      "title_zh": "DynVLA：学习世界动态用于自动驾驶动作推理",
+      "motivation_cn": "自动驾驶动作推理缺乏对世界演化的显式建模，决策不够物理一致。",
+      "method_cn": "提出DynVLA，用动态分词器压缩未来动态，在动作生成前进行预测并解耦自车与环境动态。",
+      "result_cn": "实验显示DynVLA显著提升决策质量，同时保持低延迟推理。",
+      "conclusion_cn": "通过预测世界动态增强动作推理，为自动驾驶决策提供了新范式。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-ebuja4tldv",
+      "score": 8.0,
+      "evidence_en": "Generative flow matching for 3D trajectory prediction with SE(3) equivariance",
+      "evidence_cn": "生成式流匹配用于3D轨迹预测并保持SE(3)等变性",
+      "canonical_evidence": "生成式流匹配用于3D轨迹预测并保持SE(3)等变性",
+      "tldr_en": "GSE-Flow extends flow matching to SE(3)-equivariant 3D trajectory prediction, using coherent sequence encoding and time-modulated embeddings to unify history and evolving streams, with a geometry-feature tensorization mechanism for accurate continuous prediction.",
+      "tldr_cn": "3D轨迹预测需要捕获复杂时空依赖并保持物理对称性，而传统生成模型难以同时满足。本文提出GSE-Flow，将流匹配扩展到SE(3)-等变动力学，设计一致序列编码和时间调制嵌入来统一历史与演化流，并通过几何特征张量化机制提升预测精度。在相关基准上，该方法相比现有基线取得了更优的预测性能和对称性保持。这一框架为物理感知的3D轨迹生成提供了通用方案。",
+      "title_zh": "面向未来流动：用于3D轨迹预测的几何SE(3)-等变流匹配",
+      "motivation_cn": "3D轨迹预测需兼顾复杂时空依赖与物理对称性，现有生成模型难以兼顾。",
+      "method_cn": "提出SE(3)-等变流匹配框架，结合序列编码、时间调制嵌入和几何特征张量化。",
+      "result_cn": "在3D轨迹预测基准上相较基线显著提升预测精度与等变性。",
+      "conclusion_cn": "为物理对称性约束下的生成式轨迹预测提供了可行范式。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ncrrcg4bfp",
+      "score": 8.0,
+      "evidence_en": "trajectory world model for robotic planning and control, scalable Mixture-of-Experts",
+      "evidence_cn": "面向机器人规划与控制的轨迹世界模型，可扩展专家混合",
+      "canonical_evidence": "面向机器人规划与控制的轨迹世界模型，可扩展专家混合",
+      "tldr_en": "Introduces WestWorld, a scalable knowledge-encoded trajectory world model using system-aware Mixture-of-Experts, enabling accurate dynamics prediction and zero-shot generalization across robotic systems for planning and control.",
+      "tldr_cn": "该论文指出现有轨迹世界模型难以扩展到大量不同机器人系统且忽略物理结构知识，导致规划控制性能受限。为此提出WestWorld，通过系统感知的专家混合（Sys-MoE）机制动态组合和路由各机器人系统专属专家，并编码物理结构知识以增强零样本泛化。实验表明，WestWorld在轨迹预测和机器人规划控制任务中显著优于现有基线，并能迁移到未见系统。该工作为多机器人统一轨迹建模提供了可扩展新方法。同时，模型保持了较高的可扩展性。",
+      "title_zh": "WestWorld：面向多样化机器人系统的知识编码可扩展轨迹世界模型",
+      "motivation_cn": "现有轨迹世界模型扩展性差且未利用物理结构知识，难以适应多种机器人系统。",
+      "method_cn": "提出系统感知的专家混合机制与知识编码，构建可扩展的轨迹世界模型。",
+      "result_cn": "在轨迹预测与规划控制上提升精度和泛化能力，支持多系统动态学习。",
+      "conclusion_cn": "WestWorld为多机器人系统提供可扩展轨迹世界模型，推动规划控制研究。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-wiwfiew7y4",
+      "score": 8.0,
+      "evidence_en": "deep generative flow matching for trajectory simulation with pedestrian dynamics applications",
+      "evidence_cn": "面向轨迹模拟的深度生成流匹配方法，应用于行人动力学",
+      "canonical_evidence": "面向轨迹模拟的深度生成流匹配方法，应用于行人动力学",
+      "tldr_en": "STFlow applies flow matching to simulate geometric trajectories in N-body and pedestrian dynamics, using geometric deep learning to respect permutation and time-shift symmetries. It handles perturbation sensitivity and multi-scale correlations.",
+      "tldr_cn": "本文提出STFlow，一种数据耦合的流匹配框架，用于模拟分子、行人等动力学系统的几何轨迹。针对N体系统对扰动高度敏感、存在分叉以及多尺度时空关联的难点，利用深度生成建模与几何深度学习学习复杂轨迹分布，并保持置换与时间平移对称性。在多种任务上的实验验证了其概率模拟能力，为行人动力学与轨迹预测提供了有力工具。",
+      "title_zh": "STFlow：用于几何轨迹模拟的数据耦合流匹配方法",
+      "motivation_cn": "N体系统轨迹对扰动高度敏感且具有多尺度时空关联，物理仿真与数据驱动模拟面临挑战。",
+      "method_cn": "提出数据耦合的流匹配方法，利用几何深度学习学习轨迹分布并保持置换与时间平移对称性。",
+      "result_cn": "在多种动力学系统上实现概率性轨迹模拟，能处理分叉和复杂相关结构。",
+      "conclusion_cn": "为包含行人在内的多体轨迹模拟提供生成式解决方案，可支撑轨迹预测研究。",
+      "matched_requirement_id": "req-2",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "pedestrian trajectory forecasting deep learning"
+    },
+    {
+      "paper_id": "openreview-icml-2026-bxiaowdft2",
+      "score": 8.0,
+      "evidence_en": "human motion reconstruction with global trajectory estimation and multi-scale autoregressive generation",
+      "evidence_cn": "人体运动重建，包含全局轨迹估计与多尺度自回归生成",
+      "canonical_evidence": "人体运动重建，包含全局轨迹估计与多尺度自回归生成",
+      "tldr_en": "MotionMAR is a coarse-to-fine method for reconstructing human motion from sparse observations, estimating global trajectory and refining temporal details via multi-scale autoregressive modeling.",
+      "tldr_cn": "人体运动遵循低频全局轨迹到高频细节的时序层次结构，从稀疏观测中完整重建仍具挑战。本文借鉴多层级自回归模型，提出MotionMAR粗到细框架，先估计全局运动轨迹，再逐步细化时间细节。具体包括时间多尺度Tokenization VQ-VAE编码不同分辨率运动，以及运动自回归网络在潜空间跨尺度预测。实验表明该方法能有效利用稀疏观测重建连贯的人体运动，推动了运动重建与生成任务的发展。",
+      "title_zh": "运动MAR：基于稀疏观测的多尺度自回归人体运动重建",
+      "motivation_cn": "人体运动存在多尺度时序结构，从稀疏观测重建全局轨迹和细节是一个挑战。",
+      "method_cn": "提出MotionMAR，先估计全局轨迹，再用TMT VQ-VAE多尺度编码和运动自回归网络逐步细化生成运动。",
+      "result_cn": "实验验证了在稀疏观测下能重建出连贯的自然人体运动。",
+      "conclusion_cn": "该工作展示了多尺度自回归建模在运动重建中的有效性，并为运动生成提供新思路。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    },
+    {
+      "paper_id": "openreview-icml-2026-rwqiud7rhp",
+      "score": 8.0,
+      "evidence_en": "functional periodic autoencoder for motion generation and prediction via phase manifolds, enabling smooth trajectories",
+      "evidence_cn": "基于相位流形的运动生成与预测统一框架，支持任意时间分辨率平滑轨迹",
+      "canonical_evidence": "基于相位流形的运动生成与预测统一框架，支持任意时间分辨率平滑轨迹",
+      "tldr_en": "FunPhase learns a functional periodic autoencoder with phase manifolds for motion generation, unifying prediction and generation and enabling smooth arbitrary-resolution trajectory sampling.",
+      "tldr_cn": "人体运动生成受空间几何与时间动力学强耦合的限制，现有相位流形方法多绑定固定骨架和窄分布。本文提出FunPhase，将周期相位流形嵌入函数空间，用函数域解码取代离散时间解码，从而支持任意时间分辨率采样平滑轨迹。FunPhase在统一的可解释相位流形中同时完成运动预测与生成。实验验证了其在多样运动分布上的泛化能力，为运动表征与生成提供新范式。",
+      "title_zh": "FunPhase：基于相位流形的周期性函数自编码器用于运动生成",
+      "motivation_cn": "现有运动生成受固定骨架与窄分布限制，难以处理空间时间耦合。",
+      "method_cn": "提出功能周期自编码器FunPhase，学习相位流形，用函数空间解码控制运动轨迹。",
+      "result_cn": "在统一的相位流形中实现运动预测与生成，并支持任意时间分辨率采样。",
+      "conclusion_cn": "函数空间的相位流形为自然运动建模提供了灵活的统一框架。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    },
+    {
+      "paper_id": "openreview-icml-2026-woiiket6bn",
+      "score": 7.0,
+      "evidence_en": "Constrained decoding for safe autoregressive robot navigation policies",
+      "evidence_cn": "针对自回归机器人导航策略的约束解码以保证安全",
+      "canonical_evidence": "针对自回归机器人导航策略的约束解码以保证安全",
+      "tldr_en": "SafeDec introduces constrained decoding for autoregressive transformer-based robot navigation policies, enforcing STL safety specifications on generated action sequences to improve behavioral correctness while retaining real-world navigation performance.",
+      "tldr_cn": "端到端多任务机器人导航策略虽然泛化能力强，但缺乏明确的行为正确性约束。本文提出SafeDec约束解码框架，针对自回归Transformer导航策略，在解码时强制满足信号时序逻辑(STL)安全规范，保证生成动作序列的安全性与可行性。在仿真和真实世界导航任务中，该方法在不显著降低性能的前提下大幅减少不安全行为。该框架为机器人及自动驾驶等数据驱动导航策略提供了一种训练后安全强化手段。",
+      "title_zh": "SafeDec：安全自回归通用机器人导航策略的约束解码",
+      "motivation_cn": "数据驱动的导航策略缺乏显式行为正确性约束，可能产生不安全动作。",
+      "method_cn": "提出SafeDec约束解码框架，在自回归策略解码时强制执行STL安全规范。",
+      "result_cn": "在仿真和真实导航任务中，SafeDec有效减少不安全行为并保持任务性能。",
+      "conclusion_cn": "为通用机器人导航策略提供了一种无需重新训练的安全增强方案，可推广到自动驾驶场景。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-2uli4uqgrg",
+      "score": 7.0,
+      "evidence_en": "fine-grained traffic prediction for autonomous vehicles, lane-change guidance",
+      "evidence_cn": "面向自动驾驶车辆的细粒度交通预测与换道引导",
+      "canonical_evidence": "面向自动驾驶车辆的细粒度交通预测与换道引导",
+      "tldr_en": "Proposes MiniTraffic, lightweight pre-trained models with contrastive learning for fine-grained traffic prediction, overcoming data scarcity and computational cost, supporting autonomous driving tasks.",
+      "tldr_cn": "该论文针对细粒度交通预测任务中任务特定模型效率低、城市级预训练模型忽略细粒度需求以及计算资源消耗大等问题，提出轻量级预训练框架MiniTraffic。框架利用道路级数据通过频域稳定性增强模块应对车道级数据稀缺，并通过对比聚类捕捉道路-车道相关性。实验表明，MiniTraffic在细粒度交通预测上性能优异且模型体积小，能有效支持自动驾驶换道引导等实际应用。该方法为智慧交通和自动驾驶场景提供了高效预训练方案，兼顾精度与部署成本。",
+      "title_zh": "更轻量实用：面向细粒度交通任务的微型对比学习预训练模型",
+      "motivation_cn": "现有细粒度交通预测模型效率低，城市级预训练模型忽略细粒度需求，且计算资源开销大。",
+      "method_cn": "提出MiniTraffic轻量预训练框架，利用频域增强和对比聚类捕捉道路-车道相关性。",
+      "result_cn": "实验表明MiniTraffic在细粒度交通预测上性能优异，且模型体积小、计算开销低。",
+      "conclusion_cn": "该方法为自动驾驶和智慧城市中的交通预测提供了轻量实用的预训练模型。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-epvory8h4y",
+      "score": 7.0,
+      "evidence_en": "explicit trajectory control in human motion video generation",
+      "evidence_cn": "在人体运动视频生成中显式控制轨迹",
+      "canonical_evidence": "在人体运动视频生成中显式控制轨迹",
+      "tldr_en": "RealisMotion decomposes human video generation into foreground subject, background, human trajectory, and action patterns, allowing independent control. Using a ground-aware 3D world space, it edits trajectories by unprojecting 2D paths into 3D.",
+      "tldr_cn": "本文提出RealisMotion，将人物视频生成解耦为前景主体、背景、人类轨迹和动作模式四个独立元素，解决现有方法无法分别控制这些要素的问题。该方法在地面感知的3D世界坐标系中编辑运动，将2D轨迹反投影到3D实现轨迹控制，并支持动作与轨迹的自由组合。该框架为可控人体运动生成提供了更强的灵活性和表达力。",
+      "title_zh": "RealisMotion：在世界空间中进行解耦的人体运动控制与视频生成",
+      "motivation_cn": "现有视频生成方法无法分别控制前景主体、背景、人类轨迹和动作模式。",
+      "method_cn": "构建地面感知的3D世界坐标系，将运动与外观、主体与背景、动作与轨迹解耦，并通过2D轨迹反投影到3D实现轨迹控制。",
+      "result_cn": "实现灵活可组合的人体视频生成，支持对轨迹和动作的独立编辑。",
+      "conclusion_cn": "解耦控制框架扩展了人体运动生成的表现力，为轨迹级生成提供新思路。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    },
+    {
+      "paper_id": "openreview-icml-2026-jizqaemuqk",
+      "score": 7.0,
+      "evidence_en": "constrained MAP prediction for most likely trajectory avoiding obstacles, directly methodological for trajectory prediction",
+      "evidence_cn": "面向避障轨迹的最大后验推断算法，为轨迹预测提供约束求解方法",
+      "canonical_evidence": "面向避障轨迹的最大后验推断算法，为轨迹预测提供约束求解方法",
+      "tldr_en": "This paper studies constrained MAP inference over continuous variables with non-convex constraints and proposes scalable exact and approximate message-passing methods, applicable to obstacle-avoiding trajectory prediction.",
+      "tldr_cn": "安全关键系统中常需在非凸代数约束下求最可能的预测轨迹，例如预测不穿越障碍的轨迹。现有精确求解在大规模连续变量上效率低。本文首先给出可精确高效求解的充分条件，并设计可扩展的消息传递算法；随后提出将定义域划分为凸可行区域并进行搜索的通用求解策略。该方法为带约束轨迹预测提供理论与算法支撑，有望用于自动驾驶与机器人导航。",
+      "title_zh": "非凸约束下MAP推断的理论与实践",
+      "motivation_cn": "非凸约束下的连续MAP预测在安全和效率上极具挑战。",
+      "method_cn": "提出可扩展消息传递算法及域划分搜索策略，用于非凸约束MAP推断。",
+      "result_cn": "在可处理片段上获得精确高效解，并给出通用近似求解方法。",
+      "conclusion_cn": "为非凸约束下的轨迹预测提供理论保证与实用工具。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-sdcoyjz34e",
+      "score": 6.0,
+      "evidence_en": "continuous trajectory prediction for autonomous navigation, memory-augmented Kalman filtering for error accumulation",
+      "evidence_cn": "面向自主导航的连续轨迹预测及误差累积修正",
+      "canonical_evidence": "面向自主导航的连续轨迹预测及误差累积修正",
+      "tldr_en": "The paper mitigates error accumulation in continuous trajectory prediction for UAV navigation by formulating prediction as recursive Bayesian state estimation with a memory-augmented Kalman filter.",
+      "tldr_cn": "无人飞行器在复杂环境中的连续轨迹预测常采用逐点航位推算，导致误差随位置更新不断累积并产生状态漂移。本文借鉴控制论，将连续预测建模为递归贝叶斯状态估计，并引入记忆增强卡尔曼滤波来动态修正位姿误差。实验表明该方法能有效缓解状态漂移，增强后续轨迹预测的可靠性。该思路可迁移至自动驾驶等其他自主系统的轨迹预测任务。",
+      "title_zh": "通过记忆增强卡尔曼滤波缓解连续导航中的误差累积",
+      "motivation_cn": "无人系统连续轨迹预测中逐步航位推算造成误差累积与状态漂移，损害后续轨迹预测。",
+      "method_cn": "将连续预测看作递归贝叶斯状态估计，用记忆增强卡尔曼滤波修正位置偏差。",
+      "result_cn": "实验验证了该方法能有效抑制误差累积，提升轨迹预测的稳定性和准确性。",
+      "conclusion_cn": "为连续轨迹预测提供基于控制理论的校正框架，可推广到自动驾驶等领域。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-hyw7wlpzae",
+      "score": 6.0,
+      "evidence_en": "Hierarchical policy learning via spectral decomposition of robot action sequences",
+      "evidence_cn": "通过对机器人动作序列进行谱分解实现层级策略学习",
+      "canonical_evidence": "通过对机器人动作序列进行谱分解实现层级策略学习",
+      "tldr_en": "Causal Spectral Policy (CSP) models robot action generation as a coarse-to-fine process by decomposing actions via DCT, separating global motion intent from execution refinements, improving precision on simulation and real-robot tasks.",
+      "tldr_cn": "机器人动作序列同时包含高层运动意图和底层执行微调，现有方法难以显式建模。本文通过离散余弦变换在谱域分解动作，发现低频对应整体轨迹、高频对应精确对齐，进而提出因果谱策略CSP，以粗到细方式生成动作。在仿真和真实机器人上，CSP相较强基线显著提升了任务精度和泛化能力。该方法为机器人及自动驾驶的运动生成了可解释的层级控制结构。",
+      "title_zh": "基于谱分解的层级策略学习",
+      "motivation_cn": "机器人动作序列中高层意图和底层微调混杂，难以显式建模。",
+      "method_cn": "提出CSP，利用DCT谱分解将动作生成建模为因果粗到细过程。",
+      "result_cn": "在仿真和真实机器人实验中，CSP优于强基线，任务精度和泛化性提升。",
+      "conclusion_cn": "谱分解为机器人动作生成提供了清晰的层级建模方式，可迁移至车辆运动控制。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-1fdayakhmv",
+      "score": 6.0,
+      "evidence_en": "training-free diffusion guidance for safe trajectory generation and uncertainty-aware blending",
+      "evidence_cn": "免训练扩散引导用于安全轨迹生成与不确定性感知融合",
+      "canonical_evidence": "免训练扩散引导用于安全轨迹生成与不确定性感知融合",
+      "tldr_en": "Proposes training-free Fisher-preserving guidance to keep diffusion updates on the data manifold while optimizing objectives. A truncated Fisher denoising sensitivity serves as uncertainty signal for multi-sample blending, enabling real-time safe visual navigation.",
+      "tldr_cn": "这项工作针对扩散模型在测试时引导易偏离训练流形的问题，提出保Fisher引导方法，利用外积跨度投影避免Fisher漂移，通过低秩雅可比分解实现每次仅需一次反向传播的实时推理。同时引入截断Fisher去噪敏感性作为不确定性信号，用于多采样动作融合。在视觉导航等任务上生成更可靠、高效的轨迹，对自动驾驶的安全规划具有借鉴价值。",
+      "title_zh": "保Fisher引导：面向安全扩散控制的免训练流形约束",
+      "motivation_cn": "标准扩散模型在测试时引导易偏离训练流形，产生不可靠或低效的轨迹。",
+      "method_cn": "提出保Fisher引导与截断Fisher去噪敏感性，通过低秩雅可比分解实现单步回传的在线约束优化。",
+      "result_cn": "在视觉导航中生成满足目标且保持在流形上的可靠轨迹，支持多样本混合。",
+      "conclusion_cn": "免训练流形约束提升扩散控制的安全性与实时性，可用于路径规划与自动驾驶。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-cuqzjo3re4",
+      "score": 6.0,
+      "evidence_en": "flow-based generative framework with trajectory consistency, applicable to efficient trajectory sampling",
+      "evidence_cn": "基于流的生成框架，通过轨迹一致性实现高效采样",
+      "canonical_evidence": "基于流的生成框架，通过轨迹一致性实现高效采样",
+      "tldr_en": "Proposes Euler Mean Flows (EMF), replacing hard trajectory consistency objectives with a principled linear surrogate to support one-step and few-step generation. The framework is JVP-free and faithfully approximates long-horizon consistency from semigroup theory.",
+      "tldr_cn": "本文提出欧拉平均流（EMF），针对现有轨迹一致性约束难以监督优化的问题，根据半群公式推导出一个线性替代目标，在温和正则假设下可靠逼近原始一致性，并支持长程流映射组合的直接数据监督。该框架统一了单步与少步生成训练，且无需计算雅可比向量积，在保持生成质量的同时显著减少采样成本，为高效生成模型提供了新方案。",
+      "title_zh": "基于欧拉平均流的一步生成中的轨迹一致性",
+      "motivation_cn": "长时间尺度的轨迹一致性目标难以监督和优化，限制了少步生成。",
+      "method_cn": "提出欧拉平均流（EMF），用线性替代目标近似原始一致性目标，支持一跳与少步生成，无需JVP训练。",
+      "result_cn": "在保持生成质量的同时大幅降低采样成本，实现统一训练框架。",
+      "conclusion_cn": "为高效生成模型提供轨迹一致性近似方案，可用于轨迹预测等任务。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    },
+    {
+      "paper_id": "openreview-icml-2026-lpqtiyphzn",
+      "score": 6.0,
+      "evidence_en": "generative trajectory policies for offline RL capturing multi-modal behavior, relevant to trajectory planning",
+      "evidence_cn": "面向离线强化学习的生成轨迹策略，捕获多模态行为，与轨迹规划相关",
+      "canonical_evidence": "面向离线强化学习的生成轨迹策略，捕获多模态行为，与轨迹规划相关",
+      "tldr_en": "This paper bridges slow iterative diffusion policies and fast single-step consistency policies in offline RL by viewing them as continuous-time generative trajectories governed by an ODE. It demonstrates a unifying perspective for efficient multi-modal trajectory generation.",
+      "tldr_cn": "本文针对离线强化学习中生成轨迹策略的两难问题：扩散策略迭代缓慢而一致性策略性能受损，提出统一视角，将扩散、流匹配与一致性模型看作连续时间生成轨迹的特例。基于该视角构建的方法可在保持多模态行为表达能力的同时提升生成效率，并在实验中展示出与现有方法相比更优的性能-速度权衡，对自动驾驶等轨迹生成场景具有启发意义。",
+      "title_zh": "基于生成轨迹策略的离线强化学习",
+      "motivation_cn": "生成式策略在离线RL中面临迭代模型慢与单步模型性能差的权衡。",
+      "method_cn": "将扩散、流匹配和一致性模型统一为连续时间生成轨迹视角，提出桥接迭代与单步生成的策略框架。",
+      "result_cn": "在保留多模态建模能力的同时提升采样效率与性能。",
+      "conclusion_cn": "为离线RL中的轨迹生成提供统一视角，可用于自动驾驶决策控制。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-fzp6xzgg4d",
+      "score": 6.0,
+      "evidence_en": "General uncertainty quantification framework that can be transferred to trajectory prediction uncertainty evaluation",
+      "evidence_cn": "通用不确定性量化框架，可迁移用于轨迹预测的不确定性评估",
+      "canonical_evidence": "通用不确定性量化框架，可迁移用于轨迹预测的不确定性评估",
+      "tldr_en": "Introduces Human-AI Collaborative Uncertainty Quantification, where AI refines human prediction sets under counterfactual harm and complementarity principles, and proves the optimal collaborative set has a two-threshold structure for robust decision making.",
+      "tldr_cn": "在高风险决策中，AI预测系统需要与人类判断协同以应对不确定性。论文提出人机协同不确定性量化框架，让AI在’反事实伤害‘和’互补性‘约束下优化人类专家给出的预测集，并从理论上证明最优协同预测集具有双阈值结构。该方法为提高预测不确定性评估的可靠性与人机互补性提供了新思路，可迁移至轨迹预测等多模态预测场景。",
+      "title_zh": "人机协同不确定性量化",
+      "motivation_cn": "高风险决策需要结合人类判断与AI预测，现有不确定性量化方法未充分协同人类能力。",
+      "method_cn": "提出人机协同不确定性量化框架，AI遵循反事实伤害与互补性原则优化人类预测集。",
+      "result_cn": "理论上显示最优协同预测集具有简单的双阈值结构，为实际构建提供依据。",
+      "conclusion_cn": "为AI与人类协同决策中的不确定性建模提供了通用框架，可应用于轨迹预测评估。",
+      "matched_requirement_id": "req-8",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "How to evaluate the uncertainty of multimodal trajectory predictions?"
+    },
+    {
+      "paper_id": "openreview-icml-2026-ihbw4rqm7l",
+      "score": 6.0,
+      "evidence_en": "diffusion-based offline trajectory planning integrating dynamics model for predictive control, transferable to vehicle planning",
+      "evidence_cn": "面向离线决策的扩散轨迹规划与动力学建模，可用于自动驾驶规划控制",
+      "canonical_evidence": "面向离线决策的扩散轨迹规划与动力学建模，可用于自动驾驶规划控制",
+      "tldr_en": "MPDiffuser combines a diffusion planner with a dynamics diffusion model to generate task-aligned and dynamically plausible trajectories for offline predictive control, improving sample efficiency and feasibility.",
+      "tldr_cn": "离线决策中的扩散模型常生成与系统动力学不一致的轨迹，可靠性受限。本文提出MPDiffuser，在采样过程中交替进行规划器与动力学扩散模型的更新，逐步修正可行性的同时保持任务意图，并用轻量排序模块挑选最优轨迹。该方法提升了轨迹的动力学合理性、采样效率和适应能力。组合式设计也使动力学模型能够利用多样化的数据，适用于自动驾驶等控制场景。",
+      "title_zh": "基于模型的扩散采样用于离线决策中的预测控制",
+      "motivation_cn": "离线决策中的扩散轨迹往往违反系统动力学，导致控制可靠性不足。",
+      "method_cn": "提出MPDiffuser，交替扩散规划器和动力学模型，并在采样后排序选择满足任务目标的轨迹。",
+      "result_cn": "生成轨迹在动力学可行性和任务对齐上更优，采样效率与泛化能力提升。",
+      "conclusion_cn": "该组合式扩散框架为离线预测控制提供可靠且可适应的轨迹生成方法。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-bjodtiusvx",
+      "score": 5.0,
+      "evidence_en": "diffusion-based trajectory control and multimodal behavior generation",
+      "evidence_cn": "基于扩散的行为控制与多模态轨迹生成",
+      "canonical_evidence": "基于扩散的行为控制与多模态轨迹生成",
+      "tldr_en": "Introduces Parameterized Diffusion Policy (PDP) that embeds latent manifolds to turn diffusion from stochastic diversity into a precise tool for behavior steering, enabling interpolation and generalization to novel constraints. Improves adaptation on multimodal benchmarks in sim and real robot.",
+      "tldr_cn": "这篇论文提出参数化扩散策略（PDP），通过在平滑连续流形上学习扩散策略，使得潜在变量之间的距离反映物理轨迹的语义相似性，从而将扩散从随机多样性机制转变为精确的行为控制工具。该方法支持已知策略间的平滑插值，并在无需更新权重的条件下泛化到新约束。在复杂多模态基准的仿真和真实机器人实验中，PDP相比常规扩散策略显著提升了适应性能。",
+      "title_zh": "从噪声到控制：参数化扩散策略",
+      "motivation_cn": "标准扩散策略难以精确控制生成行为，缺乏对轨迹语义的把握。",
+      "method_cn": "提出参数化扩散策略，将策略学习在带平滑结构的潜流形上，以语义距离指导扩散过程，支持插值和新约束适应。",
+      "result_cn": "在仿真与真实机器人多模态基准上，适应性能显著优于常规扩散策略。",
+      "conclusion_cn": "结构化的潜空间使扩散策略具备精确编辑与泛化能力，推动行为控制研究。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-rkiq95zucw",
+      "score": 5.0,
+      "evidence_en": "training-free sampling framework for long-horizon robotic planning via trajectory probability sharpening, potentially useful for planning",
+      "evidence_cn": "面向长时程机器人规划的推理期采样框架，提升全局轨迹概率，可迁移至轨迹规划",
+      "canonical_evidence": "面向长时程机器人规划的推理期采样框架，提升全局轨迹概率，可迁移至轨迹规划",
+      "tldr_en": "CAPS is a training-free inference framework that uses SNR-aware power distributions to sharpen global trajectory probabilities, mitigating instruction drift in long-horizon VLA planning.",
+      "tldr_cn": "视觉-语言-动作模型在长时程任务中常出现指令漂移。本文将这种漂移归因于局部贪心采样坠入负向枢轴窗口的系统性采样误差。为此提出上下文感知幂采样CAPS，利用幂分布锐化全局轨迹概率，在条件生成轨迹上实现前瞻搜索。该方法是免训练的推理期计算框架，可有效提升长时程机器人规划的稳定性。",
+      "title_zh": "将指令漂移重新理解为采样误差：面向长时程机器人规划的SNR感知幂分布",
+      "motivation_cn": "长时程任务中局部贪心采样导致指令漂移和不可逆错误。",
+      "method_cn": "提出CAPS，基于信噪比感知的幂分布锐化全局轨迹概率并执行前瞻搜索。",
+      "result_cn": "在长时程规划中缓解了指令漂移，提升了全局成功率。",
+      "conclusion_cn": "将指令漂移建模为采样误差，为长时程规划提供了免训练改进方案。",
+      "matched_requirement_id": "req-composite-av-pnc",
+      "matched_query_tag": "query:av-pnc:composite",
+      "matched_query_text": "Papers central to 自动驾驶汽车规划与控制, especially work that connects or combines: algorithms for motion planning in autonomous vehicles; path planning methods for self-driving cars; trajectory planning and optimization for autonomous driving; behavior decision making for autonomous vehicles; autonomous driving planning and control systems; vehicle dynamics and control for autonomous driving; recent advances in autonomous vehicle planning and control; path planning and trajectory optimization for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-gd2s0bjqnz",
+      "score": 4.0,
+      "evidence_en": "Human motion and interaction primitives, but oriented to locomotion control rather than trajectory prediction.",
+      "evidence_cn": "人类运动与环境交互原语，但面向运动控制而非轨迹预测。",
+      "canonical_evidence": "人类运动与环境交互原语，但面向运动控制而非轨迹预测。",
+      "tldr_en": "Proposes TRIP to extract transferable interaction primitives from unlabeled game videos for humanoid locomotion control, explicitly modeling dependencies between motion dynamics and environmental context.",
+      "tldr_cn": "人形机器人运动控制普遍缺乏高质量真机数据，现有方法多将视频作为被动运动先验。该文提出TRIP框架，从无标注游戏视频中提取与场景交互的可迁移动作原语，并构建离散交互原语库对运动与环境依赖建模。实验证明迁移到真实人形运动场景后仍能保持鲁棒性。该工作为从视频学习运动交互提供了新思路，但与轨迹预测任务仍有距离。",
+      "title_zh": "从游戏视频学习可迁移交互原语用于人形运动",
+      "motivation_cn": "人形运动控制面临真实数据稀缺，视频常被当作被动先验，未利用动态交互信息。",
+      "method_cn": "提出TRIP框架，从无标注游戏视频中提取离散交互原语库，显式建模运动与环境依赖并跨域迁移。",
+      "result_cn": "实验表明该交互原语能提升人形机器人多种场景下的运动控制鲁棒性。",
+      "conclusion_cn": "为从视频学习可迁移人类运动交互提供了新方法，但主要服务控制而非预测。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    },
+    {
+      "paper_id": "openreview-icml-2026-vwwbpznnaq",
+      "score": 4.0,
+      "evidence_en": "multi-agent coordination with in-context learning on trajectories, transferable to social interaction modeling",
+      "evidence_cn": "多智能体协调与轨迹学习，可迁移至社会交互建模",
+      "canonical_evidence": "多智能体协调与轨迹学习，可迁移至社会交互建模",
+      "tldr_en": "CooT adapts to unfamiliar partners by in-context learning on trajectories of behavior-preferring agents, providing a potential interaction-modeling approach for multi-agent path prediction.",
+      "tldr_cn": "多智能体系统中陌生伙伴的有效协调充满挑战，现有方法依赖群体多样性但难以适应分布外情况，微调又需要大量交互。本文提出协调变换器（CooT），利用上下文学习对行为偏好智能体的轨迹进行训练，从而在不微调的情况下实时适应多样化伙伴行为。该方法为建模智能体间交互提供了新思路，或可借鉴到行人轨迹预测中的社会交互建模。",
+      "title_zh": "CooT：用协调Transformer实现上下文中的协作学习",
+      "motivation_cn": "现有多智能体协调方法缺乏分布外适应能力，微调可行性低，难以在少样本下适应新伙伴。",
+      "method_cn": "提出协调Transformer，利用上下文学习在行为偏好智能体的轨迹上训练，实现在线伙伴适应。",
+      "result_cn": "初步实验表明该方法能够有效适应多样化的伙伴行为，无需大量微调。",
+      "conclusion_cn": "为多智能体协调提供了一种无需微调的上下文学习机制，也为社会交互建模提供了参考。",
+      "matched_requirement_id": "req-3",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "modeling social interactions for pedestrian path prediction"
+    },
+    {
+      "paper_id": "openreview-icml-2026-aae3hxdkbt",
+      "score": 4.0,
+      "evidence_en": "continuous-time trajectory synthesis and compression, transferable to trajectory data learning",
+      "evidence_cn": "连续时间轨迹合成与压缩，可迁移至轨迹数据学习",
+      "canonical_evidence": "连续时间轨迹合成与压缩，可迁移至轨迹数据学习",
+      "tldr_en": "CHESS proposes a function-first trajectory condensation framework that synthesizes continuous-time signals with physics-induced structure, reducing artifacts and improving reuse across architectures and sampling rates.",
+      "tldr_cn": "该论文针对连续时间轨迹数据在极端压缩与异构采样下，离散样本优化与底层物理过程不对齐的问题，提出函数优先的轨迹凝聚框架CHESS。CHESS将优化从离散样本转移到连续时间信号轨迹，通过联合低秩空间相干性和分段光滑性等物理结构约束，避免产生高频非物理伪影。实验表明，CHESS生成的凝聚轨迹在不同架构和采样率下均具有更好的通用性和复用性，显著提升下游模型训练效率。该方法为轨迹数据高效学习提供了新思路。",
+      "title_zh": "CHESS：用于轨迹凝聚的切比雪夫谱合成",
+      "motivation_cn": "连续时间轨迹在极端压缩和异构采样下，离散样本优化易产生非物理伪影且难以跨模型复用。",
+      "method_cn": "提出函数优先的切比雪夫谱合成框架CHESS，在连续信号空间优化并注入低秩与分段光滑约束。",
+      "result_cn": "CHESS生成的凝聚轨迹在多个架构与采样率上表现更好，减少伪影并提升可复用性。",
+      "conclusion_cn": "CHESS为轨迹数据压缩和高效学习提供了物理感知的新方法论。",
+      "matched_requirement_id": "req-composite-av-traj-pred",
+      "matched_query_tag": "query:av-traj-pred:composite",
+      "matched_query_text": "Papers central to 请帮我查找自动驾驶轨迹预测相关的论文, especially work that connects or combines: trajectory prediction for autonomous vehicles; autonomous driving trajectory forecasting; driver behavior trajectory prediction; deep learning methods for trajectory prediction in autonomous driving; multimodal trajectory prediction for self driving cars; interaction aware trajectory prediction for autonomous vehicles."
+    },
+    {
+      "paper_id": "openreview-icml-2026-ofzlydmmhe",
+      "score": 4.0,
+      "evidence_en": "generative diffusion for human pose estimation, multi-view assignment with Sinkhorn projections",
+      "evidence_cn": "生成扩散用于人体姿态估计，多视角分配与Sinkhorn投影",
+      "canonical_evidence": "生成扩散用于人体姿态估计，多视角分配与Sinkhorn投影",
+      "tldr_en": "DisPOSE applies generative diffusion over polystochastic tensors with differentiable Sinkhorn projections for self-supervised multi-view 3D human pose estimation, improving generalization to real-world scenarios.",
+      "tldr_cn": "该论文针对自监督多视角3D人体姿态估计中依赖合成目录导致真实场景泛化差的问题，提出DisPOSE框架。DisPOSE将多视角人员分配问题近似为多随机张量空间上的生成扩散过程，在去噪过程中使用可微Sinkhorn投影引导解向可行分配，并结合2D图像先验恢复完整3D骨架。实验表明，DisPOSE在公共真实数据集上的精度与泛化性均超过现有自监督方法，为多视角人体姿态估计提供了一种生成式解决路径。",
+      "title_zh": "DisPOSE：投影多随机扩散用于自监督多视角3D人体姿态估计",
+      "motivation_cn": "自监督多视角3D人体姿态估计依赖合成姿态目录，真实场景泛化能力不足。",
+      "method_cn": "提出DisPOSE，将多视角人员分配近似为多随机张量上的生成扩散过程，并利用Sinkhorn投影约束。",
+      "result_cn": "在真实场景数据上，DisPOSE的姿态估计精度和泛化性优于现有自监督方法。",
+      "conclusion_cn": "生成式扩散赋能为多视角姿态估计提供了一种鲁棒的自监督解决方案。",
+      "matched_requirement_id": "req-5",
+      "matched_query_tag": "query:traj-pred",
+      "matched_query_text": "generative models for human motion trajectory generation"
+    }
+  ],
+  "llm_ranked_at": "2026-08-04T07:43:56.299817+00:00",
+  "display_min_score": 4.0,
+  "pruned_at": "2026-08-04T07:43:56.341639+00:00"
+}
